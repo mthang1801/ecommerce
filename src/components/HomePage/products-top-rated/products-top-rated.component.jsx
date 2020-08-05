@@ -17,7 +17,6 @@ import Box from '@material-ui/core/Box';
 import Slider from "react-slick";
 
 let productsTopRated = getProductsTopRated();
-console.log(productsTopRated)
 let productTopRatedGroup = [];
 let accumulatorProducts = [];
 productsTopRated.forEach( (product,idx) => {

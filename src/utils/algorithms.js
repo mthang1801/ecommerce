@@ -60,3 +60,19 @@ export const getProductsListByCategoryId = (categeryId) => {
     });
   return productsList;
 };
+
+export const getCategoryData = () => {
+  const categoryList = { ...CATEGORIES_DATA };
+  return Object.keys(categoryList).map((key) => categoryList[key]);
+};
+
+export const getMaxPrice = () => {
+  const sellers = [...SELLERS_DATA];
+  let max = sellers[0].price;
+  sellers.forEach((seller) => {
+    if (seller.price > max) {
+      max = seller.price;
+    }
+  });
+  return max;
+};

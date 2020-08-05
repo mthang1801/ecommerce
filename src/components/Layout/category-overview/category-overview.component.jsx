@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  CategoryOverViewContainer,
-  Header,
-  Body,
-} from "./category-overview.styles";
+import { CategoryOverViewContainer } from "./category-overview.styles";
 import CategoryToggle from "../category-toggle/category-toggle.component";
 import CategoryMenu from "../category-menu/category-menu.component";
 const CategoryOverView = () => {

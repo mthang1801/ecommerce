@@ -47,7 +47,7 @@ const LatestProducts = () => {
 
   return (
     <LatestProductsContainer>
-      <Title>sản phẩm gần đây</Title>
+      <Title>sản phẩm mới</Title>
       <Slider {...settings} style={{height: "85%"}}  autoplaySpeed={3000}>
         {latestProductsGroup.map((groups, id) => (
           <Grid key={id}>

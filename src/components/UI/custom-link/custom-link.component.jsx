@@ -5,7 +5,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 export const OptionLink = styled(Link)`   
   cursor: pointer;
   padding : .5rem ;
-  text-transform: uppercase;
+  text-transform: ${({textTransform}) => textTransform ? textTransform.toString().toLowerCase() : "uppercase"};
   color : black;
   text-decoration : none ;
   font-weight : bold ; 
