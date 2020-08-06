@@ -10,7 +10,7 @@ export const OptionLink = styled(Link)`
   text-decoration : none ;
   font-weight : bold ; 
   &:hover{
-    color : rgb(127, 173, 57);    
+    color : #7fad39;    
   }
 `
 
@@ -19,7 +19,7 @@ const ActiveLink = styled(Link)`
   padding : .5rem ;
   text-transform: uppercase;
   font-weight :bold ;
-  color: rgb(127, 173, 57);
+  color: #7fad39;
 
 `;
 

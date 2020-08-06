@@ -9,5 +9,6 @@ export const ShopGridOverviewContainer = styled.div`
 `
 
 export const Grid = styled.div`
-  width : ${({w25}) => w25 ? "25%" : "75%"}
+  margin : 1rem auto;
+  width : ${({w25}) => w25 ? "25%" : "75%"};  
 `

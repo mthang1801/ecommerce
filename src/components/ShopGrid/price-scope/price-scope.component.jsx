@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     width: 300,
     display : "flex", 
     flexDirection : "column",
-    margin : "2rem auto"
+    margin : "2rem 0 4rem 0"    
   },
 });
 

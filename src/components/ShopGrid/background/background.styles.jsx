@@ -24,5 +24,5 @@ export const BackgrounLabel = styled.h1`
   font-size : 3.5em;
   text-transform : uppercase ;
   font-weight : 700;
-  color : #85de00;
+  color : #8be800;
 `

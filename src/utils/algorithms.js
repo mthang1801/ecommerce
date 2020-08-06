@@ -14,7 +14,6 @@ export const getLastestProducts = () => {
   if (sellers.length <= 6) {
     return sellers;
   }
-  console.log(sellers.slice(0, 10));
   for (let i = 0; i < len; i++) {
     if (checkProductIsTheSame[sellers[i].productId]) {
       sellers[i] = sellers[len + j];
@@ -25,7 +24,6 @@ export const getLastestProducts = () => {
       result.push(sellers[i]);
     }
   }
-  console.log(checkProductIsTheSame);
   return result;
 };
 
@@ -75,4 +73,31 @@ export const getMaxPrice = () => {
     }
   });
   return max;
+};
+
+export const getSaleOffProducts = () => {
+  let sellers = [...SELLERS_DATA];
+  sellers = sellers.filter((seller) => seller.discount > 0);
+  sellers.sort((a, b) => {
+    if (a.discount > b.discount) {
+      return -1;
+    }
+    return 1;
+  });
+  return sellers;
+};
+
+export const getNumberOfProducts = () => {
+  let sellers = [...SELLERS_DATA];
+  return sellers.length;
+};
+
+export const getProductsPerpage = (page, sort = "ascending") => {
+  const NUMBER_PRODUCTS_PER_PAGE = 12;
+  let sellers = [...SELLERS_DATA];
+  return sellers.filter(
+    (_, idx) =>
+      idx >= (page - 1) * NUMBER_PRODUCTS_PER_PAGE &&
+      idx < page * NUMBER_PRODUCTS_PER_PAGE
+  );
 };
