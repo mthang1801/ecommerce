@@ -1,16 +1,31 @@
-import React from 'react'
-import {HeaderContainer,LeftSide, MidSide, RightSide, LogoContainer, LogoImage,Option, CartPrice } from "./navigations.styles";
+import React, {useState, useRef, useEffect} from 'react'
+import {HeaderContainer,LeftSide, MidSide, RightSide, LogoImage,Option, CartPrice } from "./navigations.styles";
 import Logo from "../../../assets/img/logo.png"
 import Icon from "../../UI/custom-icon/custom-icon.component";
 import {FaHeart, FaShoppingBag} from "react-icons/fa"
 import {CustomLink} from "../../UI/custom-link/custom-link.component";
+import PagesMenu from "../pages-menu/pages-menu.components";
 const Header = () => {
+  const [showPageMenu, setShowPageMenu] = useState(false);
+  const pageMenuRef = useRef(null);
+  
+  useEffect(() => {
+    function trackPageMenu(e){      
+      if(pageMenuRef && !pageMenuRef.current.contains(e.target)){
+        setShowPageMenu(false)
+      }else{
+        setShowPageMenu(true);
+      }
+    }
+    document.addEventListener("mouseover", trackPageMenu);
+    return () => document.removeEventListener("mouseover", trackPageMenu)
+  })
   return (
     <HeaderContainer>
       <LeftSide>
-        <LogoContainer>
+        <CustomLink to="/">
           <LogoImage src={Logo}/>
-        </LogoContainer>
+        </CustomLink>
       </LeftSide>
       <MidSide>
         <Option>
@@ -19,8 +34,9 @@ const Header = () => {
           <Option>
             <CustomLink to="/shop-grid">Shop</CustomLink>
           </Option>
-          <Option>
+          <Option ref={pageMenuRef}>
             <CustomLink to="/pages">Pages</CustomLink>
+            <PagesMenu show={showPageMenu}/>
           </Option>
           <Option>
             <CustomLink to="/blog">Blog</CustomLink>

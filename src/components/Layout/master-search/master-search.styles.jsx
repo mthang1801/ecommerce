@@ -12,6 +12,7 @@ export const MasterSearchContainer = styled.div`
   height : 100%; 
   align-items : center;
   margin :0 1rem;
+  z-index: 300;
 `
 
 export const CategoryTypes = styled.div`

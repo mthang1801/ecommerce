@@ -6,11 +6,9 @@ import FeaturedProductOverview from "../../components/HomePage/featured-product-
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 const HomePage = () => {
   return (
-    <HomePageContainer>
-      <MasterHeader/>
+    <HomePageContainer>      
       <BannerOverview/>
-      <CategoriesSlider />
-     
+      <CategoriesSlider />     
       <FeaturedProductOverview />
     </HomePageContainer>
   )

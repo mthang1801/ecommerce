@@ -1,7 +1,7 @@
 import CATEGORIES_DATA from "../data/category";
 import PRODUCTS_DATA from "../data/products";
 import SELLERS_DATA from "../data/sellers";
-
+import CART_DATA from "../data/cart";
 export const getLastestProducts = () => {
   let sellers = [...SELLERS_DATA];
   sellers.sort((a, b) => {
@@ -100,4 +100,8 @@ export const getProductsPerpage = (page, sort = "ascending") => {
       idx >= (page - 1) * NUMBER_PRODUCTS_PER_PAGE &&
       idx < page * NUMBER_PRODUCTS_PER_PAGE
   );
+};
+
+export const getCartItems = () => {
+  return [...CART_DATA];
 };

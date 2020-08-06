@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import {Link} from "react-router-dom";
 export const HeaderContainer = styled.div`
   width : 100% ; 
   height: 80px;
@@ -25,21 +25,20 @@ export const RightSide = styled.div`
   height : 100%;
   display : flex ; 
   justify-content : center;
-  align-items:center;
+  align-items:center; 
  
-`
-export const LogoContainer = styled.div`
-  max-width : 5rem ; 
-  height : 100%;
 `
 export const LogoImage = styled.img`
   width : 100%;
   height : 100%;
+  max-width : 5rem ; 
 `
 
 export const Option = styled.span`
   padding : 0 1rem;
+  position :relative;
 `
+
 
 export const CartPrice = styled.span`
   font-weight : bold ;  
