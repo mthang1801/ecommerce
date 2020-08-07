@@ -8,6 +8,7 @@ export const CheckoutOverviewContainer = styled.div`
 export const Title = styled.h2`
   font-weight : bold ;
   font-size : 1.7em;
+  margin-bottom: 1rem;
 `
 export const CheckoutPreview = styled.div`
   display : flex ; 

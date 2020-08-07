@@ -37,10 +37,7 @@ const Header = () => {
           <Option ref={pageMenuRef}>
             <CustomLink>Pages</CustomLink>
             <PagesMenu show={showPageMenu}/>
-          </Option>
-          <Option>
-            <CustomLink to="/blog">Blog</CustomLink>
-          </Option>
+          </Option>          
           <Option>
             <CustomLink to="/contact">Contact</CustomLink>
           </Option>

@@ -8,6 +8,7 @@ import Cart from "./pages/cart/cart.component";
 import ShopDetails from "./pages/shop-details/shop-details.component";
 import MasterHead from "./components/Layout/master-header/master-header.component";
 import Checkout from "./pages/checkout/checkout.component";
+import Contact from "./pages/contact/contact.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/cart" component={Cart} />
         <Route path="/details" component={ShopDetails} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/contact" component={Contact} />
       </Switch>
       <Footer />
     </Router>

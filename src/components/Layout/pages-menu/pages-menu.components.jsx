@@ -7,8 +7,7 @@ const PageMenu =  ({show}) => {
       <CustomLink to="/details">Chi tiết sản phẩm</CustomLink>
       <CustomLink to="/cart">Giỏ hàng</CustomLink>
       <CustomLink to="/checkout">Tiến hành thành toán</CustomLink>
-      <CustomLink>Lịch sử mua hàng</CustomLink>
-      <CustomLink>Blogs</CustomLink>
+      <CustomLink>Lịch sử mua hàng</CustomLink>      
     </PageMenuContainer>
   )
 }
