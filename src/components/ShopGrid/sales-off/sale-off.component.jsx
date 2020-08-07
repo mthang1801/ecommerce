@@ -2,7 +2,7 @@ import React from 'react'
 import {SaleOffContainer, SeleOffLabel} from "./sale-off.styles";
 import {getSaleOffProducts} from "../../../utils/algorithms"
 import Slider from "react-slick";
-import ProductItem from "../product-item/product-item.component";
+import ProductItem from "../../UI/product-item/product-item.component";
 const saleOffProducts = getSaleOffProducts();
 const SaleOff = () => { 
   const settings = {    

@@ -35,7 +35,7 @@ const Header = () => {
             <CustomLink to="/shop-grid">Shop</CustomLink>
           </Option>
           <Option ref={pageMenuRef}>
-            <CustomLink to="/pages">Pages</CustomLink>
+            <CustomLink>Pages</CustomLink>
             <PagesMenu show={showPageMenu}/>
           </Option>
           <Option>

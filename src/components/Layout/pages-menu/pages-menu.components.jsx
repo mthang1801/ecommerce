@@ -4,6 +4,7 @@ const PageMenu =  ({show}) => {
   console.log(show)
   return (
     <PageMenuContainer show={show}>
+      <CustomLink to="/details">Chi tiết sản phẩm</CustomLink>
       <CustomLink to="/cart">Giỏ hàng</CustomLink>
       <CustomLink>Lịch sử mua hàng</CustomLink>
       <CustomLink>Blogs</CustomLink>

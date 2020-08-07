@@ -92,7 +92,7 @@ export const getNumberOfProducts = () => {
   return sellers.length;
 };
 
-export const getProductsPerpage = (page, sort = "ascending") => {
+export const getProductsPerpage = (page = 1, sort = "ascending") => {
   const NUMBER_PRODUCTS_PER_PAGE = 12;
   let sellers = [...SELLERS_DATA];
   return sellers.filter(

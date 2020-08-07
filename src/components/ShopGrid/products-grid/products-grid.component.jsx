@@ -1,7 +1,7 @@
 import React from 'react'
 import {ProductsGridContainer} from "./products-grid.styles";
 import {getProductsPerpage} from "../../../utils/algorithms";
-import ProductItem from "../product-item/product-item.component"
+import ProductItem from "../../UI/product-item/product-item.component";
 let productsPageOne = getProductsPerpage(1);
 const ProductsGrid = () => {
   return (

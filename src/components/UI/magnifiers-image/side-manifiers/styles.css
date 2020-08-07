@@ -1,0 +1,11 @@
+.flex {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.input-position {
+  width : 50%;  
+  position: relative;
+  z-index: 300;
+}

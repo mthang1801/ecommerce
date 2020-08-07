@@ -5,6 +5,7 @@ import Footer from "./components/Layout/footer/footer.component";
 import Home from "./pages/home/home.component";
 import ShopGrid from "./pages/shop-grid/shop-grid.component";
 import Cart from "./pages/cart/cart.component";
+import ShopDetails from "./pages/shop-details/shop-details.component";
 import MasterHead from "./components/Layout/master-header/master-header.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/shop-grid" component={ShopGrid} />
         <Route path="/cart" component={Cart} />
+        <Route path="/details" component={ShopDetails} />
       </Switch>
       <Footer />
     </Router>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {darken} from "polished";
+import {darken, lighten} from "polished";
 export const CartTableContainer = styled.div`  
   width : 100%;
   display : flex ; 
@@ -62,6 +62,19 @@ export const TableRow = styled.div`
     }
   }
 ` 
+
+export const Button = styled.button`
+  outline : none ; 
+  border : none  ;
+  background-color : inherit;
+  cursor : pointer; 
+  color: #404040;
+  font-size :1.1em;
+  &:hover{
+    color : black;
+  }
+`
+
 export const  Image = styled.img`
   width : 10rem;
   height :  10rem ;
