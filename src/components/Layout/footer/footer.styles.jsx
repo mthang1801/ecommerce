@@ -82,6 +82,8 @@ export const Button = styled.button`
   width : 30%;
   font-size:  1.1em;
   height : 100%;
+  color : white ;
+  cursor : pointer; 
   &:hover{
     background-color : ${darken("0.1", "#7fad39")}
   }

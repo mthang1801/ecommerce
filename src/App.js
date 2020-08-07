@@ -7,6 +7,7 @@ import ShopGrid from "./pages/shop-grid/shop-grid.component";
 import Cart from "./pages/cart/cart.component";
 import ShopDetails from "./pages/shop-details/shop-details.component";
 import MasterHead from "./components/Layout/master-header/master-header.component";
+import Checkout from "./pages/checkout/checkout.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/shop-grid" component={ShopGrid} />
         <Route path="/cart" component={Cart} />
         <Route path="/details" component={ShopDetails} />
+        <Route path="/checkout" component={Checkout} />
       </Switch>
       <Footer />
     </Router>

@@ -6,6 +6,7 @@ const PageMenu =  ({show}) => {
     <PageMenuContainer show={show}>
       <CustomLink to="/details">Chi tiết sản phẩm</CustomLink>
       <CustomLink to="/cart">Giỏ hàng</CustomLink>
+      <CustomLink to="/checkout">Tiến hành thành toán</CustomLink>
       <CustomLink>Lịch sử mua hàng</CustomLink>
       <CustomLink>Blogs</CustomLink>
     </PageMenuContainer>
