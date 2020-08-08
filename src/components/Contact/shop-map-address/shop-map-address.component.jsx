@@ -10,6 +10,7 @@ const ShopMapAddress = () => {
         allowfullscreen={true}
         aria-hidden="false"
         tabindex="0"
+        title="shop"
       />
     </ShopMapAddressContainer>
   );

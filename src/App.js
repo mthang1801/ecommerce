@@ -9,15 +9,16 @@ import ShopDetails from "./pages/shop-details/shop-details.component";
 import MasterHead from "./components/Layout/master-header/master-header.component";
 import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
+import Authentication from "./pages/auth/auth.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 function App() {
   return (
     <Router>
       <Toolbar />
       <Navigation />
-      <MasterHead />
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/auth" component={Authentication} />
         <Route path="/shop-grid" component={ShopGrid} />
         <Route path="/cart" component={Cart} />
         <Route path="/details" component={ShopDetails} />

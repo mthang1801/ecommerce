@@ -7,6 +7,7 @@ import Background from "../../components/Layout/background/background.component"
 const ShopGridPage = () => {
   return (
     <ShopGridPageContainer>             
+      <MasterHeader/>
       <Background label="SHOP GRID"/>   
       <ShopGridOverview/>
     </ShopGridPageContainer>
