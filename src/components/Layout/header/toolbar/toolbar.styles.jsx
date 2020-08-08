@@ -8,14 +8,13 @@ export const ToolbarContainer = styled.nav`
   justify-content : space-between;
   align-items : center;
   padding : 0 5rem;
-  font-size : .9em;
+  font-size : .9em;  
 `
 
 export const ToolbarLeft = styled.div`
   display : flex ; 
   width : 40% ; 
-  overflow : hidden;
-
+  overflow : hidden;  
 `
 export const ToolbarRight = styled.div`
   display : flex ;   
@@ -26,12 +25,18 @@ export const ToolbarRight = styled.div`
 
 export const ToolbarItem = styled.div`  
   padding : 0 1rem;
-  &:not(:last-child){
-    border-right : 1px solid #ccc;
-  }
+  &:not(:first-child){
+    border-left : 1px solid #ccc;
+  }  
   height : 100%; 
   display : flex ; 
   align-items : center;
+  @media screen and (max-width:992px){
+    display : ${({medium}) => medium ? "none" : "inherit"} ;
+  }
+  & > a{
+    padding : 0;
+  }
 `
 
 export const Icons = styled.div`

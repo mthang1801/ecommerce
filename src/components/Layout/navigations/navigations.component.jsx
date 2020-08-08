@@ -1,60 +1,45 @@
-import React, {useState, useRef, useEffect} from 'react'
-import {HeaderContainer,LeftSide, MidSide, RightSide, LogoImage,Option, CartPrice } from "./navigations.styles";
-import Logo from "../../../assets/img/logo.png"
-import Icon from "../../UI/custom-icon/custom-icon.component";
-import {FaHeart, FaShoppingBag} from "react-icons/fa"
-import {CustomLink} from "../../UI/custom-link/custom-link.component";
-import PagesMenu from "../pages-menu/pages-menu.components";
-const Header = () => {
-  const [showPageMenu, setShowPageMenu] = useState(false);
-  const pageMenuRef = useRef(null);
-  
-  useEffect(() => {
-    function trackPageMenu(e){      
-      if(pageMenuRef && !pageMenuRef.current.contains(e.target)){
-        setShowPageMenu(false)
-      }else{
-        setShowPageMenu(true);
-      }
-    }
-    document.addEventListener("mouseover", trackPageMenu);
-    return () => document.removeEventListener("mouseover", trackPageMenu)
-  })
+import React from 'react'
+import {DesktopContainer,LeftSide, MidSide, RightSide, Row, SmallerViewPort } from "./navigations.styles";
+import NavigationItems from "../navigation-items/navigation-items.component";
+import {connect} from "react-redux";
+import {selectIsMobile} from "../../../redux/checkViewPort/checkViewPort.selectors"
+import {createStructuredSelector} from "reselect";
+import Brand from "../navigation-brand/navigation-brand.component";
+import Widget from "../navigation-widget/navigation-widget.component";
+import ToggleDrawer from "../header/toggle-drawer/toggle-drawer.component";
+const Header = ({setOpenDrawer, isMobile}) => {  
+  if(!isMobile) 
+  // for Desktop
+    return (
+      <DesktopContainer>
+        <LeftSide>
+          <Brand/>
+        </LeftSide>
+        <MidSide>
+          <NavigationItems/>
+        </MidSide>
+        <RightSide>        
+          <Widget/>
+        </RightSide>
+      </DesktopContainer>
+    )
   return (
-    <HeaderContainer>
-      <LeftSide>
-        <CustomLink to="/">
-          <LogoImage src={Logo}/>
-        </CustomLink>
-      </LeftSide>
-      <MidSide>
-        <Option>
-            <CustomLink to="/">Home</CustomLink>
-          </Option>
-          <Option>
-            <CustomLink to="/shop-grid">Shop</CustomLink>
-          </Option>
-          <Option ref={pageMenuRef}>
-            <CustomLink>Pages</CustomLink>
-            <PagesMenu show={showPageMenu}/>
-          </Option>          
-          <Option>
-            <CustomLink to="/contact">Contact</CustomLink>
-          </Option>
-      </MidSide>
-      <RightSide>        
-        <Option>
-          <Icon icon={<FaHeart/>} number={1}/>   
-        </Option>
-        <Option>                           
-          <Icon icon={<FaShoppingBag/>} number={5}/>
-        </Option>
-        <Option>
-          <CartPrice>Cart: ${150.00}</CartPrice>
-        </Option>
-      </RightSide>
-    </HeaderContainer>
+  //for Tablets, mobile
+    <SmallerViewPort>
+      <Row justifyBetween>
+        <Brand />
+        <ToggleDrawer/>
+      </Row>
+      <Row justifyCenter>
+        <Widget/>
+      </Row>
+    </SmallerViewPort>
   )
 }
 
-export default Header
+const mapStateToProps = createStructuredSelector({
+  isMobile : selectIsMobile
+})
+
+
+export default connect(mapStateToProps)(Header)

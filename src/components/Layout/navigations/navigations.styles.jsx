@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
-export const HeaderContainer = styled.div`
+
+export const DesktopContainer = styled.div`
   width : 100% ; 
-  height: 80px;
-  font-size : 1.1em;
+  height: 80px;  
   display : flex ; 
   align-items : center;
   padding : 0 5rem ; 
@@ -11,36 +10,36 @@ export const HeaderContainer = styled.div`
 `
 
 export const LeftSide = styled.div`
-  flex : 1 0 25%;
+  width : 15%;
 `
 export const MidSide = styled.div` 
-  flex : 2 0 50%;
+  width : 60%;
   display : flex ; 
   height : 100%;
   align-items:center;
   justify-content : center;
 `
 export const RightSide = styled.div`
-  flex : 1 0 25%;
+  width : 25%;
   height : 100%;
   display : flex ; 
   justify-content : center;
   align-items:center; 
  
 `
-export const LogoImage = styled.img`
+
+export const SmallerViewPort = styled.div`
   width : 100%;
-  height : 100%;
-  max-width : 5rem ; 
+  display : flex ;
+  flex-direction : column;  
+  margin : auto;
 `
 
-export const Option = styled.span`
-  padding : 0 1rem;
-  position :relative;
-`
-
-
-export const CartPrice = styled.span`
-  font-weight : bold ;  
-  font-size : .9em;
+export const Row = styled.div`
+  display : flex;    
+  width : 100%;
+  height : 60px;
+  align-items : center;
+  padding  : 2rem;
+  justify-content : ${(props) => props.justifyBetween ? "space-between" : "center" }
 `

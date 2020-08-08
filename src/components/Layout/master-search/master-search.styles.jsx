@@ -10,8 +10,7 @@ export const MasterSearchContainer = styled.div`
   display : flex ; 
   width : 100%;
   height : 100%; 
-  align-items : center;
-  margin :0 1rem;
+  align-items : center;  
   z-index: 300;
 `
 

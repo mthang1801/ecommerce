@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 export const PageMenuContainer = styled.div`
   position : absolute; 
   top : 100%;
-  width : 12vw;
+  width : 100%;
   display : flex ; 
   flex-direction : column;
   background-color : #454545;

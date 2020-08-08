@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   MasterBannerContainer,
   MainTitle,
@@ -13,7 +13,7 @@ import BgImage from "../../../assets/img/hero/banner.jpg";
 const MasterBanner = () => {
   
   return (
-    <MasterBannerContainer img={BgImage}>      
+    <MasterBannerContainer img={BgImage} >      
       <MainTitle>fruit fresh</MainTitle>
       <SubTitle>
         <Span>Vegetable</Span>

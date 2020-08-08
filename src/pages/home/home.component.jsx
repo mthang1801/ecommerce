@@ -5,6 +5,7 @@ import CategoriesSlider from "../../components/Layout/categories-slider/categori
 import FeaturedProductOverview from "../../components/HomePage/featured-product-overview/featured-product-overview.component";
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 const HomePage = () => {
+ 
   return (
     <HomePageContainer>      
       <MasterHeader/>
