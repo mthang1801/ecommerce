@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 export const CartCheckoutContainer = styled.section`
   display : flex ; 
-  width : 90%; 
+  flex-direction : ${props => props.mobileView || props.tabletView ? "column" : "row"};
+  width : 90%;
   margin : auto ;  
 `
 
 export const Grid = styled.div`
-  width : 50%;
-  flex :  1 ;
+  width :  ${props => props.mobileView || props.tabletView ? "100%" : "50%"};  
+  margin : 1rem auto;
 `

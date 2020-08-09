@@ -1,11 +1,9 @@
 import styled from "styled-components";
 export const BannerOverViewContainer = styled.section`
-  display : flex ;   
-  height : 500px;
-  width : 100%;
-  padding : 1rem;  
-`
+  display : block ;   
+  height :  ${({smallView}) => smallView ? "auto" : "30rem"} ;
+  width : ${({smallView}) => smallView ? "100%" : "75%"};
+  margin : ${({smallView}) => smallView ? "1rem auto" : "0 0 0 auto"};
+  padding : 0.5rem;  
 
-export const Grid = styled.div`
-  width : ${({w25}) => w25 ? "25%" : "75%"}
 `

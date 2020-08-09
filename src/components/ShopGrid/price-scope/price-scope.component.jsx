@@ -6,6 +6,7 @@ import {PriceLabel} from "./price-scope.styles";
 const useStyles = makeStyles({
   root: {
     width: 300,
+    maxWidth : "90%",
     display : "flex", 
     flexDirection : "column",
     margin : "2rem 0 4rem 0"    

@@ -4,7 +4,10 @@ export const CartDiscountContainer = styled.div`
   width : 100%;
   display : flex ; 
   flex-direction: column ;
-  pading : 0.5rem;
+  padding : 0.5rem;
+  & > * {
+    padding :${props => props.mobileView || props.tabletView ? "0.5rem" : "0" };
+  }
 `
 
 export const Label = styled.h3`
@@ -17,20 +20,23 @@ export const Form = styled.form`
   width : 100%;
   height : 3rem;
   display : flex; 
-  align-items : center;
+  justify-content : ${props => props.mobileView || props.tabletView ? "center" : "stretch" };
+  align-items : ${props => props.mobileView || props.tabletView ? "center" : "stretch" };
 `
 
 export const Input = styled.input`
   padding : 1rem;  
-  width : 50%;
+  width : ${props => props.mobileView || props.tabletView ? "auto" : "50%" };
+  min-width : 70%;
   height : 100%;
-  font-size : 1.2em;
+  font-size : ${props => props.mobileView || props.tabletView ? "1em" : "1.2em" };
   text-align :center;
 `
 
-export const Button = styled.button`  
+export const Button = styled.button`   
+  min-width : 15%;
   height : 100%;
-  padding : 1rem 2rem;
+  padding :${props => props.mobileView || props.tabletView ? "0 0.5rem" : "1rem 2rem" };
   margin-left: 1rem;
   outline : none ; 
   border:none ; 

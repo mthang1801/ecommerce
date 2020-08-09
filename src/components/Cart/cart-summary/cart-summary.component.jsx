@@ -1,6 +1,6 @@
 import React from 'react'
 import {CartSummaryContainer, Label, Grid, CartKey,CartValue, CheckoutButton} from "./cart-summary.styles";
-const CartSummary = () => {
+const CartSummary = ({mobileView, tabletView}) => {
   return (
     <CartSummaryContainer>
       <Label>Hóa đơn</Label>
@@ -12,7 +12,7 @@ const CartSummary = () => {
         <CartKey>Số tiền thanh toán</CartKey>
         <CartValue>118.221.000 VND</CartValue>
       </Grid>
-      <CheckoutButton>tiến hành thang toán</CheckoutButton>
+      <CheckoutButton mobileView={mobileView} tabletView={tabletView}>tiến hành thang toán</CheckoutButton>
     </CartSummaryContainer>
   )
 }

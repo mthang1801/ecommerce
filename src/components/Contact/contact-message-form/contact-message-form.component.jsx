@@ -1,8 +1,8 @@
 import React from 'react'
 import {Form,Title, FormInline, Input, BtnSend, TextArea} from "./contact-message-form.styles";
-const ContactMessageForm = () => {
+const ContactMessageForm = ({mobileView, tabletView}) => {
   return (
-    <Form>
+    <Form mobileView={mobileView} tabletView={tabletView}>
       <Title>Để lại lời nhắn</Title>
       <FormInline>
         <Input placeholder="Nhập tên của bạn"/>

@@ -1,15 +1,18 @@
 import styled from "styled-components";
 
-export const TaskBarContainer = styled.section`
+export const TaskBarContainer = styled.div`
   display : flex ; 
-  justify-content : space-between;
-  padding : 1rem ;
+  justify-content : ${props => props.mobileView ? "center" : "space-between"};
+  align-items : center;
+  padding : 0.5rem ;
+  width : 100%;
+  height : ${props => props.mobileView || props.tabletView ? "5rem" : "auto"};
+  flex-direction : ${props => props.mobileView ? "column" : "row"};
 `
 
-export const Grid = styled.div`
-  flex : 1 0 33.3%;
-  width : 33.3%;
-  display : flex;  
+export const Grid = styled.div`  
+  display: ${props => ( (props.mobileView && props.hideSm) || (props.mobileView && props.hideMd)|| ( props.tabletView && props.hideMd ) ? "none" : "flex")};
+  width :  ${props =>  props.mobileView ? "100%" : props.tabletView ? "auto" : "33.33%" };
   align-items: center;  
 `
 export const Paragraph = styled.p``

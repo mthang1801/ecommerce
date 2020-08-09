@@ -5,29 +5,31 @@ export const CartActionsContainer = styled.section`
   width : 100%; 
   display : flex ; 
   justify-content : space-between ;
-  font-size : 1.2em;  
-  margin : 3rem auto;
+  align-items : center;
+  font-size : ${props => props.mobileView || props.tabletView ? "1em" : "1.2em"};  
+  margin : ${props => props.mobileView || props.tabletView ? "1.5rem auto" : "3rem auto"}; 
 `
 
 export const BtnShopping = styled(Link)`
-  padding : 1rem 2rem ; 
+  padding : ${props => props.mobileView || props.tabletView ? "0.5rem" : "1rem 1.5rem"}; 
   text-transform : uppercase ;   
-  background-color: #e8e8e8; 
-  text-decoration : none ;
-  color : inherit ;
+  background-color: #388e3c; 
+  color : white;
+
+  text-decoration : none ;  
   &:hover{
-    background-color : ${darken("0.1", "#e8e8e8")};
+    background-color : ${darken("0.1", "#388e3c")};
   }
 `
 
 export const BtnUpdate = styled.span` 
-  padding : 1rem 2rem ; 
-  background-color: #e8e8e8; 
+  padding :${props => props.mobileView || props.tabletView ? "0.5rem" : "1rem 1.5rem"}; 
+  background-color: #afb42b; 
   text-transform : uppercase ;  
-  color : inherit ;  
+  color : inherit ;    
   cursor : pointer; 
   &:hover{
-    background-color : ${darken("0.1", "#e8e8e8")};
+    background-color : ${darken("0.1", "#afb42b")};
   };
   display : flex  ;
   align-items : center;

@@ -4,23 +4,23 @@ import {getNumberOfProducts} from "../../../utils/algorithms";
 import {BsGridFill} from "react-icons/bs"
 import {FaListUl } from "react-icons/fa"
 
-const TaskBar = () => {
+const TaskBar = ({mobileView,tabletView}) => {
   const numberOfProducts = getNumberOfProducts();
   const [sortBy, setSortBy] = useState("ascending");
   const [view,setView] = useState("grid");
   return (
-    <TaskBarContainer>
-      <Grid>
+    <TaskBarContainer mobileView={mobileView} tabletView={tabletView}>
+      <Grid mobileView={mobileView} tabletView={tabletView}>
         <Paragraph>Sắp xếp</Paragraph>
         <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
           <Option value="ascending">Tăng dần</Option>
           <Option value="descending">Giảm dần</Option>
         </Select>
       </Grid>
-      <Grid>
+      <Grid mobileView={mobileView} tabletView={tabletView} hideSm>
         <Paragraph>Tìm thấy <Strong>{numberOfProducts} </Strong>mặt hàng</Paragraph>
       </Grid>
-      <Grid>
+      <Grid mobileView={mobileView} tabletView={tabletView} hideMd>
         <Settings>
           <Button active={view==="grid"} onClick={() => setView("grid")}><BsGridFill/></Button>
           <Button active={view==="list"} onClick={() => setView("list")}><FaListUl/></Button>

@@ -4,11 +4,14 @@ export const ContactServicesContainer = styled.div`
   display : flex ; 
   justify-content : center;
   width : 90%;
+  flex-direction : ${props => props.mobileView ? "column" : "row"};
+  align-items :  ${props => props.mobileView ? "center" : "space-around"};
   margin : 3rem auto;
+  flex-wrap : wrap;
 `
 
 export const  ServiceItem = styled.div`
-  width : 22%;
+  width : ${props => props.mobileView ? "100%" : props.tabletView ? "48%" : "22%"};
   display : flex; 
   flex-direction : column;
   align-items : center;  

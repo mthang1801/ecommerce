@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 export const CategoriesSliderContainer = styled.div`
-  width : 85%;
-  margin : 7rem auto;
+  width : ${({mobileView}) => mobileView ? "90%" : "80%"};
+  margin : ${({mobileView}) => mobileView ? "1rem auto" : "3rem auto"}} ;
   text-align : center;
 `
 
@@ -34,8 +34,7 @@ export const CategoryImage = styled.img`
 
 export const CategoryName = styled.div`
   font-weight : bold;
-  text-transform : uppercase ; 
-  font-family : Cairo , "sans serif" ;
+  text-transform : uppercase ;   
 `
 
 export const SampleNextArrow = (props) => {

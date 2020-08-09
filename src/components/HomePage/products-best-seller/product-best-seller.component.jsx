@@ -22,7 +22,8 @@ productsBestSeller.forEach((product, idx) => {
     accumulatorProducts = [];
   }
 });
-const ProductsBestSeller = () => {
+const ProductsBestSeller = ({mobileView,tabletView}) => {
+  
   const settings = {
     dots: false,
     infinite: true,
@@ -38,12 +39,14 @@ const ProductsBestSeller = () => {
     <ProductBestSellerContainer>
       <Title>sản phẩm bán chạy</Title>
       <Slider {...settings} style={{ height: "85%" }} autoplaySpeed={3000}>
-        {productsBestSellerGroup.map((groups, id) => (
+        {!mobileView ? productsBestSellerGroup.map((groups, id) => (
           <Grid key={id}>
             {groups.map((product) => (
               <ProductItem key={product.userId} product={product}/>
             ))}
           </Grid>
+        )) : productsBestSeller.map(product => (
+          <ProductItem key={product.userId} product={product}/>
         ))}
       </Slider>
     </ProductBestSellerContainer>

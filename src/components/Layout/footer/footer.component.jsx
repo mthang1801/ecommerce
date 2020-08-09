@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useContext, useEffect} from "react";
 import {
   FooterContainer,
   FooterAbout,
@@ -25,9 +25,25 @@ import {
   TiSocialTwitter,
   TiSocialInstagram,
 } from "react-icons/ti";
-const Footer = () => {
+import AppContext from "../../../context/app-viewport.context";
+const Footer = () => {  
+  const [mobileView, setMobileView] = useState(window.innerWidth < 600);
+  const [tabletView, setTabletView] = useState(window.innerWidth < 992 && window.innerWidth >= 600);
+  const width = useContext(AppContext);
+  useEffect(() => {
+    if (width < 600) {
+      setMobileView(true);
+    } else {
+      setMobileView(false);
+    }
+    if (width < 992 && width >= 600) {
+      setTabletView(true);
+    } else {
+      setTabletView(false);
+    }
+  }, [width]);
   return (
-    <FooterContainer>
+    <FooterContainer mobileView={mobileView} tabletView={tabletView}>
       <FooterAbout>
         <FooterLogoContainer to="/">
           <FooterLogo src={Logo} />

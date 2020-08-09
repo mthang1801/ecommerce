@@ -5,6 +5,7 @@ export const ProductItemContainer = styled.div`
   justify-content: center;
   width: 100%;
   height: 30%;
+  overflow:  hidden ; 
 `;
 
 export const ProductImageContainer = styled.div`
@@ -23,6 +24,7 @@ export const ProductInfo = styled.div`
   flex-direction: column;
   height : 100%;
   width: 60%;
+  margin-left : 12px;
   text-align: left;  
   justify-content : center;
   line-height : 2;

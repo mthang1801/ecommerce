@@ -4,9 +4,16 @@ import {darken} from "polished";
 export const FooterContainer = styled.footer`
   width : 100%;
   background-color : #F3F6FA;
-  padding : 5rem;
-  display : grid ; 
-  grid-template-columns : 1fr 1fr 1fr ;    
+  padding : 4rem;
+  display : flex ;     
+  justify-content : ${(props) => props.mobileView ? "center" : "space-around"} ;
+  text-align : ${(props) => props.mobileView || props.tabletView ? "center" : "left"} ;
+  align-items : ${(props) => props.mobileView || props.tabletView? "center" : "stretch"} ;
+  flex-wrap : wrap ;
+  & > * {
+    width :  ${(props) => props.mobileView ? "90%" : props.tabletView ? "48%" : "33%"} ;
+    padding : 1rem 0;
+  }
 `
 
 export const  FooterAbout = styled.div`

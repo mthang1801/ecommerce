@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const Option = styled.span`
-  width:  ${({ isMobile }) => (isMobile ? "100%" : "auto")};
+  width:  ${({ smallView }) => (smallView ? "100%" : "auto")};
   position: relative;
-  padding: ${({ isMobile }) => (isMobile ? ".5rem" : "0")};   
+  padding: ${({ smallView }) => (smallView ? ".5rem" : "0")};   
   margin-bottom : ${({m1}) => m1 ? "1rem" : 0};
   & > a{
     display : flex ; 

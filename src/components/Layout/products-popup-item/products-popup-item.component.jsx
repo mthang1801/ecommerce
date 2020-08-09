@@ -6,7 +6,7 @@ import {
 } from "./products-popup-item.styles";
 
 const ProductsPopupItem = ({ productLabel, productList }) => {
-  console.log(productList);
+  
   return (
     <ProductsPopupItemContainer>
       <Label>{productLabel}</Label>

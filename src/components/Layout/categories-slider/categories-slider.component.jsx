@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { CategoriesSliderContainer, Caption, CategoryItem, CategoryImage, CategoryName} from "./categories-slider.styles";
 import categoriesData from "../../../data/category";
 import Slider from "react-slick";
+import AppContext from "../../../context/app-viewport.context";
 const categoryItems = Object.keys(categoriesData).map(
   (key) => categoriesData[key]
 );
@@ -22,17 +23,32 @@ categoryItems.forEach((item, index) => {
 
 const CategoriesSlider = (props) => {
   const [slide, setSlide] = useState(null)
+  const [mobileView, setMobileView] = useState(window.innerWidth < 600);
+  const [tabletView, setTabletView] = useState(window.innerWidth < 992);
+  const width = useContext(AppContext);
+  useEffect(() => {
+    if (width < 600) {
+      setMobileView(true);
+    } else {
+      setMobileView(false);
+    }
+    if (width < 992) {
+      setTabletView(true);
+    } else {
+      setTabletView(false);
+    }
+  }, [width]);
   const slideRef = useRef(null);
   useEffect(() => {  
     setSlide(slideRef.current)
   }, [slideRef])
     return (
-      <CategoriesSliderContainer>
+      <CategoriesSliderContainer mobileView={mobileView}>
        <Caption>Danh mục sản phẩm</Caption>
         <Slider
           asNavFor={slide}
           ref={slideRef}
-          slidesToShow={3}
+          slidesToShow={mobileView ? 2 : tabletView ? 3 : 4}
           swipeToSlide={true}
           focusOnSelect={true}        
           autoplay

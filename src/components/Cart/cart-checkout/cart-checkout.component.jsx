@@ -2,14 +2,14 @@ import React from 'react'
 import {CartCheckoutContainer, Grid} from "./cart-checkout.styles";
 import CartDiscount from "../cart-discount/cart-discount.component";
 import CartSummary from "../cart-summary/cart-summary.component";
-const CartCheckout = () => {
+const CartCheckout = ({mobileView, tabletView}) => {
   return (
-    <CartCheckoutContainer>
-      <Grid>
-        <CartDiscount/>
+    <CartCheckoutContainer mobileView={mobileView} tabletView={tabletView}>
+      <Grid mobileView={mobileView} tabletView={tabletView}>
+        <CartDiscount mobileView={mobileView} tabletView={tabletView}/>
       </Grid>
-      <Grid>
-        <CartSummary/>
+      <Grid mobileView={mobileView} tabletView={tabletView}>
+        <CartSummary mobileView={mobileView} tabletView={tabletView}/>
       </Grid>
     </CartCheckoutContainer>
   )

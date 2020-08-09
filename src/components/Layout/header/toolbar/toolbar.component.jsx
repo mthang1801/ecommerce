@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ToolbarContainer,
   ToolbarLeft,
@@ -16,18 +16,25 @@ import {
 import ToggleLanguage from "../../toggle-languages/toggle-languages.component";
 import Icon from "../../../UI/custom-icon/custom-icon.component";
 import { CustomLink } from "../../../UI/custom-link/custom-link.component";
-import {connect} from "react-redux";
-import {createStructuredSelector} from "reselect";
-import {selectIsMobile} from "../../../../redux/checkViewPort/checkViewPort.selectors";
-const Toolbar = ({isMobile}) => {
-    
-  if(!isMobile)
+import AppContext from "../../../../context/app-viewport.context";
+const Toolbar = () => {
+  const [smallView, setSmallView] = useState(window.innerWidth < 992);
+  const width = useContext(AppContext);
+  useEffect(() => {
+    if (width < 992) {
+      setSmallView(true);
+    } else {
+      setSmallView(false);
+    }
+  }, [width]); 
+  if (!smallView)
     return (
       <ToolbarContainer>
         <ToolbarLeft>
           <ToolbarItem>hello@colorlib.com</ToolbarItem>
-          {!isMobile &&  <ToolbarItem medium>Free Shipping for all Order of $99</ToolbarItem>}
-         
+          {!smallView && (
+            <ToolbarItem mediumView={width<1200}>Free Shipping for all Order of $99</ToolbarItem>
+          )}
         </ToolbarLeft>
         <ToolbarRight>
           <ToolbarItem>
@@ -39,7 +46,7 @@ const Toolbar = ({isMobile}) => {
             </Icons>
           </ToolbarItem>
           <ToolbarItem>
-            <ToggleLanguage/>
+            <ToggleLanguage />
           </ToolbarItem>
           <ToolbarItem>
             <CustomLink
@@ -59,7 +66,4 @@ const Toolbar = ({isMobile}) => {
   return null;
 };
 
-const mapStateToProps = createStructuredSelector({
-  isMobile : selectIsMobile
-})
-export default connect(mapStateToProps)(Toolbar);
+export default Toolbar;

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState , useEffect, useContext} from "react";
 import {
   MasterBannerContainer,
   MainTitle,
@@ -6,14 +6,21 @@ import {
   Notice,
   Button,
   Span,
-  BackgroundContainer,
-  BackgroundImage,
 } from "./banner.styles";
 import BgImage from "../../../assets/img/hero/banner.jpg";
+import AppContext from "../../../context/app-viewport.context";
 const MasterBanner = () => {
-  
+  const [mobileView, setMobileView] = useState(window.innerWidth < 600);
+  const width = useContext(AppContext);
+  useEffect(() => {
+    if (width < 600) {
+      setMobileView(true);
+    } else {
+      setMobileView(false);
+    }
+  }, [width]);
   return (
-    <MasterBannerContainer img={BgImage} >      
+    <MasterBannerContainer img={BgImage} mobileView={mobileView} >      
       <MainTitle>fruit fresh</MainTitle>
       <SubTitle>
         <Span>Vegetable</Span>

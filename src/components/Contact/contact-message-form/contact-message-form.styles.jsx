@@ -2,14 +2,15 @@ import styled from "styled-components";
 import {darken} from "polished";
 
 export const Form = styled.form`
-  width : 80%; 
-  padding : 2rem 3rem;
-  margin : 1rem auto ;
+  width : ${props => props.mobileView ? "100%" : props.tabletView ? "85%" : "70%"}; 
+  padding : ${props => props.mobileView ? "1rem" : props.tabletView ? "1rem 1.5rem" : "2rem 3rem"};
+  margin : ${props => props.mobileView ? "0" : props.tabletView ? "0.75rem auto" : "1rem auto"};  ;
   text-align : center;
-  font-size : 1.2em;
+  font-size : ${props => props.mobileView || props.tabletView  ? "1em" : "1.2em"}; 
   & > *{
     margin : 1rem auto ;
   }
+  overflow : hidden;
 `
 export const Title = styled.h2`
   font-size : 1.5em ;

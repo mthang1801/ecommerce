@@ -34,15 +34,15 @@ export const CartValue = styled.span`
   text-overflow: ellipsis;
 `
 export const CheckoutButton = styled.button`
-  margin : 2rem ;
+  margin : ${props => props.mobileView || props.tabletView ? "1rem" : "2rem"} ; 
   display : block;
   outline : none ; 
   border : none ; 
   background-color : #7fad39;
-  padding : 1rem 2rem;
+  padding : ${props => props.mobileView || props.tabletView ? "0.75rem 1rem" : "1rem 2rem"} ;
   border-radius : 5px; 
   color : white ;
-  font-size : 1.2em ; 
+  font-size :  ${props => props.mobileView || props.tabletView ? "0.95em" : "1.2em"} ; 
   text-transform : uppercase ; 
   cursor : pointer;
   &:hover { 

@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {lighten} from "polished"
 export const ProductProfileTextContainer = styled.div`
   width : 100%; 
-  padding :1rem 3rem;
+  margin :  ${props => props.mobileView ||  props.tabletView    ? "1rem auto" : "auto"} ;
+  padding : ${props => props.mobileView ? "0.2rem" : props.tabletView  ? "1rem" : "1rem 3rem"} ;
   border-left : 1px solid #eee;
   height : 100% ; 
 `
@@ -55,6 +56,9 @@ export const  Button = styled.button`
   background-color : ${({bgColor}) => bgColor ? bgColor : "#404040"};
   color : white;
   fonto-weight : 600;
+  height : 100%;
+  display : flex ; 
+  align-items : center;
   cursor : pointer; 
   &:hover{
     background-color : ${({bgColor}) => bgColor ? lighten("0.1",bgColor ) :  lighten("0.1","#404040")};
@@ -67,7 +71,7 @@ export const  Paragraph = styled.div`
 
 export const ProductStatus = styled.div`
   margin : 1rem auto;
-  padding : 2rem;
+  padding : ${props => props.mobileView ? "0.5rem" : props.tabletView  ? "1rem" : "2rem"} ;
   background-color : #e8e8e8;
   display : flex ; 
   flex-direction : column;

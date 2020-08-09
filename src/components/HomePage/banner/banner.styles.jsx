@@ -9,7 +9,7 @@ export const MasterBannerContainer = styled.div`
   height : 100%; 
   align-items : flex-start;
   justify-content :center;
-  padding : 5rem ;
+  padding : ${({mobileView}) => mobileView ? "2rem" : "5rem"} ;
   position : relative; 
   overflow : hidden ;
   margin-left: 1rem;

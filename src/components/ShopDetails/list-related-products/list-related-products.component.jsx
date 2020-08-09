@@ -4,13 +4,13 @@ import { getProductsPerpage} from "../../../utils/algorithms";
 import ProductItem from "../../UI/product-item/product-item.component";
 
 let relatedProducts = getProductsPerpage();
-const ListRelatedProduct = () => {
+const ListRelatedProduct = ({mobileView, tabletView}) => {
   return (
-    <ListRelatedProductContainer>
-      <Title>Sản phẩm liên quan</Title>
-      <ListProducts>
-        {relatedProducts
-          .filter((_, idx) => idx < 4)
+    <ListRelatedProductContainer >
+      <Title>Sản phẩm tương tự</Title>
+      <ListProducts mobileView={mobileView} tabletView={tabletView}>
+        { relatedProducts
+          .filter((_, idx) => idx < 4 )
           .map((product) => (
             <ProductItem key={product._id} product={product} />
           ))}

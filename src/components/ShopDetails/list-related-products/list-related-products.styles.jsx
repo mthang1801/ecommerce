@@ -12,5 +12,10 @@ export const Title = styled.h2`
 
 
 export const ListProducts = styled.div`
+  width : 100%;
   display : flex;
+  overflow : auto;
+  & > * {
+    margin : 0 1rem;
+  }
 `

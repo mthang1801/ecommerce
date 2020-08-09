@@ -26,9 +26,9 @@ import {
   TiSocialInstagram,
   TiSocialTwitter,
 } from "react-icons/ti";
-const ProductProfileText = () => {
+const ProductProfileText = ({mobileView, tabletView}) => {
   return (
-    <ProductProfileTextContainer>
+    <ProductProfileTextContainer mobileView={mobileView} tabletView={tabletView}>
       <Title>Vetgetable’s Package</Title>
       <Reviews>
         <Rating
@@ -66,7 +66,7 @@ const ProductProfileText = () => {
         </Button>
       </ProductActions>
       <hr />
-      <ProductStatus>
+      <ProductStatus mobileView={mobileView} tabletView={tabletView}>
         <StatusText>Tình trạng sản phẩm</StatusText>
         <Row>
           <Span>Trạng thái</Span>

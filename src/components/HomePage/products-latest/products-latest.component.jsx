@@ -1,53 +1,53 @@
-import React from "react";
-import {
-  LatestProductsContainer,
-  Title,
-  Grid,
-} from "./products-latest.styles";
-import { getLastestProducts } from "../../../utils/algorithms";
+import React, { useState, useEffect, useContext } from "react";
+import { LatestProductsContainer, Title, Grid } from "./products-latest.styles";
+import { getLatestProducts } from "../../../utils/algorithms";
 import ProductItem from "../product-item/product-item.component";
+import AppContext from "../../../context/app-viewport.context";
 import Slider from "react-slick";
 
-let lastestProducts = getLastestProducts();
+let latestProducts = getLatestProducts();
 let latestProductsGroup = [];
 let accumulatorProducts = [];
-lastestProducts.forEach( (product,idx) => {
-  if( (idx !== 0 && idx % 3 === 0 )  ){
-    latestProductsGroup.push(accumulatorProducts);
-    accumulatorProducts = [];
-  }    
-  accumulatorProducts.push(product)
-  if( idx %3 !==0 && idx === lastestProducts.length -1 ){
+latestProducts.forEach((product, idx) => {
+  if (idx !== 0 && idx % 3 === 0) {
     latestProductsGroup.push(accumulatorProducts);
     accumulatorProducts = [];
   }
-})
+  accumulatorProducts.push(product);
+  if (idx % 3 !== 0 && idx === latestProducts.length - 1) {
+    latestProductsGroup.push(accumulatorProducts);
+    accumulatorProducts = [];
+  }
+});
 
-const LatestProducts = () => { 
+const LatestProducts = ({ mobileView, tabletView }) => {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,    
+    speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1,  
-    nextArrow : null ,
-    prevArrow : null ,
-    adaptiveHeight : true  ,
-    autoplay : true
-    
+    slidesToScroll: 1,
+    nextArrow: null,
+    prevArrow: null,
+    adaptiveHeight: true,
+    autoplay: true,
   };
 
   return (
     <LatestProductsContainer>
       <Title>sản phẩm mới</Title>
-      <Slider {...settings} style={{height: "85%"}}  autoplaySpeed={3000}>
-        {latestProductsGroup.map((groups, id) => (
-          <Grid key={id}>
-            {groups.map((product) => (
-              <ProductItem key={product.userId} product={product}/>
+      <Slider {...settings} style={{ height: "85%" }} autoplaySpeed={3000}>
+        {!mobileView
+          ? latestProductsGroup.map((groups, id) => (
+              <Grid key={id}>
+                {groups.map((product) => (
+                  <ProductItem key={product.userId} product={product} />
+                ))}
+              </Grid>
+            ))
+          : latestProducts.map((product, id) => (
+              <ProductItem key={product.userId} product={product} />
             ))}
-          </Grid>
-        ))}
       </Slider>
     </LatestProductsContainer>
   );

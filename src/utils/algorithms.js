@@ -2,7 +2,7 @@ import CATEGORIES_DATA from "../data/category";
 import PRODUCTS_DATA from "../data/products";
 import SELLERS_DATA from "../data/sellers";
 import CART_DATA from "../data/cart";
-export const getLastestProducts = () => {
+export const getLatestProducts = () => {
   let sellers = [...SELLERS_DATA];
   sellers.sort((a, b) => {
     if (Date.parse(a.createdAt) > Date.parse(b.createdAt)) return -1;
@@ -92,13 +92,27 @@ export const getNumberOfProducts = () => {
   return sellers.length;
 };
 
-export const getProductsPerpage = (page = 1, sort = "ascending") => {
-  const NUMBER_PRODUCTS_PER_PAGE = 12;
+export const getProductsPerpage = (
+  page = 1,
+  viewport = "desktop",
+  sort = "ascending"
+) => {
+  let NUM_PRODUCTS_PER_PAGE;
+  switch (viewport) {
+    case "mobileView":
+      NUM_PRODUCTS_PER_PAGE = 3;
+      break;
+    case "tabletView":
+      NUM_PRODUCTS_PER_PAGE = 6;
+      break;
+    default:
+      NUM_PRODUCTS_PER_PAGE = 12;
+  }
   let sellers = [...SELLERS_DATA];
   return sellers.filter(
     (_, idx) =>
-      idx >= (page - 1) * NUMBER_PRODUCTS_PER_PAGE &&
-      idx < page * NUMBER_PRODUCTS_PER_PAGE
+      idx >= (page - 1) * NUM_PRODUCTS_PER_PAGE &&
+      idx < page * NUM_PRODUCTS_PER_PAGE
   );
 };
 

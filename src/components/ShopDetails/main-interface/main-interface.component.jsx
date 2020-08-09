@@ -2,14 +2,14 @@ import React from 'react'
 import {MainInterfaceContainer, Grid} from "./main-interface.styles";
 import ProductProfileImages from "../product-profile-images/product-profile-images.component";
 import ProductProfileText from "../product-profile-text/product-profile-text.component";
-const MainInterface = () => {
+const MainInterface = ({mobileView, tabletView}) => {
   return (
-    <MainInterfaceContainer>
-      <Grid w40>
+    <MainInterfaceContainer mobileView={mobileView} tabletView={tabletView}>
+      <Grid w40 mobileView={mobileView} tabletView={tabletView}>
         <ProductProfileImages/>
       </Grid>
-      <Grid>
-        <ProductProfileText/>
+      <Grid mobileView={mobileView} tabletView={tabletView}>
+        <ProductProfileText mobileView={mobileView} tabletView={tabletView}/>
       </Grid>
     </MainInterfaceContainer>
   )

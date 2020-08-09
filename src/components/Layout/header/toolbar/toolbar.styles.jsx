@@ -29,11 +29,8 @@ export const ToolbarItem = styled.div`
     border-left : 1px solid #ccc;
   }  
   height : 100%; 
-  display : flex ; 
-  align-items : center;
-  @media screen and (max-width:992px){
-    display : ${({medium}) => medium ? "none" : "inherit"} ;
-  }
+  display :  ${({mediumView}) => mediumView ? "none" : "flex"} ; 
+  align-items : center;  
   & > a{
     padding : 0;
   }

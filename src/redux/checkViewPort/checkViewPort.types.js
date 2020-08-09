@@ -1,4 +1,0 @@
-export default {
-  SET_IS_DESKTOP: "SET_IS_DESKTOP",
-  SET_IS_MOBILE: "SET_IS_MOBILE",
-};

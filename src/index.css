@@ -4,6 +4,12 @@ body {
   -moz-osx-font-smoothing: grayscale;  
 }
 
+@media (max-width:992){
+  *{
+    font-size : 10px;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

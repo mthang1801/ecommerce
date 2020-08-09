@@ -12,11 +12,12 @@ export const Title = styled.h2`
 `
 export const CheckoutPreview = styled.div`
   display : flex ; 
-  justify-content : space-between;
+  justify-content : ${props => props.mobileView || props.tabletView ? "center" : "space-between"};
+  flex-direction : ${props => props.mobileView || props.tabletView ? "column" : "row"};
   padding-top : 2rem ;
   border-top : 1px solid #ccc;
 `
 export const Grid = styled.div`
-  width : ${({w60}) => w60 ? "55%" : "40%"};
-
+  width : ${props => props.mobileView || props.tabletView ? "100%" :  props.w60 ? "55%" : "42%" } ;
+  margin-bottom : ${props => props.mobileView || props.tabletView ? "2rem" : 0};
 `

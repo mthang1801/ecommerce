@@ -12,24 +12,24 @@ import {
   Button,
 } from "./cart-table.styles";
 import { getCartItems } from "../../../utils/algorithms";
-const CartTable = () => {
+const CartTable = ({ mobileView, tabletView }) => {
   const cartItems = getCartItems();
-  console.log(cartItems);
+
   return (
-    <CartTableContainer>
-      <TableHeader>
+    <CartTableContainer mobileView={mobileView} tabletView={tabletView}>
+      <TableHeader mobileView={mobileView} tabletView={tabletView}>
         <Row product>Mặt Hàng</Row>
-        <Row>Giá</Row>
+        <Row>Đơn Giá</Row>
         <Row>Số lượng</Row>
         <Row>Giảm giá</Row>
         <Row>Thành tiền</Row>
         <Row></Row>
       </TableHeader>
-      <TableBody>
+      <TableBody mobileView={mobileView} tabletView={tabletView}>
         {cartItems.map((cart) => (
           <TableRow key={cart._id}>
             <Row product>
-              <Image src={cart.imageUrl} />
+              {!mobileView && !tabletView && <Image src={cart.imageUrl} />}
               <Name>{cart.name}</Name>
             </Row>
             <Row>{cart.price.toLocaleString("es-AR")}</Row>
@@ -51,11 +51,11 @@ const CartTable = () => {
           </TableRow>
         ))}
       </TableBody>
-      <TableFooter>
+      <TableFooter mobileView={mobileView} tabletView={tabletView}>
         <Row product></Row>
         <Row></Row>
         <Row></Row>
-        <Row>
+        <Row style={{width: mobileView || tabletView ?  "30%" : "auto", fontSize : "0.9em", textAlign : "right"}}>
           <strong>Tổng tiền</strong>
         </Row>
         <Row totalPrice>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   CategoryMenuContainer,
   DropdownContent,
@@ -7,6 +7,7 @@ import {
 import CATEGORY_DATA from "../../../data/category";
 import { CustomLink } from "../../UI/custom-link/custom-link.component";
 import ProductsPopup from "../products-popup/products-popup.component";
+import AppContext from "../../../context/app-viewport.context";
 const CategoryMenu = ({ show }) => {
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
@@ -17,6 +18,15 @@ const CategoryMenu = ({ show }) => {
   const categoriesList = Object.keys(CATEGORY_DATA).map(
     (key) => CATEGORY_DATA[key]
   );
+  const [smallView, setSmallView] = useState(window.innerWidth < 992);
+  const width = useContext(AppContext);
+  useEffect(() => {
+    if (width < 992) {
+      setSmallView(true);
+    } else {
+      setSmallView(false);
+    }
+  }, [width]);
   useEffect(() => {
     setOffsetWidth(categoryRef.current.offsetWidth);
   }, [setOffsetWidth]);
@@ -39,8 +49,7 @@ const CategoryMenu = ({ show }) => {
   const handleMouseEnter = (e, categoryId) => {
     setCtfId(categoryId);
     setIsTouched(true);
-  };
-  console.log(categoriesList);
+  };  
   const handleMouseLeave = (e) => {};
   return (
     <CategoryMenuContainer ref={categoryRef}>
@@ -56,7 +65,7 @@ const CategoryMenu = ({ show }) => {
               {item.name}
             </CustomLink>
             <DropdownContent>
-              {ctgId && (
+              {ctgId && !smallView && (
                 <ProductsPopup
                   ref={popUpRef}
                   offsetWidth={offsetWidth}

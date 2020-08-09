@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
 export const ProductItemContainer = styled.div`
-  margin : 2.5rem auto;
+  margin : 1.25rem auto;
   display : flex;
   padding : 1rem;
   flex-direction : column;
   justify-content :center;
   align-items : center;
-  width : 15rem;
+  width: 100%;
   height: 20rem; 
   border : 1px solid #ccc ;
   box-shadow : 1px 1px 2px rgba(0,0,0,0.15);
-  border-radius : 5px; 
+  border-radius : 5px;   
 `
 
 export const Button = styled.span`

@@ -23,7 +23,9 @@ export const Row = styled.div`
   justify-content : space-between;
   padding : .5rem ;
 `
-export const Grid = styled.div``
+export const Grid = styled.div` 
+  overflow : hidden ;
+`
 export const Strong = styled.span`
   font-size : 1.2em;
   font-weight : bold ; 
