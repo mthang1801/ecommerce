@@ -1,0 +1,39 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "install-client": "npm install --prefix client",
+    "admin": "npm start --prefix admin",
+    "client": "npm start --prefix client",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mthang1801/ecommerce.git"
+  },
+  "author": "mvt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mthang1801/ecommerce/issues"
+  },
+  "homepage": "https://github.com/mthang1801/ecommerce#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.28",
+    "multer": "^1.4.2",
+    "polished": "^3.6.5",
+    "react-icons": "^3.10.0",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
