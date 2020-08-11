@@ -6,7 +6,7 @@ export const OptionLink = styled(Link)`
   cursor: pointer;
   color : ${darken("0.2", "white")} ; 
   text-decoration : none ;    
-  &:hover{
+  &:hover,  &:active{
     color : white;
   };
   display : flex ; 
@@ -18,6 +18,9 @@ const ActiveLink = styled(Link)`
   text-decoration : none ;   
   font-weight :bold ;
   color: white ;  
+  &:hover,  &:active{
+    color : white;
+  }
   display : flex ; 
   align-items : center;
 `;

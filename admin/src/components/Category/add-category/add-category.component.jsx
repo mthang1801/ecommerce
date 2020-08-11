@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect , useRef} from "react";
 import {
   Form,
   Title,
@@ -7,6 +7,7 @@ import {
   Input,
   Feedback,
   Error,
+  Success,
   BtnSubmit  
 } from "../../UI/custom-form/custom-form.styles";
 import { AddCategoryContainer, DisplayImage,  } from "./add-category.styles";
@@ -18,6 +19,14 @@ const AddCategory = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [imgBase64, setImageBase64] = useState(null);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const formRef = useRef(null);
+  useEffect(() => {
+    setTimeout(() => {
+      setError(null);
+    },5000)
+  },[error])
+
   const postInputChangeHandler = (e) => {
     setImageUrl(e.target.files[0])
     generateBase64FromImage(e.target)
@@ -27,21 +36,31 @@ const AddCategory = () => {
   const handleSubmitForm = e => {
     e.preventDefault(); 
     setError(null);
-    if(!name || !linkUrl || !imageUrl){
-      setError("You must fill all fields");
+    setSuccess(null);
+    if(!name || name.length < 3 || !linkUrl || !imageUrl){      
+      setError("You must fill all fields and name at least 3 characters");
       return ;
     }
     let formData = new FormData();
     formData.append("image", imageUrl);
     formData.append("name", name);
     formData.append("linkUrl", linkUrl);
-    axios.post("/admin/add-category", formData).then(res => console.log(res))
+    axios.post("/admin/add-category", formData).then(res => { 
+      setSuccess("Created Category Success!!");
+      setImageUrl(null);
+      setName("");
+      setLinkUrl("");
+      setImageBase64(null);
+      formRef.current.reset();
+    })
+    .catch(error => setError(error))
   }
   return (
     <AddCategoryContainer>
-      <Form onSubmit={handleSubmitForm}>
+      <Form ref={formRef} onSubmit={handleSubmitForm}>
         <Title>Thêm Danh mục sản phẩm</Title>
         {error && <Error>{error}</Error>}
+        {success && <Success>{success}</Success>}
         <FormGroup>
           <Label>Tên Danh mục</Label>
           <Input
@@ -57,7 +76,7 @@ const AddCategory = () => {
             type="text"
             name="linkUrl"
             value={linkUrl}
-            onChange={(e) => setLinkUrl(encodeURI(e.target.value))}
+            onChange={(e) => setLinkUrl(e.target.value.replace(/[^a-zA-Z0-9/-]/g, ""))}
           />
           <Feedback>Không khoảnh trắng và ký tự đặc biệt</Feedback>
         </FormGroup>

@@ -22,7 +22,7 @@ exports.postAddProduct = async (req, res, next) => {
       imageUrl: req.file.filename,
     });
     await newCategory.save();
-    res.status(201).json({ ...newCategory });
+    res.status(201).json({ ...newCategory._doc });
   } catch (error) {
     console.log(error);
   }

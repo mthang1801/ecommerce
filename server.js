@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const shopRouter = require("./routes/shop");
 const adminRouter = require("./routes/admin");
 const connectDB = require("./config/connectDB");
 const app = express();
@@ -40,8 +41,16 @@ const uploadFile = multer({
 }).single("image");
 
 app.use(uploadFile);
+app.use("/", shopRouter);
 app.use("/admin", adminRouter);
 
+//handle error
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const data = error.data;
+  const message = error.message;
+  res.json({ status, message, data });
+});
 connectDB()
   .then((res) => {
     console.log("DB has been connected");

@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 export const Form = styled.form`
   width : 600px ;
-  max-width : 50%;
-  margin : 1rem ;
+  max-width : 40%;
+  margin :1rem 2rem ;
 `
 export const FormGroup = styled.div`
   width : 100%;
+  height : 2.5rem;  
   display : flex ; 
   flex-direction: column ; 
   justify-conetent : center;
@@ -22,12 +23,17 @@ export const Error = styled.div`
   color : #dd2222; 
   font-weight : 600;
 `
+export const Success = styled.div`
+  margin : 2rem ;
+  text-align : center;
+  color : #7fad39; 
+  font-weight : 600;
+`
 export const FormInline = styled.div`
   display : flex ;   
-  justify-content : space-between;  
-  & ${FormGroup} {
-    width : 48%;
-  }
+  width : 100%;
+  height: 2.5rem;
+  
 `
 
 export const Title = styled.h2`
@@ -45,8 +51,8 @@ background-color : white;
 `
 
 export const Input = styled.input`
-  width : 100%;
-  height : 2.5rem; 
+  width : 100%;  
+  height : 100%; 
   padding : 0 0.5rem;  
   font-size : 1.1em;
   border : none ; 
@@ -55,7 +61,8 @@ export const Input = styled.input`
   z-index :  0;
   &[type=file]{
     padding-top : 0.6rem;
-  }
+  };
+  flex-grow : 1 ;
 `
 
 export const Feedback = styled.span`
@@ -82,7 +89,7 @@ export const Select = styled.select`
 
 export const Option = styled.option``
 
-export const BtnSubmit = styled.button`
+export const BtnSubmit = styled.button`  
   display : inline-block ;
   outline : none ; 
   border: none ; 
@@ -98,4 +105,13 @@ export const BtnSubmit = styled.button`
     color : black;
     border : 1px solid black;
   }
+`
+
+export const BtnInline = styled.button`    
+  width : 20%;
+  height: 100%;
+  text-align: center;
+  display : block;
+  cursor: pointer ; 
+  z-index:  1 ;
 `

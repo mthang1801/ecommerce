@@ -1,10 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {CategoryManagementPageContainer} from "./category-management.styles";
 import Toolbar from "../../components/Category/toolbar/toolbar.component";
-import CategoryListTable from "../../components/Category/category-list-table/category-list-table.component";
+import {default as CategoryListTable} from "../../components/Category/index-category/index-category.container";
 import AddCategory from "../../components/Category/add-category/add-category.component";
 import {Route} from "react-router-dom";
-const CategoryManagementPage = ({match}) => {  
+import {connect} from "react-redux";
+import {fetchCategoryList} from "../../redux/category/category.actions";
+const CategoryManagementPage = ({match, fetchCategoryList}) => {  
+  useEffect( () => {fetchCategoryList()} ,[fetchCategoryList])
   return (
     <CategoryManagementPageContainer>
       <Toolbar/>
@@ -14,4 +17,8 @@ const CategoryManagementPage = ({match}) => {
   )
 }
 
-export default CategoryManagementPage
+const mapDispatchToProps = dispatch => ({
+  fetchCategoryList : () => dispatch(fetchCategoryList())
+})
+
+export default connect(null, mapDispatchToProps)(CategoryManagementPage)
