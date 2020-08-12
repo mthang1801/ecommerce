@@ -12,8 +12,9 @@ import {
 } from "../../UI/custom-form/custom-form.styles";
 import { AddCategoryContainer, DisplayImage,  } from "./add-category.styles";
 import { generateBase64FromImage } from "../../../utils/image";
-import axios from "../../../utils/axios";
-const AddCategory = () => {
+import {addCategory} from "../../../redux/category/category.actions";
+import {connect} from "react-redux";
+const AddCategory = ({addCategory}) => {
   const [name, setName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
@@ -45,7 +46,7 @@ const AddCategory = () => {
     formData.append("image", imageUrl);
     formData.append("name", name);
     formData.append("linkUrl", linkUrl);
-    axios.post("/admin/add-category", formData).then(res => { 
+    addCategory(formData).then(res => {
       setSuccess("Created Category Success!!");
       setImageUrl(null);
       setName("");
@@ -53,7 +54,8 @@ const AddCategory = () => {
       setImageBase64(null);
       formRef.current.reset();
     })
-    .catch(error => setError(error))
+    .catch(err => {console.log(err)})
+      
   }
   return (
     <AddCategoryContainer>
@@ -102,4 +104,8 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+const mapDispatchToProps = dispatch => ({
+  addCategory : category => dispatch(addCategory(category))
+})
+
+export default connect(null, mapDispatchToProps)(AddCategory);

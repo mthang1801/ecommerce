@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Thead,
@@ -9,9 +9,16 @@ import {
   Toggle,
 } from "../../UI/custom-table/custom-table.styles";
 import { FaEdit, FaTrash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-const ListTableCategory = ({ data }) => {  
+import { removeCategory } from "../../../redux/category/category.actions";
+import { connect } from "react-redux";
+import EditForm from "../edit-form/edit-form.component";
+
+const ListTableCategory = ({ data, removeCategory }) => {
   const [collapsed, setCollapsed] = useState([]);
-  const [colNum, setColNum] = useState(6);  
+  const [colNum, setColNum] = useState(0);
+  const [edit, setEdit] = useState({});
+  const [cols, setCols] = useState([]);
+  console.log(colNum )
   const close = (position) => {
     if (collapsed.includes(position)) {
       return true;
@@ -29,97 +36,83 @@ const ListTableCategory = ({ data }) => {
     }
   };
 
-  return (
-    <Table>
-      <Thead>
-        <Row number={colNum}>
-          <Data close={close(1)}>
-            <span>Id</span>{" "}
-            {close(1) ? (
-              <Toggle onClick={() => handleToggle(1)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(1)}>&#10094;</Toggle>
-            )}{" "}
-          </Data>
-          <Data close={close(2)}>
-            Name{" "}
-            {close(2) ? (
-              <Toggle onClick={() => handleToggle(2)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(2)}>&#10094;</Toggle>
-            )}
-          </Data>
-          <Data close={close(3)}>
-            linkUrl{" "}
-            {close(3) ? (
-              <Toggle onClick={() => handleToggle(3)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(3)}>&#10094;</Toggle>
-            )}
-          </Data>
-          <Data close={close(4)}>
-            ImageUrl{" "}
-            {close(4) ? (
-              <Toggle onClick={() => handleToggle(4)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(4)}>&#10094;</Toggle>
-            )}
-          </Data>
-          <Data close={close(5)}>
-            Created At{" "}
-            {close(5) ? (
-              <Toggle onClick={() => handleToggle(5)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(5)}>&#10094;</Toggle>
-            )}
-          </Data>
-          <Data close={close(6)}>
-            {" "}
-            {close(6) ? (
-              <Toggle onClick={() => handleToggle(6)}>&#10095;</Toggle>
-            ) : (
-              <Toggle onClick={() => handleToggle(6)}>&#10094;</Toggle>
-            )}
-          </Data>
-        </Row>
-      </Thead>
-      <Tbody>
-        {data.map((category) => (
-          <Row key={category._id} number={colNum}>
-            <Data close={close(1)} tbody title={category._id}>
-              {category._id}
-            </Data>
-            <Data close={close(2)} tbody title={category.name}>
-              {category.name}
-            </Data>
-            <Data close={close(3)} tbody title={category.linkUrl}>
-              {category.linkUrl}
-            </Data>
-            <Data close={close(4)} tbody title={category.imageUrl}>
-              <a
-                href={`http://localhost:5000/images/${category.imageUrl}`}
-                style={{ color: "blue" }}
-                target="_blank"
-              >
-                {category.imageUrl}
-              </a>
-            </Data>
-            <Data close={close(5)} tbody title={category.createdAt}>
-              {category.createdAt}
-            </Data>
-            <Data close={close(6)} tbody style={{ textAlign: "center" }}>
-              <Button color="#fbc531">
-                <FaEdit />
-              </Button>
-              <Button color="#dd2222">
-                <FaTrash />
-              </Button>
-            </Data>
-          </Row>
-        ))}
-      </Tbody>
-    </Table>
-  );
-};
+  useEffect(() => {
+    if (data && data.length) {
+      const cols = Object.keys(data[0])
+      .filter((item) => !["__v", "updatedAt"].includes(item))
+      .sort();
+      setCols(cols);
+      setColNum(cols.length+1);
+    }
+  }, [data]);
 
-export default ListTableCategory;
+  if (data.length) {
+    return (
+      <React.Fragment>
+        <Table>
+          <Thead>
+            <Row number={colNum}>
+              {cols.map((col, idx) => (
+                <Data close={close(idx)}>
+                  <span>{col}</span>
+                  {close(idx) ? (
+                    <Toggle onClick={() => handleToggle(idx)}>&#10095;</Toggle>
+                  ) : (
+                    <Toggle onClick={() => handleToggle(idx)}>&#10094;</Toggle>
+                  )}
+                </Data>
+              ))}
+              <Data>{close(cols.length) ? (
+                    <Toggle onClick={() => handleToggle(cols.length)}>&#10095;</Toggle>
+                  ) : (
+                    <Toggle onClick={() => handleToggle(cols.length)}>&#10094;</Toggle>
+                  )}</Data>
+            </Row>
+          </Thead>
+          <Tbody>
+            {data.map((category) => (
+              <Row key={category._id} number={colNum}>
+                {cols.map((col, idx) => (
+                  <Data close={close(idx)} tbody title={category[col]}>
+                    {col === "imageUrl" ? (
+                      <a
+                        href={`http://localhost:5000/images/${category[col]}`}
+                        style={{ color: "blue" }}
+                        target="_blank"
+                      >
+                        {category[col]}
+                      </a>
+                    ) : (
+                      category[col]
+                    )}
+                  </Data>
+                ))}
+                <Data
+                  close={close(cols.length)}
+                  tbody
+                  style={{ textAlign: "center" }}
+                >
+                  <Button color="#fbc531" onClick={() => setEdit(category)}>
+                    <FaEdit />
+                  </Button>
+                  <Button
+                    onClick={() => removeCategory(category._id)}
+                    color="#dd2222"
+                  >
+                    <FaTrash />
+                  </Button>
+                </Data>
+              </Row>
+            ))}
+          </Tbody>
+        </Table>
+        <EditForm edit={edit} setEdit={setEdit} />
+      </React.Fragment>
+    );
+  }
+  return null;
+};
+const mapDispatchToProps = (dispatch) => ({
+  removeCategory: (categoryId) => dispatch(removeCategory(categoryId)),
+});
+export default connect(null, mapDispatchToProps)(ListTableCategory);
