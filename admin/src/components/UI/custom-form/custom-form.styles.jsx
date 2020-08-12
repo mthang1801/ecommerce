@@ -79,12 +79,13 @@ export const Required = styled.span`
 `
 
 export const Select = styled.select`  
-  width : 100%; 
-  padding : .7rem 1rem;
-  font-size : 1.1em;
-  border : none ; 
-  outline : none ; 
-  border-bottom :1px solid #424242;
+  width: 105%;
+  padding: .6rem 1rem;
+  font-size: 1.1em;
+  border: none;
+  outline: none;
+  background-color: white;
+  border: 1px solid #424242;
 `
 
 export const Option = styled.option``

@@ -60,11 +60,11 @@ const AddCategory = ({addCategory}) => {
   return (
     <AddCategoryContainer>
       <Form ref={formRef} onSubmit={handleSubmitForm}>
-        <Title>Thêm Danh mục sản phẩm</Title>
+        <Title>Thêm Nhóm sản phẩm</Title>
         {error && <Error>{error}</Error>}
         {success && <Success>{success}</Success>}
         <FormGroup>
-          <Label>Tên Danh mục</Label>
+          <Label>Tên Nhóm</Label>
           <Input
             type="text"
             name="name"
@@ -73,7 +73,7 @@ const AddCategory = ({addCategory}) => {
           />
         </FormGroup>
         <FormGroup>
-          <Label>Tạo liên kết</Label>
+          <Label>Tạo Đường dẫn liên kết</Label>
           <Input
             type="text"
             name="linkUrl"
@@ -91,7 +91,7 @@ const AddCategory = ({addCategory}) => {
           />
         </FormGroup>
         <FormGroup>
-          <BtnSubmit>Thêm Sản Phẩm</BtnSubmit>
+          <BtnSubmit>Thêm Nhóm Sản phẩm</BtnSubmit>
         </FormGroup>
       </Form>
       {imgBase64 && (

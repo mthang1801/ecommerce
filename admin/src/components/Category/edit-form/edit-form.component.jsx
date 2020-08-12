@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {Form,FormGroup, Input, Title, Label, Error, BtnSubmit} from "../../UI/custom-form/custom-form.styles";
 import {EditFormWrapper, FormWrapper, DisplayImage, Image} from "./edit-form.styles"
-import Modal from "../../UI/modal/modal.component";
+import Backdrop from "../../UI/backdrop/backdrop.component";
 import {generateBase64FromImage} from "../../../utils/image";
 import {connect} from "react-redux";
 import {editCategory} from "../../../redux/category/category.actions"
@@ -46,7 +46,7 @@ const EditForm = ({edit, setEdit, editCategory}) => {
 
   return (
     <EditFormWrapper onSubmit={handleSubmitForm}>
-      <Modal show={showForm} close={() => setEdit({})}/>
+      <Backdrop show={showForm} close={() => setEdit({})}/>
       <FormWrapper show={showForm}>
         <Form >
           <Title>Cập nhật Category</Title>  

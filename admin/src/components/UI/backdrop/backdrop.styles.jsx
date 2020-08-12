@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ModalWrapper = styled.div`
+export const BackdropWrapper = styled.div`
   width: 100%;
   height: 100%;
   position : fixed; 

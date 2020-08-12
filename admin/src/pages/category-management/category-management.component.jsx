@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {CategoryManagementPageContainer} from "./category-management.styles";
+import {CategoryManagementPageWrapper} from "./category-management.styles";
 import Toolbar from "../../components/Category/toolbar/toolbar.component";
 import {default as CategoryListTable} from "../../components/Category/index-category/index-category.container";
 import AddCategory from "../../components/Category/add-category/add-category.component";
@@ -9,11 +9,11 @@ import {fetchCategoryList} from "../../redux/category/category.actions";
 const CategoryManagementPage = ({match, fetchCategoryList}) => {  
   useEffect( () => {fetchCategoryList()} ,[fetchCategoryList])
   return (
-    <CategoryManagementPageContainer>
+    <CategoryManagementPageWrapper>
       <Toolbar/>
       <Route path={`${match.path}`} exact component={CategoryListTable}/>      
       <Route path={`${match.path}/add-category`} component={AddCategory}/>      
-    </CategoryManagementPageContainer>
+    </CategoryManagementPageWrapper>
   )
 }
 

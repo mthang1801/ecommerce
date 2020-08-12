@@ -1,16 +1,16 @@
-import React, {useEffect} from "react";
-import {ModalWrapper} from "./modal.styles";
-const Modal = ({close, show}) => { 
-  useEffect(() => {    
-    function detectEscapeButton(e){
-      if(e.keyCode == 27){
-        close();
-      }
-    }
-    document.addEventListener("keydown", detectEscapeButton);
-    return  () => document.removeEventListener("keydown", detectEscapeButton);
-  },[])
-  return <ModalWrapper show={show} onClick={close}/>
+import React, { memo} from "react";
+import classes from "./Modal.module.css";
+import clsx from "clsx";
+import Backdrop from "../backdrop/backdrop.component";
+const Modal= props=> {     
+    return(
+      <React.Fragment>
+        <Backdrop show={props.show} close={props.close}></Backdrop>
+        <div className={clsx(classes.Modal, props.show ? classes.show : "")}>    
+          {props.children}
+        </div>      
+      </React.Fragment>
+    )  
 }
 
-export default Modal
+export default memo(Modal, (prevProps, nextProps) =>  nextProps.show === prevProps.show || nextProps.children === prevProps.children);
