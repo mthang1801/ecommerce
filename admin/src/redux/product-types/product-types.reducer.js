@@ -4,11 +4,14 @@ const INITIAL_STATE = {
   productTypesList: [],
   loading: false,
   error: undefined,
+  count: 0,
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_START:
+    case productTypesActionTypes.ADD_PRODUCT_TYPE_START:
+    case productTypesActionTypes.SEARCH_PRODUCT_TYPES_START:
       return {
         ...state,
         loading: true,
@@ -18,9 +21,24 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        productTypesList: action.payload.productTypesList,
+        count: action.payload.count,
+      };
+    case productTypesActionTypes.SEARCH_PRODUCT_TYPES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         productTypesList: action.payload,
       };
+    case productTypesActionTypes.ADD_PRODUCT_TYPE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        productTypesList: [...state.productTypesList, action.payload],
+      };
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_FAIL:
+    case productTypesActionTypes.ADD_PRODUCT_TYPE_FAIL:
+    case productTypesActionTypes.SEARCH_PRODUCT_TYPES_FAIL:
       return {
         ...state,
         loading: false,

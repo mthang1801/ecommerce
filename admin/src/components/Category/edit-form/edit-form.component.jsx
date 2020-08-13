@@ -38,7 +38,7 @@ const EditForm = ({edit, setEdit, editCategory}) => {
     formData.append("_id", edit._id);
     formData.append("image", imageUrl);
     formData.append("name", name);
-    formData.append("linkUrl", linkUrl);
+    formData.append("linkUrl", linkUrl);   
     editCategory(formData)
     .catch(error => setError(error))
   }

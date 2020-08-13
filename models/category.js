@@ -18,6 +18,7 @@ const CategorySchema = new mongoose.Schema(
     productTypes: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "product-types",
         required: true,
       },
     ],

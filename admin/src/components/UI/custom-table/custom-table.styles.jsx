@@ -6,9 +6,10 @@ export const Table = styled.div`
   flex-direction: column;
   width: 90%;
   min-width: 900px;
-  margin: auto;
-  overflow-y: auto;
+  margin: auto;  
   font-size : 0.85em;
+  max-height : 450px;
+  overflow : auto;
 `;
 
 export const Thead = styled.div`
@@ -23,6 +24,16 @@ export const Thead = styled.div`
 export const Tbody = styled.div`
   text-align: left;
 `;
+
+export const TFooter = styled.div`  
+  background-color: #192a56 !important;
+  color: white;
+  font-weight: bold;
+  display : flex ; 
+  justify-content : flex-end ;  
+  align-items : center;
+  padding : 0.5rem 1.5rem; 
+`
 
 export const Row = styled.div`
   padding: 0.2rem 0.5rem;
@@ -90,11 +101,23 @@ export const Button = styled.span`
   }
 `;
 
-export const Toggle = styled.span`
-  color: ${darken("0.1", "white")};
+export const BtnText = styled.span`
+  color: ${darken("0.2", "white")};
   cursor: pointer;
   &:hover {
     color: white;
+  } ; 
+  padding : 0.75rem;
+  &:disabled{
+    color : red;
   }
-  margin-left: 1rem;
 `;
+
+export const Select = styled.select`
+  padding : 0.15rem 0.5rem;
+  border:  none ; 
+  outline : none ;
+  font-size : 1.1em;
+`
+
+export const Option = styled.option``

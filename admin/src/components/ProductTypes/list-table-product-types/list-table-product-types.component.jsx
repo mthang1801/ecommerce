@@ -7,24 +7,31 @@ import {
   Data,
   Button,
   BtnText,
+  TFooter,
+  Select, 
+  Option
 } from "../../UI/custom-table/custom-table.styles";
 import { FaEdit, FaTrash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { removeCategory } from "../../../redux/category/category.actions";
 import { connect } from "react-redux";
+import {fetchProductTypes, findProductTypesById } from "../../../redux/product-types/product-types.actions"
 import EditForm from "../edit-form/edit-form.component";
+const ListTableCategory = ({ data, count,fetchProductTypes }) => {  
+  const page =  1;
+  const numPerPage =  5 ;
+  const selectNumPerPage = [5,10,20,50];
 
-const ListTableCategory = ({ data, removeCategory }) => {
   const [collapsed, setCollapsed] = useState([]);
   const [colNum, setColNum] = useState(0);
-  const [edit, setEdit] = useState({});
+  const [edit, setEdit] = useState(null);
   const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]);
-  console.log(colNum )
+
   const close = (position) => {
     if (collapsed.includes(position)) {
       return true;
     }
     return false;
   };
+  
   const handleToggle = (pos) => {
     let findIdx = collapsed.findIndex((idx) => idx === pos);
     if (findIdx > -1) {
@@ -36,6 +43,30 @@ const ListTableCategory = ({ data, removeCategory }) => {
     }
   };
 
+  const handleSelectNumPerPageChange = e => {
+    
+    fetchProductTypes(page, e.target.value);
+  }
+
+  const handleEditProductType = (id) => {
+    findProductTypesById(id).then(data => {
+      setEdit({_id: data._id, name : data.name, linkUrl : data.linkUrl, rootLink : data.category.linkUrl})
+    }).catch(err => console.log(err));
+  }
+
+  const handleClickNextPage = e => {
+    if(count > page * numPerPage ){     
+      fetchProductTypes(page+1,numPerPage);
+    }
+    return ; 
+  }
+  const handleClickPrevPage = e => {
+    if(page > 1) {
+      sessionStorage.setItem("page", page-1);  
+      fetchProductTypes(page-1,numPerPage);
+    }
+  }
+
   if (data.length) {
     return (
       <React.Fragment>
@@ -43,7 +74,7 @@ const ListTableCategory = ({ data, removeCategory }) => {
           <Thead>
             <Row number={colNum}>
               {cols.map((col, idx) => (
-                <Data close={close(idx)}>
+                <Data key={col} close={close(idx)}>
                   <span>{col}</span>
                   {close(idx) ? (
                     <BtnText onClick={() => handleToggle(idx)}>&#10095;</BtnText>
@@ -63,7 +94,7 @@ const ListTableCategory = ({ data, removeCategory }) => {
             {data.map((category) => (
               <Row key={category._id} number={colNum}>
                 {cols.map((col, idx) => (
-                  <Data close={close(idx)} tbody title={category[col]}>
+                  <Data key={`${col}-${idx}`} close={close(idx)} tbody title={category[col]}>
                     {col === "imageUrl" ? (
                       <a
                         href={`http://localhost:5000/images/${category[col]}`}
@@ -82,11 +113,11 @@ const ListTableCategory = ({ data, removeCategory }) => {
                   tbody
                   style={{ textAlign: "center" }}
                 >
-                  <Button color="#fbc531" onClick={() => setEdit(category)}>
+                  <Button color="#fbc531" onClick={() => handleEditProductType(category._id)}>
                     <FaEdit />
                   </Button>
                   <Button
-                    onClick={() => removeCategory(category._id)}
+                    onClick={() => {}}
                     color="#dd2222"
                   >
                     <FaTrash />
@@ -94,15 +125,25 @@ const ListTableCategory = ({ data, removeCategory }) => {
                 </Data>
               </Row>
             ))}
-          </Tbody>
+          </Tbody>          
+          <TFooter>
+            <BtnText onClick={handleClickPrevPage} disabled={ page == 1} >&#10094;</BtnText>
+            <span>{page}</span>
+            <BtnText onClick={handleClickNextPage} disabled={count > ( (page-1) * numPerPage)}>&#10095;</BtnText>
+            <Select value={numPerPage} onChange={handleSelectNumPerPageChange}>
+              {selectNumPerPage.map( item => (
+                <Option key={item} value={item}>{item}</Option>
+              ))}
+            </Select>
+          </TFooter>
         </Table>
-        <EditForm edit={edit} setEdit={setEdit} />
+        {edit && <EditForm edit={edit} setEdit={setEdit} />}
       </React.Fragment>
     );
   }
   return null;
 };
 const mapDispatchToProps = (dispatch) => ({
-  removeCategory: (categoryId) => dispatch(removeCategory(categoryId)),
+  fetchProductTypes : (page,number) => dispatch(fetchProductTypes(page,number))
 });
 export default connect(null, mapDispatchToProps)(ListTableCategory);
