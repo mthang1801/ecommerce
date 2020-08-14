@@ -1,5 +1,5 @@
 import React, { memo} from "react";
-import classes from "./Modal.module.css";
+import classes from "./modal.module.css";
 import clsx from "clsx";
 import Backdrop from "../backdrop/backdrop.component";
 const Modal= props=> {     

@@ -47,7 +47,7 @@ const NavigationItems = () => {
         <CustomLink to="/management/product-types" icon={<FaProjectDiagram />}>
           Loại Sản phẩm
         </CustomLink>
-        <CustomLink to="/management/products-list" icon={<FaListOl />}>
+        <CustomLink to="/management/products" icon={<FaListOl />}>
           DS sản phẩm
         </CustomLink>
         <CustomLink

@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
+const Products = require("../models/product");
 exports.getCategoryList = async (req, res, next) => {
   try {
     const searchKey = req.query.search || "";
@@ -21,7 +22,6 @@ exports.getCategoryList = async (req, res, next) => {
 
 exports.getProductTypes = async (req, res, next) => {
   try {
-    console.log(req.query);
     const searchKey = req.query.search || "";
     if (searchKey) {
       const categoryFilter = await ProductTypes.find({
@@ -34,7 +34,6 @@ exports.getProductTypes = async (req, res, next) => {
     }
     const page = +req.query.page || 1;
     let numberProductTypesPerPage = +req.query.number || 5;
-    console.log(page);
     const numberProductTypes = await ProductTypes.countDocuments();
     let productTypesList;
     if (numberProductTypesPerPage > numberProductTypes) {
@@ -55,6 +54,60 @@ exports.getProductTypesById = async (req, res, next) => {
     const id = req.params.id;
     const productTypes = await ProductTypes.findById(id).populate("category");
     res.status(200).json(productTypes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getListLinksProductTypes = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    const category = await Category.findById(id);
+    if (!category) {
+      const err = new Error("Category not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productTypes = category.productTypes;
+    let productTypesPromise = productTypes.map(async (_id) => {
+      const productType = await ProductTypes.findById(_id);
+      return {
+        _id: productType._id,
+        linkUrl: productType.linkUrl,
+        name: productType.name,
+      };
+    });
+    const listLinkUrl = await Promise.all(productTypesPromise);
+    res.status(200).json(listLinkUrl);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProducts = async (req, res, next) => {
+  try {
+    const searchKey = req.query.search || "";
+    if (searchKey) {
+      const categoryFilter = await Products.find({
+        $or: [
+          { name: { $regex: new RegExp(searchKey, "i") } },
+          { linkUrl: { $regex: new RegExp(searchKey, "i") } },
+        ],
+      });
+      return res.status(200).json(categoryFilter);
+    }
+    const page = +req.query.page || 1;
+    let numberProductsPerPage = +req.query.number || 5;
+    const numberProducts = await Products.countDocuments();
+    let productsList;
+    if (numberProductsPerPage > numberProducts) {
+      productsList = await Products.find();
+    } else {
+      productsList = await Products.find()
+        .skip((page - 1) * numberProductsPerPage)
+        .limit(numberProductsPerPage);
+    }
+    res.status(200).json({ productsList, count: numberProducts });
   } catch (error) {
     next(error);
   }

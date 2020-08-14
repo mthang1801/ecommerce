@@ -51,6 +51,7 @@ background-color : white;
 `
 
 export const Input = styled.input`
+  border-radius: 5px;
   width : 100%;  
   height : 100%; 
   padding : 0 0.5rem;  
@@ -86,6 +87,7 @@ export const Select = styled.select`
   outline: none;
   background-color: white;
   border: 1px solid #424242;
+  border-radius: 5px;
 `
 
 export const Option = styled.option``

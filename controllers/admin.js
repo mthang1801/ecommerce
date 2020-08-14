@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
+const Products = require("../models/product");
 const removeImage = require("../utils/removeImage");
 exports.postCategory = async (req, res, next) => {
   try {
@@ -67,6 +68,8 @@ exports.deleteCategory = async (req, res, next) => {
 exports.postAddProductTypes = async (req, res, next) => {
   try {
     const { name, linkUrl, rootLink } = req.body;
+    console.log(name, linkUrl, rootLink);
+
     const checkProductTypesExisting = await ProductTypes.findOne({
       $or: [{ name: { $regex: new RegExp(name, "i") } }, { linkUrl: linkUrl }],
     });
@@ -93,7 +96,6 @@ exports.postAddProductTypes = async (req, res, next) => {
 exports.putEditProductTypes = async (req, res, next) => {
   try {
     const { _id, name, linkUrl, rootUrl } = req.body;
-
     let productTypes = await ProductTypes.findById(_id);
     if (!productTypes) {
       const err = new Error("Product Types not found");
@@ -107,7 +109,6 @@ exports.putEditProductTypes = async (req, res, next) => {
       await category.save();
     }
     const newCategory = await Category.findOne({ linkUrl: rootUrl });
-    console.log(newCategory);
     productTypes.name = name;
     productTypes.linkUrl = linkUrl;
     productTypes.category = newCategory._id;
@@ -137,6 +138,32 @@ exports.deleteProductTypes = async (req, res, next) => {
       await category.save();
     }
     res.status(200).json({ msg: "remove Success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.postAddProducts = async (req, res, next) => {
+  try {
+    const { name, linkUrl, rootLink } = req.body;
+    let checkProductsExisting = await Products.findOne({
+      $or: [{ name: name }, { linkUrl: linkUrl }],
+    });
+    if (checkProductsExisting) {
+      const error = new Error("Product has been existing");
+      error.statusCode = 400;
+      throw error;
+    }
+    const productType = await ProductTypes.findOne({ linkUrl: rootLink });
+    const newProduct = new Products({
+      name,
+      linkUrl,
+      productType,
+    });
+    const createdProduct = await newProduct.save();
+    productType.products.push(createdProduct._id);
+    await productType.save();
+    res.status(201).json(createdProduct._doc);
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import {
   Form,
   Title,
@@ -14,32 +14,33 @@ import {
   FormInline,
 } from "../../UI/custom-form/custom-form.styles";
 import {
-  AddProductTypesWrapper,
+  AddProductWrapper,
   DisplayImage,
-} from "./add-product-types.styles";
-import { addProductType } from "../../../redux/product-types/product-types.actions"
-import { addCategory } from "../../../redux/category/category.actions";
+} from "./add-product.styles";
+import { addProduct } from "../../../redux/products/products.actions"
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCategoryList } from "../../../redux/category/category.selector";
-const AddProductTypes = ({addProductType, categoryList }) => {
+import axios from "axios";
+import Backdrop from "../../UI/backdrop/backdrop.component";
+import Spinner from "../../UI/spinner/spinner.component";
+const AddProductTypes = ({addProduct, categoryList }) => {
   const [name, setName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
-  const [rootLink, setRootLink] = useState(""); 
+  const [categoryLink, setCategoryLink] = useState(""); 
+  const [rootLink, setRootLink] = useState("");
+  const [productTypes, setProductTypes] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const formRef = useRef(null);
-  useEffect(() => {
-    setTimeout(() => {
-      setError(null);
-    }, 5000);
-  }, [error]);
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef(null);  
 
   useEffect(() => {
-    if (categoryList.length) {
-      setRootLink(categoryList[0].linkUrl);
+    if (categoryList.length) {      
+      setCategoryLink(categoryList[0].linkUrl);
     }
   }, [categoryList]);
+
   const handleChangeProductType = (e) => {
     let val = e.target.value ; 
     if(val[0] !== "/"){
@@ -48,29 +49,49 @@ const AddProductTypes = ({addProductType, categoryList }) => {
     setLinkUrl(val.replace(/[^a-zA-Z0-9/-]/g, ""))
   }
   const handleSelectChange = (e) => {
-    setRootLink(e.target.value);
+    e.preventDefault();
+    const categoryId = e.target.value ; 
+    setCategoryLink(categoryId);   
+    setLoading(true);
+    axios.get("/list-links-product-types", {params : {id : categoryId}})
+    .then(res => {
+      setProductTypes(res.data);
+      if(res.data.length){
+        setRootLink(res.data[0].linkUrl)
+      }
+      setLoading(false);
+    })
+    .catch(err => console.log(err));
   };
+
+  const handleChangeProductTypes = e => {
+    setRootLink(e.target.value);
+  }
+
   const handleSubmitForm = (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    if (!name || name.length < 3 || !linkUrl || linkUrl =="/" || !rootLink) {
+    if (!name || name.length < 3 || !linkUrl || linkUrl =="/" || !categoryLink || !rootLink) {
       setError("You must fill all fields and name at least 3 characters");
       return;
     }
     if(linkUrl[0] !== "/"){
       linkUrl = "/" + linkUrl;
-    }   
-    let formData = new FormData();
-    formData.append("name", name);
-    formData.append("linkUrl", rootLink + linkUrl);
-    formData.append("rootLink", rootLink)
-    addProductType(formData).then(
+    }
+    const data = {
+      name, 
+      linkUrl : rootLink + linkUrl,
+      rootLink
+    }
+      
+    addProduct(data).then(
       res => {
         setLinkUrl("");        
         setName("");
-        setRootLink(categoryList[0].linkUrl)
-        setSuccess("Thêm Loại SP thành công!");
+        setRootLink("");
+        setProductTypes([]);
+        setSuccess("Thêm SP thành công!");
         formRef.current.reset();
       }
     )
@@ -81,31 +102,44 @@ const AddProductTypes = ({addProductType, categoryList }) => {
   };
  
   return (
-    <AddProductTypesWrapper>
+    <AddProductWrapper>
+      <Backdrop show={loading}/>
+      {loading && <Spinner/>}
       <Form ref={formRef} onSubmit={handleSubmitForm}>
-        <Title>Thêm Loại SP</Title>
+        <Title>Thêm SP</Title>
         {error && <Error>{error}</Error>}
         {success && <Success>{success}</Success>}
         <FormGroup>
-          <Label>Tên Loại SP</Label>
+          <Label>Tên SP</Label>
           <Input
             type="text"
             name="name"
-            value={name}
+            value={name || ""}
             onChange={(e) => setName(e.target.value)}
           />
         </FormGroup>
         <FormGroup>
           <Label>Lựa chọn nhóm SP</Label>
-          <Select onChange={handleSelectChange}>
+          <Select defaultValue="#" onChange={handleSelectChange}>
+            <Option value="#" disabled>--Lựa chọn nhóm SP--</Option>
             {categoryList.map((categoryItem) => (
-              <Option key={categoryItem._id} value={categoryItem.linkUrl}>
+              <Option key={categoryItem._id} value={categoryItem._id}>
                 {categoryItem.name}
               </Option>
             ))}
           </Select>
         </FormGroup>
-          <FormGroup>
+        <FormGroup>
+          <Label>Lựa chọn loại SP</Label>
+          <Select defaultValue={rootLink} onChange={handleChangeProductTypes}>
+            {productTypes.map((link) => (
+              <Option key={link.name} value={link.linkUrl}>
+                {link.name}
+              </Option>
+            ))}
+          </Select>
+        </FormGroup>
+        <FormGroup>
             <Label>Đường dẫn gốc</Label>
             <Input value={rootLink} disabled/>
           </FormGroup>
@@ -131,10 +165,10 @@ const AddProductTypes = ({addProductType, categoryList }) => {
           </FormGroup>       
        
         <FormGroup>
-          <BtnSubmit>Thêm Loại SP</BtnSubmit>
+          <BtnSubmit>Thêm SP</BtnSubmit>
         </FormGroup>
       </Form>     
-    </AddProductTypesWrapper>
+    </AddProductWrapper>
   );
 };
 
@@ -143,7 +177,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addProductType: (productType) => dispatch(addProductType(productType)),
+  addProduct: (product) => dispatch(addProduct(product)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddProductTypes);
+export default memo(connect(mapStateToProps, mapDispatchToProps)(AddProductTypes));

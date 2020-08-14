@@ -16,7 +16,9 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
   const formRef = useRef(null);
   useEffect(() => {
     setName(edit.name);
-    setLinkUrl(edit.linkUrl);  
+    if(edit.linkUrl){
+      setLinkUrl("/" + edit.linkUrl.split("/")[2]); 
+    }    
     setRootLinkUrl(edit.rootLink)
   }, [edit, categoryList])
   const handleSelectChange = (e) => {
@@ -39,10 +41,9 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
     const  data = {
       _id : edit._id , 
       name, 
-      linkUrl,
+      linkUrl : rootLinkUrl + linkUrl,
       rootUrl : rootLinkUrl
-    }
-    console.log("submit")
+    }   
     
     editProductTypes(data).then(res => {
       setEdit({});

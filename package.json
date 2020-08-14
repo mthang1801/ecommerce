@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/mthang1801/ecommerce#readme",
   "dependencies": {
+    "clsx": "^1.1.1",
     "express": "^4.17.1",
     "mongoose": "^5.9.28",
     "multer": "^1.4.2",

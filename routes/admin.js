@@ -8,4 +8,5 @@ router.delete("/category", adminController.deleteCategory);
 router.post("/product-types", adminController.postAddProductTypes);
 router.put("/product-types", adminController.putEditProductTypes);
 router.delete("/product-types", adminController.deleteProductTypes);
+router.post("/products", adminController.postAddProducts);
 module.exports = router;
