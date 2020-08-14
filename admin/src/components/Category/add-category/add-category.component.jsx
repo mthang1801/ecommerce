@@ -96,7 +96,7 @@ const AddCategory = ({addCategory}) => {
       </Form>
       {imgBase64 && (
         <DisplayImage>
-          <img src={imgBase64} />
+          <img src={imgBase64} alt={linkUrl}/>
         </DisplayImage>
       )}
      

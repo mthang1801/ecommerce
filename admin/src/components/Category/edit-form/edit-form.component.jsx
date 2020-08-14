@@ -6,6 +6,7 @@ import {generateBase64FromImage} from "../../../utils/image";
 import {connect} from "react-redux";
 import {editCategory} from "../../../redux/category/category.actions"
 const EditForm = ({edit, setEdit, editCategory}) => {  
+  console.log("render");
   const [name, setName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -38,9 +39,9 @@ const EditForm = ({edit, setEdit, editCategory}) => {
     formData.append("_id", edit._id);
     formData.append("image", imageUrl);
     formData.append("name", name);
-    formData.append("linkUrl", linkUrl);   
-    editCategory(formData)
-    .catch(error => setError(error))
+    formData.append("linkUrl", linkUrl);      
+    // editCategory(formData)
+    // .catch(error => setError(error))
   }
   const showForm = Object.keys(edit).length >0;
 

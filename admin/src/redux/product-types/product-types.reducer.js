@@ -12,6 +12,7 @@ export default (state = INITIAL_STATE, action) => {
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_START:
     case productTypesActionTypes.ADD_PRODUCT_TYPE_START:
     case productTypesActionTypes.SEARCH_PRODUCT_TYPES_START:
+    case productTypesActionTypes.REMOVE_PRODUCT_TYPE_START:
       return {
         ...state,
         loading: true,
@@ -35,10 +36,21 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         productTypesList: [...state.productTypesList, action.payload],
+        count: state.count + 1,
+      };
+    case productTypesActionTypes.REMOVE_PRODUCT_TYPE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        productTypesList: state.productTypesList.filter(
+          (item) => item._id.toString() !== action.payload.toString()
+        ),
+        count: state.count - 1,
       };
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_FAIL:
     case productTypesActionTypes.ADD_PRODUCT_TYPE_FAIL:
     case productTypesActionTypes.SEARCH_PRODUCT_TYPES_FAIL:
+    case productTypesActionTypes.REMOVE_PRODUCT_TYPE_FAIL:
       return {
         ...state,
         loading: false,

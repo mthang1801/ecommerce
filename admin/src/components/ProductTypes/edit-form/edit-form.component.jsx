@@ -14,14 +14,11 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
   const [rootLinkUrl, setRootLinkUrl] = useState(""); 
   const [error, setError] = useState(null);
   const formRef = useRef(null);
-  // useEffect(() => {
-  //   setName(edit.name || "");
-  //   setLinkUrl(edit.linkUrl || "");  
-  //   setRootLinkUrl(edit.rootLink || "")
-  //   return () => edit ; 
-  // }, [edit])
-  
- 
+  useEffect(() => {
+    setName(edit.name);
+    setLinkUrl(edit.linkUrl);  
+    setRootLinkUrl(edit.rootLink)
+  }, [edit, categoryList])
   const handleSelectChange = (e) => {
     setRootLinkUrl(e.target.value);
   };
@@ -46,20 +43,18 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
       rootUrl : rootLinkUrl
     }
     console.log("submit")
-    axios.put("/admin/product-types", JSON.stringify(data))
-    .then(res => console.log(res))
-    .catch(err => setError(err.message));
-    // editProductTypes(data).then(res => {
-    //   setEdit({});
-    // })
-    // .catch(err => {
-    //   setError(err.message);
-    // })
+    
+    editProductTypes(data).then(res => {
+      setEdit({});
+    })
+    .catch(err => {
+      setError(err.message);
+    })
   }
   const showForm = Object.keys(edit).length >0;
 
   return (
-    <EditFormWrapper onSubmit={handleSubmitForm}>
+    <EditFormWrapper >
       <Backdrop show={showForm} close={() => setEdit({})}/>
       <FormWrapper show={showForm}>
       <Form ref={formRef} onSubmit={handleSubmitForm}>
@@ -70,7 +65,7 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
           <Input
             type="text"
             name="name"
-            value={name}
+            value={name || ""}
             onChange={(e) => setName(e.target.value)}
           />
         </FormGroup>
@@ -86,14 +81,14 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
         </FormGroup>
           <FormGroup>
             <Label>Đường dẫn gốc</Label>
-            <Input value={rootLinkUrl} disabled/>
+            <Input value={rootLinkUrl||""} disabled/>
           </FormGroup>
           <FormGroup>
             <Label>Tạo đường dẫn liên kết</Label>
             <Input
               type="text"
               name="linkUrl"
-              value={linkUrl}
+              value={linkUrl || ""}
               onChange={handleChangeProductType}
             />
             <Feedback>Không khoảnh trắng và ký tự đặc biệt</Feedback>
@@ -103,7 +98,7 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
             <Input
               type="text"
               name="linkUrl"
-              value={rootLinkUrl + linkUrl}
+              value={rootLinkUrl + linkUrl || ""}
               disabled
             />          
           </FormGroup>       

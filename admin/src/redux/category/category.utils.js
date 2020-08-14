@@ -8,11 +8,6 @@ export const editCategory = (categoryList, category) => {
 };
 
 export const removeCategory = (categoryList, categoryId) => {
-  console.log(categoryList);
-  const updatedCategoryList = categoryList.filter(
-    (categoryItem) => categoryItem._id.toString() !== categoryId.toString()
-  );
-  console.log(updatedCategoryList);
   return categoryList.filter(
     (categoryItem) => categoryItem._id.toString() !== categoryId.toString()
   );

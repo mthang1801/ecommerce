@@ -122,23 +122,52 @@ export const editProductTypesFail = (err) => ({
   payload: err,
 });
 
-export const editProductTypes = (formData) => (dispatch) => {
+export const editProductTypes = (productTypesData) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!formData) {
+      if (!productTypesData) {
         reject(new Error("Không tìm thấy loại sp"));
       }
       dispatch(editProductTypesStart());
+      console.log(productTypesData);
       const { data } = await axios({
         url: "/admin/product-types",
         method: "PUT",
-        data: JSON.stringify(formData),
+        data: productTypesData,
       });
       console.log(data);
       dispatch(editProductTypesSuccess());
       resolve(true);
     } catch (error) {
+      dispatch(editProductTypesFail(error.message));
       reject(error);
+    }
+  });
+};
+
+export const removeProductTypeStart = () => ({
+  type: productTypesActionTypes.REMOVE_PRODUCT_TYPE_START,
+});
+
+export const removeProductTypeSuccess = (id) => ({
+  type: productTypesActionTypes.REMOVE_PRODUCT_TYPE_SUCCESS,
+  payload: id,
+});
+
+export const removeProductTypeFail = () => ({
+  type: productTypesActionTypes.REMOVE_PRODUCT_TYPE_FAIL,
+});
+
+export const removeProductType = (id) => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      dispatch(removeProductTypeStart());
+      const res = await axios.delete("/admin/product-types", { data: { id } });
+      dispatch(removeProductTypeSuccess(id));
+      resolve(true);
+    } catch (error) {
+      dispatch(removeProductTypeFail(error.message));
+      reject(error.message);
     }
   });
 };

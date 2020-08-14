@@ -13,16 +13,18 @@ import {
 } from "../../UI/custom-table/custom-table.styles";
 import { FaEdit, FaTrash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { connect } from "react-redux";
-import {fetchProductTypes, findProductTypesById } from "../../../redux/product-types/product-types.actions"
+import {fetchProductTypes, findProductTypesById , removeProductType} from "../../../redux/product-types/product-types.actions"
 import EditForm from "../edit-form/edit-form.component";
-const ListTableCategory = ({ data, count,fetchProductTypes }) => {  
-  const page =  1;
-  const numPerPage =  5 ;
+import {selectProductTypesCount} from "../../../redux/product-types/product-types.selectors"
+import {createStructuredSelector} from "reselect";
+const ListTableCategory = ({ data,count, fetchProductTypes, removeProductType }) => {   
+  const numPerPage =  +sessionStorage.getItem("numPerPage") || 5 ;
+  let page = +sessionStorage.getItem("page") || 1 ;   
   const selectNumPerPage = [5,10,20,50];
 
   const [collapsed, setCollapsed] = useState([]);
   const [colNum, setColNum] = useState(0);
-  const [edit, setEdit] = useState(null);
+  const [edit, setEdit] = useState({});
   const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]);
 
   const close = (position) => {
@@ -43,8 +45,8 @@ const ListTableCategory = ({ data, count,fetchProductTypes }) => {
     }
   };
 
-  const handleSelectNumPerPageChange = e => {
-    
+  const handleSelectNumPerPageChange = e => {    
+    sessionStorage.setItem("numPerPage", e.target.value);
     fetchProductTypes(page, e.target.value);
   }
 
@@ -53,16 +55,28 @@ const ListTableCategory = ({ data, count,fetchProductTypes }) => {
       setEdit({_id: data._id, name : data.name, linkUrl : data.linkUrl, rootLink : data.category.linkUrl})
     }).catch(err => console.log(err));
   }
+  console.log(count)
+  const handleRemoveProductType = id => {  
+    removeProductType(id).then(res => {                 
+      console.log(page * numPerPage, count)
+      if(page > 1 && (page-1) * numPerPage === count - 1 ){
+        page -=1 ;
+        sessionStorage.setItem("page", page );
+        fetchProductTypes(page, numPerPage)
+      }
+    })
+  }
 
   const handleClickNextPage = e => {
-    if(count > page * numPerPage ){     
+    if(count > page * numPerPage ){         
+      sessionStorage.setItem("page", page+1);
       fetchProductTypes(page+1,numPerPage);
     }
     return ; 
   }
   const handleClickPrevPage = e => {
     if(page > 1) {
-      sessionStorage.setItem("page", page-1);  
+      sessionStorage.setItem("page" , page-1) ;
       fetchProductTypes(page-1,numPerPage);
     }
   }
@@ -117,7 +131,7 @@ const ListTableCategory = ({ data, count,fetchProductTypes }) => {
                     <FaEdit />
                   </Button>
                   <Button
-                    onClick={() => {}}
+                    onClick={() => handleRemoveProductType(category._id)}
                     color="#dd2222"
                   >
                     <FaTrash />
@@ -129,7 +143,7 @@ const ListTableCategory = ({ data, count,fetchProductTypes }) => {
           <TFooter>
             <BtnText onClick={handleClickPrevPage} disabled={ page == 1} >&#10094;</BtnText>
             <span>{page}</span>
-            <BtnText onClick={handleClickNextPage} disabled={count > ( (page-1) * numPerPage)}>&#10095;</BtnText>
+            <BtnText onClick={handleClickNextPage} disabled={count <= ( page * numPerPage )}>&#10095;</BtnText>
             <Select value={numPerPage} onChange={handleSelectNumPerPageChange}>
               {selectNumPerPage.map( item => (
                 <Option key={item} value={item}>{item}</Option>
@@ -137,13 +151,18 @@ const ListTableCategory = ({ data, count,fetchProductTypes }) => {
             </Select>
           </TFooter>
         </Table>
-        {edit && <EditForm edit={edit} setEdit={setEdit} />}
+        <EditForm edit={edit} setEdit={setEdit} />
       </React.Fragment>
     );
   }
   return null;
 };
+
+const mapStateToProps = createStructuredSelector({
+  count : selectProductTypesCount
+})
 const mapDispatchToProps = (dispatch) => ({
-  fetchProductTypes : (page,number) => dispatch(fetchProductTypes(page,number))
+  fetchProductTypes : (page,number) => dispatch(fetchProductTypes(page,number)),
+  removeProductType: (id) => dispatch(removeProductType(id))
 });
-export default connect(null, mapDispatchToProps)(ListTableCategory);
+export default connect(mapStateToProps, mapDispatchToProps)(ListTableCategory);

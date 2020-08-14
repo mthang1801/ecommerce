@@ -7,4 +7,5 @@ router.put("/category", adminController.putCategory);
 router.delete("/category", adminController.deleteCategory);
 router.post("/product-types", adminController.postAddProductTypes);
 router.put("/product-types", adminController.putEditProductTypes);
+router.delete("/product-types", adminController.deleteProductTypes);
 module.exports = router;

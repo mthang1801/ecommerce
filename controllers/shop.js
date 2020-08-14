@@ -34,6 +34,7 @@ exports.getProductTypes = async (req, res, next) => {
     }
     const page = +req.query.page || 1;
     let numberProductTypesPerPage = +req.query.number || 5;
+    console.log(page);
     const numberProductTypes = await ProductTypes.countDocuments();
     let productTypesList;
     if (numberProductTypesPerPage > numberProductTypes) {

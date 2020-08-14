@@ -93,28 +93,50 @@ exports.postAddProductTypes = async (req, res, next) => {
 exports.putEditProductTypes = async (req, res, next) => {
   try {
     const { _id, name, linkUrl, rootUrl } = req.body;
-    console.log(_id, name);
-    // let productTypes = await ProductTypes.findById(_id);
-    // if (!productTypes) {
-    //   const err = new Error("Product Types not found");
-    //   err.statusCode = 400;
-    //   throw err;
-    // }
-    // const category = await Category.findOne({ productTypes: _id });
 
-    // if (category && category.linkUrl !== rootUrl) {
-    //   category.productTypes.pull(_id);
-    //   await category.save();
-    // }
-    // const newCategory = await Category.findOne({ linkUrl: rootUrl });
-    // console.log(newCategory);
-    // productTypes.name = name;
-    // productTypes.linkUrl = linkUrl;
-    // productTypes.category = newCategory._id;
-    // let updatedProductType = await productTypes.save();
-    // newCategory.productTypes.push(_id);
-    // await newCategory.save();
-    // res.status(200).json(updatedProductType._doc);
+    let productTypes = await ProductTypes.findById(_id);
+    if (!productTypes) {
+      const err = new Error("Product Types not found");
+      err.statusCode = 400;
+      throw err;
+    }
+    const category = await Category.findOne({ productTypes: _id });
+
+    if (category && category.linkUrl !== rootUrl) {
+      category.productTypes.pull(_id);
+      await category.save();
+    }
+    const newCategory = await Category.findOne({ linkUrl: rootUrl });
+    console.log(newCategory);
+    productTypes.name = name;
+    productTypes.linkUrl = linkUrl;
+    productTypes.category = newCategory._id;
+    let updatedProductType = await productTypes.save();
+    newCategory.productTypes.push(_id);
+    await newCategory.save();
+    res.status(200).json(updatedProductType._doc);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteProductTypes = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const productType = await ProductTypes.findById(id);
+    if (!productType) {
+      const err = new Error("Product type not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    await ProductTypes.findByIdAndDelete(id);
+    //find category which contained productType
+    const category = await Category.findOne({ productTypes: id });
+    if (category) {
+      category.productTypes.pull(id);
+      await category.save();
+    }
+    res.status(200).json({ msg: "remove Success" });
   } catch (error) {
     next(error);
   }
