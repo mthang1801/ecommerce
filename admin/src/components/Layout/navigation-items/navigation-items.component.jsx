@@ -27,16 +27,16 @@ const NavigationItems = () => {
         onClick={() => setToggleWebExtension(!toggleWebExtension)}
       >
         <FaCoins
-          style={{ padding: "2px 5px 0 5px", verticalAlign: "middle" }}
+          style={{ verticalAlign: "middle" }}
         />{" "}
         Quản lý Website{" "}
         {toggleWebExtension ? (
-          <FaArrowUp
-            style={{ padding: "2px 5px 0 5px", verticalAlign: "middle" }}
+          <FaArrowDown
+            style={{ verticalAlign: "middle" }}
           />
         ) : (
-          <FaArrowDown
-            style={{ padding: "2px 5px 0 5px", verticalAlign: "middle" }}
+          <FaArrowUp
+            style={{ verticalAlign: "middle" }}
           />
         )}
       </CustomLink>
@@ -57,6 +57,7 @@ const NavigationItems = () => {
           Nhà bán hàng
         </CustomLink>
       </ExtensionScope>
+      
     </NavigationItemsContainer>
   );
 };

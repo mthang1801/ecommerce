@@ -10,6 +10,7 @@ const CategorySchema = new mongoose.Schema(
     linkUrl: {
       type: String,
       required: true,
+      index: true,
     },
     imageUrl: {
       type: String,

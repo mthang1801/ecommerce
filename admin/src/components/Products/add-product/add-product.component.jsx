@@ -72,7 +72,7 @@ const AddProductTypes = ({addProduct, categoryList }) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    if (!name || name.length < 3 || !linkUrl || linkUrl =="/" || !categoryLink || !rootLink) {
+    if (!name || name.length < 3 || !linkUrl || linkUrl =="/" || !categoryLink|| categoryLink === "#" || !rootLink || rootLink === "#") {
       setError("You must fill all fields and name at least 3 characters");
       return;
     }
@@ -100,7 +100,7 @@ const AddProductTypes = ({addProduct, categoryList }) => {
       setError(err);
     })
   };
- 
+ console.log(productTypes)
   return (
     <AddProductWrapper>
       <Backdrop show={loading}/>
@@ -131,7 +131,8 @@ const AddProductTypes = ({addProduct, categoryList }) => {
         </FormGroup>
         <FormGroup>
           <Label>Lựa chọn loại SP</Label>
-          <Select defaultValue={rootLink} onChange={handleChangeProductTypes}>
+          <Select defaultValue="#" onChange={handleChangeProductTypes}>
+          <Option value="#" disabled>--Lựa chọn loại SP--</Option>
             {productTypes.map((link) => (
               <Option key={link.name} value={link.linkUrl}>
                 {link.name}

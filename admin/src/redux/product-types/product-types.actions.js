@@ -135,8 +135,8 @@ export const editProductTypes = (productTypesData) => (dispatch) => {
         method: "PUT",
         data: productTypesData,
       });
-      console.log(data);
-      dispatch(editProductTypesSuccess());
+
+      dispatch(editProductTypesSuccess(data));
       resolve(true);
     } catch (error) {
       dispatch(editProductTypesFail(error.message));

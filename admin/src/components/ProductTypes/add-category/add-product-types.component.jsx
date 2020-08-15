@@ -29,17 +29,8 @@ const AddProductTypes = ({addProductType, categoryList }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const formRef = useRef(null);
-  useEffect(() => {
-    setTimeout(() => {
-      setError(null);
-    }, 5000);
-  }, [error]);
-
-  useEffect(() => {
-    if (categoryList.length) {
-      setRootLink(categoryList[0].linkUrl);
-    }
-  }, [categoryList]);
+  
+  
   const handleChangeProductType = (e) => {
     let val = e.target.value ; 
     if(val[0] !== "/"){
@@ -97,7 +88,8 @@ const AddProductTypes = ({addProductType, categoryList }) => {
         </FormGroup>
         <FormGroup>
           <Label>Lựa chọn nhóm SP</Label>
-          <Select onChange={handleSelectChange}>
+          <Select defaultValue="" onChange={handleSelectChange}>
+            <Option value="" disabled>--Lựa chọn nhóm SP--</Option>
             {categoryList.map((categoryItem) => (
               <Option key={categoryItem._id} value={categoryItem.linkUrl}>
                 {categoryItem.name}

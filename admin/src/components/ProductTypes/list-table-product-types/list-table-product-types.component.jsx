@@ -25,7 +25,7 @@ const ListTableCategory = ({ data,count, fetchProductTypes, removeProductType })
   const [collapsed, setCollapsed] = useState([]);
   const [colNum, setColNum] = useState(0);
   const [edit, setEdit] = useState({});
-  const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]);
+  const [cols, setCols] = useState(["name", "linkUrl", "createdAt"]);
 
   const close = (position) => {
     if (collapsed.includes(position)) {
@@ -55,7 +55,7 @@ const ListTableCategory = ({ data,count, fetchProductTypes, removeProductType })
       setEdit({_id: data._id, name : data.name, linkUrl : data.linkUrl, rootLink : data.category.linkUrl})
     }).catch(err => console.log(err));
   }
-  console.log(count)
+  
   const handleRemoveProductType = id => {  
     removeProductType(id).then(res => {                 
       console.log(page * numPerPage, count)

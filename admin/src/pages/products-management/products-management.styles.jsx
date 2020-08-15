@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ProductsWrapper = styled.main`
-  width: calc(100% - 200px);
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;

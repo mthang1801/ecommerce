@@ -1,5 +1,5 @@
 import productTypesActionTypes from "./product-types.types";
-
+import { eidtProductTypes } from "./product-types.utils";
 const INITIAL_STATE = {
   productTypesList: [],
   loading: false,
@@ -13,10 +13,10 @@ export default (state = INITIAL_STATE, action) => {
     case productTypesActionTypes.ADD_PRODUCT_TYPE_START:
     case productTypesActionTypes.SEARCH_PRODUCT_TYPES_START:
     case productTypesActionTypes.REMOVE_PRODUCT_TYPE_START:
+    case productTypesActionTypes.EIDT_PRODUCT_TYPE_START:
       return {
         ...state,
         loading: true,
-        error: false,
       };
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_SUCCESS:
       return {
@@ -47,10 +47,20 @@ export default (state = INITIAL_STATE, action) => {
         ),
         count: state.count - 1,
       };
+    case productTypesActionTypes.EIDT_PRODUCT_TYPE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        productTypesList: eidtProductTypes(
+          state.productTypesList,
+          action.payload
+        ),
+      };
     case productTypesActionTypes.FETCH_PRODUCT_TYPES_FAIL:
     case productTypesActionTypes.ADD_PRODUCT_TYPE_FAIL:
     case productTypesActionTypes.SEARCH_PRODUCT_TYPES_FAIL:
     case productTypesActionTypes.REMOVE_PRODUCT_TYPE_FAIL:
+    case productTypesActionTypes.EIDT_PRODUCT_TYPE_FAIL:
       return {
         ...state,
         loading: false,

@@ -9,6 +9,12 @@ const ProductSchema = new mongoose.Schema(
     linkUrl: {
       type: String,
       required: true,
+      index: true,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
     },
     productType: {
       type: mongoose.Schema.Types.ObjectId,

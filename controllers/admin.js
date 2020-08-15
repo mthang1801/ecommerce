@@ -1,6 +1,6 @@
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
-const Products = require("../models/product");
+const Product = require("../models/product");
 const removeImage = require("../utils/removeImage");
 exports.postCategory = async (req, res, next) => {
   try {
@@ -32,7 +32,6 @@ exports.postCategory = async (req, res, next) => {
 exports.putCategory = async (req, res, next) => {
   try {
     const { _id, name, linkUrl } = req.body;
-    console.log(req.body, req.file);
     const category = await Category.findById(_id);
     if (!category) {
       const error = new Error("Category not found");
@@ -44,7 +43,6 @@ exports.putCategory = async (req, res, next) => {
       await removeImage(filename);
       filename = req.file.filename;
     }
-    console.log(filename);
     category.name = name;
     category.linkUrl = linkUrl;
     category.imageUrl = filename;
@@ -68,8 +66,6 @@ exports.deleteCategory = async (req, res, next) => {
 exports.postAddProductTypes = async (req, res, next) => {
   try {
     const { name, linkUrl, rootLink } = req.body;
-    console.log(name, linkUrl, rootLink);
-
     const checkProductTypesExisting = await ProductTypes.findOne({
       $or: [{ name: { $regex: new RegExp(name, "i") } }, { linkUrl: linkUrl }],
     });
@@ -146,7 +142,7 @@ exports.deleteProductTypes = async (req, res, next) => {
 exports.postAddProducts = async (req, res, next) => {
   try {
     const { name, linkUrl, rootLink } = req.body;
-    let checkProductsExisting = await Products.findOne({
+    let checkProductsExisting = await Product.findOne({
       $or: [{ name: name }, { linkUrl: linkUrl }],
     });
     if (checkProductsExisting) {
@@ -155,15 +151,79 @@ exports.postAddProducts = async (req, res, next) => {
       throw error;
     }
     const productType = await ProductTypes.findOne({ linkUrl: rootLink });
-    const newProduct = new Products({
+    const categoryType = await Category.findById(productType.category);
+    const newProduct = new Product({
       name,
       linkUrl,
+      category: categoryType,
       productType,
     });
     const createdProduct = await newProduct.save();
     productType.products.push(createdProduct._id);
     await productType.save();
     res.status(201).json(createdProduct._doc);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.putEditProduct = async (req, res, next) => {
+  try {
+    const { _id, name, linkUrl, rootLink, categoryLink } = req.body.product;
+    const product = await Product.findById(_id)
+      .populate("category")
+      .populate("product-types");
+    if (!product) {
+      const err = new Error("Product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    if (product.linkUrl !== linkUrl) {
+      let oldProductType = await ProductTypes.findById(product.productType);
+      let oldCategory = await Category.findById(product.category);
+      let newProductType = await ProductTypes.findOne({ linkUrl: rootLink });
+      let newCategory = await Category.findOne({ linkUrl: categoryLink });
+      if (!oldProductType || !oldCategory || !newProductType || !newCategory) {
+        const error = new Error("Something went wrong with linkUrl");
+        error.statusCode = 400;
+        throw error;
+      }
+      if (rootLink !== product.productType.linkUrl) {
+        oldProductType.products.pull(_id);
+        await oldProductType.save();
+        product.productType = newProductType;
+        newProductType.products.push(_id);
+        await newProductType.save();
+        if (categoryLink !== product.category.linkUrl) {
+          product.category = newCategory;
+        }
+      }
+    }
+    product.name = name;
+    product.linkUrl = linkUrl;
+    const editedProduct = await product.save();
+    res.status(200).json(editedProduct._doc);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteProduct = async (req, res, next) => {
+  try {
+    const id = req.query.id;
+    const product = await Product.findById(id);
+
+    if (!product) {
+      const err = new Error("product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    await Product.findByIdAndDelete(id);
+    const productType = await ProductTypes.findOne({ products: id });
+    productType.products.pull(id);
+    await productType.save();
+    res.status(200).json({ msg: "remove success" });
   } catch (error) {
     next(error);
   }

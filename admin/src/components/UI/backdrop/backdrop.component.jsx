@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {BackdropWrapper} from "./backdrop.styles";
-const Backdrop = ({close, show}) => { 
+const Backdrop = ({close, show,loading=false}) => { 
   useEffect(() => {    
     function detectEscapeButton(e){
       if(e.keyCode == 27){
@@ -10,7 +10,8 @@ const Backdrop = ({close, show}) => {
     document.addEventListener("keydown", detectEscapeButton);
     return  () => document.removeEventListener("keydown", detectEscapeButton);
   },[])
-  return <BackdropWrapper show={show} onClick={close}/>
+  console.log(loading)
+  return <BackdropWrapper loading={loading ? loading : undefined} show={show} onClick={close}/>
 }
 
 export default Backdrop

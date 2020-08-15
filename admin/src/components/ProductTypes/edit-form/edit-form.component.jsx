@@ -6,9 +6,7 @@ import {createStructuredSelector} from "reselect";
 import {selectCategoryList} from "../../../redux/category/category.selector";
 import {editProductTypes} from "../../../redux/product-types/product-types.actions"
 import {connect} from "react-redux";
-import axios from "axios"
 const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {    
-  console.log("render");
   const [name, setName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [rootLinkUrl, setRootLinkUrl] = useState(""); 
@@ -34,7 +32,7 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
   const handleSubmitForm = e => {
     e.preventDefault(); 
     setError(null);    
-    if(!name || name.length < 3 || !linkUrl ){      
+    if(!name || name.length < 3 || !linkUrl || rootLinkUrl==="#" ){      
       setError("You must fill all fields and name at least 3 characters");
       return ;
     }    
@@ -72,7 +70,8 @@ const EditForm = ({edit, setEdit, categoryList, editProductTypes}) => {
         </FormGroup>
         <FormGroup>
           <Label>Lựa chọn nhóm SP</Label>
-          <Select defaultValue={linkUrl} onChange={handleSelectChange}>            
+          <Select defaultValue="#" onChange={handleSelectChange}>  
+          <Option value="#" disabled>--Lựa chọn nhóm SP--</Option>        
             {categoryList.map((categoryItem) => (
               <Option key={categoryItem._id} value={categoryItem.linkUrl} >
                 {categoryItem.name}

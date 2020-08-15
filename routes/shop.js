@@ -10,4 +10,5 @@ router.get(
   shopController.getListLinksProductTypes
 );
 router.get("/products", shopController.getProducts);
+router.get("/products/:id", shopController.getProductById);
 module.exports = router;
