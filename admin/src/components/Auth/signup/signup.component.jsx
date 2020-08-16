@@ -1,10 +1,12 @@
 import React  from "react"; 
-import {CustomFormContainer, FormHeader, Title, SubTitle,  FormGroups, FormActions, StyledLink, Option, FlashForm} from "../../UI/auth-form/auth-form.styles";
+import {CustomFormContainer, FormHeader, Title, SubTitle,  FormGroups, FormActions, StyledLink, Option, FlashForm, ErrorMessage} from "../../UI/auth-form/auth-form.styles";
 import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import {withRouter} from "react-router-dom";
 import {register} from "../../../redux/user/user.actions";
+import {selectUserError} from "../../../redux/user/user.selectors"
 import {connect} from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 const INITIAL_STATE = {       
   controls : {
@@ -135,12 +137,14 @@ class SignUp extends React.Component{
     Object.keys(this.state.controls).map( controlItem => {
       formInputArray.push(this.state.controls[controlItem]);
     })    
+    const {error} = this.props ; 
     return (
-      <CustomFormContainer onSubmit={this.handleSubmitSignUpForm}>
+      <CustomFormContainer onSubmit={this.handleSubmitSignUpForm}>        
         <FormHeader>
           <Title>Sign Up</Title>
           <SubTitle>Sign up your account via email and password.</SubTitle>
         </FormHeader>       
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <FormGroups>         
           {formInputArray.map(({label, name, touched, type, valid, validation, validationErrors, value}) => (
             <CustomInput
@@ -166,9 +170,11 @@ class SignUp extends React.Component{
     )
   }
 }
-
+const mapStateToProps = createStructuredSelector({
+  error : selectUserError
+})
 const mapDispatchToProps = dispatch => ({
   register : formData => dispatch(register(formData))
 })
 
-export default connect(null, mapDispatchToProps)(withRouter(SignUp));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

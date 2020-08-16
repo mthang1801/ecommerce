@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef, memo} from 'react'
-import {Form,FormGroup, Input, Title, Label, Error, BtnSubmit, Select, Option, Feedback} from "../../UI/custom-form/custom-form.styles";
+import {Form,FormGroup, Input, Title, Label, Error, BtnSubmit, Select, Option, Feedback} from "../../../../../../admin/src/components/UI/custom-form/custom-form.styles";
 import {EditFormWrapper, FormWrapper,} from "./edit-form.styles"
-import Backdrop from "../../UI/backdrop/backdrop.component";
+import Backdrop from "../../../../../../admin/src/components/UI/backdrop/backdrop.component";
 import {createStructuredSelector} from "reselect";
-import {selectCategoryList} from "../../../redux/category/category.selector";
+import {selectCategoryList} from "../../../../../../admin/src/redux/category/category.selector";
 import {editProduct} from "../../../redux/products/products.actions"
 import {connect} from "react-redux";
-import Spinner from "../../UI/spinner/spinner.component";
+import Spinner from "../../../../../../admin/src/components/UI/spinner/spinner.component";
 import axios from "axios"
 const EditForm = ({edit, setEdit, categoryList, editProduct}) => {    
   const [name, setName] = useState("");

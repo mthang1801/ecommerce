@@ -11,7 +11,6 @@ export const OptionLink = styled(Link)`
   };
   display : flex ; 
   align-items : center;
-
 `
 
 const ActiveLink = styled(Link)`

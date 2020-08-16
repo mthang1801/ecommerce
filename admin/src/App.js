@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navigation from "./components/Layout/navigation/navigation.component";
 import {
   BrowserRouter as Router,
@@ -8,14 +8,30 @@ import {
 } from "react-router-dom";
 import Auth from "./pages/auth/auth.component";
 import Management from "./pages/management/management.component";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+import {
+  selectCurrentUser,
+  selectUserLoading,
+} from "./redux/user/user.selectors";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { fetchUser } from "./redux/user/user.actions";
+import Spinner from "./components/UI/spinner/spinner.component";
 import "./App.css";
-function App({ user }) {
+function App({ user, fetchUser, loading }) {
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+  if (loading) return <Spinner />;
   return (
     <Router>
       <Switch>
+        <Route
+          path="/"
+          exact
+          render={(props) =>
+            user ? <Redirect to="/management" /> : <Redirect to="/auth" />
+          }
+        />
         <Route
           path="/auth"
           render={(props) =>
@@ -34,5 +50,9 @@ function App({ user }) {
 }
 const mapStateToProps = createStructuredSelector({
   user: selectCurrentUser,
+  loading: selectUserLoading,
 });
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => ({
+  fetchUser: () => dispatch(fetchUser()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);

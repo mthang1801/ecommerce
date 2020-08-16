@@ -4,7 +4,9 @@ import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import {SignInWrapper} from "./signin.styles";
 import {withRouter} from "react-router-dom";
-import {FaGooglePlusG, FaFacebookF} from "react-icons/fa";
+import {login} from "../../../redux/user/user.actions"
+import {connect} from "react-redux";
+
 class SignIn extends React.Component{
   state = {
     email : "", 
@@ -21,7 +23,7 @@ class SignIn extends React.Component{
     e.preventDefault();
     const {email, password} = this.state ; 
     this.setState({error : null })
-    
+    this.props.login(email, password);
   }
 
   render(){    
@@ -48,7 +50,10 @@ class SignIn extends React.Component{
       </SignInWrapper>
     )
   }
-
 }
 
-export default withRouter(SignIn);
+const mapDispatchToProps = dispatch => ({
+  login : (email, password) => dispatch(login(email, password))
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(SignIn));

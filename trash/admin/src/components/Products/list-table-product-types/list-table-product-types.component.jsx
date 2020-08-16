@@ -10,14 +10,14 @@ import {
   TFooter,
   Select, 
   Option
-} from "../../UI/custom-table/custom-table.styles";
+} from "../../../../../../admin/src/components/UI/custom-table/custom-table.styles";
 import { FaEdit, FaTrash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { connect } from "react-redux";
 import {fetchProducts, findProductById, removeProduct} from "../../../redux/products/products.actions"
 import EditForm from "../edit-form/edit-form.component";
 import {selectProductsCount, selectProductsList} from "../../../redux/products/products.selectors"
 import {createStructuredSelector} from "reselect";
-import Spinner from "../../UI/spinner/spinner.component";
+import Spinner from "../../../../../../admin/src/components/UI/spinner/spinner.component";
 const ListTableCategory = ({ data ,count, fetchProducts, removeProduct }) => {   
   let numPerPage =  +sessionStorage.getItem("numProductsPerPage") || 5 ;
   let page = +sessionStorage.getItem("productPage") || 1 ;   
