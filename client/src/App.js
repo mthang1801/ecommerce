@@ -10,13 +10,25 @@ import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.compo
 import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
 import Authentication from "./pages/auth/auth.component";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
 import Seller from "./pages/seller/seller.component";
-function App() {
+import { fetchUserStart } from "./redux/user/user.actions";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "./redux/user/user.selectors";
+function App({ fetchUser, user }) {
   const [width] = useWindowSize();
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
   return (
     <Router>
       <AppContext.Provider value={width}>
@@ -26,7 +38,12 @@ function App() {
         <Navigation />
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/auth" component={Authentication} />
+          <Route
+            path="/auth"
+            render={(props) =>
+              user ? <Redirect to="/" /> : <Authentication {...props} />
+            }
+          />
           <Route path="/shop-grid" component={ShopGrid} />
           <Route path="/cart" component={Cart} />
           <Route path="/details" component={ShopDetails} />
@@ -39,5 +56,10 @@ function App() {
     </Router>
   );
 }
-
-export default App;
+const mapStateToProps = createStructuredSelector({
+  user: selectCurrentUser,
+});
+const mapDispatchToProps = (dispatch) => ({
+  fetchUser: () => dispatch(fetchUserStart()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);

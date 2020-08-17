@@ -1,4 +1,5 @@
 const Staff = require("../models/staff");
+const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 exports.getAuthStaff = async (req, res, next) => {
@@ -38,6 +39,25 @@ exports.postLoginAuthStaff = async (req, res, next) => {
     const user = staff._doc;
     delete user.password;
     res.status(200).json({ token, user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAuthUser = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated) {
+      const err = new Error("Unauthorized");
+      err.statusCode = 401;
+      throw err;
+    }
+    const user = await User.findById(req.user._id, { "local.password": 0 });
+    if (!user) {
+      const err = new Error("Somthing went wrong with user");
+      err.statusCode = 404;
+      throw err;
+    }
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }

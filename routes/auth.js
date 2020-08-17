@@ -14,4 +14,11 @@ router.get("/staff", isAuth, authController.getAuthStaff);
  * @access public
  */
 router.post("/staff", authController.postLoginAuthStaff);
+/**
+ * @routes get /auth/user
+ * @desc get user authenticate via jwt
+ * @access private
+ */
+router.get("/user", isAuth, authController.getAuthUser);
+
 module.exports = router;

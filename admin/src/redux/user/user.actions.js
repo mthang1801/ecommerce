@@ -28,7 +28,6 @@ export const fetchUser = () => async (dispatch) => {
       throw new Error("Token has expired");
     }
     setAuthToken(localStorage.token);
-    console.log(axios.defaults.headers);
     const { data } = await axios.get("/auth/staff");
     dispatch(fetchUserSuccess(data));
   } catch (error) {

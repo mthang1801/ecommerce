@@ -29,13 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.28",
     "multer": "^1.4.2",
-    "polished": "^3.6.5",
-    "react-icons": "^3.10.0",
-    "react-router-dom": "^5.2.0",
-    "react-select": "^3.1.0",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "styled-components": "^5.1.1",
+    "nodemailer": "^6.4.11",
     "validator": "^13.1.1"
   },
   "devDependencies": {

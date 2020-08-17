@@ -7,7 +7,7 @@ export const Option = styled.span`
   margin-bottom : ${({m1}) => m1 ? "1rem" : 0};
   & > a{
     display : flex ; 
-    align-items : center;
+      align-items : center;
   };
   & svg{
     font-size : 1.5em;  

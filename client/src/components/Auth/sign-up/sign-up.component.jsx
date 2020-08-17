@@ -8,17 +8,17 @@ import {
   Option,
   FlashForm,
   Title,
-  SubTitle
+  SubTitle,
+  ErrorMessage
 } from "../../UI/custom-form/custom-form.styles";
 import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import { withRouter } from "react-router-dom";
 import { FaGooglePlusG, FaFacebookF } from "react-icons/fa";
-// import {
-//   signInWithGoogle,
-//   signInWithFacebook,
-//   signUpAccount,
-// } from "../../utils/firebase";
+import {registerStart} from "../../../redux/user/user.actions"
+import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {selectUserError} from "../../../redux/user/user.selectors"
 const INITIAL_STATE = {
   controls: {
     name: {
@@ -81,8 +81,7 @@ const INITIAL_STATE = {
 class SignUp extends React.Component {
   state = { ...INITIAL_STATE };
 
-  checkValidity = (value, rules) => {
-    console.log(rules);
+  checkValidity = (value, rules) => {   
     let isValid = true;
     let errorsMessage = [];
     if (rules.required) {
@@ -146,8 +145,9 @@ class SignUp extends React.Component {
       this.setState({ ...INITIAL_STATE });
       return;
     }
-    const { name, email, password } = this.state.controls;
-    // signUpAccount(name.value, email.value, password.value);
+    const { name, email, password } = this.state.controls;   
+    
+    this.props.registerStart(name.value,email.value, password.value);
   };
 
   render() {
@@ -156,6 +156,7 @@ class SignUp extends React.Component {
     Object.keys(this.state.controls).map((controlItem) => {
       formInputArray.push(this.state.controls[controlItem]);
     });
+    const {error} = this.props
     return (
       <CustomFormContainer onSubmit={this.handleSubmitSignUpForm}>
         <FormHeader>
@@ -164,6 +165,7 @@ class SignUp extends React.Component {
             Sign up your account via email and password.
           </SubTitle>
         </FormHeader>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <FlashForm>
           <CustomButton
             type="button"
@@ -242,4 +244,12 @@ class SignUp extends React.Component {
   }
 }
 
-export default withRouter(SignUp);
+const mapStateToProps = createStructuredSelector({
+  error : selectUserError
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerStart : (name,email,password) => dispatch(registerStart(name,email,password))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

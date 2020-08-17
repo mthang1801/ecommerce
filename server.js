@@ -5,6 +5,7 @@ const shopRouter = require("./routes/shop");
 const adminRouter = require("./routes/admin");
 const staffRouter = require("./routes/staff");
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
 const connectDB = require("./config/connectDB");
 const app = express();
 
@@ -47,16 +48,18 @@ const uploadFile = multer({
 
 app.use(uploadFile);
 app.use("/", shopRouter);
+app.use("/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/staff", staffRouter);
 app.use("/auth", authRouter);
+
 //handle error
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const data = error.data;
   const message = error.message;
   console.log(error);
-  res.status(status).json({ message });
+  res.status(status).json({ message: message });
 });
 connectDB()
   .then((res) => {

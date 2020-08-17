@@ -47,3 +47,7 @@ export const Icons = styled.div`
     padding : 0 .2rem;
   }
 `
+
+export const Logout = styled.span`
+  cursor : pointer ; 
+`

@@ -4,7 +4,9 @@ import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import {withRouter} from "react-router-dom";
 import {FaGooglePlusG, FaFacebookF} from "react-icons/fa"
-// import {signInWithGoogle, auth, signInWithFacebook} from "../../utils/firebase";
+import {connect} from "react-redux"
+import {loginStart} from "../../../redux/user/user.actions";
+
 class SignIn extends React.Component{
   state = {
     email : "", 
@@ -22,7 +24,7 @@ class SignIn extends React.Component{
     const {email, password} = this.state ; 
     this.setState({error : null })
     try {
-      // await auth.signInWithEmailAndPassword(email, password);      
+      this.props.login(email,password)
     } catch (error) {
       this.setState({error : error.message})
     }
@@ -57,4 +59,8 @@ class SignIn extends React.Component{
 
 }
 
-export default withRouter(SignIn);
+const mapDispatchToProps = dispatch => ({
+  login : (email,password) => dispatch(loginStart(email, password))
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(SignIn));
