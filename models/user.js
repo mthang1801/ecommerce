@@ -17,6 +17,8 @@ const UserSchema = new mongoose.Schema(
         type: String,
         default: "avatar-default.png",
       },
+      verify_token: String,
+      expiration_token: Date,
     },
     facebook: {
       name: {

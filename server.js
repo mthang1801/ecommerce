@@ -7,14 +7,18 @@ const staffRouter = require("./routes/staff");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const connectDB = require("./config/connectDB");
+const configViewEngine = require("./config/viewEngine");
 const app = express();
 
 const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
+//config view Engine
+configViewEngine(app);
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -58,7 +62,6 @@ app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const data = error.data;
   const message = error.message;
-  console.log(error);
   res.status(status).json({ message: message });
 });
 connectDB()

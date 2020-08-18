@@ -1,4 +1,4 @@
-import { put, takeLatest, call, all, delay } from "redux-saga/effects";
+import { put, takeLatest, call, all, delay, take } from "redux-saga/effects";
 import * as actions from "./user.actions";
 import userActionTypes from "./user.types";
 import axios from "axios";
@@ -24,7 +24,6 @@ function* fetchUser() {
       Math.ceil(new Date(localStorage.userExpDate).getTime() - Date.now()) /
       1000;
     const { data } = yield axios.get(urls.FETCH_USER_URL);
-    console.log(data);
     yield put(actions.fetchUserSuccess(data));
     console.log(timeRemain);
     yield put(actions.checkAuthTimeout(timeRemain));
@@ -35,6 +34,7 @@ function* fetchUser() {
 
 function* register({ payload: { name, email, password } }) {
   try {
+    console.log(axios.defaults.headers);
     const {
       data: { token, user, expDate },
     } = yield axios.post(urls.REGISTER_URL, { name, email, password });
@@ -45,6 +45,7 @@ function* register({ payload: { name, email, password } }) {
     yield put(actions.registerSuccess(user));
     yield put(actions.checkAuthTimeout(expDate));
   } catch (error) {
+    console.log(error);
     yield put(actions.registerFail(error.message));
   }
 }

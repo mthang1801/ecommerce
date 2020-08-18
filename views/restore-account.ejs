@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <div class="container">        
+      <form method="POST" action="/user/verify/update-account">
+        <h2 class="title">TẠO MỚI MẬT KHẨU</h2>      
+        <input type="hidden" name="token" value="<%= token %>"> 
+        <% if(error) {%>
+          <div class="error text-center"><%= error %></div>
+        <%}%>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="disabled" id="email" name="email" value="<%= email %>" readonly />          
+        </div>
+        <div class="form-group">
+          <label for="new-password">Nhập mật khẩu mới</label>
+          <input type="password" id="new-password" name="password" />       
+        </div>
+        <div class="form-group">
+          <label for="new-password-retype">Xác nhận mật khẩu mới</label>
+          <input type="password" id="new-password-retype" name="confirmPassword" />         
+        </div>
+        <button type="submit">Khôi phục</button>
+      </form>  
+  </div>
+</body>
+</html>

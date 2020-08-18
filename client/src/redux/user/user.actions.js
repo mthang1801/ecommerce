@@ -1,5 +1,5 @@
 import userActionTypes from "./user.types";
-
+import axios from "axios";
 export const fetchUserStart = () => ({
   type: userActionTypes.FETCH_USER_START,
 });
@@ -53,3 +53,31 @@ export const loginFail = (err) => ({
   type: userActionTypes.LOGIN_FAIL,
   payload: err,
 });
+
+export const restoreAccountStart = () => ({
+  type: userActionTypes.RESTORE_ACCOUNT_START,
+});
+
+export const restoreAccountSuccess = () => ({
+  type: userActionTypes.RESTORE_ACCOUNT_SUCCESS,
+});
+
+export const restoreAccountFail = (err) => ({
+  type: userActionTypes.RESTORE_ACCOUNT_FAIL,
+  payload: err,
+});
+
+export const restoreAccount = (email) => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      dispatch(restoreAccountStart());
+      console.log(axios.defaults.headers);
+      await axios.post("/user/restore-account", { email });
+      dispatch(restoreAccountSuccess());
+      resolve(true);
+    } catch (error) {
+      dispatch(restoreAccountFail(error.message));
+      reject(false);
+    }
+  });
+};

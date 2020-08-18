@@ -6,12 +6,21 @@ import {withRouter} from "react-router-dom";
 import {FaGooglePlusG, FaFacebookF} from "react-icons/fa"
 import {connect} from "react-redux"
 import {loginStart} from "../../../redux/user/user.actions";
-
+import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component"
 class SignIn extends React.Component{
   state = {
     email : "", 
     password : "",
-    error : null
+    error : null, 
+    disabled : true , 
+    loaded : false ,
+    captcha_value :null
+  }
+
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({loaded: true})
+    },1000)
   }
 
   handleChange = e => {
@@ -29,9 +38,13 @@ class SignIn extends React.Component{
       this.setState({error : error.message})
     }
   }
+  handleChangeGoogleRecaptcha = value => {
+    this.setState({ captcha_value: value, disabled: false });
+    if (value === null) this.setState({ disabled: true });
+  }
 
   render(){    
-    const {email, password, error} = this.state;   
+    const {email, password, error, disabled, loaded} = this.state;   
     const {authPath}  = this.props;   
     return (
       <CustomFormContainer onSubmit={this.onSubmitSigninForm}>
@@ -47,7 +60,8 @@ class SignIn extends React.Component{
         <FormGroups>                        
           <CustomInput type="text" name="email" value={email} label="Email" onChange={this.handleChange} required/>
           <CustomInput type="password" name="password" value={password} label="Password" onChange={this.handleChange} required/>
-          <CustomButton variant="outlined" size="small" color="#0d47a1" bgColor="blue">Sign In</CustomButton>
+          {loaded && <GoogleRecaptcha onChange={this.handleChangeGoogleRecaptcha}/>}
+          <CustomButton variant="outlined" size="small" color="#0d47a1" bgColor="blue" disabled={disabled} style={{marginTop : "1rem"}}>Sign In</CustomButton>
         </FormGroups>       
         <FormActions>          
           <Option>Don't have account ? <StyledLink to={`${authPath}/signup`}>Signup account</StyledLink></Option>

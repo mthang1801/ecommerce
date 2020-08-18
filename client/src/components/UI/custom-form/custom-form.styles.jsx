@@ -66,7 +66,7 @@ export const FlashForm = styled.div`
   @media screen and (max-width : 500px){    
     flex-direction : column;        
     &> *{
-      width : 100%;
+      width : 100% !important;
       margin-bottom : 1rem;
     }
   }

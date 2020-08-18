@@ -14,23 +14,26 @@ import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import { withRouter } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-
+import { restoreAccount } from "../../../redux/user/user.actions";
+import { connect } from "react-redux";
+import Loader from "../../UI/loader/loader.component";
+import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component"
 const TEST_SITE_KEY = "6LcvD8AZAAAAACzN8Rm8GyuqDckBjdIft40W75wJ";
-const DELAY = 1500;
+const DELAY = 0;
 class RestoreAccount extends React.Component {
   state = {
     email: "",
     error: null,
-    loading: false,
-    disabled: true,    
+    loaded: false,
+    disabled: true,
+    submitLoading: false,
+    captcha_value : null
   };
 
-  _reCaptchaRef = React.createRef();
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ loading: true });
-    }, DELAY);
+  componentDidMount() {    
+     setTimeout(() => {
+      this.setState({ loaded: true });
+     },1000)
   }
 
   handleChange = (e) => {
@@ -39,13 +42,15 @@ class RestoreAccount extends React.Component {
   };
 
   handleSubmit = async (e) => {
+    this.setState({submitLoading : true })
     const { email } = this.state;
     e.preventDefault();
     if (!email) {
       return;
     }
     try {
-      // await resetAccount(email);
+      await this.props.restoreAccount(email);
+      this.setState({submitLoading : false});
       this.props.history.push(`${this.props.match.path}/done`);
     } catch (error) {
       this.setState({ error: error.message });
@@ -53,63 +58,61 @@ class RestoreAccount extends React.Component {
   };
 
   reCaptchaHandleChange = (value) => {
-    this.setState({ value, disabled : false  });
-    if(value === null) this.setState({disabled: true})
-  }
+    this.setState({ captcha_value : value, disabled: false });
+    if (value === null) this.setState({ disabled: true });
+  };
 
   render() {
     console.log(this.props);
-    const { email, error, loading, disabled } = this.state;
+    const { email, error, loaded, disabled, submitLoading } = this.state;
     return (
-      <CustomFormContainer onSubmit={this.handleSubmit}>
-        <FormHeader>
-          <Title>Forgot account</Title>
-          <SubTitle>Get your account via Email.</SubTitle>
-        </FormHeader>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <FormGroups>
-          <CustomInput
-            type="text"
-            name="email"
-            value={email}
-            label="Email"
-            onChange={this.handleChange}
-            required
-          />
-          {loading && (
-            <Option>
-              {" "}
-              <ReCAPTCHA
-                style={{ display: "inline-block" }}
-                theme="dark"
-                badge="inline"
-                size="normal"
-                ref={this._reCaptchaRef}
-                sitekey={TEST_SITE_KEY}
-                onChange={this.reCaptchaHandleChange}
-                asyncScriptOnLoad={this.asyncScriptOnLoad}
-              />
-            </Option>
-          )}
-          <CustomButton
-            variant="contained"
-            color="white"
-            size="small"            
-            bgColor="#3949ab"
-            disabled={disabled}
-          >
-            Submit
-          </CustomButton>
-        </FormGroups>
+      <React.Fragment>
+        {submitLoading && <Loader />}
+        <CustomFormContainer onSubmit={this.handleSubmit}>
+          <FormHeader>
+            <Title>Forgot account</Title>
+            <SubTitle>Get your account via Email.</SubTitle>
+          </FormHeader>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <FormGroups>
+            <CustomInput
+              type="text"
+              name="email"
+              value={email}
+              label="Email"
+              onChange={this.handleChange}
+              required
+            />
+            {loaded && (
+              <Option>
+                {" "}
+               <GoogleRecaptcha onChange={this.reCaptchaHandleChange}/>
+               </Option>
+            )}
+            <CustomButton
+              variant="contained"
+              color="white"
+              size="small"
+              bgColor="#3949ab"
+              disabled={disabled}
+            >
+              Submit
+            </CustomButton>
+          </FormGroups>
 
-        <FormActions>
-          <Option>
-            <StyledLink to="/auth/signin">Back to Signin</StyledLink>
-          </Option>
-        </FormActions>
-      </CustomFormContainer>
+          <FormActions>
+            <Option>
+              <StyledLink to="/auth/signin">Back to Signin</StyledLink>
+            </Option>
+          </FormActions>
+        </CustomFormContainer>
+      </React.Fragment>
     );
   }
 }
 
-export default withRouter(RestoreAccount);
+const mapDispatchToProps = (dispatch) => ({
+  restoreAccount: (email) => dispatch(restoreAccount(email)),
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(RestoreAccount));

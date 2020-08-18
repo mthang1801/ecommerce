@@ -18,7 +18,8 @@ import { FaGooglePlusG, FaFacebookF } from "react-icons/fa";
 import {registerStart} from "../../../redux/user/user.actions"
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {selectUserError} from "../../../redux/user/user.selectors"
+import {selectUserError} from "../../../redux/user/user.selectors";
+import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component";
 const INITIAL_STATE = {
   controls: {
     name: {
@@ -77,9 +78,17 @@ const INITIAL_STATE = {
     },
   },
   formIsValid: false,
+  loaded : false ,
+  disabled : true 
 };
 class SignUp extends React.Component {
   state = { ...INITIAL_STATE };
+
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({loaded : true})
+    },1000)
+  }
 
   checkValidity = (value, rules) => {   
     let isValid = true;
@@ -150,8 +159,13 @@ class SignUp extends React.Component {
     this.props.registerStart(name.value,email.value, password.value);
   };
 
+  handleChangeGoogleRecaptcha = value => {
+    this.setState({ captcha_value: value, disabled: false });
+    if (value === null) this.setState({ disabled: true });
+  }
+
   render() {
-    const { formIsValid } = this.state;
+    const { formIsValid, loaded , disabled} = this.state;
     let formInputArray = [];
     Object.keys(this.state.controls).map((controlItem) => {
       formInputArray.push(this.state.controls[controlItem]);
@@ -218,12 +232,14 @@ class SignUp extends React.Component {
               />
             )
           )}
+          {loaded && <GoogleRecaptcha onChange={this.handleChangeGoogleRecaptcha}/>}
           <CustomButton
             variant="outlined"
             size="small"
             color="#0d47a1"
-            bgColor="blue"
-            disabled={!formIsValid}
+            bgColor="blue"            
+            disabled={!formIsValid || disabled}
+           
           >
             Submit
           </CustomButton>
