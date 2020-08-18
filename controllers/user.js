@@ -54,6 +54,8 @@ exports.postUserRegister = async (req, res, next) => {
     const expDate = +process.env.AUTH_EXP_DATE;
     const cloneUser = newUser._doc;
     delete cloneUser.local.password;
+    cloneUser.name = name;
+    cloneUser.email = email;
     res.status(201).json({ token, user: cloneUser, expDate });
   } catch (error) {
     next(error);
@@ -83,6 +85,8 @@ exports.postUserLogin = async (req, res, next) => {
     const expDate = +process.env.AUTH_EXP_DATE;
     const cloneUser = user._doc;
     delete cloneUser.local.password;
+    cloneUser.name = cloneUser.local.name;
+    cloneUser.email = email;
     res.status(200).json({ user: cloneUser, token, expDate });
   } catch (error) {
     next(error);
@@ -196,8 +200,10 @@ exports.postUserLoginFacebook = async (req, res, next) => {
       { expiresIn: +process.env.AUTH_EXP_DATE }
     );
     const expDate = +process.env.AUTH_EXP_DATE;
-
-    res.status(200).json({ token, user, expDate });
+    const cloneUser = user._doc;
+    cloneUser.name = name;
+    cloneUser.email = email;
+    res.status(200).json({ token, user: cloneUser, expDate });
   } catch (error) {
     next(error);
   }
@@ -222,6 +228,9 @@ exports.postUserLoginGoogle = async (req, res, next) => {
       { expiresIn: +process.env.AUTH_EXP_DATE }
     );
     const expDate = +process.env.AUTH_EXP_DATE;
+    const cloneUser = user._doc;
+    cloneUser.name = name;
+    cloneUser.email = email;
     res.status(200).json({ token, user, expDate });
   } catch (error) {
     next(error);

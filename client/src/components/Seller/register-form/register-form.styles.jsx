@@ -22,7 +22,7 @@ export const FormInline = styled.div`
   }
 `
 
-export const Label = styled.span`
+export const Label = styled.label`
   position : absolute ; 
   top : -1rem;
 `
@@ -47,6 +47,7 @@ export const Select = styled.select`
   width : 100%; 
   padding : .7rem 1rem;
   font-size : 1.1em;
+  line-height : 1.7;
   border : none ; 
   outline : none ; 
   border-bottom :1px solid #424242;

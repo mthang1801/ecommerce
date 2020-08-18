@@ -5,18 +5,23 @@ import RestoreAccount from "../../components/Auth/restore-account/restore-accoun
 import RestoreAccountDone from "../../components/Auth/restore-account-done/restore-account-done.component";
 import { Switch, Route } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-
+import {createStructuredSelector} from "reselect";
+import {connect} from "react-redux";
+import {selectCurrentUser} from "../../redux/user/user.selectors"
 class AuthPage extends React.Component {
+ 
   render() {
-    const { match, location, currentUser } = this.props;
-    if (currentUser) {
+    console.log(this.props.history)
+    const { match, location, user } = this.props;
+    if (user) {
       if (location.state) return <Redirect to={location.state.from} />;
       return <Redirect to="/" />;
     }
     return (
-      <Switch>
+      <Switch>       
         <Route
-          path={`${match.path}/signin`}
+          exact
+          path={`${match.path}`}
           render={(props) => <SignIn authPath={match.path} {...props} />}
         />
         <Route
@@ -39,5 +44,8 @@ class AuthPage extends React.Component {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  user : selectCurrentUser
+})
 
-export default AuthPage;
+export default connect(mapStateToProps)(AuthPage);

@@ -6,6 +6,7 @@ const adminRouter = require("./routes/admin");
 const staffRouter = require("./routes/staff");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const apiRouter = require("./routes/api");
 const connectDB = require("./config/connectDB");
 const configViewEngine = require("./config/viewEngine");
 const app = express();
@@ -56,7 +57,7 @@ app.use("/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/staff", staffRouter);
 app.use("/auth", authRouter);
-
+app.use("/api", apiRouter);
 //handle error
 app.use((error, req, res, next) => {
   console.log(error);

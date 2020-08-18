@@ -19,7 +19,7 @@ const ForgotPasswordDone = ({ history, location, match }) => {
         need to check your email to activate restore password feature and update
         new password.
       </TextContent>
-      <ButtonDone onClick={() => history.replace("/auth/signin")}>
+      <ButtonDone onClick={() => history.replace("/auth")}>
         Done
       </ButtonDone>
     </ForgotDoneContainer>

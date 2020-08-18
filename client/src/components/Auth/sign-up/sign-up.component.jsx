@@ -226,7 +226,7 @@ class SignUp extends React.Component {
         </FormGroups>
         <FormActions>
           <Option>
-            <StyledLink to="/auth/signin">Signin account</StyledLink>
+            <StyledLink to="/auth">Signin account</StyledLink>
           </Option>
           <Option>
             Forgot password ?{" "}

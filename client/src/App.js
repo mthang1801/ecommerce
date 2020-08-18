@@ -19,7 +19,7 @@ import {
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
-import Seller from "./pages/seller/seller.component";
+import { default as Seller } from "./pages/seller/seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -38,12 +38,7 @@ function App({ fetchUser, user }) {
         <Navigation />
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route
-            path="/auth"
-            render={(props) =>
-              user ? <Redirect to="/" /> : <Authentication {...props} />
-            }
-          />
+          <Route path="/auth" component={Authentication} />
           <Route path="/shop-grid" component={ShopGrid} />
           <Route path="/cart" component={Cart} />
           <Route path="/details" component={ShopDetails} />

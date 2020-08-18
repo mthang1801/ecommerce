@@ -29,6 +29,7 @@ class SignIn extends React.Component{
   render(){    
     const {email, password, error} = this.state; 
     const {match}= this.props;
+    console.log(match)
     return (
       <SignInWrapper>
          <CustomFormContainer onSubmit={this.onSubmitSigninForm}>

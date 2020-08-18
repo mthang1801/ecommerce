@@ -54,7 +54,7 @@ const NavigationItems = () => {
             <RowInline>
               <ToggleLanguages />
               <CustomLink
-                to="/auth/signin"
+                to="/auth"
                 style={{ textTransform: "capitialize", borderLeft: "1px solid #eee"}}
               >
                 <Icon

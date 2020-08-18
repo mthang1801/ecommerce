@@ -102,7 +102,7 @@ class RestoreAccount extends React.Component {
 
           <FormActions>
             <Option>
-              <StyledLink to="/auth/signin">Back to Signin</StyledLink>
+              <StyledLink to="/auth">Back to Signin</StyledLink>
             </Option>
           </FormActions>
         </CustomFormContainer>

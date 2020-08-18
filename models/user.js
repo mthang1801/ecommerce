@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
+    first_name: String,
+    last_name: String,
     local: {
       name: { type: String, unique: true, sparse: true },
       email: {
@@ -34,10 +36,12 @@ const UserSchema = new mongoose.Schema(
       default: "customer", //seller
     },
     information: {
+      email: String,
       city: String,
       district: String,
       address: String,
-      phone: String,
+      phone1: String,
+      phone2: String,
       zipCode: Number,
     },
     status: {

@@ -22,6 +22,7 @@
     "react-image-magnifiers": "^1.4.0",
     "react-img-zoom": "^0.1.0",
     "react-magnifier": "^3.0.4",
+    "react-payment-inputs": "^1.1.7",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",

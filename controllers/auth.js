@@ -57,7 +57,14 @@ exports.getAuthUser = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    res.status(200).json(user);
+    const cloneUser = user._doc;
+    cloneUser.name =
+      cloneUser.local.name || cloneUser.google.name || cloneUser.facebook.name;
+    cloneUser.email =
+      cloneUser.local.email ||
+      cloneUser.google.email ||
+      cloneUser.facebook.email;
+    res.status(200).json(cloneUser);
   } catch (error) {
     next(error);
   }

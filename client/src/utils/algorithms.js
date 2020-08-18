@@ -2,6 +2,8 @@ import CATEGORIES_DATA from "../data/category";
 import PRODUCTS_DATA from "../data/products";
 import SELLERS_DATA from "../data/sellers";
 import CART_DATA from "../data/cart";
+import axios from "axios";
+import urls from "./urls";
 export const getLatestProducts = () => {
   let sellers = [...SELLERS_DATA];
   sellers.sort((a, b) => {
@@ -126,4 +128,28 @@ export const getCategoryList = () => {
 
 export const getProductsByProductType = (productType) => {
   return PRODUCTS_DATA[productType];
+};
+
+export const getListCities = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(urls.LIST_CITIES_API);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getListDistricts = async (cityID) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(
+        urls.LIST_DISTRICTS_BASE_ON_CITY_API(cityID)
+      );
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

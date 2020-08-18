@@ -163,7 +163,7 @@ class SignUp extends React.Component{
           <CustomButton variant="outlined" size="small" color="#0d47a1" bgColor="blue" disabled={!formIsValid}>Submit</CustomButton>
         </FormGroups>       
         <FormActions>          
-          <Option><StyledLink to="/auth/signin">Signin account</StyledLink></Option>
+          <Option><StyledLink to="/auth">Signin account</StyledLink></Option>
           <Option>Forgot password ? <StyledLink to="/auth/forgot-password">Get Password Again.</StyledLink></Option>
         </FormActions>
       </CustomFormContainer>
