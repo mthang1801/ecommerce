@@ -6,7 +6,9 @@ import {withRouter} from "react-router-dom";
 import {FaGooglePlusG, FaFacebookF} from "react-icons/fa"
 import {connect} from "react-redux"
 import {loginStart} from "../../../redux/user/user.actions";
-import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component"
+import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component";
+import FacebookLogin from "../../UI/facebook-login/facebook-login.component";
+import GoogleLogin from "../../UI/google-login/google-login.component";
 class SignIn extends React.Component{
   state = {
     email : "", 
@@ -31,6 +33,10 @@ class SignIn extends React.Component{
   onSubmitSigninForm = async e => {
     e.preventDefault();
     const {email, password} = this.state ; 
+    if(!email || !password){
+      this.setState({error : "Email và mật khẩu không được để trống"});
+      return;
+    }
     this.setState({error : null })
     try {
       this.props.login(email,password)
@@ -54,8 +60,8 @@ class SignIn extends React.Component{
         </FormHeader>
         {error &&  <ErrorMessage>{error}</ErrorMessage>}
         <FlashForm>
-          <CustomButton type="button" icon={<FaGooglePlusG/>} size="small"  color="white" bgColor="#EA4335" variant="contained" onClick={() => {}} positionIcon="after">Sign In</CustomButton>     
-          <CustomButton type="button" icon={<FaFacebookF/>} size="small"  color="white" bgColor="#4267B2" variant="contained" onClick={() => {}} positionIcon="after">Sign In</CustomButton>     
+          <FacebookLogin/>
+          <GoogleLogin/>         
         </FlashForm>
         <FormGroups>                        
           <CustomInput type="text" name="email" value={email} label="Email" onChange={this.handleChange} required/>

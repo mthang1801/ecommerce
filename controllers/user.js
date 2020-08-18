@@ -24,14 +24,15 @@ exports.postUserRegister = async (req, res, next) => {
       error.statusCode = 400;
       throw error;
     }
-    const staff = await User.findOne({
+    const user = await User.findOne({
       $or: [
         { "local.email": email },
         { "facebook.email": email },
         { "google.email": email },
       ],
     });
-    if (staff) {
+
+    if (user) {
       const error = new Error("Email has been existing");
       error.statusCode = 400;
       throw error;
@@ -44,16 +45,16 @@ exports.postUserRegister = async (req, res, next) => {
         password: hashPassword,
       },
     });
-    const createdUser = await newUser.save();
+    await newUser.save();
     const token = jwt.sign(
       { userId: newUser._id, email: email },
       process.env.JwT_SECRET,
       { expiresIn: +process.env.AUTH_EXP_DATE }
     );
     const expDate = +process.env.AUTH_EXP_DATE;
-    const user = createdUser._doc;
-    delete user.local.password;
-    res.status(201).json({ token, user, expDate });
+    const cloneUser = newUser._doc;
+    delete cloneUser.local.password;
+    res.status(201).json({ token, user: cloneUser, expDate });
   } catch (error) {
     next(error);
   }
@@ -173,5 +174,56 @@ exports.postUpdateAccount = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+exports.postUserLoginFacebook = async (req, res, next) => {
+  try {
+    const { id, name, email } = req.body;
+    let user = await User.findOne({ "facebook.id": id });
+    if (!user) {
+      user = new User({
+        facebook: {
+          id,
+          name,
+          email,
+        },
+      });
+      await user.save();
+    }
+    const token = jwt.sign(
+      { userId: user._id, email: email },
+      process.env.JwT_SECRET,
+      { expiresIn: +process.env.AUTH_EXP_DATE }
+    );
+    const expDate = +process.env.AUTH_EXP_DATE;
+
+    res.status(200).json({ token, user, expDate });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postUserLoginGoogle = async (req, res, next) => {
+  try {
+    const { id, name, email } = req.body;
+    let user = await User.findOne({ "google.id": id });
+    if (!user) {
+      user = new User({
+        google: {
+          id,
+          name,
+          email,
+        },
+      });
+      await user.save();
+    }
+    const token = jwt.sign(
+      { userId: user._id, email: email },
+      process.env.JwT_SECRET,
+      { expiresIn: +process.env.AUTH_EXP_DATE }
+    );
+    const expDate = +process.env.AUTH_EXP_DATE;
+    res.status(200).json({ token, user, expDate });
+  } catch (error) {
+    next(error);
   }
 };

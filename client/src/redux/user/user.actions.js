@@ -54,6 +54,15 @@ export const loginFail = (err) => ({
   payload: err,
 });
 
+export const loginFacebookStart = (id, name, email) => ({
+  type: userActionTypes.LOGIN_VIA_FACEBOOK_START,
+  payload: { id, email, name },
+});
+export const loginGoogleStart = (id, name, email) => ({
+  type: userActionTypes.LOGIN_VIA_GOOGLE_START,
+  payload: { id, email, name },
+});
+
 export const restoreAccountStart = () => ({
   type: userActionTypes.RESTORE_ACCOUNT_START,
 });

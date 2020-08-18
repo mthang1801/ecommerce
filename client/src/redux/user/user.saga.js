@@ -65,6 +65,36 @@ function* login({ payload: { email, password } }) {
   }
 }
 
+function* loginFacebook({ payload: { id, name, email } }) {
+  try {
+    const {
+      data: { token, user, expDate },
+    } = yield axios.post(urls.LOGIN_FB_URL, { id, name, email });
+    localStorage.setItem("userToken", token);
+    localStorage.setItem("userExpDate", new Date(Date.now() + expDate * 1000));
+    setAuthToken(token);
+    yield put(actions.loginSuccess(user));
+    yield put(actions.checkAuthTimeout(expDate));
+  } catch (error) {
+    yield put(actions.loginFail());
+  }
+}
+function* loginGoogle({ payload: { id, name, email } }) {
+  try {
+    console.log(name, email);
+    const {
+      data: { token, user, expDate },
+    } = yield axios.post(urls.LOGIN_GG_URL, { id, name, email });
+    localStorage.setItem("userToken", token);
+    localStorage.setItem("userExpDate", new Date(Date.now() + expDate * 1000));
+    setAuthToken(token);
+    yield put(actions.loginSuccess(user));
+    yield put(actions.checkAuthTimeout(expDate));
+  } catch (error) {
+    yield put(actions.loginFail());
+  }
+}
+
 function* checkAuthTimeout({ payload }) {
   yield delay(payload * 1000);
   yield put(actions.logoutStart());
@@ -89,6 +119,13 @@ function* onLogin() {
   yield takeLatest(userActionTypes.LOGIN_START, login);
 }
 
+function* onLoginFacebook() {
+  yield takeLatest(userActionTypes.LOGIN_VIA_FACEBOOK_START, loginFacebook);
+}
+function* onLoginGoogle() {
+  yield takeLatest(userActionTypes.LOGIN_VIA_GOOGLE_START, loginGoogle);
+}
+
 function* onLogout() {
   yield takeLatest(userActionTypes.LOGOUT_START, logout);
 }
@@ -104,5 +141,7 @@ export default function* userSaga() {
     call(onCheckAuthTimeout),
     call(onFetchUser),
     call(onLogin),
+    call(onLoginFacebook),
+    call(onLoginGoogle),
   ]);
 }

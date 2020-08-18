@@ -20,6 +20,8 @@ import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {selectUserError} from "../../../redux/user/user.selectors";
 import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component";
+import FacebookLogin from "../../UI/facebook-login/facebook-login.component";
+import GoogleLogin from "../../UI/google-login/google-login.component";
 const INITIAL_STATE = {
   controls: {
     name: {
@@ -180,31 +182,9 @@ class SignUp extends React.Component {
           </SubTitle>
         </FormHeader>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <FlashForm>
-          <CustomButton
-            type="button"
-            icon={<FaGooglePlusG />}
-            size="small"
-            color="white"
-            bgColor="#EA4335"
-            variant="contained"
-            onClick={() => {}}
-            positionIcon="after"
-          >
-            Sign In
-          </CustomButton>
-          <CustomButton
-            type="button"
-            icon={<FaFacebookF />}
-            size="small"
-            color="white"
-            bgColor="#4267B2"
-            variant="contained"
-            onClick={() => {}}
-            positionIcon="after"
-          >
-            Sign In
-          </CustomButton>
+        <FlashForm>         
+          <FacebookLogin/>
+          <GoogleLogin/>
         </FlashForm>
         <FormGroups>
           {formInputArray.map(

@@ -61,7 +61,7 @@ export const FlashForm = styled.div`
   justify-content : space-around;
   & > * {
     display : block;
-    width : 40% !important;
+    width : 46% !important;
   }
   @media screen and (max-width : 500px){    
     flex-direction : column;        

@@ -3,50 +3,39 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema(
   {
     local: {
-      name: {
-        type: String,
-      },
+      name: { type: String, unique: true, sparse: true },
       email: {
         type: String,
+        require: true,
+        index: true,
         unique: true,
+        sparse: true,
       },
-      password: {
-        type: String,
-      },
-      avatar: {
-        type: String,
-        default: "avatar-default.png",
-      },
+      password: String,
       verify_token: String,
       expiration_token: Date,
     },
     facebook: {
-      name: {
-        type: String,
-      },
-      email: {
-        type: String,
-        unique: true,
-      },
-      avatar: {
-        type: String,
-      },
+      id: String,
+      name: { type: String, unique: true, sparse: true },
+      email: { type: String },
     },
     google: {
-      name: {
-        type: String,
-      },
-      email: {
-        type: String,
-        unique: true,
-      },
-      avatar: {
-        type: String,
-      },
+      id: String,
+      name: { type: String, unique: true, sparse: true },
+      email: { type: String, unique: true, sparse: true },
+    },
+    avatar: {
+      type: String,
+      default: "avatar-default.png",
+    },
+    role: {
+      type: String,
+      default: "customer", //seller
     },
     information: {
-      country: String,
       city: String,
+      district: String,
       address: String,
       phone: String,
       zipCode: Number,
@@ -86,7 +75,7 @@ const UserSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 module.exports = mongoose.model("users", UserSchema);
