@@ -6,8 +6,7 @@ export const Form = styled.form`
   margin : 1rem auto;
 `
 export const FormGroup = styled.div`
-  display : flex ; 
-  flex-direction: column ; 
+  display : flex ;   
   &:not(:last-child){
     margin-bottom : 2rem;
   }
@@ -55,3 +54,12 @@ export const Select = styled.select`
 `
 
 export const Option = styled.option``
+
+export const Editable = styled.span` 
+  color : rgba(0,0,0,0.75)  ;
+  cursor : pointer;
+  font-size : 1.6em;
+  &:hover{
+    color : black;
+  }
+`

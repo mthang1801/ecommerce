@@ -1,12 +1,28 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {TermsAndPrivacyContainer} from "./term-and-privacy.styles"
 import AppContext from "../../../context/app-viewport.context";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-const TermsAndPrivacy = () => { 
+const TermsAndPrivacy = ({setDisabledNext}) => { 
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   const [tabletView, setTabletView] = useState(window.innerWidth < 992 && window.innerWidth >= 660);
   const [checked, setChecked] = useState(false);
+  const articleRef = useRef(null)
+  useEffect(() => {
+    if(checked){
+      setDisabledNext(false);
+    }else{
+      setDisabledNext(true);
+    }
+  }, [checked])
+
+  useEffect(() => {
+    console.log(articleRef.current.offsetTop)
+    window.scroll({
+      top: articleRef.current.offsetTop,      
+      behavior: 'smooth'
+    });
+  }, [])
   const width = useContext(AppContext);
   useEffect(() => {
     if (width < 660) {
@@ -22,7 +38,7 @@ const TermsAndPrivacy = () => {
   }, [width]);
   return (
     <TermsAndPrivacyContainer mobileView={mobileView} tabletView={tabletView}>
-      <article>
+      <article ref={articleRef}>
         <div >
           <h2>
             <strong>Terms and Conditions</strong>

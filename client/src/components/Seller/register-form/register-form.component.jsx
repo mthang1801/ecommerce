@@ -8,6 +8,7 @@ import {
   Required,
   Select,
   Option,
+  Editable
 } from "./register-form.styles";
 import AppContext from "../../../context/app-viewport.context";
 import { connect } from "react-redux";
@@ -15,9 +16,13 @@ import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../../redux/user/user.selectors";
 import { PaymentInputsWrapper, usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
-import { getListCities, getListDistricts } from "../../../utils/algorithms";
-import Loader from "../../UI/loader/loader.component";
-const RegisterForm = ({ user }) => {
+import {
+  getListCities,
+  getListDistricts,
+  getListWards,
+} from "../../../utils/algorithms";
+import {FiEdit} from "react-icons/fi"
+const RegisterForm = ({ user, disabledNext, setDisabledNext }) => {  
   const {
     wrapperProps,
     getCardImageProps,
@@ -27,17 +32,28 @@ const RegisterForm = ({ user }) => {
   } = usePaymentInputs();
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [cvc, setCvc] = useState("");
-  const [payMethod, setPayMethod] = useState(null);
+  const [cvc, setCvc] = useState("");  
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   const [listCities, setListCites] = useState([]);
   const [listDistricts, setListDistricts] = useState([]);
+  const [listWards, setListWards] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState(user.email);
+  const [disabledEmail, setDisabledEmail] = useState(true);
   const [selectedCity, setSelectedCity] = useState({
     ID: "",
     SolrID: "",
     Title: "",
   });
   const [selectedDist, setSelectedDist] = useState({
+    ID: "",
+    SolrID: "",
+    Title: "",
+  });
+  const [selectedWard, setSelectedWard] = useState({
     ID: "",
     SolrID: "",
     Title: "",
@@ -61,14 +77,28 @@ const RegisterForm = ({ user }) => {
   }, [width]);
 
   useEffect(() => {
+    let _mounted = true ;
     getListCities()
       .then((listCities) => {
-        setListCites(listCities);
+        if(_mounted){
+          setListCites(listCities);
+        }       
       })
       .catch((err) => {
-        setError(err);
+        if(_mounted){
+          setError(err);
+        }       
       });
-  }, [getListCities]);
+      return () => _mounted = false;
+  }, []);
+
+  useEffect( () => {   
+    if(firstName&&lastName&&selectedCity&& selectedDist&& selectedWard&& address&& phone&& email&& cardNumber&& expiryDate&& cvc ){
+      setDisabledNext(false)
+    }else{
+      setDisabledNext(true);
+    }
+  },[firstName,lastName,selectedCity, selectedDist, selectedWard, address, phone, email, cardNumber, expiryDate, cvc])
 
   const handleChangeCity = (e) => {
     const index = e.nativeEvent.target.selectedIndex;
@@ -76,7 +106,7 @@ const RegisterForm = ({ user }) => {
       ID: e.target.value,
       SolrID: e.target.childNodes[index].dataset.url,
       Title: e.nativeEvent.target[index].text,
-    });
+    });    
     getListDistricts(e.target.value)
       .then((data) => {
         setListDistricts(data);
@@ -93,7 +123,18 @@ const RegisterForm = ({ user }) => {
       SolrID: e.target.childNodes[index].dataset.url,
       Title: e.nativeEvent.target[index].text,
     });
+    getListWards(e.target.value)
+      .then((data) => setListWards(data))
+      .catch((err) => setError(err));
   };
+  const handleChangeWard = (e) => {
+    const index = e.nativeEvent.target.selectedIndex;
+    setSelectedWard({
+      ID: e.target.value,
+      SolrID: e.target.childNodes[index].dataset.url,
+      Title: e.nativeEvent.target[index].text,
+    });    
+  };  
 
   const handleChangeCardNumber = (e) => {
     setCardNumber(e.target.value);
@@ -111,15 +152,15 @@ const RegisterForm = ({ user }) => {
         <FormInline>
           <FormGroup>
             <Label htmlFor="first_name">
-              Họ<Required>*</Required>
+            <Required>Họ*</Required>
             </Label>
-            <Input name="first_name" id="first_name" />
+            <Input name="first_name" id="first_name" value={firstName} onChange={e => setFirstName(e.target.value)}/>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="last_name">
-              Tên<Required>*</Required>
+              <Required>Tên*</Required>
             </Label>
-            <Input name="last_name" id="last_name" />
+            <Input name="last_name" id="last_name" value={lastName} onChange={e => setLastName(e.target.value)}/>
           </FormGroup>
         </FormInline>
         <FormGroup>
@@ -143,24 +184,48 @@ const RegisterForm = ({ user }) => {
               --Chọn Quận/Huyện--
             </Option>
             {listDistricts.map((district) => (
-              <Option key={district.ID} value={district.ID} data-url={district.SolrID}>
+              <Option
+                key={district.ID}
+                value={district.ID}
+                data-url={district.SolrID}
+              >
                 {district.Title}
+              </Option>
+            ))}
+          </Select>
+        </FormGroup>
+        <FormGroup>
+          <Select
+            defaultValue={selectedWard.ID}
+            onChange={handleChangeWard}
+          >
+            <Option value={selectedWard.ID} disabled>
+              --Chọn Phường/Xã--
+            </Option>
+            {listWards.map((ward) => (
+              <Option
+                key={ward.ID}
+                value={ward.ID}
+                data-url={ward.SolrID}
+              >
+                {ward.Title}
               </Option>
             ))}
           </Select>
         </FormGroup>
 
         <FormGroup>
-          <Input name="apartment" placeholder="Đường, Phường Xã, Số nhà" />
+          <Input name="apartment" placeholder="Đường, Số nhà" value={address} onChange={e => setAddress(e.target.value)}/>
         </FormGroup>
         <FormInline>
           <FormGroup>
-            <Label htmlFor="phone">Số điện thoại</Label>
-            <Input name="phone1" id="phone1" />
+            <Label htmlFor="phone"><Required>Số điện thoại*</Required></Label>
+            <Input name="phone" id="phone" value={phone} onChange={e => setPhone(e.target.value)} />
           </FormGroup>
           <FormGroup>
-            <Label>Email</Label>
-            <Input name="email" value={user.email} disabled />
+            <Label><Required>Email*</Required></Label>
+            <Input name="email" value={email} onChange={e => setEmail(e.target.value)} disabled={disabledEmail} />
+            <Editable onClick={() => setDisabledEmail(!disabledEmail)}><FiEdit/></Editable>
           </FormGroup>
         </FormInline>
         <PaymentInputsWrapper {...wrapperProps}>
@@ -177,8 +242,7 @@ const RegisterForm = ({ user }) => {
     </React.Fragment>
   );
 };
-
 const mapStateToProps = createStructuredSelector({
-  user: selectCurrentUser,
-});
+  user : selectCurrentUser
+})
 export default connect(mapStateToProps)(RegisterForm);

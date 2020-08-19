@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import {SellerPageContainer} from "./seller.styles";
 import Background from "../../components/Layout/background/background.component";
@@ -7,7 +7,7 @@ import {selectCurrentUser} from "../../redux/user/user.selectors";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {Redirect} from "react-router-dom"
-const SellerPage = ({user, match, history}) => {
+const SellerPage = ({user, match, history}) => {  
   if(!user){    
     history.location.state = match.path;
     return <Redirect to={{

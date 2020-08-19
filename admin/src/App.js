@@ -20,6 +20,7 @@ import "./App.css";
 function App({ user, fetchUser, loading }) {
   useEffect(() => {
     fetchUser();
+    return () => fetchUser();
   }, [fetchUser]);
   if (loading) return <Spinner />;
   return (

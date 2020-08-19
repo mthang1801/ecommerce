@@ -130,7 +130,7 @@ export const getProductsByProductType = (productType) => {
   return PRODUCTS_DATA[productType];
 };
 
-export const getListCities = async () => {
+export const getListCities = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const { data } = await axios.get(urls.LIST_CITIES_API);
@@ -141,11 +141,24 @@ export const getListCities = async () => {
   });
 };
 
-export const getListDistricts = async (cityID) => {
+export const getListDistricts = (cityID) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { data } = await axios.get(
-        urls.LIST_DISTRICTS_BASE_ON_CITY_API(cityID)
+        urls.LIST_DISTRICTS_BASE_ON_CITY_ID_API(cityID)
+      );
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getListWards = (districtID) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(
+        urls.LIST_WARDS_BASE_ON_DISRICT_ID_API(districtID)
       );
       resolve(data);
     } catch (error) {

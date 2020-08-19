@@ -24,12 +24,11 @@ class SignIn extends React.Component{
     const {email, password} = this.state ; 
     this.setState({error : null })
     this.props.login(email, password);
-  }
+  } 
 
   render(){    
     const {email, password, error} = this.state; 
-    const {match}= this.props;
-    console.log(match)
+    const {match}= this.props;   
     return (
       <SignInWrapper>
          <CustomFormContainer onSubmit={this.onSubmitSigninForm}>

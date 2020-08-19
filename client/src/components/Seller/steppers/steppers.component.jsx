@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { SteppersContainer, StepperContent } from "./steppers.styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
@@ -30,15 +30,15 @@ function getSteps() {
   ];
 }
 
-function getStepContent(stepIndex) { 
+function getStepContent(stepIndex, disabledNext, setDisabledNext) { 
   
   switch (stepIndex) {
     case 0:
-      return <RegisterForm />;
+      return <RegisterForm disabledNext={disabledNext} setDisabledNext={setDisabledNext}/>;
     case 1:
-      return <TermsAndPrivacy />;
+      return <TermsAndPrivacy disabledNext={disabledNext} setDisabledNext={setDisabledNext}/>;
     case 2:
-      return <FormCreateProduct/>;
+      return <FormCreateProduct disabledNext={disabledNext} setDisabledNext={setDisabledNext}/>;
     default:
       return "Unknown stepIndex";
   }
@@ -47,7 +47,8 @@ function getStepContent(stepIndex) {
 const Steppers = ({mobileView, tabletView}) => {
   
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [disabledNext, setDisabledNext] = useState(true)
   const steps = getSteps();
 
   const handleNext = () => {
@@ -82,9 +83,9 @@ const Steppers = ({mobileView, tabletView}) => {
           ) : (
             <div>
               <StepperContent>
-                {getStepContent(activeStep)}
+                {getStepContent(activeStep,disabledNext, setDisabledNext)}
               </StepperContent>
-              <div>
+              <div style={{display: "flex", justifyContent : "center", margin: "1rem auto"}}>
                 <Button
                   disabled={activeStep === 0}
                   onClick={handleBack}
@@ -96,6 +97,7 @@ const Steppers = ({mobileView, tabletView}) => {
                   variant="contained"
                   color="primary"
                   onClick={handleNext}
+                  disabled={disabledNext}                 
                 >
                   {activeStep === steps.length - 1 ? "Finish" : "Next"}
                 </Button>

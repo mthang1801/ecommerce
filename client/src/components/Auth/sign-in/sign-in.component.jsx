@@ -18,11 +18,14 @@ class SignIn extends React.Component{
     loaded : false ,
     captcha_value :null
   }
-
+  timer = null ;
   componentDidMount(){
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.setState({loaded: true})
-    },1000)
+    },1000)    
+  }
+  componentWillUnmount(){
+    clearTimeout(this.timer);
   }
 
   handleChange = e => {

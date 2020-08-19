@@ -9,9 +9,8 @@ import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux";
 import {selectCurrentUser} from "../../redux/user/user.selectors"
 class AuthPage extends React.Component {
- 
-  render() {
-    console.log(this.props.history)
+  
+  render() {    
     const { match, location, user } = this.props;
     if (user) {
       if (location.state) return <Redirect to={location.state.from} />;
