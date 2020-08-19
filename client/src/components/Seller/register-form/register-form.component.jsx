@@ -90,7 +90,7 @@ const RegisterForm = ({ user, disabledNext, setDisabledNext }) => {
         }       
       });
       return () => _mounted = false;
-  }, []);
+  }, [getListCities]);
 
   useEffect( () => {   
     if(firstName&&lastName&&selectedCity&& selectedDist&& selectedWard&& address&& phone&& email&& cardNumber&& expiryDate&& cvc ){

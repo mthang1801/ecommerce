@@ -3,8 +3,9 @@ import {CustomFormContainer, FormHeader, Title, SubTitle,  FormGroups, FormActio
 import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import {withRouter} from "react-router-dom";
-import {FaGooglePlusG, FaFacebookF} from "react-icons/fa"
 import {connect} from "react-redux"
+import {createStructuredSelector} from "reselect";
+import {selectUserError} from "../../../redux/user/user.selectors"
 import {loginStart} from "../../../redux/user/user.actions";
 import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component";
 import FacebookLogin from "../../UI/facebook-login/facebook-login.component";
@@ -32,6 +33,11 @@ class SignIn extends React.Component{
     const {name, value} = e.target;
     this.setState({ [name] : value})
   }
+  componentDidUpdate(prevProps){
+    if(prevProps.error !== this.props.error){
+      this.setState({error : this.props.error})
+    }
+  }
 
   onSubmitSigninForm = async e => {
     e.preventDefault();
@@ -44,7 +50,7 @@ class SignIn extends React.Component{
     try {
       this.props.login(email,password)
     } catch (error) {
-      this.setState({error : error.message})
+      this.setState({error : error})
     }
   }
   handleChangeGoogleRecaptcha = value => {
@@ -82,8 +88,12 @@ class SignIn extends React.Component{
 
 }
 
+const mapStateToProps = createStructuredSelector({
+  error : selectUserError
+})
+
 const mapDispatchToProps = dispatch => ({
   login : (email,password) => dispatch(loginStart(email, password))
 })
 
-export default connect(null, mapDispatchToProps)(withRouter(SignIn));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignIn));

@@ -47,9 +47,8 @@ export const Select = styled.select`
   padding : .7rem 1rem;
   font-size : 1.1em;
   line-height : 1.7;
-  border : none ; 
   outline : none ; 
-  border-bottom :1px solid #424242;
+  border :1px solid #424242;
   margin : 0 auto 1.5rem auto;
 `
 

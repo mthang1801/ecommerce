@@ -85,7 +85,7 @@ export const restoreAccount = (email) => (dispatch) => {
       dispatch(restoreAccountSuccess());
       resolve(true);
     } catch (error) {
-      dispatch(restoreAccountFail(error.message));
+      dispatch(restoreAccountFail(error.response.data.message));
       reject(false);
     }
   });

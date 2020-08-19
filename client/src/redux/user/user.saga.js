@@ -28,7 +28,7 @@ function* fetchUser() {
     console.log(timeRemain);
     yield put(actions.checkAuthTimeout(timeRemain));
   } catch (error) {
-    yield put(actions.fetchUserFail(error.message));
+    yield put(actions.fetchUserFail());
   }
 }
 
@@ -46,12 +46,13 @@ function* register({ payload: { name, email, password } }) {
     yield put(actions.checkAuthTimeout(expDate));
   } catch (error) {
     console.log(error);
-    yield put(actions.registerFail(error.message));
+    yield put(actions.registerFail(error.response.data.message));
   }
 }
 
 function* login({ payload: { email, password } }) {
   try {
+    console.log(email, password);
     const {
       data: { token, user, expDate },
     } = yield axios.post(urls.LOGIN_URL, { email, password });
@@ -61,7 +62,7 @@ function* login({ payload: { email, password } }) {
     yield put(actions.loginSuccess(user));
     yield put(actions.checkAuthTimeout(expDate));
   } catch (error) {
-    yield put(actions.loginFail(error.message));
+    yield put(actions.loginFail(error.response.data.message));
   }
 }
 
@@ -76,7 +77,7 @@ function* loginFacebook({ payload: { id, name, email } }) {
     yield put(actions.loginSuccess(user));
     yield put(actions.checkAuthTimeout(expDate));
   } catch (error) {
-    yield put(actions.loginFail());
+    yield put(actions.loginFail(error.response.data.message));
   }
 }
 function* loginGoogle({ payload: { id, name, email } }) {
@@ -91,7 +92,7 @@ function* loginGoogle({ payload: { id, name, email } }) {
     yield put(actions.loginSuccess(user));
     yield put(actions.checkAuthTimeout(expDate));
   } catch (error) {
-    yield put(actions.loginFail());
+    yield put(actions.loginFail(error.response.data.message));
   }
 }
 

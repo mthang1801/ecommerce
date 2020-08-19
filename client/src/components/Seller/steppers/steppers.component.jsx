@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import RegisterForm from "../register-form/register-form.component";
 import TermsAndPrivacy from "../terms-and-privacy/term-and-privacy.component";
-import FormCreateProduct from "../../UI/form-create-product/form-create-product.component";
+import FormCreateProduct from "../form-create-product/form-create-product.component";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",

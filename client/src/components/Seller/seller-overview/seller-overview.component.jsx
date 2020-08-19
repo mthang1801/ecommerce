@@ -2,6 +2,7 @@ import React,  { useState, useEffect, useContext } from 'react'
 import {SellerOverviewContainer} from "./seller-overview.styles";
 import Steppers from "../steppers/steppers.component";
 import AppContext from "../../../context/app-viewport.context";
+import FormCreateProduct from "../form-create-product/form-create-product.component";
 const SellerOverview = () => {
   
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
@@ -21,7 +22,8 @@ const SellerOverview = () => {
   }, [width]);
   return (
     <SellerOverviewContainer>
-      <Steppers mobileView={mobileView} tabletView={tabletView} />
+      <FormCreateProduct/>
+      {/* <Steppers mobileView={mobileView} tabletView={tabletView} /> */}
     </SellerOverviewContainer>
   )
 }

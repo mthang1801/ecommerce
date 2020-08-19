@@ -122,13 +122,15 @@ export const getCartItems = () => {
   return [...CART_DATA];
 };
 
-export const getCategoryList = () => {
-  return Object.keys(CATEGORIES_DATA).map((key) => CATEGORIES_DATA[key]);
-};
+// export const getCategoryList = () => {
+//   return Object.keys(CATEGORIES_DATA).map((key) => CATEGORIES_DATA[key]);
+// };
 
 export const getProductsByProductType = (productType) => {
   return PRODUCTS_DATA[productType];
 };
+
+//========================================
 
 export const getListCities = () => {
   return new Promise(async (resolve, reject) => {
@@ -159,6 +161,30 @@ export const getListWards = (districtID) => {
     try {
       const { data } = await axios.get(
         urls.LIST_WARDS_BASE_ON_DISRICT_ID_API(districtID)
+      );
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getListCategory = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(urls.GET_LIST_CATEGORY);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getListProductType = (categoryID) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(
+        urls.GET_LIST_PRODUCT_TYPE__BY_CATEGORYID(categoryID)
       );
       resolve(data);
     } catch (error) {

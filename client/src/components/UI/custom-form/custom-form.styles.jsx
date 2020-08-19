@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 export const CustomFormContainer = styled.form`
-  width : 500px ;
+  width : 90%; 
+  max-width : 500px ;
   padding : 2.5rem 3.5rem ;
   text-align : center;  
   border: 1px solid #ccc;
@@ -11,8 +12,7 @@ export const CustomFormContainer = styled.form`
   display : flex ; 
   flex-direction : column ; 
   align-items : center;  
-  @media screen and (max-width: 500px){
-    width : 90%;
+  @media screen and (max-width: 500px){    
     padding : 1.5rem 2rem;
   }
 `

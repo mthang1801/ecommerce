@@ -13,17 +13,15 @@ import {
 import CustomInput from "../../UI/custom-input/custom-input.component";
 import CustomButton from "../../UI/custom-button/custom-button.component";
 import { withRouter } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
 import { restoreAccount } from "../../../redux/user/user.actions";
 import { connect } from "react-redux";
+import { selectUserError} from "../../../redux/user/user.selectors"
+import {createStructuredSelector} from "reselect"
 import Loader from "../../UI/loader/loader.component";
 import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component"
-const TEST_SITE_KEY = "6LcvD8AZAAAAACzN8Rm8GyuqDckBjdIft40W75wJ";
-const DELAY = 0;
 class RestoreAccount extends React.Component {
   state = {
-    email: "",
-    error: null,
+    email: "",   
     loaded: false,
     disabled: true,
     submitLoading: false,
@@ -52,8 +50,8 @@ class RestoreAccount extends React.Component {
       await this.props.restoreAccount(email);
       this.setState({submitLoading : false});
       this.props.history.push(`${this.props.match.path}/done`);
-    } catch (error) {
-      this.setState({ error: error.message });
+    } catch (error) {      
+      this.setState({submitLoading : false});      
     }
   };
 
@@ -62,9 +60,9 @@ class RestoreAccount extends React.Component {
     if (value === null) this.setState({ disabled: true });
   };
 
-  render() {
-    console.log(this.props);
-    const { email, error, loaded, disabled, submitLoading } = this.state;
+  render() {  
+    const { email, loaded, disabled, submitLoading } = this.state;
+    const {error} = this.props;
     return (
       <React.Fragment>
         {submitLoading && <Loader />}
@@ -110,9 +108,11 @@ class RestoreAccount extends React.Component {
     );
   }
 }
-
+const mapStateToProps = createStructuredSelector({
+  error : selectUserError
+})
 const mapDispatchToProps = (dispatch) => ({
   restoreAccount: (email) => dispatch(restoreAccount(email)),
 });
 
-export default connect(null, mapDispatchToProps)(withRouter(RestoreAccount));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RestoreAccount));
