@@ -18,6 +18,15 @@ exports.getCategoryList = async (req, res, next) => {
     next(error);
   }
 };
+exports.getListProductTypesByCategoryId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await ProductTypes.find({ category: id });
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.getProductTypes = async (req, res, next) => {
   try {
