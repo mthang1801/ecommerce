@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const ProductSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+const ProductSchema = new Schema(
   {
     name: {
       type: String,
@@ -12,17 +12,30 @@ const ProductSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    linkUrl: {
+      type: String,
+      required: true,
+    },
+    images: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "images",
+        required: true,
+      },
+    ],
     discount: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 100,
-    },
-    discount_start_date: {
-      type: Date,
-    },
-    discount_end_date: {
-      type: Date,
+      value: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+      },
+      start_at: {
+        type: Date,
+      },
+      end_at: {
+        type: Date,
+      },
     },
     price: {
       type: Number,
@@ -37,34 +50,34 @@ const ProductSchema = new mongoose.Schema(
       required: true,
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
     },
     productType: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "product-types",
       required: true,
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "categories",
       required: true,
     },
-    manufactors: {
+    manufactor: {
       type: String,
       required: true,
     },
     comments: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "comments",
         required: true,
       },
     ],
     votes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "votes",
         required: true,
       },

@@ -9,4 +9,5 @@ export default {
   LIST_WARDS_BASE_ON_DISRICT_ID_API: (id) => `/api/district/${id}/ward`,
   GET_LIST_CATEGORY: "/category",
   GET_LIST_PRODUCT_TYPE__BY_CATEGORYID: (id) => `/category/${id}/product-type`,
+  POST_CREATE_NEW_PRODUCT: `/product`,
 };

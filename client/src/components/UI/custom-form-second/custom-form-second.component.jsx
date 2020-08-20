@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Form = styled.form`
   width : 100%; 
   max-width : 600px;
-  margin : 1rem auto;
+  margin : 1.5rem auto;
 `
 export const FormGroup = styled.div`
   display : flex ;   
@@ -39,7 +39,8 @@ export const Input = styled.input`
   border-bottom :1px solid #424242;
   &:focus { 
     border-bottom : 2px solid #002984;
-  }
+  };
+  margin-top : ${({inputFile}) => inputFile ? "0.5rem" : 0}
 `
 
 
@@ -86,4 +87,17 @@ display : flex ;
   width : ${({isDiscount}) => isDiscount ? "100%" : "50%"};
   height : ${({isDiscount}) => isDiscount ? "auto" : 0};
   transition : ${({isDiscount}) => isDiscount ? "all 0.25s" : "none"};
+`
+
+export const PlainText= styled.span`
+  width : 100%; 
+  overflow: hidden ;
+  white-space : nowrap; 
+  text-overflow : ellipsis ;
+  position : absolute;   
+  left : 4px;
+  font-style: italic;
+  color : #dd2222;
+  top : 100%;
+  font-size : 0.8em ;
 `

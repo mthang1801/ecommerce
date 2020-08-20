@@ -42,16 +42,21 @@ const storage = multer.diskStorage({
     if (!["image/jpg", "image/jpeg", "image/png"].includes(file.mimetype)) {
       return cb(new Error("This file is not image file"), false);
     }
+
     return cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
-const uploadFile = multer({
+// const uploadSingleFile = multer({
+//   storage: storage,
+//   limits: { fieldSize: 1024 * 1024 },
+// }).single("image");
+const uploadMultipleFiles = multer({
   storage: storage,
-  limits: { fieldSize: 1024 * 1024 },
-}).single("image");
-
-app.use(uploadFile);
+  limits: { fileSize: 1024 * 1024 },
+}).any();
+// app.use(uploadSingleFile);
+app.use(uploadMultipleFiles);
 app.use("/", shopRouter);
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);

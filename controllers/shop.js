@@ -1,5 +1,9 @@
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
+const Image = require("../models/images");
+const Product = require("../models/product");
+const User = require("../models/user");
+const fs = require("fs-extra");
 exports.getCategoryList = async (req, res, next) => {
   try {
     const searchKey = req.query.search || "";
@@ -87,6 +91,106 @@ exports.getListLinksProductTypes = async (req, res, next) => {
     });
     const listLinkUrl = await Promise.all(productTypesPromise);
     res.status(200).json(listLinkUrl);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postCreateProduct = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const {
+      categoryId,
+      productTypeId,
+      rootUrl,
+      name,
+      tags,
+      price,
+      discount,
+      discountExpDate,
+      description,
+      information,
+      manufactor,
+    } = req.body;
+    //set name url for product
+    const match = /[A-Za-z0-9]/;
+    const nameUrl = name
+      .split(" ")
+      .filter((character) => match.test(character))
+      .concat([Date.now()])
+      .join("-")
+      .toLowerCase();
+    const newProduct = new Product({
+      name,
+      tags,
+      linkUrl: `${rootUrl}/${nameUrl}`,
+      discount:
+        discount && discountExpDate
+          ? {
+              value: +discount,
+              start_at: new Date(),
+              end_at: discountExpDate,
+            }
+          : null,
+      price,
+      description,
+      information,
+      user: req.user._id,
+      productType: productTypeId,
+      category: categoryId,
+      manufactor,
+    });
+    const user = await User.findById(req.user._id);
+    const productType = await ProductTypes.findById(productTypeId);
+    if (!user) {
+      const error = new Error("User has not existed");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (!productType) {
+      const error = new Error("Category has not existed");
+      error.statusCode = 404;
+      throw error;
+    }
+    await newProduct.save();
+    user.products.push(newProduct);
+    productType.products.push(newProduct);
+    await user.save();
+    await productType.save();
+
+    //generate base 64image to save in db
+    console.log(req.files);
+    const listBase64ImagePromise = req.files.map(async (file) => {
+      const data = await fs.readFile(file.path, "base64");
+      const mimetype = file.mimetype;
+      const name = file.originalname;
+      return { data, mimetype, name };
+    });
+    const listBase64Image = await Promise.all(listBase64ImagePromise);
+    console.log(listBase64Image);
+    const listImagesPromise = listBase64Image.map(
+      async ({ name, data, mimetype }) => {
+        let newImage = new Image({
+          name,
+          data,
+          mimetype,
+          product: newProduct,
+        });
+        await newImage.save();
+        return newImage._id;
+      }
+    );
+    const listImages = await Promise.all(listImagesPromise);
+    newProduct.images = [...listImages];
+    await newProduct.save();
+    req.files.forEach(async (file) => {
+      await fs.unlink(file.path);
+    });
+    res.status(200).json(newProduct);
   } catch (error) {
     next(error);
   }

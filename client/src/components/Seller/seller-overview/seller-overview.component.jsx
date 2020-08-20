@@ -22,8 +22,7 @@ const SellerOverview = () => {
   }, [width]);
   return (
     <SellerOverviewContainer>
-      <FormCreateProduct/>
-      {/* <Steppers mobileView={mobileView} tabletView={tabletView} /> */}
+      <Steppers mobileView={mobileView} tabletView={tabletView} />
     </SellerOverviewContainer>
   )
 }
