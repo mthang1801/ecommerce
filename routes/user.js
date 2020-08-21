@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user");
+const { isAuth } = require("../middlewares/auth");
 /**
  * @route POST user/register
  * @desc create user account
@@ -49,5 +50,10 @@ router.get("/verify/:token", userController.getRestoreAccount);
  * @access private
  */
 router.post("/verify/update-account", userController.postUpdateAccount);
-
+/**
+ * @route PUT /user/register-seller
+ * @desc execute update role user as seller
+ * @access private
+ */
+router.put("/register-seller", isAuth, userController.putUpdateUserAsSeller);
 module.exports = router;

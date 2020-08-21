@@ -9,6 +9,7 @@ const INITIAL_STATE = {
     lastName: "",
     address: "",
     phone: "",
+    email: "",
     disabledEmail: true,
     selectedCity: {
       ID: "",
@@ -26,8 +27,28 @@ const INITIAL_STATE = {
       Title: "",
     },
   },
-  term: false,
-  product: {},
+  product: {
+    selectedCategory: {
+      _id: "",
+      name: "",
+      linkUrl: "",
+    },
+    selectedProductType: {
+      _id: "",
+      name: "",
+      linkUrl: "",
+    },
+    name: "",
+    manufactor: "",
+    image: [],
+    tags: [],
+    price: "",
+    isDiscount: false,
+    discount: null,
+    discountExpDate: null,
+    description: "",
+    information: "",
+  },
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,19 +58,20 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         register: {
           ...state.register,
-          [action.payload.key]: { ...action.payload.value },
+          ...action.payload,
         },
       };
-    case sellerActionTypes.SAVE_TERM:
+    case sellerActionTypes.SAVE_PRODUCT_FORM:
       return {
         ...state,
-        term: action.payload,
+        product: {
+          ...state.product,
+          ...action.payload,
+        },
       };
-    case sellerActionTypes.SAVE_PRODUCT_FORM:
     case sellerActionTypes.CLEAR_ALL:
       return {
         register: {},
-        term: false,
         product: {},
       };
     default:

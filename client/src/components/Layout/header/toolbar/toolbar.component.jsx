@@ -42,7 +42,12 @@ const Toolbar = ({user,logout}) => {
             <ToggleLanguage />
           </ToolbarItem>
           <ToolbarItem>
-            <CustomLink to="/seller" style={{textTransform:"capitalize", fontWeight : 400}}>Trở thành Nhà Bán Hàng</CustomLink>
+            {user && (user.role !== "seller" ? 
+             <CustomLink to="/register-seller" style={{textTransform:"capitalize", fontWeight : 400}}>Trở thành Nhà Bán Hàng</CustomLink> 
+             :
+             <CustomLink to="/create-new-product" style={{textTransform:"capitalize", fontWeight : 400}}>Bán Sản phẩm</CustomLink> )
+          }
+           
           </ToolbarItem>
           <ToolbarItem>
             {user ? <Logout onClick={() => logout()}>

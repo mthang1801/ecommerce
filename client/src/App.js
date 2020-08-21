@@ -10,16 +10,11 @@ import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.compo
 import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
 import Authentication from "./pages/auth/auth.component";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
-import { default as Seller } from "./pages/seller/seller.container";
+import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -44,7 +39,7 @@ function App({ fetchUser, user }) {
           <Route path="/details" component={ShopDetails} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/contact" component={Contact} />
-          <Route path="/seller" component={Seller} />
+          <Route path="/register-seller" component={RegisterSeller} />
         </Switch>
         <Footer />
       </AppContext.Provider>

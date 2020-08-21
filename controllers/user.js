@@ -65,7 +65,6 @@ exports.postUserRegister = async (req, res, next) => {
 exports.postUserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     const user = await User.findOne({ "local.email": email });
     if (!user) {
       const err = new Error("Email or password was not correct");
@@ -178,7 +177,7 @@ exports.postUpdateAccount = async (req, res, next) => {
       title: "Cập nhậ tài khoản thành công",
     });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 exports.postUserLoginFacebook = async (req, res, next) => {
@@ -233,6 +232,54 @@ exports.postUserLoginGoogle = async (req, res, next) => {
     cloneUser.name = name;
     cloneUser.email = email;
     res.status(200).json({ token, user, expDate });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.putUpdateUserAsSeller = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const err = new Error("unauthorize");
+      err.statusCode = 401;
+      throw err;
+    }
+    const {
+      firstName,
+      lastName,
+      address,
+      phone,
+      selectedCity,
+      selectedDist,
+      selectedWard,
+      cardNumber,
+      expiryDate,
+      cvc,
+      email,
+    } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      const err = new Error("User not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    user.role = "seller";
+    (user.information = {
+      first_name: firstName,
+      last_name: lastName,
+      city: selectedCity.Title,
+      district: selectedDist.Title,
+      ward: selectedWard.Title,
+      address: address,
+      email: email || req.user.email,
+      phone: phone,
+      credit_card: {
+        number: cardNumber,
+        expDate: expiryDate,
+        cvc: +cvc,
+      },
+    }),
+      await user.save();
+    res.status(200).json({ msg: "Updated success" });
   } catch (error) {
     next(error);
   }

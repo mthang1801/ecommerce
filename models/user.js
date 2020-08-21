@@ -36,13 +36,19 @@ const UserSchema = new mongoose.Schema(
       default: "customer", //seller
     },
     information: {
-      email: String,
+      first_name: String,
+      last_name: String,
       city: String,
       district: String,
+      ward: String,
       address: String,
-      phone1: String,
-      phone2: String,
-      zipCode: Number,
+      email: String,
+      phone: String,
+      credit_card: {
+        number: String,
+        expDate: String,
+        cvc: Number,
+      },
     },
     status: {
       type: String,

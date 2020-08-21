@@ -163,7 +163,6 @@ exports.postCreateProduct = async (req, res, next) => {
     await productType.save();
 
     //generate base 64image to save in db
-    console.log(req.files);
     const listBase64ImagePromise = req.files.map(async (file) => {
       const data = await fs.readFile(file.path, "base64");
       const mimetype = file.mimetype;
@@ -171,7 +170,6 @@ exports.postCreateProduct = async (req, res, next) => {
       return { data, mimetype, name };
     });
     const listBase64Image = await Promise.all(listBase64ImagePromise);
-    console.log(listBase64Image);
     const listImagesPromise = listBase64Image.map(
       async ({ name, data, mimetype }) => {
         let newImage = new Image({
@@ -190,7 +188,7 @@ exports.postCreateProduct = async (req, res, next) => {
     req.files.forEach(async (file) => {
       await fs.unlink(file.path);
     });
-    res.status(200).json(newProduct);
+    res.status(200).json({ msg: "product created" });
   } catch (error) {
     next(error);
   }

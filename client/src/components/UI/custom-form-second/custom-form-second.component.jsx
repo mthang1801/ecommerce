@@ -9,7 +9,7 @@ export const FormGroup = styled.div`
   display : flex ;   
   margin : 0 0.5rem;
   &:not(:last-child){
-    margin-bottom : 2rem;
+    margin-bottom : 2.3rem;
   }
   position : relative;
 `
@@ -22,11 +22,21 @@ export const FormInline = styled.div`
   }
 `
 
+export const Title = styled.h2`
+  text-align : center; 
+  font-weight : bold ; 
+  font-size : 1.8em;
+  margin : 0 auto 2rem auto;
+`
+
 export const Label = styled.label`
   position : absolute ; 
-  top : -1rem;
-  font-size : 0.9em;  
+  top : -0.8rem;
+  font-size : 0.85em;  
   color : #002984 ;
+  left : 10px ;
+  background-color : white ; 
+  z-index : 1;
 `
 
 export const Input = styled.input`
@@ -40,7 +50,8 @@ export const Input = styled.input`
   &:focus { 
     border-bottom : 2px solid #002984;
   };
-  margin-top : ${({inputFile}) => inputFile ? "0.5rem" : 0}
+  margin-top : ${({inputFile}) => inputFile ? "0.5rem" : 0};
+  z-index :  0;
 `
 
 
@@ -63,7 +74,8 @@ export const Select = styled.select`
   border-radius: 2px; 
   padding: 1rem;
   padding-right: 2rem;
-  font-size : 0.9em;
+  font-size : 0.95em;
+  z-index: 0;
 `
 
 export const Option = styled.option``
@@ -97,7 +109,7 @@ export const PlainText= styled.span`
   position : absolute;   
   left : 4px;
   font-style: italic;
-  color : #dd2222;
+  color : #404040;
   top : 100%;
   font-size : 0.8em ;
 `

@@ -192,3 +192,44 @@ export const getListProductType = (categoryID) => {
     }
   });
 };
+
+export const registerAsSeller = (registerForm) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.put(
+        urls.UPDATE_ROLE_USER_AS_SELLER,
+        registerForm
+      );
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const createNewProduct = (product) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let formData = new FormData();
+      formData.append("categoryId", product.selectedCategory._id);
+      formData.append("productTypeId", product.selectedProductType._id);
+      formData.append("rootUrl", product.selectedProductType.linkUrl);
+      formData.append("name", product.name);
+      formData.append("tags", product.tags);
+      formData.append("price", product.price);
+      formData.append("discount", product.discount || 0);
+      formData.append("dicountExpDate", product.discountExpDate);
+      formData.append("description", product.description);
+      formData.append("information", product.information);
+      formData.append("manufactor", product.manufactor);
+      for (let file of product.image) {
+        formData.append("multiple-images", file);
+      }
+
+      const { data } = await axios.post(urls.POST_CREATE_NEW_PRODUCT, formData);
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

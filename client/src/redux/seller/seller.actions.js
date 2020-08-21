@@ -1,16 +1,15 @@
 import sellerActionTypes from "./seller.types";
 
-export const saveRegisterForm = (key, value) => {
-  console.log(key, value);
+export const saveRegisterForm = (obj) => {
   return {
     type: sellerActionTypes.SAVE_REGISTER_FORM,
-    payload: { key, value },
+    payload: obj,
   };
 };
 
-export const saveProductForm = (product) => ({
+export const saveProductForm = (obj) => ({
   type: sellerActionTypes.SAVE_PRODUCT_FORM,
-  payload: product,
+  payload: obj,
 });
 
 export const clearAll = () => ({
