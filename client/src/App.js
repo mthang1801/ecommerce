@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import Toolbar from "./components/Layout/header/toolbar/toolbar.component";
 import Navigation from "./components/Layout/navigations/navigations.component";
 import Footer from "./components/Layout/footer/footer.component";
@@ -19,6 +19,8 @@ import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "./redux/user/user.selectors";
+import ErrorBoundary from "./components/UI/error-boundary/error-boundary.component";
+import Loader from "./components/UI/loader/loader.component";
 function App({ fetchUser, user }) {
   const [width] = useWindowSize();
   useEffect(() => {
@@ -32,14 +34,18 @@ function App({ fetchUser, user }) {
         <Toolbar />
         <Navigation />
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/auth" component={Authentication} />
-          <Route path="/shop-grid" component={ShopGrid} />
-          <Route path="/cart" component={Cart} />
-          <Route path="/details" component={ShopDetails} />
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/register-seller" component={RegisterSeller} />
+          <ErrorBoundary>
+            <Suspense fallback={<Loader />}>
+              <Route path="/" exact component={Home} />
+              <Route path="/auth" component={Authentication} />
+              <Route path="/shop-grid" component={ShopGrid} />
+              <Route path="/cart" component={Cart} />
+              <Route path="/details" component={ShopDetails} />
+              <Route path="/checkout" component={Checkout} />
+              <Route path="/contact" component={Contact} />
+              <Route path="/register-seller" component={RegisterSeller} />
+            </Suspense>
+          </ErrorBoundary>
         </Switch>
         <Footer />
       </AppContext.Provider>
