@@ -218,7 +218,7 @@ export const createNewProduct = (product) => {
       formData.append("tags", product.tags);
       formData.append("price", product.price);
       formData.append("discount", product.discount || 0);
-      formData.append("dicountExpDate", product.discountExpDate);
+      formData.append("discountExpDate", product.discountExpDate);
       formData.append("description", product.description);
       formData.append("information", product.information);
       formData.append("manufactor", product.manufactor);

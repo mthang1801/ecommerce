@@ -24,4 +24,21 @@ code {
 a{
   text-decoration: none;
 }
+@media screen and (max-width : 992px){
+  :root{
+    font-size : 14px !important;  
+  }
+}
+@media screen and (max-width : 500px){
+  :root{
+    font-size: 10px !important;
+  }
+}
 
+
+
+@media screen and (min-width: 992px){
+  :root{
+    font-size : 16px !important;
+  }
+}

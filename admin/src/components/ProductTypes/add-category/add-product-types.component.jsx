@@ -23,13 +23,13 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCategoryList } from "../../../redux/category/category.selector";
 const AddProductTypes = ({addProductType, categoryList }) => {
+  
   const [name, setName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [rootLink, setRootLink] = useState(""); 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const formRef = useRef(null);
-  
   
   const handleChangeProductType = (e) => {
     let val = e.target.value ; 
@@ -60,7 +60,7 @@ const AddProductTypes = ({addProductType, categoryList }) => {
       res => {
         setLinkUrl("");        
         setName("");
-        setRootLink(categoryList[0].linkUrl)
+        setRootLink("")
         setSuccess("Thêm Loại SP thành công!");
         formRef.current.reset();
       }

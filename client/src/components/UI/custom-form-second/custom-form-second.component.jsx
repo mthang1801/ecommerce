@@ -113,3 +113,10 @@ export const PlainText= styled.span`
   top : 100%;
   font-size : 0.8em ;
 `
+
+export const ErrorMessage = styled.h4`
+  font-weight: 600; 
+  font-size : 1em;
+  text-align : left ;
+  color : #dd2222; 
+`

@@ -79,7 +79,7 @@ const Steppers = ({ mobileView, tabletView, register, product, clearAll }) => {
   const stepRef = useRef(null);
   useEffect(() =>{
     setScroll(stepRef.current.offsetTop);
-  })
+  },[stepRef.current.offsetTop])
   const handleNext = async () => {
     console.log("call");
     if (activeStep === steps.length - 1) {

@@ -6,6 +6,10 @@ const ProductTypesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      default: "active",
+    },
     linkUrl: {
       type: String,
       required: true,

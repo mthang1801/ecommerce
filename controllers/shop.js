@@ -4,14 +4,20 @@ const Image = require("../models/images");
 const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs-extra");
+const { openDelimiter } = require("ejs");
 exports.getCategoryList = async (req, res, next) => {
   try {
     const searchKey = req.query.search || "";
     if (searchKey) {
       const categoryFilter = await Category.find({
-        $or: [
-          { name: { $regex: new RegExp(searchKey, "i") } },
-          { linkUrl: { $regex: new RegExp(searchKey, "i") } },
+        $and: [
+          {
+            $or: [
+              { name: { $regex: new RegExp(searchKey, "i") } },
+              { linkUrl: { $regex: new RegExp(searchKey, "i") } },
+            ],
+          },
+          { status: "active" },
         ],
       });
       return res.status(200).json(categoryFilter);
@@ -25,7 +31,7 @@ exports.getCategoryList = async (req, res, next) => {
 exports.getListProductTypesByCategoryId = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = await ProductTypes.find({ category: id });
+    const data = await ProductTypes.find({ category: id, status: "active" });
     res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -37,9 +43,16 @@ exports.getProductTypes = async (req, res, next) => {
     const searchKey = req.query.search || "";
     if (searchKey) {
       const categoryFilter = await ProductTypes.find({
-        $or: [
-          { name: { $regex: new RegExp(searchKey, "i") } },
-          { linkUrl: { $regex: new RegExp(searchKey, "i") } },
+        $and: [
+          {
+            $or: [
+              { name: { $regex: new RegExp(searchKey, "i") } },
+              { linkUrl: { $regex: new RegExp(searchKey, "i") } },
+            ],
+          },
+          {
+            status: "active",
+          },
         ],
       });
       return res.status(200).json(categoryFilter);
@@ -64,7 +77,10 @@ exports.getProductTypes = async (req, res, next) => {
 exports.getProductTypesById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const productTypes = await ProductTypes.findById(id).populate("category");
+    const productTypes = await ProductTypes.findOne({
+      _id: id,
+      status: "active",
+    }).populate("category");
     res.status(200).json(productTypes);
   } catch (error) {
     next(error);
@@ -74,7 +90,7 @@ exports.getProductTypesById = async (req, res, next) => {
 exports.getListLinksProductTypes = async (req, res, next) => {
   try {
     const { id } = req.query;
-    const category = await Category.findById(id);
+    const category = await Category.findOne({ _id: id, status: "active" });
     if (!category) {
       const err = new Error("Category not found");
       err.statusCode = 404;
@@ -127,14 +143,6 @@ exports.postCreateProduct = async (req, res, next) => {
       name,
       tags,
       linkUrl: `${rootUrl}/${nameUrl}`,
-      discount:
-        discount && discountExpDate
-          ? {
-              value: +discount,
-              start_at: new Date(),
-              end_at: discountExpDate,
-            }
-          : null,
       price,
       description,
       information,
@@ -143,8 +151,18 @@ exports.postCreateProduct = async (req, res, next) => {
       category: categoryId,
       manufactor,
     });
+    if (+discount > 0 && discountExpDate) {
+      newProduct.discount = {
+        value: +discount,
+        start_at: new Date(),
+        end_at: discountExpDate,
+      };
+    }
     const user = await User.findById(req.user._id);
-    const productType = await ProductTypes.findById(productTypeId);
+    const productType = await ProductTypes.findOne({
+      _id: productTypeId,
+      status: "active",
+    });
     if (!user) {
       const error = new Error("User has not existed");
       error.statusCode = 404;

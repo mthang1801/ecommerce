@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
-const Product = require("../trash/models/product");
+const Product = require("../models/product");
+const User = require("../models/user");
 const removeImage = require("../utils/removeImage");
 exports.postCategory = async (req, res, next) => {
   try {
@@ -57,7 +58,31 @@ exports.putCategory = async (req, res, next) => {
 exports.deleteCategory = async (req, res, next) => {
   try {
     const { categoryId } = req.body;
-    const category = await Category.findByIdAndDelete(categoryId);
+
+    const category = await Category.findById(categoryId);
+    category.status = "deleted";
+    if (!category) {
+      const err = new Error("Category not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productTypes = category.productTypes;
+    await productTypes.forEach(async (productTypeId) => {
+      let productType = await ProductTypes.findById(productTypeId);
+      productType.status = "deleted";
+      let products = productType.products;
+      await products.forEach(async (productId) => {
+        try {
+          let product = await Product.findById(productId);
+          product.status = "deleted";
+          await product.save();
+        } catch (error) {
+          next(error);
+        }
+      });
+      await productType.save();
+    });
+    await category.save();
     await removeImage(category.imageUrl);
     res.status(200).json({ message: "Delete success!!" });
   } catch (error) {}

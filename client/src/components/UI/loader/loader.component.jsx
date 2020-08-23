@@ -1,12 +1,11 @@
 import React from 'react'
-import Backdrop from "../../UI/backdrop/backdrop.component";
 import Spinner from "../../UI/custom-spinner/custom-spinner";
+import {LoaderWrapper} from "./loader.styles"
 const Loader = () => {
   return (
-    <React.Fragment>
-      <Backdrop/>
+    <LoaderWrapper>      
       <Spinner/>
-    </React.Fragment>
+    </LoaderWrapper>
   )
 }
 

@@ -80,7 +80,7 @@ export const Required = styled.span`
 `
 
 export const Select = styled.select`  
-  width: 105%;
+  width: 100%;
   padding: .6rem 1rem;
   font-size: 1.1em;
   border: none;

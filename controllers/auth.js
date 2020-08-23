@@ -34,7 +34,7 @@ exports.postLoginAuthStaff = async (req, res, next) => {
     const token = jwt.sign(
       { userId: staff._id, email: email },
       process.env.JwT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: +process.env.AUTH_EXP_DATE }
     );
     const user = staff._doc;
     delete user.password;

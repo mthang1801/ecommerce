@@ -49,6 +49,10 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      default: "active",
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -83,7 +87,7 @@ const ProductSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 module.exports = mongoose.model("products", ProductSchema);

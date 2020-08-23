@@ -9,6 +9,7 @@ import ShopDetails from "./pages/shop-details/shop-details.component";
 import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.component";
 import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
+import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
@@ -18,14 +19,20 @@ import { default as RegisterSeller } from "./pages/register-seller/register-sell
 import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+import {
+  selectCurrentUser,
+  selectUserLoading,
+} from "./redux/user/user.selectors";
 import ErrorBoundary from "./components/UI/error-boundary/error-boundary.component";
 import Loader from "./components/UI/loader/loader.component";
-function App({ fetchUser, user }) {
+function App({ fetchUser, user, loading }) {
   const [width] = useWindowSize();
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+  if (loading && !user) {
+    return <Loader />;
+  }
   return (
     <Router>
       <AppContext.Provider value={width}>
@@ -44,6 +51,7 @@ function App({ fetchUser, user }) {
               <Route path="/checkout" component={Checkout} />
               <Route path="/contact" component={Contact} />
               <Route path="/register-seller" component={RegisterSeller} />
+              <Route path="/create-new-product" component={CreateProduct} />
             </Suspense>
           </ErrorBoundary>
         </Switch>
@@ -54,6 +62,7 @@ function App({ fetchUser, user }) {
 }
 const mapStateToProps = createStructuredSelector({
   user: selectCurrentUser,
+  loading: selectUserLoading,
 });
 const mapDispatchToProps = (dispatch) => ({
   fetchUser: () => dispatch(fetchUserStart()),

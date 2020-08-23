@@ -1,5 +1,6 @@
 import { put, takeLatest, call, all, delay, take } from "redux-saga/effects";
 import * as actions from "./user.actions";
+import * as productActions from "../seller/seller.actions";
 import userActionTypes from "./user.types";
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -106,6 +107,7 @@ function* logout() {
   localStorage.removeItem("userToken");
   localStorage.removeItem("userExpDate");
   yield put(actions.logoutSuccess());
+  yield put(productActions.clearAll());
 }
 
 function* onFetchUser() {

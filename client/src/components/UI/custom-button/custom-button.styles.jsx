@@ -1,4 +1,4 @@
-import styled, {css} from "styled-components";
+  import styled, {css} from "styled-components";
 import {darken, lighten} from "polished";
 const ButtonColor = css`
   background-color : ${({color}) => color ? `${color.trim().toString()}` : "black"};

@@ -29,18 +29,31 @@ import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { generateBase64Image } from "../../../utils/image";
 import "./form-create.styles.css";
-import {connect} from "react-redux";
-import {saveProductForm} from "../../../redux/seller/seller.actions";
-import {selectCreateProductForm} from "../../../redux/seller/seller.selectors";
-import {createStructuredSelector} from "reselect";
-const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
+import { connect } from "react-redux";
+import { saveProductForm } from "../../../redux/seller/seller.actions";
+import { selectCreateProductForm } from "../../../redux/seller/seller.selectors";
+import { createStructuredSelector } from "reselect";
+const FormCreateProduct = ({ setDisabledNext, save, product, scroll }) => {
   const [listCatogory, setListCategory] = useState([]);
   const [listProductType, setListProductType] = useState([]);
-  const {selectedCategory, selectedProductType ,name, manufactor, image,tags, price, isDiscount, discount, discountExpDate, description, information,} = product ; 
-  
+  const {
+    selectedCategory,
+    selectedProductType,
+    name,
+    manufactor,
+    image,
+    tags,
+    price,
+    isDiscount,
+    discount,
+    discountExpDate,
+    description,
+    information,
+  } = product;
+
   const [listBase64Image, setListBase64Image] = useState([]);
- 
-  const [error, setError] = useState(false); 
+
+  const [error, setError] = useState(false);
   //#region  setView
   // const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   // const [tabletView, setTabletView] = useState(
@@ -60,7 +73,7 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
   //   }
   // }, [width]);
   //#endregion
-  
+
   useEffect(() => {
     window.scrollTo({
       top: scroll,
@@ -90,59 +103,76 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
     const index = e.target.selectedIndex;
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
-    const name = e.target[index].text;   
-    save({selectedCategory : {_id, name, linkUrl}})       
+    const name = e.target[index].text;
+    save({ selectedCategory: { _id, name, linkUrl } });
     getListProductType(_id)
       .then((data) => {
         setListProductType([...data]);
       })
-      .catch((err) => setError(err));      
-  };  
+      .catch((err) => setError(err));
+  };
   const handleChangeProductType = (e) => {
     const index = e.target.selectedIndex;
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
-    const name = e.target[index].text;    
-    save({selectedProductType : {_id, name, linkUrl}});
+    const name = e.target[index].text;
+    save({ selectedProductType: { _id, name, linkUrl } });
   };
   const handleChangeImage = async (e) => {
     const length = e.target.files.length;
     let listImage = [];
     for (let i = 0; i < length; i++) {
       listImage.push(e.target.files[i]);
-    }     
-    save({image : [...listImage]})
+    }
+    save({ image: [...listImage] });
     const imageBase64Promise = listImage.map(async (file) => {
       return await generateBase64Image(file);
     });
     const listImageBase64 = await Promise.all(imageBase64Promise);
     setListBase64Image(listImageBase64);
   };
-  const handleChangeChip = (chip) => {      
-    save({tags : chip})
+  const handleChangeChip = (chip) => {
+    save({ tags: chip });
   };
-  useEffect(() => {     
-  
-    if ( !selectedCategory.name||
-         !selectedCategory._id || 
-         !selectedCategory.linkUrl || 
-         !selectedProductType.name|| 
-         !selectedProductType._id || 
-         !selectedProductType.linkUrl ||
-         name.trim().length < 3 || 
-         !image.length ||         
-         !price || price === 0||
-         !tags.length || 
-         (isDiscount && (!discount || typeof discount !== "number" || discount < 0 || discount > 100 || !discountExpDate)) || 
-         !description || 
-         !information || 
-         !manufactor
-         ) {
+  useEffect(() => {
+    if (
+      !selectedCategory.name ||
+      !selectedCategory._id ||
+      !selectedCategory.linkUrl ||
+      !selectedProductType.name ||
+      !selectedProductType._id ||
+      !selectedProductType.linkUrl ||
+      name.trim().length < 3 ||
+      !image.length ||
+      !price ||
+      price === 0 ||
+      !tags.length ||
+      (isDiscount &&
+        (!discount ||
+          typeof discount !== "number" ||
+          discount < 0 ||
+          discount > 100 ||
+          !discountExpDate)) ||
+      !description ||
+      !information ||
+      !manufactor
+    ) {
       return setDisabledNext(true);
-    }       
+    }
     setDisabledNext(false);
-  },[selectedCategory, selectedProductType,name,tags,isDiscount, discount, discountExpDate,description, information, manufactor ])
-  
+  }, [
+    selectedCategory,
+    selectedProductType,
+    name,
+    tags,
+    isDiscount,
+    discount,
+    discountExpDate,
+    description,
+    information,
+    manufactor,
+  ]);
+
   return (
     <FormCreateProductWrapper>
       <Form>
@@ -200,7 +230,9 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             id="name"
             type="text"
             value={name}
-            onChange={(e) => { save({name : e.target.value}) } }
+            onChange={(e) => {
+              save({ name: e.target.value });
+            }}
             style={{
               borderBottomColor: name.trim().length < 3 ? "red" : "green",
             }}
@@ -213,7 +245,9 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             id="manufactor"
             type="text"
             value={manufactor}
-            onChange={(e) => { save({manufactor : e.target.value})} }
+            onChange={(e) => {
+              save({ manufactor: e.target.value });
+            }}
             style={{
               borderBottomColor: !manufactor ? "red" : "green",
             }}
@@ -228,7 +262,7 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             onChange={handleChangeImage}
             multiple
             inputFile
-            style={{borderBottomColor: !image.length ? "red" : "green",}}
+            style={{ borderBottomColor: !image.length ? "red" : "green" }}
           />
           <PlainText>Bạn cần tải lên ít nhất 1 hình(*)</PlainText>
         </FormGroup>
@@ -237,12 +271,14 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
           <ChipInput
             fullWidth
             defaultValue={tags}
-            newChipKeyCodes={[32,13]}
+            newChipKeyCodes={[32, 13]}
             onChange={(chip) => handleChangeChip(chip)}
             blurBehavior="add"
-            style={{ marginTop: "0.75rem"}}
+            style={{ marginTop: "0.75rem" }}
           />
-          <PlainText>Bạn phải tạo tags, nhấn phím cách để thêm tags mới (*)</PlainText>
+          <PlainText>
+            Bạn phải tạo tags, nhấn phím cách để thêm tags mới (*)
+          </PlainText>
         </FormGroup>
         <FormGroup>
           <Label>Giá sản phẩm</Label>
@@ -253,8 +289,10 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             suffix={" VNĐ"}
             allowNegative={false}
             allowEmptyFormatting={true}
-            onValueChange={({ floatValue }) => { save({price : floatValue})}}
-            style={{borderBottomColor: !price ? "red" : "green",}}
+            onValueChange={({ floatValue }) => {
+              save({ price: floatValue });
+            }}
+            style={{ borderBottomColor: !price ? "red" : "green" }}
           />
           <PlainText>Giá SP là bắt buộc (*)</PlainText>
         </FormGroup>
@@ -264,7 +302,9 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
               control={
                 <Checkbox
                   checked={isDiscount}
-                  onChange={(e) => {save({isDiscount : e.target.checked})} }
+                  onChange={(e) => {
+                    save({ isDiscount: e.target.checked });
+                  }}
                   name="checkedB"
                   color="primary"
                 />
@@ -279,17 +319,22 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
               </Label>
               <CustomNumberFormat
                 value={discount}
-                style={{borderBottomColor: discount==0 || !discount ? "red" : "green",}}
+                style={{
+                  borderBottomColor:
+                    discount == 0 || !discount ? "red" : "green",
+                }}
                 allowLeadingZeros={false}
                 thousandSeparator={true}
                 allowNegative={false}
                 allowEmptyFormatting={true}
-                onValueChange={({ floatValue }) => { save({discount : floatValue})}}
+                onValueChange={({ floatValue }) => {
+                  save({ discount: floatValue });
+                }}
                 suffix={" %"}
                 isAllowed={({ floatValue }) =>
                   floatValue >= 0 && floatValue <= 100
                 }
-              />                                         
+              />
             </FormGroupAnimation>
           </FormGroup>
           <FormGroup style={{ flex: 1 }}>
@@ -299,13 +344,15 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
               </Label>
               <Input
                 type="date"
-                onChange={(e) =>{ save({discountExpDate : e.target.value}) }}
-                style={{borderBottomColor: !discountExpDate ? "red" : "green",}}
+                onChange={(e) => {
+                  save({ discountExpDate: e.target.value });
+                }}
+                style={{
+                  borderBottomColor: !discountExpDate ? "red" : "green",
+                }}
               />
-             
-                <PlainText style={{ top: "52%" }}>
-                  Bắt buộc (*)
-                </PlainText>              
+
+              <PlainText style={{ top: "52%" }}>Bắt buộc (*)</PlainText>
             </FormGroupAnimation>
           </FormGroup>
         </FormInline>
@@ -340,8 +387,8 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             editor={ClassicEditor}
             data={description}
             onChange={(event, editor) => {
-              const data = editor.getData();             
-              save({description : data})
+              const data = editor.getData();
+              save({ description: data });
             }}
           />
           <PlainText>Bắt buộc (*)</PlainText>
@@ -363,11 +410,11 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
             editor={ClassicEditor}
             data={information}
             onChange={(event, editor) => {
-              const data = editor.getData();             
-              save({information : data})
+              const data = editor.getData();
+              save({ information: data });
             }}
-          />  
-          <PlainText>Bắt buộc(*)</PlainText>       
+          />
+          <PlainText>Bắt buộc(*)</PlainText>
         </List>
       </Form>
       <DisplayImage>
@@ -378,10 +425,10 @@ const FormCreateProduct = ({setDisabledNext, save,product, scroll}) => {
     </FormCreateProductWrapper>
   );
 };
-const mapStateToProps = createStructuredSelector ({
-  product : selectCreateProductForm
-})
-const mapDispatchToProps = dispatch => ({
-  save : (obj) => dispatch(saveProductForm(obj))
-})
+const mapStateToProps = createStructuredSelector({
+  product: selectCreateProductForm,
+});
+const mapDispatchToProps = (dispatch) => ({
+  save: (obj) => dispatch(saveProductForm(obj)),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(FormCreateProduct);

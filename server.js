@@ -1,14 +1,11 @@
 const express = require("express");
-const multer = require("multer");
+const configFileStorage = require("./config/fileStorage");
 const path = require("path");
-const shopRouter = require("./routes/shop");
-const adminRouter = require("./routes/admin");
-const staffRouter = require("./routes/staff");
-const authRouter = require("./routes/auth");
-const userRouter = require("./routes/user");
-const apiRouter = require("./routes/api");
+const initRouter = require("./routes");
 const connectDB = require("./config/connectDB");
 const configViewEngine = require("./config/viewEngine");
+const CORS = require("./config/cors");
+const handlerError = require("./config/handleError");
 const app = express();
 
 const port = process.env.PORT || 5000;
@@ -17,60 +14,24 @@ if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 //config view Engine
 configViewEngine(app);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, UPDATE, DELETE, PATH, OPTIONS, PUT"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authentication");
-  if (req.method === "OPTIONS") {
-    res.sendStatus(200);
-  }
-  next();
-});
+//Handler Access-Control-Allow-Origin
+CORS(app);
+
+//set up static file images
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./images");
-  },
-  filename: (req, file, cb) => {
-    if (!["image/jpg", "image/jpeg", "image/png"].includes(file.mimetype)) {
-      return cb(new Error("This file is not image file"), false);
-    }
+//set up file storage
+configFileStorage(app);
 
-    return cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
+//init Router
+initRouter(app);
 
-// const uploadSingleFile = multer({
-//   storage: storage,
-//   limits: { fieldSize: 1024 * 1024 },
-// }).single("image");
-const uploadMultipleFiles = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 },
-}).any();
-// app.use(uploadSingleFile);
-app.use(uploadMultipleFiles);
-app.use("/", shopRouter);
-app.use("/user", userRouter);
-app.use("/admin", adminRouter);
-app.use("/staff", staffRouter);
-app.use("/auth", authRouter);
-app.use("/api", apiRouter);
 //handle error
-app.use((error, req, res, next) => {
-  console.log(error);
-  const status = error.statusCode || 500;
-  const data = error.data;
-  const message = error.message;
-  res.status(status).json({ message: message });
-});
+handlerError(app);
 connectDB()
   .then((res) => {
     console.log("DB has been connected");

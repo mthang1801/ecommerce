@@ -7,6 +7,10 @@ const CategorySchema = new mongoose.Schema(
       required: true,
       minlength: 3,
     },
+    status: {
+      type: String,
+      default: "active",
+    },
     linkUrl: {
       type: String,
       required: true,

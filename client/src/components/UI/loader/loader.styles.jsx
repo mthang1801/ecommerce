@@ -1,11 +1,12 @@
-import styled from "styled-components";
+import styled  from "styled-components";
 
 export const LoaderWrapper = styled.div`
-  display : fixed ;
+  position : fixed ;
   left: 0 ;
   right : 0 ;
   top : 0; 
   bottom : 0;
-  background-color : black;
-  z-index : 999
+  background-color : white;  
+  z-index : 5000;
 `
+

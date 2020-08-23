@@ -71,8 +71,7 @@ export default (state = INITIAL_STATE, action) => {
       };
     case sellerActionTypes.CLEAR_ALL:
       return {
-        register: {},
-        product: {},
+        ...INITIAL_STATE,
       };
     default:
       return state;
