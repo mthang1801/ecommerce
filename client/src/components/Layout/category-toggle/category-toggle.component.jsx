@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import {CategoryToggleContainer, CategoryLeft, Slash, CategoryMiddle, CategoryRight} from "./category-toggle.styles";
 import Icon from "../../UI/custom-icon/custom-icon.component"
 import { FaArrowDown, FaArrowUp} from "react-icons/fa"
-const CategoryToggle = ({show, onClick}) => {
+import CategoryMenu from "../category-menu/category-menu.component";
+import Backdrop from "../../UI/backdrop/backdrop.component"
+const CategoryToggle = ({show, onMouseEnter, onMouseLeave}) => {
+  const [showBackdrop, setShowBackdrop] = useState(false)
   return (
-    <CategoryToggleContainer onClick={onClick}>
+    <CategoryToggleContainer onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <Backdrop show={showBackdrop}/>
       <CategoryLeft>
         <Slash />
         <Slash />
@@ -14,6 +18,7 @@ const CategoryToggle = ({show, onClick}) => {
       <CategoryRight>
         {show ?<Icon icon={<FaArrowUp/>} color="white" /> : <Icon icon={<FaArrowDown/>} color="white" /> }        
       </CategoryRight>
+      {show && <CategoryMenu setShowBackdrop={setShowBackdrop}/>}
     </CategoryToggleContainer>
   );
 };

@@ -3,15 +3,16 @@ import {
   CategoryMenuContainer,
   DropdownContent,
   CategoryList,
+  CustomLink
 } from "./category-menu.styles";
 import CATEGORY_DATA from "../../../data/category";
-import { CustomLink } from "../../UI/custom-link/custom-link.component";
 import ProductsPopup from "../products-popup/products-popup.component";
 import AppContext from "../../../context/app-viewport.context";
-const CategoryMenu = ({ show }) => {
+const CategoryMenu = ({ setShowBackdrop }) => {
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
   const [touched, setIsTouched] = useState(false);
+  const [activeLink, setActiveLink] = useState(null);
   const categoryRef = useRef(null);
   const popUpRef = React.createRef(null);
   const listRef = useRef(null);
@@ -36,6 +37,7 @@ const CategoryMenu = ({ show }) => {
       if (listRef && !listRef.current.contains(e.target)) {
         setCtfId(null);
         setIsTouched(false);
+        setActiveLink(null);
       }
     }
     document.addEventListener("mouseover", removePopupWhenMouseOutListCategory);
@@ -49,10 +51,14 @@ const CategoryMenu = ({ show }) => {
   const handleMouseEnter = (e, categoryId) => {
     setCtfId(categoryId);
     setIsTouched(true);
-  };  
-  const handleMouseLeave = (e) => {};
+    setActiveLink(categoryId);
+    setShowBackdrop(true);
+  };    
+  const handleMouseLeave = (e) => {
+    setShowBackdrop(false);   
+  };
   return (
-    <CategoryMenuContainer ref={categoryRef}>
+    <CategoryMenuContainer ref={categoryRef}>      
       <CategoryList ref={listRef}>
         {categoriesList.map((item) => (
           <React.Fragment key={item._id}>
@@ -61,9 +67,10 @@ const CategoryMenu = ({ show }) => {
               onMouseLeave={(e) => handleMouseLeave(e)}
               to={item.linkUrl}
               style={{ fontWeight: "400", textTransform: "capitalize" }}
+              active={item._id === activeLink}
             >
               {item.name}
-            </CustomLink>
+            </CustomLink>            
             <DropdownContent>
               {ctgId && !smallView && (
                 <ProductsPopup

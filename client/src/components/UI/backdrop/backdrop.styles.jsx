@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const BackdropContainer = styled.div`
+  display : ${({show}) => show ? "block" : "none"};
   position : fixed ; 
   width : 100%; 
   height : 100%;  

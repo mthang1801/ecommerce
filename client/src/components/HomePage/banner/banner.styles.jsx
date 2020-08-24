@@ -1,18 +1,17 @@
 import styled from "styled-components";
 
-export const MasterBannerContainer = styled.div`
+export const MasterBannerContainer = styled.div`  
   display : flex ; 
   flex-direction : column;
-  background : ${({img}) => img ? `url(${img})` : ""};
-  background-position : center; 
-  background-size : cover ;
-  height : 100%; 
+  background : ${({img}) => img ? `url(${img})` : ""};  
+  background-color : transparent ; 
+  background-size : cover ;  
+  height : ${({height} ) => height ? `${height}px` : "100%"}; 
   align-items : flex-start;
   justify-content :center;
-  padding : ${({mobileView}) => mobileView ? "2rem" : "5rem"} ;
-  position : relative; 
-  overflow : hidden ;
-  margin-left: 1rem;
+  padding : ${({mobileView}) => mobileView ? "2rem" : "0"} ;
+  position : relative;  
+  z-index: 0;
 `
 
 

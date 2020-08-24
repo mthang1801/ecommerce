@@ -1,16 +1,17 @@
 import styled from "styled-components";
 export const CategoryToggleContainer = styled.div`
   display : flex ; 
-  padding : .4rem 1rem;
+  width : 100%;  
+  height : 100%;
   background-color : rgb(127,173,57);
   color : white;
   text-align:center;
-  align-items: center;
-  height : 100%;
+  align-items: center;  
   &:hover{
     cursor : pointer;
     background-color : lighten(0.1, white)         
-  }
+  };
+  z-index: 1500;
 `
 
 export const CategoryLeft = styled.div`
@@ -20,7 +21,7 @@ export const CategoryLeft = styled.div`
   justify-content: space-around;
   align-items : center;
   height : 60%;
-    
+  z-index : 1500;      
 `
 export const Slash = styled.div`
   width : 1rem;

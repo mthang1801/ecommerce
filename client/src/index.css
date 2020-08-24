@@ -42,3 +42,6 @@ a{
     font-size : 16px !important;
   }
 }
+.slick-next:before, .slick-prev:before{
+  font-size : 30px;
+}

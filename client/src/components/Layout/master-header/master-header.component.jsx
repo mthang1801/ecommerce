@@ -16,10 +16,10 @@ const MasterHeader = (props) => {
   }, [width]);
   return (
     <MasterHeaderContainer smallView={smallView}>
-      <Grid w25 smallView={smallView}>
+      <Grid w20 smallView={smallView}>
         <CategoryOverview />
       </Grid>
-      <Grid w50 smallView={smallView}>
+      <Grid w55 smallView={smallView}>
         <MasterSearch />
       </Grid>
       <Grid w25 smallView={smallView}>

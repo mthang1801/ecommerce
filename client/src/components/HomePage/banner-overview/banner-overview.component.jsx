@@ -1,10 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {BannerOverViewContainer} from "./banner-overview.styles";
+import {BannerOverViewContainer, Grid, Carousel, SmallBanner} from "./banner-overview.styles";
 import Banner from "../banner/banner.component"
 import AppContext from "../../../context/app-viewport.context";
+import CarouselBanners from "../carousel-banners/carousel-banners.component";
+import bannersData from "../../../data/banner";
 const BannerOverView = () => {
   const [smallView, setSmallView] = useState(window.innerWidth < 992);
-  const width = useContext(AppContext); 
+  const width = useContext(AppContext);   
   useEffect(() => {
     if(width < 992){
       setSmallView(true);
@@ -14,8 +16,22 @@ const BannerOverView = () => {
   }, [width]);
 
   return (
-    <BannerOverViewContainer smallView={smallView}>           
-      <Banner />         
+    <BannerOverViewContainer smallView={smallView}>    
+      <Grid w60>
+        <Carousel>
+          <CarouselBanners/>
+        </Carousel>
+        {bannersData.filter((_,idx) => idx < 2).map((item) => (
+          <Banner key={item.imageUrl} img={item.imageUrl} linkUrl={item.linkUrl} />
+        ))}
+      </Grid>   
+  
+      <Grid>
+        {bannersData.filter((_,idx) => idx >= 2).map((item) => (
+          <Banner key={item.imageUrl} img={item.imageUrl} linkUrl={item.linkUrl} />
+        ))}
+      </Grid>
+              
     </BannerOverViewContainer>
   )
 }
