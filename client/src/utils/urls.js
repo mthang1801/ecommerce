@@ -8,7 +8,9 @@ export default {
   LIST_DISTRICTS_BASE_ON_CITY_ID_API: (id) => `/api/city/${id}/district`,
   LIST_WARDS_BASE_ON_DISRICT_ID_API: (id) => `/api/district/${id}/ward`,
   GET_LIST_CATEGORY: "/category",
-  GET_LIST_PRODUCT_TYPE__BY_CATEGORYID: (id) => `/category/${id}/product-type`,
+  GET_LIST_PRODUCT_TYPE_BY_CATEGORYID: (id) => `/category/${id}/product-type`,
+  GET_LIST_PRODUCT_GROUP_BY_PRODUCTTYPEID: (id) =>
+    `/product-type/${id}/product-group`,
   POST_CREATE_NEW_PRODUCT: `/product`,
   UPDATE_ROLE_USER_AS_SELLER: `/user/register-seller`,
   FETCH_INITIAL_DATA: `/initial-data`,

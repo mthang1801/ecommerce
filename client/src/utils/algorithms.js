@@ -122,10 +122,6 @@ export const getCartItems = () => {
   return [...CART_DATA];
 };
 
-// export const getCategoryList = () => {
-//   return Object.keys(CATEGORIES_DATA).map((key) => CATEGORIES_DATA[key]);
-// };
-
 export const getProductsByProductType = (productType) => {
   return PRODUCTS_DATA[productType];
 };
@@ -186,6 +182,7 @@ export const getListProductType = (categoryID) => {
       const { data } = await axios.get(
         urls.GET_LIST_PRODUCT_TYPE_BY_CATEGORYID(categoryID)
       );
+
       resolve(data);
     } catch (error) {
       reject(error);
@@ -214,8 +211,8 @@ export const createNewProduct = (product) => {
       formData.append("categoryId", product.selectedCategory._id);
       formData.append("productTypeId", product.selectedProductType._id);
       formData.append("rootUrl", product.selectedProductType.linkUrl);
+      formData.append("label", product.label);
       formData.append("name", product.name);
-      formData.append("tags", product.tags);
       formData.append("price", product.price);
       formData.append("discount", product.discount || 0);
       formData.append("discountExpDate", product.discountExpDate);

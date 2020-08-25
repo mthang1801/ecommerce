@@ -1,17 +1,23 @@
 import styled from "styled-components";
-
+import {darken} from "polished"
 export const Form = styled.form`
   width : 100%; 
   max-width : 600px;
   margin : 1.5rem auto;
 `
 export const FormGroup = styled.div`
-  display : flex ;   
+  display :  flex ; 
   margin : 0 0.5rem;
   &:not(:last-child){
-    margin-bottom : 2.3rem;
+    margin-bottom :${({hide}) => hide ? "0" : "2.3rem"};
   }
   position : relative;
+  visibility : ${({hide}) => hide ? "hidden" : "visible"}; 
+  height : ${({hide}) => hide ? 0 : "auto"}; 
+  & > * {
+    display : ${({hide}) => hide ? "none" : "block"}
+  };  
+  transition : all 0.4s;
 `
 
 export const FormInline = styled.div`
@@ -119,4 +125,17 @@ export const ErrorMessage = styled.h4`
   font-size : 1em;
   text-align : left ;
   color : #dd2222; 
+`
+
+export const CloseBtn = styled.span`
+position: absolute;
+right: 3px;
+
+font-size: 2em;
+font-weight: bold;
+color: #4f4f4f;
+cursor : pointer;
+  &:hover{
+    color : ${darken("0.15", "#4f4f4f")}
+  }
 `

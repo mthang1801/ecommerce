@@ -6,8 +6,13 @@ import {withRouter} from "react-router-dom";
 import {fetchUserStart} from "../../../redux/user/user.actions";
 import {connect} from "react-redux";
 import { clearAll } from '../../../redux/seller/seller.actions';
-const FormCompleteCreateProduct = ({success, history, clearAll, fetchUser}) => {
-  
+const FormCompleteCreateProduct = ({success, history, clearAll, fetchUser, scroll}) => {
+  useEffect(() => {
+    window.scrollTo({
+      top : scroll,
+      behavior : "smooth"
+    })
+  }, [scroll])
   const handleComplete = e => {      
     clearAll();
     fetchUser();

@@ -2,13 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema(
   {
-    name: {
+    label: {
       type: String,
       required: true,
     },
-    group: {
+    name: {
       type: String,
-      ref: "product-groups",
       required: true,
     },
     linkUrl: {

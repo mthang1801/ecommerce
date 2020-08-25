@@ -4,6 +4,7 @@ const Image = require("../models/images");
 const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs-extra");
+const validator = require("validator");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -22,18 +23,6 @@ exports.getInitialData = async (req, res, next) => {
         ),
       };
     });
-    console.log(categoryObject);
-    // productTypesList.forEach((productType) => {
-    //   if (productType.status == "active" && productType.products.length) {
-    //     productsID = productsID.concat(productType.products.slice(0, 8));
-    //   }
-    // });
-    // let productsPromise = productsID.map(async (id) => {
-    //   return await Product.findOne({ _id: id });
-    // });
-
-    // let products = await Promise.all(productsPromise);
-    // products = products.filter((el) => el);
 
     res.status(200).json({
       category: categoryList,
@@ -71,6 +60,16 @@ exports.getListProductTypesByCategoryId = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await ProductTypes.find({ category: id, status: "active" });
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProductGroupByProductTypeId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await ProductGroup.find({ productType: id, status: "active" });
     res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -157,12 +156,13 @@ exports.postCreateProduct = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const {
+    const errorsArr = [];
+    let {
       categoryId,
       productTypeId,
       rootUrl,
+      label,
       name,
-      tags,
       price,
       discount,
       discountExpDate,
@@ -170,6 +170,7 @@ exports.postCreateProduct = async (req, res, next) => {
       information,
       manufactor,
     } = req.body;
+
     //set name url for product
     const match = /[A-Za-z0-9]/;
     const nameUrl = name
@@ -178,9 +179,15 @@ exports.postCreateProduct = async (req, res, next) => {
       .concat([Date.now()])
       .join("-")
       .toLowerCase();
+    const product = await Product.findOne({
+      name: new RegExp(["^", name, "$"].join(""), "i"),
+    });
+    if (product) {
+      name = name + "|" + Date.now();
+    }
     const newProduct = new Product({
+      label,
       name,
-      tags,
       linkUrl: `${rootUrl}/${nameUrl}`,
       price,
       description,
@@ -190,6 +197,7 @@ exports.postCreateProduct = async (req, res, next) => {
       category: categoryId,
       manufactor,
     });
+
     if (+discount > 0 && discountExpDate) {
       newProduct.discount = {
         value: +discount,
@@ -216,6 +224,12 @@ exports.postCreateProduct = async (req, res, next) => {
     await newProduct.save();
     user.products.push(newProduct);
     productType.products.push(newProduct);
+    const checkManufactorExisted = productType.manufactors.find(
+      (item) => item.toLowerCase() == manufactor.toLowerCase()
+    );
+    if (!checkManufactorExisted) {
+      productType.manufactors.push(manufactor);
+    }
     await user.save();
     await productType.save();
 

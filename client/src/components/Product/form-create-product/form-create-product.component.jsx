@@ -12,7 +12,8 @@ import {
   FormGroupAnimation,
   PlainText,
   Title,
-  ErrorMessage
+  ErrorMessage,
+  CloseBtn
 } from "../../UI/custom-form-second/custom-form-second.component";
 import {
   FormCreateProductWrapper,
@@ -20,7 +21,7 @@ import {
   List,
   DisplayImage,
   Image,
-  Grid,
+  Grid,  
 } from "./form-create-product.styles";
 import AppContext from "../../../context/app-viewport.context";
 import Button from "@material-ui/core/Button";
@@ -40,14 +41,14 @@ import { createNewProduct } from "../../../utils/algorithms";
 import FormComplete from "../form-complete/form-complete.component"
 const FormCreateProduct = ({ save, product, scroll }) => {
   const [listCatogory, setListCategory] = useState([]);
-  const [listProductType, setListProductType] = useState([]);
+  const [listProductType, setListProductType] = useState([]);  
   const {
     selectedCategory,
-    selectedProductType,
-    name,
+    selectedProductType,  
+    label,  
+    name,       
     manufactor,
-    image,
-    tags,
+    image,    
     price,
     isDiscount,
     discount,
@@ -73,17 +74,17 @@ const FormCreateProduct = ({ save, product, scroll }) => {
   //#endregion
   useEffect(() => {
     window.scrollTo({
-      top : scroll,
+      top : scroll +300,
       behavior : "auto"
     })
-  })
+  },[])
   useEffect(() => {
     let _mounted = true;
     getListCategory()
       .then((data) => {
         if (_mounted) {
           setListCategory([
-            { _id: "", name: "Lựa chọn Nhóm Sản Phẩm", linkUrl: "" },
+            { _id: "", name: "--Lựa chọn Nội dung Sản Phẩm--", linkUrl: "" },
             ...data,
           ]);
         }
@@ -100,7 +101,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
     const name = e.target[index].text;
-    save({ selectedCategory: { _id, name, linkUrl } });
+    save({ selectedCategory: { _id, name, linkUrl}, selectedProductType : {_id : "", name : "", linkUrl : ""}});   
     getListProductType(_id)
       .then((data) => {
         setListProductType([...data]);
@@ -112,8 +113,9 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
     const name = e.target[index].text;
-    save({ selectedProductType: { _id, name, linkUrl } });
+    save({ selectedProductType: { _id, name, linkUrl }});    
   };
+
   const handleChangeImage = async (e) => {
     const length = e.target.files.length;
     let listImage = [];
@@ -127,9 +129,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const listImageBase64 = await Promise.all(imageBase64Promise);
     setListBase64Image(listImageBase64);
   };
-  const handleChangeChip = (chip) => {
-    save({ tags: chip });
-  };
+ 
   const isValidForm = () => {
     if (
       !selectedCategory.name ||
@@ -138,11 +138,11 @@ const FormCreateProduct = ({ save, product, scroll }) => {
       !selectedProductType.name ||
       !selectedProductType._id ||
       !selectedProductType.linkUrl ||
+      label.trim().length < 3 || 
       name.trim().length < 3 ||
       !image.length ||
-      !price ||
-      price === 0 ||
-      !tags.length ||
+      !price ||                
+      price === 0 ||      
       (isDiscount &&
         (!discount ||
           typeof discount !== "number" ||
@@ -152,9 +152,10 @@ const FormCreateProduct = ({ save, product, scroll }) => {
       !description ||
       !information ||
       !manufactor
-    )
-      return false;     
-      return true
+    ){
+      return false;  
+    }     
+      return true;  
   }
   
   useEffect(() => {            
@@ -164,17 +165,16 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     setDisabled(false);
   }, [
     selectedCategory,
-    selectedProductType,
-    name,
-    tags,
+    selectedProductType,     
+    name,   
+    label, 
     isDiscount,
     discount,
     discountExpDate,
     description,
     information,
     manufactor,
-  ]);
-  console.log(disabled)
+  ]);  
   const handleSubmitForm = (e) => {
     e.preventDefault();  
     if(!isValidForm()){
@@ -189,7 +189,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     })
   }
   if(complete){
-    return <FormComplete success={success}/>
+    return <FormComplete success={success} scroll={scroll}/>
   }
   return (
     <FormCreateProductWrapper smallView={smallView}>
@@ -199,7 +199,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {error && <h4>{error}</h4>}
           <FormGroup>
-            <Label>Loại Sản Phẩm</Label>
+            <Label>Nội dung Sản Phẩm</Label>
             <Select
               value={selectedCategory._id}
               onChange={handleChangeCategory}
@@ -221,18 +221,16 @@ const FormCreateProduct = ({ save, product, scroll }) => {
             </Select>
           </FormGroup>
           <FormGroup>
-            <Label>Nhóm Sản phẩm</Label>
+            <Label>Loại Sản phẩm</Label>
             <Select
-              defaultValue={selectedProductType._id}
+              value={selectedProductType._id}
               onChange={handleChangeProductType}
               style={{
                 borderBottomColor:
                   selectedProductType._id === "" ? "red" : "green",
               }}
-            >
-              <Option value="" disabled>
-                Lựa chọn Loại SP
-              </Option>
+            >         
+            <Option>--Lựa chọn loại SP --</Option>     
               {listProductType.map((productType) => (
                 <Option
                   key={productType._id}
@@ -244,6 +242,21 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                 </Option>
               ))}
             </Select>
+          </FormGroup>          
+          <FormGroup>
+            <Label htmlFor="label">Nhãn Sản phẩm</Label>
+            <Input
+              id="label"
+              type="text"
+              value={label}
+              onChange={(e) => {
+                save({ label: e.target.value });
+              }}
+              style={{
+                borderBottomColor: label.trim().length < 3 ? "red" : "green",
+              }}
+            />
+            <PlainText>Nhãn SP phải có ít nhất 3 ký tự(*)</PlainText>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="name">Tên Sản phẩm</Label>
@@ -286,21 +299,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
               style={{ borderBottomColor: !image.length ? "red" : "green" }}
             />
             <PlainText>Bạn cần tải lên ít nhất 1 hình(*)</PlainText>
-          </FormGroup>
-          <FormGroup>
-            <Label>Tạo tags</Label>
-            <ChipInput
-              fullWidth
-              defaultValue={tags}
-              newChipKeyCodes={[32, 13, 9]}
-              onChange={(chip) => handleChangeChip(chip)}
-              blurBehavior="add"
-              style={{ marginTop: "0.75rem" }}
-            />
-            <PlainText>
-              Bạn phải tạo tags, nhấn phím cách để thêm tags mới (*)
-            </PlainText>
-          </FormGroup>
+          </FormGroup>          
           <FormGroup>
             <Label>Giá sản phẩm</Label>
             <CustomNumberFormat

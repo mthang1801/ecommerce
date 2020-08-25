@@ -7,6 +7,13 @@ import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux"
 import {Redirect} from "react-router-dom"
 const CreateProductPage = ({user, match}) => { 
+  const backgroundRef = useRef(null);
+  const [scroll, setScroll] = useState(0);
+  useEffect(() => {
+    if(backgroundRef.current){
+      setScroll(backgroundRef.current.offsetTop)
+    }
+  },[backgroundRef.current])
   if(!user){
     return <Redirect to={{
       pathname : "/auth",
@@ -14,9 +21,9 @@ const CreateProductPage = ({user, match}) => {
     }} />
   } 
   return (
-    <CreateProductPageWrapper>
+    <CreateProductPageWrapper ref={backgroundRef}>
       <Background label="Đăng Sản Phẩm"/>
-      <FormCreateProduct/>
+      <FormCreateProduct scroll={scroll}/>
     </CreateProductPageWrapper>
   )
 }
