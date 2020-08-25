@@ -17,7 +17,7 @@ const MasterHeader = (props) => {
   return (
     <MasterHeaderContainer smallView={smallView}>
       <Grid w20 smallView={smallView}>
-        <CategoryOverview />
+        {/* <CategoryOverview /> */}
       </Grid>
       <Grid w55 smallView={smallView}>
         <MasterSearch />

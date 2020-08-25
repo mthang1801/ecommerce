@@ -15,20 +15,24 @@ export const CategoryMenuContainer = styled.div`
   top : calc(100%);
   color : black;
   text-align : left ;
-  z-index: 1100;
+  z-index: 1100;  
 `
 
 export const Dropdown = styled.div`
   position: relative;   
 `
 
-export const DropdownContent = styled.div``
+export const DropdownContent = styled.div`
+  
+`
 
 export const CategoryList = styled.div`  
   display : flex ;
   flex-direction : column;
   line-height : 1.5;
   z-index: 1100;
+  height: 100%;
+  overflow : auto;
 `
 
 export const CustomLink = styled.span`

@@ -4,7 +4,45 @@ const Image = require("../models/images");
 const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs-extra");
-const { openDelimiter } = require("ejs");
+exports.getInitialData = async (req, res, next) => {
+  try {
+    let categoryList = await Category.find({ status: "active" }).populate(
+      "productTypes"
+    );
+    let productTypesList = await ProductTypes.find({
+      status: "active",
+    }).populate({ path: "products", options: { limit: 6 } });
+
+    const categoryObject = {};
+    categoryList.forEach((category) => {
+      categoryObject[category._id] = {
+        productType: productTypesList.filter(
+          (productType) =>
+            productType.category.toString() === category._id.toString()
+        ),
+      };
+    });
+    console.log(categoryObject);
+    // productTypesList.forEach((productType) => {
+    //   if (productType.status == "active" && productType.products.length) {
+    //     productsID = productsID.concat(productType.products.slice(0, 8));
+    //   }
+    // });
+    // let productsPromise = productsID.map(async (id) => {
+    //   return await Product.findOne({ _id: id });
+    // });
+
+    // let products = await Promise.all(productsPromise);
+    // products = products.filter((el) => el);
+
+    res.status(200).json({
+      category: categoryList,
+      menu: categoryObject,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getCategoryList = async (req, res, next) => {
   try {
     const searchKey = req.query.search || "";
@@ -28,6 +66,7 @@ exports.getCategoryList = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.getListProductTypesByCategoryId = async (req, res, next) => {
   try {
     const { id } = req.params;

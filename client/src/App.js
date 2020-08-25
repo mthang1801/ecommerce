@@ -17,6 +17,7 @@ import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
 import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
+
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -30,6 +31,7 @@ function App({ fetchUser, user, loading }) {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+
   if (loading && !user) {
     return <Loader />;
   }

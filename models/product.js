@@ -6,12 +6,11 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
-    tags: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    group: {
+      type: String,
+      ref: "product-groups",
+      required: true,
+    },
     linkUrl: {
       type: String,
       required: true,

@@ -184,7 +184,7 @@ export const getListProductType = (categoryID) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { data } = await axios.get(
-        urls.GET_LIST_PRODUCT_TYPE__BY_CATEGORYID(categoryID)
+        urls.GET_LIST_PRODUCT_TYPE_BY_CATEGORYID(categoryID)
       );
       resolve(data);
     } catch (error) {

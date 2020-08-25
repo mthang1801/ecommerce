@@ -11,4 +11,5 @@ export default {
   GET_LIST_PRODUCT_TYPE__BY_CATEGORYID: (id) => `/category/${id}/product-type`,
   POST_CREATE_NEW_PRODUCT: `/product`,
   UPDATE_ROLE_USER_AS_SELLER: `/user/register-seller`,
+  FETCH_INITIAL_DATA: `/initial-data`,
 };

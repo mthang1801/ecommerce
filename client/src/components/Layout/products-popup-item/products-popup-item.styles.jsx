@@ -3,9 +3,10 @@ import {Link} from "react-router-dom";
 export const ProductsPopupItemContainer = styled.div`
   display : flex ; 
   flex-direction : column;
+  font-size : 0.9em;
   padding : .5rem;
   width : 20%;
-  height : 100%;
+  height: 45%; 
   flex-wrap : wrap;
   overflow : hidden;
 `

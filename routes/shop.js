@@ -3,6 +3,12 @@ const shopController = require("../controllers/shop");
 const { isAuth } = require("../middlewares/auth");
 const router = express.Router();
 /**
+ * @route GET /initial-data
+ * @desc get initial data
+ * @access public
+ */
+router.get("/initial-data", shopController.getInitialData);
+/**
  * @route GET /api/category
  * @desc get list categories
  * @access public
@@ -24,8 +30,8 @@ router.get(
  */
 router.get("/product-types", shopController.getProductTypes);
 /**
- * @route GET /product-types/id
- * @desc get list product types by id
+ * @route GET /produc-types/all
+ * @desc get all list product types
  * @access public
  */
 router.get("/product-types/:id", shopController.getProductTypesById);

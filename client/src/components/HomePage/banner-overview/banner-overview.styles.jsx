@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const BannerOverViewContainer = styled.section`
   display : flex ; 
-  height :  ${({smallView}) => smallView ? "auto" : "28rem"} ;
+  height :  ${({smallView}) => smallView ? "auto" : "33rem"} ;
   width :  ${({smallView}) => smallView ? "100%" : "80%"};
   margin : ${({smallView}) => smallView ? "1rem auto" : "0 0 0 auto"};  
   padding : 0.5rem;  

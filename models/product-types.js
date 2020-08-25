@@ -10,6 +10,12 @@ const ProductTypesSchema = new mongoose.Schema(
       type: String,
       default: "active",
     },
+    groups: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product-groups",
+      },
+    ],
     linkUrl: {
       type: String,
       required: true,
@@ -19,13 +25,6 @@ const ProductTypesSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "categories",
     },
-    products: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
-        required: true,
-      },
-    ],
     manufactors: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -8,17 +8,17 @@ import {
 import CATEGORY_DATA from "../../../data/category";
 import ProductsPopup from "../products-popup/products-popup.component";
 import AppContext from "../../../context/app-viewport.context";
-const CategoryMenu = ({ setShowBackdrop }) => {
+import {connect} from "react-redux";
+import {selectCategoryList} from "../../../redux/category/category.selectors"
+import {createStructuredSelector} from "reselect"
+const CategoryMenu = ({ categoryList }) => {
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
   const [touched, setIsTouched] = useState(false);
   const [activeLink, setActiveLink] = useState(null);
-  const categoryRef = useRef(null);
-  const popUpRef = React.createRef(null);
+  const categoryRef = useRef(null); 
   const listRef = useRef(null);
-  const categoriesList = Object.keys(CATEGORY_DATA).map(
-    (key) => CATEGORY_DATA[key]
-  );
+  
   const [smallView, setSmallView] = useState(window.innerWidth < 992);
   const width = useContext(AppContext);
   useEffect(() => {
@@ -27,10 +27,8 @@ const CategoryMenu = ({ setShowBackdrop }) => {
     } else {
       setSmallView(false);
     }
-  }, [width]);
-  useEffect(() => {
     setOffsetWidth(categoryRef.current.offsetWidth);
-  }, [setOffsetWidth]);
+  }, [width]);
 
   useEffect(() => {
     function removePopupWhenMouseOutListCategory(e) {
@@ -51,16 +49,14 @@ const CategoryMenu = ({ setShowBackdrop }) => {
   const handleMouseEnter = (e, categoryId) => {
     setCtfId(categoryId);
     setIsTouched(true);
-    setActiveLink(categoryId);
-    setShowBackdrop(true);
+    setActiveLink(categoryId);    
   };    
-  const handleMouseLeave = (e) => {
-    setShowBackdrop(false);   
+  const handleMouseLeave = (e) => {      
   };
-  return (
-    <CategoryMenuContainer ref={categoryRef}>      
-      <CategoryList ref={listRef}>
-        {categoriesList.map((item) => (
+  return (  
+    <CategoryMenuContainer ref={categoryRef} >    
+       <CategoryList ref={listRef}>
+        {categoryList.map((item) => (
           <React.Fragment key={item._id}>
             <CustomLink
               onMouseEnter={(e) => handleMouseEnter(e, item._id)}
@@ -72,19 +68,20 @@ const CategoryMenu = ({ setShowBackdrop }) => {
               {item.name}
             </CustomLink>            
             <DropdownContent>
-              {ctgId && !smallView && (
-                <ProductsPopup
-                  ref={popUpRef}
+              {(
+                <ProductsPopup                  
                   offsetWidth={offsetWidth}
                   categoryId={ctgId}
                 />
-              )}
+              )} 
             </DropdownContent>
           </React.Fragment>
         ))}
-      </CategoryList>
+      </CategoryList> 
     </CategoryMenuContainer>
   );
 };
-
-export default CategoryMenu;
+const mapStateToProps = createStructuredSelector({
+  categoryList : selectCategoryList
+})
+export default connect(mapStateToProps)(CategoryMenu);

@@ -5,9 +5,15 @@ import userActionTypes from "./user.types";
 import axios from "axios";
 import urls from "../../utils/urls";
 import setAuthToken from "../../utils/setAuthToken";
-
-function* fetchUser() {
+import { fetchMenuSuccess } from "../menu/menu.actions";
+import { fetchCategorySuccess } from "../category/category.actions";
+export function* fetchUser() {
   try {
+    const {
+      data: { menu, category },
+    } = yield axios.get(urls.FETCH_INITIAL_DATA);
+    yield put(fetchMenuSuccess(menu));
+    yield put(fetchCategorySuccess(category));
     if (!localStorage.userToken || !localStorage.userExpDate) {
       throw new Error("Authentication denied");
     }
@@ -19,14 +25,13 @@ function* fetchUser() {
       localStorage.removeItem("userToken");
       throw new Error("Token has expired");
     }
-
     setAuthToken(localStorage.userToken);
     const timeRemain =
       Math.ceil(new Date(localStorage.userExpDate).getTime() - Date.now()) /
       1000;
     const { data } = yield axios.get(urls.FETCH_USER_URL);
+
     yield put(actions.fetchUserSuccess(data));
-    console.log(timeRemain);
     yield put(actions.checkAuthTimeout(timeRemain));
   } catch (error) {
     yield put(actions.fetchUserFail());
