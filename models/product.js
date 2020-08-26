@@ -56,6 +56,10 @@ const ProductSchema = new Schema(
       ref: "users",
       required: true,
     },
+    productGroup: {
+      type: Schema.Types.ObjectId,
+      ref: "product-groups",
+    },
     productType: {
       type: Schema.Types.ObjectId,
       ref: "product-types",

@@ -24,6 +24,15 @@ router.get(
   shopController.getListProductTypesByCategoryId
 );
 /**
+ * @route GET /product-type/:id/product-group
+ * @desc get list product group by productType ID
+ * @access public
+ */
+router.get(
+  "/product-type/:id/product-group",
+  shopController.getListProductGroupByProducTypeId
+);
+/**
  * @route GET /produc-types
  * @desc get list product types
  * @access public
@@ -36,7 +45,7 @@ router.get("/product-types", shopController.getProductTypes);
  */
 router.get("/product-types/:id", shopController.getProductTypesById);
 /**
- * @route GET //list-links-product-types
+ * @route GET /list-links-product-types
  * @desc get list product types by linkUrl
  * @access public
  */

@@ -38,7 +38,12 @@ const INITIAL_STATE = {
       name: "",
       linkUrl: "",
     },
+    selectedProductGroup: {
+      _id: "",
+      name: "",
+    },
     label: "",
+    groupName: "",
     name: "",
     manufactor: "",
     image: [],

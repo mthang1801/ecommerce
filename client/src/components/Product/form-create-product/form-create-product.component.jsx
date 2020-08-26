@@ -13,7 +13,7 @@ import {
   PlainText,
   Title,
   ErrorMessage,
-  CloseBtn
+  CloseBtn,
 } from "../../UI/custom-form-second/custom-form-second.component";
 import {
   FormCreateProductWrapper,
@@ -21,12 +21,15 @@ import {
   List,
   DisplayImage,
   Image,
-  Grid,  
+  Grid,
 } from "./form-create-product.styles";
 import AppContext from "../../../context/app-viewport.context";
 import Button from "@material-ui/core/Button";
-import { getListCategory, getListProductType } from "../../../utils/algorithms";
-import ChipInput from "material-ui-chip-input";
+import {
+  getListCategory,
+  getListProductType,
+  getListProductGroup,
+} from "../../../utils/algorithms";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import CKEditor from "@ckeditor/ckeditor5-react";
@@ -34,21 +37,24 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { generateBase64Image } from "../../../utils/image";
 import "./form-create.styles.css";
 import { connect } from "react-redux";
-import { saveProductForm } from "../../../redux/seller/seller.actions";
+import { saveProductForm, clearAll } from "../../../redux/seller/seller.actions";
 import { selectCreateProductForm } from "../../../redux/seller/seller.selectors";
 import { createStructuredSelector } from "reselect";
 import { createNewProduct } from "../../../utils/algorithms";
-import FormComplete from "../form-complete/form-complete.component"
-const FormCreateProduct = ({ save, product, scroll }) => {
+import FormComplete from "../form-complete/form-complete.component";
+const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
   const [listCatogory, setListCategory] = useState([]);
-  const [listProductType, setListProductType] = useState([]);  
+  const [listProductType, setListProductType] = useState([]);
+  const [listProductGroup, setListProductGroup] = useState([]);
+  const [hideAddProductGroup, setHideAddProductGroup] = useState(true); 
   const {
     selectedCategory,
-    selectedProductType,  
-    label,  
-    name,       
+    selectedProductType,
+    selectedProductGroup,  
+    label,
+    name,
     manufactor,
-    image,    
+    image,
     price,
     isDiscount,
     discount,
@@ -74,17 +80,17 @@ const FormCreateProduct = ({ save, product, scroll }) => {
   //#endregion
   useEffect(() => {
     window.scrollTo({
-      top : scroll +300,
-      behavior : "auto"
-    })
-  },[])
+      top: scroll + 300,
+      behavior: "auto",
+    });
+    return () => clearAll();
+  }, []);
   useEffect(() => {
     let _mounted = true;
     getListCategory()
       .then((data) => {
         if (_mounted) {
-          setListCategory([
-            { _id: "", name: "--Lựa chọn Nội dung Sản Phẩm--", linkUrl: "" },
+          setListCategory([            
             ...data,
           ]);
         }
@@ -100,8 +106,23 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const index = e.target.selectedIndex;
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
-    const name = e.target[index].text;
-    save({ selectedCategory: { _id, name, linkUrl}, selectedProductType : {_id : "", name : "", linkUrl : ""}});   
+    const name = e.target[index].text;    
+    save({
+      selectedCategory: { _id, name, linkUrl },
+      selectedProductType: { _id: "", name: "", linkUrl: "" },
+      selectedProductGroup: { _id: "", name: "" },
+    });    
+    if(_id === "!"){
+      setListProductGroup([]);
+      setListProductType([]);      
+      save({
+        selectedCategory: { _id : "", name : "", linkUrl : "" },
+        selectedProductType: { _id: "", name: "", linkUrl: "" },
+        selectedProductGroup: { _id: "", name: "" },
+      });
+      return ;
+    }
+    setHideAddProductGroup(true);
     getListProductType(_id)
       .then((data) => {
         setListProductType([...data]);
@@ -112,9 +133,41 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const index = e.target.selectedIndex;
     const _id = e.target.value;
     const linkUrl = e.target.childNodes[index].dataset.url;
-    const name = e.target[index].text;
-    save({ selectedProductType: { _id, name, linkUrl }});    
+    const name = e.target[index].text;   
+    save({
+      selectedProductType: { _id, name, linkUrl },
+      selectedProductGroup: { _id: "", name: "" },
+    });
+    
+    if(_id === "!"){     
+      save({
+        selectedProductType: { _id : "", name: "", linkUrl : "" },
+        selectedProductGroup: { _id: "", name: "" },
+      });
+      
+      setListProductGroup([]);      
+      return ;
+    }
+    setHideAddProductGroup(true);
+    getListProductGroup(_id)
+      .then((data) => {
+        setListProductGroup([...data]);
+      })
+      .catch((err) => setError(err));
   };
+
+  const handleChangeProductGroup = e => {
+    const index = e.target.selectedIndex;
+    const _id = e.target.value;   
+    const name = e.target[index].text;
+    if(_id === "#"){
+      setHideAddProductGroup(false);
+      save({selectedProductGroup : {_id , name : ""}});
+    }else{
+      setHideAddProductGroup(true);
+      save({selectedProductGroup : {_id, name }})
+    }
+  }
 
   const handleChangeImage = async (e) => {
     const length = e.target.files.length;
@@ -129,7 +182,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
     const listImageBase64 = await Promise.all(imageBase64Promise);
     setListBase64Image(listImageBase64);
   };
- 
+
   const isValidForm = () => {
     if (
       !selectedCategory.name ||
@@ -138,11 +191,12 @@ const FormCreateProduct = ({ save, product, scroll }) => {
       !selectedProductType.name ||
       !selectedProductType._id ||
       !selectedProductType.linkUrl ||
-      label.trim().length < 3 || 
-      name.trim().length < 3 ||
+      !label.trim() ||
+      !name.trim() ||
+      !hideAddProductGroup && !selectedProductGroup.name ||
       !image.length ||
-      !price ||                
-      price === 0 ||      
+      !price ||
+      price === 0 ||
       (isDiscount &&
         (!discount ||
           typeof discount !== "number" ||
@@ -152,44 +206,51 @@ const FormCreateProduct = ({ save, product, scroll }) => {
       !description ||
       !information ||
       !manufactor
-    ){
-      return false;  
-    }     
-      return true;  
-  }
-  
-  useEffect(() => {            
-    if (!isValidForm()){
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (!isValidForm()) {
       return setDisabled(true);
-    }    
+    }
     setDisabled(false);
   }, [
     selectedCategory,
-    selectedProductType,     
-    name,   
-    label, 
+    selectedProductType,
+    name,
+    label,
     isDiscount,
     discount,
     discountExpDate,
     description,
     information,
     manufactor,
-  ]);  
+    price,
+    image
+  ]);
   const handleSubmitForm = (e) => {
-    e.preventDefault();  
-    if(!isValidForm()){
-      return setError("Bạn cần phải điền đầy đủ thông tin sản phẩm trước khi gửi!!")
+    e.preventDefault();
+    if (!isValidForm()) {
+      return setError(
+        "Bạn cần phải điền đầy đủ thông tin sản phẩm trước khi gửi!!"
+      );
     }
-    createNewProduct(product).then(res => {
-      setSuccess(true);      
-    }).catch(err=> {
-      setSuccess(false);
-    }).finally(( ) => {
-      setComplete(true);
-    })
-  }
-  if(complete){
-    return <FormComplete success={success} scroll={scroll}/>
+    createNewProduct(product)
+      .then((res) => {
+        setSuccess(true);
+      })
+      .catch((err) => {
+        setSuccess(false);
+      })
+      .finally(() => {
+        setComplete(true);
+      });
+  };
+  if (complete) {
+    return <FormComplete success={success} scroll={scroll} />;
   }
   return (
     <FormCreateProductWrapper smallView={smallView}>
@@ -199,7 +260,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {error && <h4>{error}</h4>}
           <FormGroup>
-            <Label>Nội dung Sản Phẩm</Label>
+            <Label>Danh mục SP</Label>
             <Select
               value={selectedCategory._id}
               onChange={handleChangeCategory}
@@ -208,6 +269,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                   selectedCategory._id === "" ? "red" : "green",
               }}
             >
+              <Option value="!">-- Lựa chọn danh mục SP --</Option>
               {listCatogory.map((category) => (
                 <Option
                   key={category._id}
@@ -220,7 +282,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
               ))}
             </Select>
           </FormGroup>
-          <FormGroup>
+          <FormGroup hide={!selectedCategory._id}>
             <Label>Loại Sản phẩm</Label>
             <Select
               value={selectedProductType._id}
@@ -229,8 +291,8 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                 borderBottomColor:
                   selectedProductType._id === "" ? "red" : "green",
               }}
-            >         
-            <Option>--Lựa chọn loại SP --</Option>     
+            >
+              <Option value="!">-- Lựa chọn loại SP --</Option>
               {listProductType.map((productType) => (
                 <Option
                   key={productType._id}
@@ -242,7 +304,36 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                 </Option>
               ))}
             </Select>
-          </FormGroup>          
+          </FormGroup>
+          <FormGroup hide={!selectedProductType._id}>
+            <Label>Nhóm Sản phẩm</Label>
+            <Select
+              value={selectedProductGroup._id}    
+              onChange={handleChangeProductGroup}          
+            >
+              <Option value="!">-- Lựa chọn nhóm SP (Nếu có) --</Option>
+              {listProductGroup.map((productGroup) => (
+                <Option key={productGroup._id} value={productGroup._id}>
+                  {productGroup.name}
+                </Option>
+              ))}
+              <Option value="#">Thêm nhóm SP</Option>
+            </Select>
+          </FormGroup>
+          <FormGroup hide={hideAddProductGroup}>
+            <Label htmlFor="groupName">Tên nhóm SP</Label>
+            <Input
+              id="groupName"
+              type="text"
+              value={selectedProductGroup.name}
+              onChange={(e) => {
+                save({selectedProductGroup: {_id : selectedProductGroup._id ,  name : e.target.value}});
+              }}
+              style={{
+                borderBottomColor: !selectedProductGroup.name.trim()? "red" : "green",
+              }}
+            />
+          </FormGroup>
           <FormGroup>
             <Label htmlFor="label">Nhãn Sản phẩm</Label>
             <Input
@@ -253,7 +344,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                 save({ label: e.target.value });
               }}
               style={{
-                borderBottomColor: label.trim().length < 3 ? "red" : "green",
+                borderBottomColor: !label.trim() ? "red" : "green",
               }}
             />
             <PlainText>Nhãn SP phải có ít nhất 3 ký tự(*)</PlainText>
@@ -299,7 +390,7 @@ const FormCreateProduct = ({ save, product, scroll }) => {
               style={{ borderBottomColor: !image.length ? "red" : "green" }}
             />
             <PlainText>Bạn cần tải lên ít nhất 1 hình(*)</PlainText>
-          </FormGroup>          
+          </FormGroup>
           <FormGroup>
             <Label>Giá sản phẩm</Label>
             <CustomNumberFormat
@@ -324,8 +415,8 @@ const FormCreateProduct = ({ save, product, scroll }) => {
                     checked={isDiscount}
                     onChange={(e) => {
                       save({ isDiscount: e.target.checked });
-                      if(discount || discountExpDate){
-                        save({discount : null , discountExpDate : null})
+                      if (discount || discountExpDate) {
+                        save({ discount: null, discountExpDate: null });
                       }
                     }}
                     name="isDiscount"
@@ -339,12 +430,12 @@ const FormCreateProduct = ({ save, product, scroll }) => {
               <FormGroupAnimation isDiscount={isDiscount}>
                 <Label>
                   <Required>Khuyến mãi</Required>
-                </Label>              
+                </Label>
                 <Input
                   type="number"
                   placeholder="%"
-                  value={discount||""}
-                  onChange={e => save({discount : +e.target.value})}
+                  value={discount || ""}
+                  onChange={(e) => save({ discount: +e.target.value })}
                 />
               </FormGroupAnimation>
             </FormGroup>
@@ -428,7 +519,13 @@ const FormCreateProduct = ({ save, product, scroll }) => {
             />
             <PlainText>Bắt buộc(*)</PlainText>
           </List>
-          <Button type="submit" variant="contained" color="primary" style={{display: "block", margin: "auto"}} disabled={disabled}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{ display: "block", margin: "auto" }}
+            disabled={disabled}
+          >
             Tạo Sản Phẩm
           </Button>
         </Form>
@@ -449,5 +546,6 @@ const mapStateToProps = createStructuredSelector({
 });
 const mapDispatchToProps = (dispatch) => ({
   save: (obj) => dispatch(saveProductForm(obj)),
+  clearAll : () => dispatch(clearAll())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FormCreateProduct);

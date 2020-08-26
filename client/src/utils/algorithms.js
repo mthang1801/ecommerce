@@ -189,6 +189,19 @@ export const getListProductType = (categoryID) => {
     }
   });
 };
+export const getListProductGroup = (productTypeID) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(
+        urls.GET_LIST_PRODUCT_GROUP_BY_PRODUCTTYPEID(productTypeID)
+      );
+
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 export const registerAsSeller = (registerForm) => {
   return new Promise(async (resolve, reject) => {
@@ -211,6 +224,13 @@ export const createNewProduct = (product) => {
       formData.append("categoryId", product.selectedCategory._id);
       formData.append("productTypeId", product.selectedProductType._id);
       formData.append("rootUrl", product.selectedProductType.linkUrl);
+      formData.append(
+        "productGroupId",
+        product.selectedProductGroup._id === "#"
+          ? ""
+          : product.selectedProductGroup._id
+      );
+      formData.append("groupName", product.selectedProductGroup.name);
       formData.append("label", product.label);
       formData.append("name", product.name);
       formData.append("price", product.price);

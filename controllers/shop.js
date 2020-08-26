@@ -4,6 +4,8 @@ const Image = require("../models/images");
 const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs-extra");
+const mongoose = require("mongoose");
+const ProductGroup = require("../models/product-groups");
 const validator = require("validator");
 exports.getInitialData = async (req, res, next) => {
   try {
@@ -69,8 +71,18 @@ exports.getListProductTypesByCategoryId = async (req, res, next) => {
 exports.getProductGroupByProductTypeId = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = await ProductGroup.find({ productType: id, status: "active" });
+    const data = await ProductGroup.find();
     res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getListProductGroupByProducTypeId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await ProductTypes.findById(id).populate("productGroups");
+    res.status(200).json(data.productGroups);
   } catch (error) {
     next(error);
   }
@@ -149,6 +161,7 @@ exports.getListLinksProductTypes = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.postCreateProduct = async (req, res, next) => {
   try {
     if (!req.isAuthenticated || !req.user) {
@@ -160,6 +173,8 @@ exports.postCreateProduct = async (req, res, next) => {
     let {
       categoryId,
       productTypeId,
+      productGroupId,
+      groupName,
       rootUrl,
       label,
       name,
@@ -171,7 +186,7 @@ exports.postCreateProduct = async (req, res, next) => {
       manufactor,
     } = req.body;
 
-    //set name url for product
+    // set name url for product
     const match = /[A-Za-z0-9]/;
     const nameUrl = name
       .split(" ")
@@ -209,7 +224,7 @@ exports.postCreateProduct = async (req, res, next) => {
     const productType = await ProductTypes.findOne({
       _id: productTypeId,
       status: "active",
-    });
+    }).populate("productGroups");
     if (!user) {
       const error = new Error("User has not existed");
       error.statusCode = 404;
@@ -221,6 +236,47 @@ exports.postCreateProduct = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+    if (!productGroupId) {
+      if (groupName) {
+        let newProductGroup = new ProductGroup({
+          name: groupName,
+          linkUrl: `${productType.linkUrl}/${encodeURIComponent(
+            groupName.toLowerCase()
+          )}`,
+          productType: productType,
+          products: [newProduct],
+        });
+
+        let findGroupName = productType.productGroups.find(
+          (item) =>
+            item.name.toLowerCase().trim() === groupName.toLowerCase().trim()
+        );
+        if (!findGroupName) {
+          await newProductGroup.save();
+          newProduct.productGroup = mongoose.Types.ObjectId(
+            newProductGroup._id
+          );
+          productType.productGroups.push(
+            mongoose.Types.ObjectId(newProductGroup._id)
+          );
+        } else {
+          const err = new Error("Product Group Name has been existing");
+          err.statusCode = 400;
+          throw err;
+        }
+      }
+    } else {
+      const productGroup = await ProductGroup.findById(productGroupId);
+      if (!productGroup) {
+        const err = new Error("Product Group not found");
+        err.statusCode = 404;
+        throw err;
+      }
+      productGroup.products.push(newProduct);
+      await productGroup.save();
+      newProduct.productGroup = productGroup._id;
+    }
+
     await newProduct.save();
     user.products.push(newProduct);
     productType.products.push(newProduct);

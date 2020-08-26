@@ -22,6 +22,13 @@ const ProductTypesSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    productGroups: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product-groups",
+        required: true,
+      },
+    ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "categories",
