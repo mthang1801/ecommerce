@@ -74,6 +74,10 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
+    sold_quantity: {
+      type: Number,
+      default: 0,
+    },
     comments: [
       {
         type: Schema.Types.ObjectId,

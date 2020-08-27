@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from "react";
 import {
   ProductsPopupItemContainer,
-  Label,
+  LinkProductType,
   CustomLink,
 } from "./products-popup-item.styles";
-const ProductsPopupItem = ({ productLabel, productList }) => {
+const ProductsPopupItem = ({ productType, productList }) => {
     
   return (    
     <ProductsPopupItemContainer>
-      <Label>{productLabel}</Label>
+      <LinkProductType to={`${productType.linkUrl}`}>{productType.name}</LinkProductType>
       {productList.length ? (
         productList.map((product) => (
           <CustomLink title={product.name} to={product.linkUrl}>

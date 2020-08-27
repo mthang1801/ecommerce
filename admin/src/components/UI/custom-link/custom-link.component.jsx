@@ -10,7 +10,7 @@ export const OptionLink = styled(Link)`
     color : white;
   };
   display : flex ; 
-  align-items : center;
+  align-items : center; 
 `
 
 const ActiveLink = styled(Link)`
@@ -21,7 +21,7 @@ const ActiveLink = styled(Link)`
     color : white;
   }
   display : flex ; 
-  align-items : center;
+  align-items : center; 
 `;
 
 const Icon = styled.span`

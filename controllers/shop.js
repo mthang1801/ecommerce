@@ -7,6 +7,9 @@ const fs = require("fs-extra");
 const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
 const validator = require("validator");
+const productGroups = require("../models/product-groups");
+const path = require("path");
+const { v4: uuid } = require("uuid");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -161,7 +164,116 @@ exports.getListLinksProductTypes = async (req, res, next) => {
     next(error);
   }
 };
+exports.getMenu = async (req, res, next) => {
+  try {
+    let menu = {};
+    const category = await Category.find().populate("productTypes");
+    for await (let categoryItem of category) {
+      menu[categoryItem._id] = {
+        _id: categoryItem._id,
+        name: categoryItem.name,
+        linkUrl: categoryItem.linkUrl,
+      };
+      let productTypes = [];
+      let count = 0;
+      for await (let productTypeItem of categoryItem.productTypes) {
+        let productType = {
+          name: productTypeItem.name,
+          linkUrl: productTypeItem.linkUrl,
+          productsMenu: [],
+        };
+        let length;
+        if (productTypeItem.productGroups.length) {
+          length = productTypeItem.productGroups.length;
+          productTypeItem = await productTypeItem
+            .populate({
+              path: "productGroups",
+              select: ["_id", "name", "linkUrl"],
+              options: {
+                limit: 6,
+              },
+            })
+            .execPopulate();
+          for await (let group of productTypeItem.productGroups) {
+            productType.productsMenu.push({
+              _id: group._id,
+              name: group.name,
+              linkUrl: group.linkUrl,
+              options: {
+                limit: 6,
+                sort: { sold: -1 },
+              },
+            });
+          }
+        } else if (productTypeItem.products.length) {
+          length = productTypeItem.products.length;
+          productTypeItem = await productTypeItem
+            .populate({
+              path: "products",
+              select: ["_id", "name", "linkUrl"],
+            })
+            .execPopulate();
+          for await (let product of productTypeItem.products) {
+            productType.productsMenu.push({
+              _id: product._id,
+              name: product.name,
+              linkUrl: product.linkUrl,
+            });
+          }
+        }
+        if (productType.productsMenu.length) {
+          productTypes.push(productType);
+        }
 
+        count += 1;
+        if (count == 5 || count == length) {
+          let manufactorOfProductType = {
+            name: "Nhà sản xuất",
+            linkUrl: productTypeItem + "/manufactors",
+            productsMenu: [],
+          };
+          productTypeItem = await productTypeItem
+            .populate({
+              path: "products",
+              select: ["_id", "name", "linkUrl", "manufactor"],
+            })
+            .execPopulate();
+          for await (let product of productTypeItem.products) {
+            manufactorOfProductType.productsMenu.push({
+              _id: uuid(),
+              name: product.manufactor,
+              linkUrl: "manufactor/" + product.manufactor.trim(),
+            });
+          }
+          productTypes.push(manufactorOfProductType);
+          break;
+        }
+      }
+      menu[categoryItem._id].productTypes = productTypes;
+    }
+    res.status(200).json(JSON.stringify(menu));
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postCreateMenu = async (req, res, next) => {
+  try {
+    const dataJSON = req.body;
+    await fs.writeFile(
+      path.join(
+        path.dirname(require.main.filename),
+        "client",
+        "src",
+        "data",
+        "menu.json"
+      ),
+      JSON.stringify(dataJSON)
+    );
+    res.status(201).json({ msg: "created success" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.postCreateProduct = async (req, res, next) => {
   try {
     if (!req.isAuthenticated || !req.user) {
@@ -203,7 +315,7 @@ exports.postCreateProduct = async (req, res, next) => {
     const newProduct = new Product({
       label,
       name,
-      linkUrl: `${rootUrl}/${nameUrl}`,
+      linkUrl: `${rootUrl}/${encodeURIComponent(nameUrl)}`,
       price,
       description,
       information,
@@ -316,6 +428,15 @@ exports.postCreateProduct = async (req, res, next) => {
       await fs.unlink(file.path);
     });
     res.status(200).json({ msg: "product created" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getLatestProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 }).limit(12);
+    res.status(200).json(products);
   } catch (error) {
     next(error);
   }

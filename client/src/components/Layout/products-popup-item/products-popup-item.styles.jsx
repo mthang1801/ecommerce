@@ -5,15 +5,17 @@ export const ProductsPopupItemContainer = styled.div`
   flex-direction : column;
   font-size : 0.9em;
   padding : .5rem;
-  width : 20%;
-  height: 45%; 
+  width : 32%;
+  max-height: 100%; 
+  margin : 1rem ;
   flex-wrap : wrap;
   overflow : hidden;
 `
 
-export const Label = styled.h4`
-  font-weight  : bold ; 
-
+export const LinkProductType = styled(Link)`  
+  font-weight : bold ; 
+  color : #757575;
+  font-size : 0.95em;
 `
 export const CustomLink = styled(Link)`
   color : inherit ; 
@@ -23,5 +25,6 @@ export const CustomLink = styled(Link)`
   text-overflow: ellipsis; 
   &:hover{
     text-decoration : underline;
-  }
+  };
+  font-size : 0.85em;
 `

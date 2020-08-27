@@ -6,7 +6,7 @@ import {
   Logout
 } from "./navigation-items.styles";
 import { CustomLink } from "../../UI/custom-link/custom-link.component";
-import { AiOutlineDashboard, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineMenu, AiFillHome , AiOutlineHome} from "react-icons/ai";
 import {
   FaCoins,
   FaArrowDown,
@@ -18,40 +18,58 @@ import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import {logout} from "../../../redux/user/user.actions";
 import {connect} from "react-redux";
-const NavigationItems = ({logout}) => {
-  const [toggleWebExtension, setToggleWebExtension] = useState(true);
+import {withRouter} from "react-router-dom"
+const NavigationItems = ({logout, match}) => {
+  console.log(match);
+  const [toggleProductManagementExtension, setToggleProductManagementExtension] = useState(true);
+  const [toggleUIExtension, setToggleUIExtension] = useState(true);
+  const [toggleHomeUI, setToggleHomeUI] = useState(true);
   return (
     <NavigationItemsContainer>
-      <CustomLink exact to="/">
-        <AiOutlineDashboard style={{ margin: "0 7px 0 7px" }} />
+      <CustomLink exact to={`${match.path}`}>
+        <AiFillHome style={{ margin: "0 7px 0 7px" }} />
         {" "}
-        Bảng điều khiển
+        Trang chủ
       </CustomLink>
-      <CustomLink
-        to="/management"
-        onClick={() => setToggleWebExtension(!toggleWebExtension)}
+      <CustomLink        
+        onClick={() => setToggleProductManagementExtension(!toggleProductManagementExtension)}
       >
-        <FaCoins style={{ margin: "0 7px 0 7px" ,verticalAlign: "middle" }} /> Quản lý Website{" "}
-        {toggleWebExtension ? (
+        <FaCoins style={{ margin: "0 7px 0 7px" ,verticalAlign: "middle" }} /> QL Sản phẩm{" "}
+        {toggleProductManagementExtension ? (
           <FaArrowDown style={{margin: "0 7px 0 7px", verticalAlign: "middle" }} />
         ) : (
           <FaArrowUp style={{ margin: "0 7px 0 7px", verticalAlign: "middle" }} />
         )}
       </CustomLink>
-      <ExtensionScope show={toggleWebExtension}>
-        <CustomLink to="/management/category">
+      <ExtensionScope show={toggleProductManagementExtension}>
+        <CustomLink to={`${match.path}/category`}>
         <AiOutlineMenu style={{ margin: "0 7px 0 7px" }}/>
           Danh mục
         </CustomLink>
-        <CustomLink to="/management/product-types">
+        <CustomLink to={`${match.path}/product-types`}>
           <FaProjectDiagram style={{ margin: "0 7px 0 7px" }}/>
           Loại Sản phẩm
         </CustomLink>        
-        <CustomLink to="/management/sellers">
+        <CustomLink to={`${match.path}/sellers`}>
           <BsFillPersonLinesFill style={{ margin: "0 7px 0 7px" }}/>
           Nhà bán hàng
         </CustomLink>
-      </ExtensionScope>
+      </ExtensionScope> 
+      <CustomLink
+        onClick={() => setToggleUIExtension(!toggleUIExtension)}
+      >
+        <FaCoins style={{ margin: "0 7px 0 7px" ,verticalAlign: "middle"}} /> QL giao diện người dùng{" "}
+          {toggleUIExtension ? (
+            <FaArrowDown style={{margin: "0 7px 0 7px", verticalAlign: "middle" }} />
+          ) : (
+            <FaArrowUp style={{ margin: "0 7px 0 7px", verticalAlign: "middle" }} />
+          )}
+      </CustomLink>
+      <ExtensionScope show={toggleUIExtension}>
+          <CustomLink to={`${match.path}/home-ui`}>
+            <AiOutlineHome style={{margin: "0 7px 0 7px", verticalAlign: "middle" }}/>
+            Trang chủ</CustomLink>          
+      </ExtensionScope>     
       <Logout onClick={logout}>
         <FiLogOut style={{ margin: "0 7px 0 7px" }} /> Logout
       </Logout>
@@ -61,4 +79,4 @@ const NavigationItems = ({logout}) => {
 const mapDispatchToProps = dispatch => ({
   logout : () => dispatch(logout())
 })
-export default connect(null,mapDispatchToProps)(NavigationItems);
+export default connect(null,mapDispatchToProps)(withRouter(NavigationItems));

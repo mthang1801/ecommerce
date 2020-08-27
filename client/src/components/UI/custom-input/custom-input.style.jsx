@@ -36,7 +36,8 @@ export const Label = styled.label`
     top : -13px ; 
     font-size : 0.8em;
     background-color : white;
-  } 
+  };
+  cursor : auto;
 `
 
 export const TextSuccess = styled.span`

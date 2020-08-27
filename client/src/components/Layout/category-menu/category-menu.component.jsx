@@ -5,13 +5,15 @@ import {
   CategoryList,
   CustomLink
 } from "./category-menu.styles";
-import CATEGORY_DATA from "../../../data/category";
+import CATEGORY_MENU from "../../../data/menu.json";
 import ProductsPopup from "../products-popup/products-popup.component";
 import AppContext from "../../../context/app-viewport.context";
 import {connect} from "react-redux";
 import {selectCategoryList} from "../../../redux/category/category.selectors"
 import {createStructuredSelector} from "reselect"
-const CategoryMenu = ({ categoryList }) => {
+const CategoryMenu = ({  }) => {  
+  const categoryList = Object.keys(CATEGORY_MENU).map(key => CATEGORY_MENU[key]);
+  
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
   const [touched, setIsTouched] = useState(false);
@@ -71,12 +73,14 @@ const CategoryMenu = ({ categoryList }) => {
               {(
                 <ProductsPopup                  
                   offsetWidth={offsetWidth}
-                  categoryId={ctgId}
+                  categoryId={ctgId}                 
+                  data={CATEGORY_MENU[ctgId]}
                 />
               )} 
             </DropdownContent>
           </React.Fragment>
         ))}
+        
       </CategoryList> 
     </CategoryMenuContainer>
   );

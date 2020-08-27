@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   InputGroup,
   Input,
@@ -22,6 +22,10 @@ const CustomInput = ({
         })
       : "";
   const border = touched ? (transformedErrors ? "error" : "success") : null;
+  const inputRef = useRef(null);
+  const handleClick = (e) => {
+    inputRef.current.focus();
+  };
   return (
     <InputGroup>
       <Input
@@ -29,8 +33,11 @@ const CustomInput = ({
         value={value}
         {...otherProps}
         border={border}
+        ref={inputRef}
       />
-      <Label shrinkLabel={!!value}>{label}</Label>
+      <Label shrinkLabel={!!value} onClick={handleClick}>
+        {label}
+      </Label>
       {touched ? (
         transformedErrors ? (
           <TextError>{transformedErrors}</TextError>

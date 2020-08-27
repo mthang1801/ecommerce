@@ -5,8 +5,8 @@ import Category from "../category-management/category-management.component";
 import  ProductTypes from "../product-types-management/product-types-management.component";
 import Dashboard from "../management-dashboard/management-dashboard.component";
 import { ManagementPageWrapper, ContentDisplay } from "./management.styles";
-const ManagementPage = ({ match }) => {
-  console.log(match);
+import ManagementHomeUI from "../management-home-ui/management-home-ui.component";
+const ManagementPage = ({ match }) => {  
   return (
     <ManagementPageWrapper>
       <Navigation />
@@ -18,6 +18,7 @@ const ManagementPage = ({ match }) => {
             path={`${match.path}/product-types`}
             component={ProductTypes}
           />        
+          <Route path={`${match.path}/home-ui`} component={ManagementHomeUI}/>
         </Switch>
       </ContentDisplay>
     </ManagementPageWrapper>

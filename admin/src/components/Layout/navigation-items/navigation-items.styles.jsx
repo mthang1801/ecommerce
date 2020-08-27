@@ -5,6 +5,7 @@ export const NavigationItemsContainer = styled.div`
   display: flex;
   flex-direction: column;
   line-height: 1.8;
+  font-size : 0.9em;
 `;
 
 export const ExtensionLink = styled.span`

@@ -12,6 +12,7 @@ import {
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
 const ProductItem = ({ product }) => {
+  console.log(product)
   return (
     <ProductItemContainer key={product.userId} title={product.name}>
       <ProductImageContainer>

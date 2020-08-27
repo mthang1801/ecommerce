@@ -4,18 +4,18 @@ import { selectMenuList } from "../../../redux/menu/menu.selectors";
 import ProductsPopupItem from "../products-popup-item/products-popup-item.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-const ProductsPopup = ({ offsetWidth, categoryId, menuList }) => {
+const ProductsPopup = ({ offsetWidth, categoryId, data }) => {
   return (
     <React.Fragment>
       {categoryId ? (
         <ProductsPopupContainer offsetWidth={offsetWidth}>
-          {menuList[categoryId].productType.map((productType) => (
+          {data.productTypes.map((productType) => (
             <React.Fragment>
-              {productType.products.length ? (
+              {productType.productsMenu.length ? (
                 <ProductsPopupItem
                   key={productType._id}
-                  productLabel={productType.name}
-                  productList={productType.products}
+                  productType={productType}
+                  productList={productType.productsMenu}
                 />
               ) : null}
             </React.Fragment>

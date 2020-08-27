@@ -3,22 +3,7 @@ import { LatestProductsContainer, Title, Grid } from "./products-latest.styles";
 import { getLatestProducts } from "../../../utils/algorithms";
 import ProductItem from "../product-item/product-item.component";
 import AppContext from "../../../context/app-viewport.context";
-import Slider from "react-slick";
-
-let latestProducts = getLatestProducts();
-let latestProductsGroup = [];
-let accumulatorProducts = [];
-latestProducts.forEach((product, idx) => {
-  if (idx !== 0 && idx % 3 === 0) {
-    latestProductsGroup.push(accumulatorProducts);
-    accumulatorProducts = [];
-  }
-  accumulatorProducts.push(product);
-  if (idx % 3 !== 0 && idx === latestProducts.length - 1) {
-    latestProductsGroup.push(accumulatorProducts);
-    accumulatorProducts = [];
-  }
-});
+import Slider from "react-slick"
 
 const LatestProducts = ({ mobileView, tabletView }) => {
   const settings = {
@@ -32,6 +17,27 @@ const LatestProducts = ({ mobileView, tabletView }) => {
     adaptiveHeight: true,
     autoplay: true,
   };
+  const [latestProducts, setLatestProducts] = useState([]);
+
+  let latestProductsGroup = [];
+  let accumulatorProducts = [];
+  latestProducts.forEach((product, idx) => {
+    if (idx !== 0 && idx % 3 === 0) {
+      latestProductsGroup.push(accumulatorProducts);
+      accumulatorProducts = [];
+    }
+    accumulatorProducts.push(product);
+    if (idx % 3 !== 0 && idx === latestProducts.length - 1) {
+      latestProductsGroup.push(accumulatorProducts);
+      accumulatorProducts = [];
+    }
+  });
+  useEffect(() => {
+    getLatestProducts().then(data => {
+      setLatestProducts(data);
+      console.log(data);
+    });
+  }, [getLatestProducts])
 
   return (
     <LatestProductsContainer>

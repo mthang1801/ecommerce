@@ -54,16 +54,6 @@ export default (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload,
       };
-    case categoryActionTypes.SEARCH_CATEGORY:
-      return {
-        ...state,
-        loading: false,
-        search: action.payload,
-        searchResults: findCategoryBySearchKey(
-          state.categoryList,
-          action.payload
-        ),
-      };
     default:
       return state;
   }

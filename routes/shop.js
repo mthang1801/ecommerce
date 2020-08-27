@@ -54,9 +54,27 @@ router.get(
   shopController.getListLinksProductTypes
 );
 /**
+ * @route GET /menu
+ * @desc get menu
+ * @access public
+ */
+router.get("/menu", shopController.getMenu);
+/**
+ * @route POST /menu
+ * @desc get menu
+ * @access public
+ */
+router.post("/menu", shopController.postCreateMenu);
+/**
  * @route POST /product
  * @desc create product
  * @access private
  */
 router.post("/product", isAuth, shopController.postCreateProduct);
+/**
+ * @route GET /latest-products
+ * @desc get Latest products to render home page
+ * @access public
+ */
+router.get("/latest-products", shopController.getLatestProducts);
 module.exports = router;

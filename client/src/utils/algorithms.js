@@ -4,30 +4,6 @@ import SELLERS_DATA from "../data/sellers";
 import CART_DATA from "../data/cart";
 import axios from "axios";
 import urls from "./urls";
-export const getLatestProducts = () => {
-  let sellers = [...SELLERS_DATA];
-  sellers.sort((a, b) => {
-    if (Date.parse(a.createdAt) > Date.parse(b.createdAt)) return -1;
-  });
-  let checkProductIsTheSame = {};
-  let j = 0;
-  let len = 6;
-  let result = [];
-  if (sellers.length <= 6) {
-    return sellers;
-  }
-  for (let i = 0; i < len; i++) {
-    if (checkProductIsTheSame[sellers[i].productId]) {
-      sellers[i] = sellers[len + j];
-      j++;
-      i--;
-    } else {
-      checkProductIsTheSame[sellers[i].productId] = true;
-      result.push(sellers[i]);
-    }
-  }
-  return result;
-};
 
 export const getProductsBestSeller = () => {
   let sellers = [...SELLERS_DATA];
@@ -245,6 +221,18 @@ export const createNewProduct = (product) => {
 
       const { data } = await axios.post(urls.POST_CREATE_NEW_PRODUCT, formData);
       resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getLatestProducts = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(urls.GET_LATEST_PRODUCTS);
+      console.log(data);
+      resolve(data);
     } catch (error) {
       reject(error);
     }
