@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import {Link} from "react-router-dom";
 export const CategoriesSliderContainer = styled.div`
   width : ${({mobileView}) => mobileView ? "90%" : "80%"};
   margin : ${({mobileView}) => mobileView ? "1rem auto" : "3rem auto"}} ;
@@ -13,8 +13,10 @@ export const Caption = styled.div`
   text-transform : uppercase;
 `
 
-export const CategoryItem = styled.div`
+export const CategoryItem = styled(Link)`
   margin : auto; 
+  cursor : pointer; 
+  color : inherit ; 
   text-align :center;
   height : 200px;  
   &:focus{

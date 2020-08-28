@@ -1,6 +1,6 @@
 import React from "react";
 import { SaleOffContainer, SeleOffLabel } from "./sale-off.styles";
-import { getSaleOffProducts } from "../../../utils/algorithms";
+import { getSaleOffProducts } from "../../../utils/connectDB";
 import Slider from "react-slick";
 import ProductItem from "../../UI/product-item/product-item.component";
 const saleOffProducts = getSaleOffProducts();

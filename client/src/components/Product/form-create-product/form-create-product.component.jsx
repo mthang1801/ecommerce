@@ -29,7 +29,7 @@ import {
   getListCategory,
   getListProductType,
   getListProductGroup,
-} from "../../../utils/algorithms";
+} from "../../../utils/connectDB";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import CKEditor from "@ckeditor/ckeditor5-react";
@@ -40,7 +40,7 @@ import { connect } from "react-redux";
 import { saveProductForm, clearAll } from "../../../redux/seller/seller.actions";
 import { selectCreateProductForm } from "../../../redux/seller/seller.selectors";
 import { createStructuredSelector } from "reselect";
-import { createNewProduct } from "../../../utils/algorithms";
+import { createNewProduct } from "../../../utils/connectDB";
 import FormComplete from "../form-complete/form-complete.component";
 const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
   const [listCatogory, setListCategory] = useState([]);

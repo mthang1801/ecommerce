@@ -15,4 +15,7 @@ export default {
   UPDATE_ROLE_USER_AS_SELLER: `/user/register-seller`,
   FETCH_INITIAL_DATA: `/initial-data`,
   GET_LATEST_PRODUCTS: "/latest-products",
+  GET_BEST_SELLER_PRODUCTS: "/best-seller-products",
+  GET_TOP_RATED_PRODUCTS: "/top-rated-products",
+  GET_CATEGORY_LIST: "/category",
 };

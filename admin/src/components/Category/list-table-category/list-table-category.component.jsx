@@ -17,8 +17,7 @@ const ListTableCategory = ({ data, removeCategory }) => {
   const [collapsed, setCollapsed] = useState([]);
   const [colNum, setColNum] = useState(0);
   const [edit, setEdit] = useState({});
-  const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]);
-  console.log(colNum )
+  const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]); 
   const close = (position) => {
     if (collapsed.includes(position)) {
       return true;

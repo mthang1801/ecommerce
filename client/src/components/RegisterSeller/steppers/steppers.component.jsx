@@ -14,7 +14,7 @@ import {
   selectRegisterForm,
 } from "../../../redux/seller/seller.selectors";
 import { createStructuredSelector } from "reselect";
-import { registerAsSeller, createNewProduct } from "../../../utils/algorithms";
+import { registerAsSeller, createNewProduct } from "../../../utils/connectDB";
 import FormComplete from "../form-complete/form-complete.component";
 
 const useStyles = makeStyles((theme) => ({

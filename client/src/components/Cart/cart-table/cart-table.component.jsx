@@ -11,7 +11,7 @@ import {
   TableFooter,
   Button,
 } from "./cart-table.styles";
-import { getCartItems } from "../../../utils/algorithms";
+import { getCartItems } from "../../../utils/connectDB";
 const CartTable = ({ mobileView, tabletView }) => {
   const cartItems = getCartItems();
 

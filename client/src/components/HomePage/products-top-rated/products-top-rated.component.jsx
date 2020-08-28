@@ -1,27 +1,12 @@
-import React from "react";
+import React , {useEffect, useState} from "react";
 import {
   LatestProductsContainer,
   Title,
   Grid,
 } from "./products-top-rated.styles";
-import { getProductsTopRated } from "../../../utils/algorithms";
+import { getTopRatedProducts } from "../../../utils/connectDB";
 import ProductItem from "../product-item/product-item.component";
 import Slider from "react-slick";
-
-let productsTopRated = getProductsTopRated();
-let productTopRatedGroup = [];
-let accumulatorProducts = [];
-productsTopRated.forEach((product, idx) => {
-  if (idx !== 0 && idx % 3 === 0) {
-    productTopRatedGroup.push(accumulatorProducts);
-    accumulatorProducts = [];
-  }
-  accumulatorProducts.push(product);
-  if (idx % 3 !== 0 && idx === productsTopRated.length - 1) {
-    productTopRatedGroup.push(accumulatorProducts);
-    accumulatorProducts = [];
-  }
-});
 
 const ProductsTopRated = ({ mobileView, tabletView }) => {
   const settings = {
@@ -35,7 +20,30 @@ const ProductsTopRated = ({ mobileView, tabletView }) => {
     adaptiveHeight: true,
     autoplay: true,
   };
-
+  const [topRatedProducts, setTopRatedProduct] = useState([]);
+  useEffect(() => {
+    let _mounted = true ;
+    getTopRatedProducts().then(data => {
+      if(_mounted){
+        setTopRatedProduct(data);
+      }
+    })
+    return () => _mounted = false; 
+  }, [getTopRatedProducts])
+ 
+  let productTopRatedGroup = [];
+  let accumulatorProducts = [];
+  topRatedProducts.forEach((product, idx) => {
+    if (idx !== 0 && idx % 3 === 0) {
+      productTopRatedGroup.push(accumulatorProducts);
+      accumulatorProducts = [];
+    }
+    accumulatorProducts.push(product);
+    if (idx % 3 !== 0 && idx === topRatedProducts.length - 1) {
+      productTopRatedGroup.push(accumulatorProducts);
+      accumulatorProducts = [];
+    }
+  });
   return (
     <LatestProductsContainer>
       <Title>Top rate</Title>
@@ -44,12 +52,12 @@ const ProductsTopRated = ({ mobileView, tabletView }) => {
           ? productTopRatedGroup.map((groups, id) => (
               <Grid key={id}>
                 {groups.map((product) => (
-                  <ProductItem key={product.userId} product={product} />
+                  <ProductItem key={product._id} product={product} />
                 ))}
               </Grid>
             ))
-          : productsTopRated.map((product) => (
-              <ProductItem key={product.userId} product={product} />
+          : topRatedProducts.map((product) => (
+              <ProductItem key={product._id} product={product} />
             ))}
       </Slider>
     </LatestProductsContainer>

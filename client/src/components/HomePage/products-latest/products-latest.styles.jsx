@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const LatestProductsContainer = styled.section`  
   width : 100%; 
-  text-align:center;
+  text-align:center;  
 `
 
 export const Title = styled.h2`
@@ -9,7 +9,7 @@ export const Title = styled.h2`
   font-weight : bold;
 `
 
-export const Grid = styled.div`
+export const Grid = styled.div` 
   display : flex ;
   justify-content : center;
   height : 800px;

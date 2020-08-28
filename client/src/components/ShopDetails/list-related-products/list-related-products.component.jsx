@@ -1,6 +1,6 @@
 import React from "react";
 import { ListRelatedProductContainer,Title, ListProducts } from "./list-related-products.styles";
-import { getProductsPerpage} from "../../../utils/algorithms";
+import { getProductsPerpage} from "../../../utils/connectDB";
 import ProductItem from "../../UI/product-item/product-item.component";
 
 let relatedProducts = getProductsPerpage();

@@ -17,7 +17,8 @@ const CategorySchema = new mongoose.Schema(
       index: true,
     },
     imageUrl: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "images",
       required: true,
     },
     productTypes: [

@@ -6,6 +6,7 @@ const User = require("../models/user");
 const fs = require("fs-extra");
 const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
+const removeImage = require("../utils/removeImage");
 const validator = require("validator");
 const productGroups = require("../models/product-groups");
 const path = require("path");
@@ -54,7 +55,8 @@ exports.getCategoryList = async (req, res, next) => {
       });
       return res.status(200).json(categoryFilter);
     }
-    const categoryList = await Category.find();
+    const categoryList = await Category.find().populate("imageUrl").limit(15);
+
     res.status(200).json(categoryList);
   } catch (error) {
     next(error);
@@ -421,11 +423,12 @@ exports.postCreateProduct = async (req, res, next) => {
         return newImage._id;
       }
     );
+
     const listImages = await Promise.all(listImagesPromise);
     newProduct.images = [...listImages];
     await newProduct.save();
     req.files.forEach(async (file) => {
-      await fs.unlink(file.path);
+      await removeImage(file.filename);
     });
     res.status(200).json({ msg: "product created" });
   } catch (error) {
@@ -435,7 +438,34 @@ exports.postCreateProduct = async (req, res, next) => {
 
 exports.getLatestProducts = async (req, res, next) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 }).limit(12);
+    const products = await Product.find()
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .limit(12);
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getBestSellerProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find()
+      .populate("images")
+      .sort({ sold_quantity: -1 })
+      .limit(12);
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getTopRatedProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find({ stars: { $gt: 4 } })
+      .populate("images")
+      .sort({ stars: -1 })
+      .limit(12);
     res.status(200).json(products);
   } catch (error) {
     next(error);

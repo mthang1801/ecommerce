@@ -1,6 +1,6 @@
 import React from "react";
 import { DeparmentContainer, DeparmentLabel } from "./department.styles";
-import { getCategoryData } from "../../../utils/algorithms";
+import { getCategoryData } from "../../../utils/connectDB";
 import { CustomLink } from "../../UI/custom-link/custom-link.component";
 const Deparment = () => {
   const categoryList = getCategoryData();

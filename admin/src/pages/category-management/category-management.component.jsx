@@ -7,7 +7,9 @@ import {Route} from "react-router-dom";
 import {connect} from "react-redux";
 import {fetchCategoryList} from "../../redux/category/category.actions";
 const CategoryManagementPage = ({match, fetchCategoryList}) => {  
-  useEffect( () => {fetchCategoryList()} ,[fetchCategoryList])
+  useEffect( () => {    
+    fetchCategoryList()    
+  } ,[fetchCategoryList])
   return (
     <CategoryManagementPageWrapper>
       <Toolbar/>

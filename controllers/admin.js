@@ -2,6 +2,8 @@ const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
 const Product = require("../models/product");
 const User = require("../models/user");
+const Image = require("../models/images");
+const fs = require("fs-extra");
 const removeImage = require("../utils/removeImage");
 exports.postCategory = async (req, res, next) => {
   try {
@@ -18,12 +20,22 @@ exports.postCategory = async (req, res, next) => {
       error.statusCode = 400;
       throw error;
     }
+    console.log(req.files);
+    const data = await fs.readFile(req.files[0].path, "base64");
+    const newImage = new Image({
+      name: req.files[0].originalname,
+      mimetype: req.files[0].mimetype,
+      data,
+    });
     const newCategory = new Category({
       name,
       linkUrl,
-      imageUrl: req.file.filename,
+      imageUrl: newImage._id,
     });
+    newImage.category = newCategory._id;
+    await newImage.save();
     await newCategory.save();
+    await removeImage(req.files[0].filename);
     res.status(201).json({ ...newCategory._doc });
   } catch (error) {
     next(error);
@@ -33,21 +45,37 @@ exports.postCategory = async (req, res, next) => {
 exports.putCategory = async (req, res, next) => {
   try {
     const { _id, name, linkUrl } = req.body;
+
     const category = await Category.findById(_id);
     if (!category) {
       const error = new Error("Category not found");
       error.statusCode = 404;
       throw error;
     }
-    let filename = category.imageUrl;
-    if (req.file) {
-      await removeImage(filename);
-      filename = req.file.filename;
+
+    if (req.files[0]) {
+      console.log(req.files[0]);
+      const image = await Image.findOne({ category: _id });
+      const data = await fs.readFile(req.files[0].path, "base64");
+      if (!image) {
+        const newImage = new Image({
+          name: req.files[0].originalname,
+          mimetype: req.files[0].mimetype,
+          data,
+          category: _id,
+        });
+        await newImage.save();
+        category.imageUrl = newImage._id;
+      }
+      image.data = data;
+      image.name = req.files[0].originalname;
+      image.mimetype = req.files[0].mimetype;
+
+      await image.save();
+      await removeImage(req.files[0].filename);
     }
     category.name = name;
     category.linkUrl = linkUrl;
-    category.imageUrl = filename;
-    category.updatedAt = new Date();
     await category.save();
     res.status(200).json({ ...category._doc });
   } catch (error) {

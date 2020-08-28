@@ -11,7 +11,7 @@ const ProductsPopupItem = ({ productType, productList }) => {
       <LinkProductType to={`${productType.linkUrl}`}>{productType.name}</LinkProductType>
       {productList.length ? (
         productList.map((product) => (
-          <CustomLink title={product.name} to={product.linkUrl}>
+          <CustomLink key={product._id} title={product.name} to={product.linkUrl}>
             {product.name}
           </CustomLink>
         ))
@@ -19,7 +19,4 @@ const ProductsPopupItem = ({ productType, productList }) => {
     </ProductsPopupItemContainer>
   );
 };
-// const  mapStateToProps = createStructuredSelector({  
-//   productList : selectProductList
-// })
 export default ProductsPopupItem;

@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
-import { getMaxPrice } from "../../../utils/algorithms";
+import { getMaxPrice } from "../../../utils/connectDB";
 import {PriceLabel} from "./price-scope.styles";
 const useStyles = makeStyles({
   root: {

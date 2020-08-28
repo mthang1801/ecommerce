@@ -20,7 +20,7 @@ import {
   getListCities,
   getListDistricts,
   getListWards,
-} from "../../../utils/algorithms";
+} from "../../../utils/connectDB";
 import { selectRegisterForm } from "../../../redux/seller/seller.selectors";
 import { FiEdit } from "react-icons/fi";
 import { saveRegisterForm } from "../../../redux/seller/seller.actions";

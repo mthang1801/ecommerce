@@ -1,31 +1,31 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { CategoriesSliderContainer, Caption, CategoryItem, CategoryImage, CategoryName} from "./categories-slider.styles";
-import categoriesData from "../../../data/category";
+import {
+  CategoriesSliderContainer,
+  Caption,
+  CategoryItem,
+  CategoryImage,
+  CategoryName,
+} from "./categories-slider.styles";
 import Slider from "react-slick";
 import AppContext from "../../../context/app-viewport.context";
-const categoryItems = Object.keys(categoriesData).map(
-  (key) => categoriesData[key]
-);
-
-let categoriesGroup = [];
-let categoriesPerPage = [];
-categoryItems.forEach((item, index) => {
-  if (index !== 0 && index % 4 === 0) {
-    categoriesGroup.push(categoriesPerPage);
-    categoriesPerPage = [];
-  }
-  categoriesPerPage.push(item);
-  if (index === categoryItems.length - 1 && index % 4 !== 0) {
-    categoriesGroup.push(categoriesPerPage);
-  }
-});
-
+import { getCategoryList } from "../../../utils/connectDB";
 
 const CategoriesSlider = (props) => {
-  const [slide, setSlide] = useState(null)
+  const [slide, setSlide] = useState(null);
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   const [tabletView, setTabletView] = useState(window.innerWidth < 992);
   const width = useContext(AppContext);
+  const [category, setCategory] = useState([]);
+  useEffect(() => {
+    let _mounted = true;
+    getCategoryList().then((data) => {
+      if (_mounted) {
+        setCategory(data);
+      }
+    });
+    return () => (_mounted = false);
+  }, [getCategoryList]);
+
   useEffect(() => {
     if (width < 600) {
       setMobileView(true);
@@ -39,35 +39,53 @@ const CategoriesSlider = (props) => {
     }
   }, [width]);
   const slideRef = useRef(null);
-  useEffect(() => {  
-    setSlide(slideRef.current)
-  }, [slideRef])
-    return (
-      <CategoriesSliderContainer mobileView={mobileView}>
-       <Caption>Danh mục sản phẩm</Caption>
-        <Slider
-          asNavFor={slide}
-          ref={slideRef}
-          slidesToShow={mobileView ? 2 : tabletView ? 3 : 4}
-          swipeToSlide={true}
-          focusOnSelect={true}        
-          autoplay
-          pauseOnHover={false}
-          autoplaySpeed={2000}
-        >
-          {categoriesGroup.map(group => 
-            group.map(item =>(
-              <CategoryItem key={item.id}>
-                <CategoryImage src={require(`../../../assets/img/categories/${item.imageUrl}`)}/>
-                <CategoryName>{item.name}</CategoryName>              
-              </CategoryItem>              
-            ))
-          )}
-        </Slider>
-     
-      </CategoriesSliderContainer>
-    );
-  
-}
+  useEffect(() => {
+    setSlide(slideRef.current);
+  }, [slideRef]);
+
+  let categoriesGroup = [];
+  let categoriesPerPage = [];
+  category.forEach((item, index) => {
+    if (index !== 0 && index % 4 === 0) {
+      categoriesGroup.push(categoriesPerPage);
+      categoriesPerPage = [];
+    }
+    categoriesPerPage.push(item);
+    if (index === category.length - 1 && index % 4 !== 0) {
+      categoriesGroup.push(categoriesPerPage);
+    }
+  });
+  return (
+    <React.Fragment>
+      {category.length ? (
+        <CategoriesSliderContainer mobileView={mobileView}>
+          <Caption>Danh mục sản phẩm</Caption>
+          <Slider
+            asNavFor={slide}
+            ref={slideRef}
+            slidesToShow={mobileView ? 2 : tabletView ? 3 : 4}
+            swipeToSlide={true}
+            focusOnSelect={true}
+            autoplay
+            pauseOnHover={false}
+            autoplaySpeed={2000}
+          >
+            {categoriesGroup.map((group) =>
+              group.map((item) => {
+                console.log(item);
+                return (
+                  <CategoryItem key={item.id} to={item.linkUrl}>
+                    <CategoryImage src={`data:${item.imageUrl.mimetype};base64,${item.imageUrl.data}`} />
+                    <CategoryName>{item.name}</CategoryName>
+                  </CategoryItem>
+                );
+              })
+            )}
+          </Slider>
+        </CategoriesSliderContainer>
+      ) : null}
+    </React.Fragment>
+  );
+};
 
 export default CategoriesSlider;

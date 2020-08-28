@@ -1,6 +1,6 @@
 import React from 'react'
 import {ProductsGridContainer} from "./products-grid.styles";
-import {getProductsPerpage} from "../../../utils/algorithms";
+import {getProductsPerpage} from "../../../utils/connectDB";
 import ProductItem from "../../UI/product-item/product-item.component";
 
 const ProductsGrid = ({mobileView,tabletView}) => {

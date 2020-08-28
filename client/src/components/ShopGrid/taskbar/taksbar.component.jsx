@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {TaskBarContainer,Grid, Paragraph, Strong, Select,Option, Settings, Button} from "./taskbar.styles";
-import {getNumberOfProducts} from "../../../utils/algorithms";
+import {getNumberOfProducts} from "../../../utils/connectDB";
 import {BsGridFill} from "react-icons/bs"
 import {FaListUl } from "react-icons/fa"
 

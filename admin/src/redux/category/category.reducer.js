@@ -1,5 +1,5 @@
 import categoryActionTypes from "./category.types";
-import { findCategoryBySearchKey } from "../../utils/algorithms";
+import { findCategoryBySearchKey } from "../../utils/connectDB";
 import { editCategory, removeCategory } from "./category.utils";
 
 const INITIAL_STATE = {

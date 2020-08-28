@@ -21,7 +21,7 @@ import {
   Image,
 } from "./form-create-product.styles";
 import AppContext from "../../../context/app-viewport.context";
-import { getListCategory, getListProductType } from "../../../utils/algorithms";
+import { getListCategory, getListProductType } from "../../../utils/connectDB";
 import ChipInput from "material-ui-chip-input";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";

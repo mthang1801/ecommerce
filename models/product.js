@@ -78,6 +78,9 @@ const ProductSchema = new Schema(
       type: Number,
       default: 0,
     },
+    stars: {
+      type: Number,
+    },
     comments: [
       {
         type: Schema.Types.ObjectId,

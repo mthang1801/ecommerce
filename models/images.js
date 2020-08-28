@@ -13,10 +13,13 @@ const ImageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "categories",
+  },
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "products",
-    required: true,
   },
 });
 

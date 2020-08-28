@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect,  memo } from "react";
 import { LatestProductsContainer, Title, Grid } from "./products-latest.styles";
-import { getLatestProducts } from "../../../utils/algorithms";
+import { getLatestProducts } from "../../../utils/connectDB";
 import ProductItem from "../product-item/product-item.component";
 import AppContext from "../../../context/app-viewport.context";
-import Slider from "react-slick"
+import Slider from "react-slick";
 
 const LatestProducts = ({ mobileView, tabletView }) => {
   const settings = {
@@ -33,30 +33,36 @@ const LatestProducts = ({ mobileView, tabletView }) => {
     }
   });
   useEffect(() => {
-    getLatestProducts().then(data => {
-      setLatestProducts(data);
-      console.log(data);
+    let _mounted = true ;
+    getLatestProducts().then((data) => {
+      if(_mounted){
+        setLatestProducts(data);
+      }
+           
     });
-  }, [getLatestProducts])
-
+    return () => _mounted = false 
+  }, [getLatestProducts]);
+  
   return (
     <LatestProductsContainer>
       <Title>sản phẩm mới</Title>
       <Slider {...settings} style={{ height: "85%" }} autoplaySpeed={3000}>
-        {!mobileView
-          ? latestProductsGroup.map((groups, id) => (
-              <Grid key={id}>
-                {groups.map((product) => (
-                  <ProductItem key={product.userId} product={product} />
-                ))}
-              </Grid>
-            ))
-          : latestProducts.map((product, id) => (
-              <ProductItem key={product.userId} product={product} />
-            ))}
+        {latestProducts.length
+          ? !mobileView
+            ? latestProductsGroup.map((groups, id) => (
+                <Grid key={id}>
+                  {groups.map((product) => (
+                    <ProductItem key={product._id} product={product} />
+                  ))}
+                </Grid>
+              ))
+            : latestProducts.map((product, id) => (
+                <ProductItem key={product._id} product={product} />
+              ))
+          : null}
       </Slider>
     </LatestProductsContainer>
   );
 };
 
-export default LatestProducts;
+export default memo(LatestProducts);

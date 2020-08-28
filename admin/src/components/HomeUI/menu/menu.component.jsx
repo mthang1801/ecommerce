@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
   getMenu,
   createMenu
-} from "../../../utils/algorithms";
+} from "../../../utils/connectDB";
 import {JSONData, MenuWrapper} from "./menu.styles";
 import Button from '@material-ui/core/Button';
 const Menu = ({match}) => {

@@ -11,6 +11,9 @@ import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
 import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
+import Category from "./pages/category/category.component";
+import ProductType from "./pages/productType/productType.component";
+import Product from "./pages/product/product.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
@@ -42,21 +45,37 @@ function App({ fetchUser, user, loading }) {
         <SideDrawer />
         <Toolbar />
         <Navigation />
-        <Switch>
-          <ErrorBoundary>
-            <Suspense fallback={<Loader />}>
+
+        <ErrorBoundary>
+          <Suspense fallback={<Loader />}>
+            <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/auth" component={Authentication} />
-              <Route path="/shop-grid" component={ShopGrid} />
-              <Route path="/cart" component={Cart} />
-              <Route path="/details" component={ShopDetails} />
-              <Route path="/checkout" component={Checkout} />
-              <Route path="/contact" component={Contact} />
-              <Route path="/register-seller" component={RegisterSeller} />
-              <Route path="/create-new-product" component={CreateProduct} />
-            </Suspense>
-          </ErrorBoundary>
-        </Switch>
+              <Route path="/auth" exact component={Authentication} />
+              <Route path="/shop-grid" exact component={ShopGrid} />
+              <Route path="/cart" exact component={Cart} />
+              <Route path="/details" exact component={ShopDetails} />
+              <Route path="/checkout" exact component={Checkout} />
+              <Route path="/contact" exact component={Contact} />
+              <Route path="/register-seller" exact component={RegisterSeller} />
+              <Route
+                path="/create-new-product"
+                exact
+                component={CreateProduct}
+              />
+              <Route
+                path="/:categoryUrl/:productTypeUrl/:productUrl"
+                component={Product}
+              />
+              <Route
+                path="/:categoryUrl/:productTypeUrl"
+                component={ProductType}
+              />
+
+              <Route path="/:categoryUrl" component={Category} />
+            </Switch>
+          </Suspense>
+        </ErrorBoundary>
+
         <Footer />
       </AppContext.Provider>
     </Router>

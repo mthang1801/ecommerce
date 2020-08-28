@@ -77,4 +77,16 @@ router.post("/product", isAuth, shopController.postCreateProduct);
  * @access public
  */
 router.get("/latest-products", shopController.getLatestProducts);
+/**
+ * @route GET /best-seller-products
+ * @desc get Best Seller products to render home page
+ * @access public
+ */
+router.get("/best-seller-products", shopController.getBestSellerProducts);
+/**
+ * @route GET /top-rated-products
+ * @desc get Top Rated products to render home page
+ * @access public
+ */
+router.get("/top-rated-products", shopController.getTopRatedProducts);
 module.exports = router;
