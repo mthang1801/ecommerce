@@ -11,7 +11,7 @@ export const FeaturedProductOverViewContainer = styled.div`
 
 export const Grid = styled.div`
   display : flex ;  
-  width : ${props => props.tabletView ? "48%" : props.mobileView ? "90%" : "30%"};
+  width : ${props => props.tabletView ? "90%" : props.mobileView ? "95%" : "85%"};
   margin : auto;
   
 `

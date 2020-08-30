@@ -10,8 +10,7 @@ import {default as IndexProductTypes} from "../../components/ProductTypes/index-
 const ProductTypes = ({ match, fetchCategoryList, fetchProductTypes }) => {
   useEffect(() => {
     fetchCategoryList();
-    fetchProductTypes();
-    return () => {fetchCategoryList() ; fetchProductTypes()}
+    fetchProductTypes();    
   }, [fetchCategoryList, fetchProductTypes]);
   return (
     <ProductTypesWrapper>

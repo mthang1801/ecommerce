@@ -15,6 +15,15 @@ router.get("/initial-data", shopController.getInitialData);
  */
 router.get("/category", shopController.getCategoryList);
 /**
+ * @route GET /category/:pathUrl?page=
+ * @desc get list content by category path
+ * @access public
+ */
+router.get(
+  "/category/:pathUrl",
+  shopController.getContentListByCategoryLinkUrl
+);
+/**
  * @route GET /category/:id/product-type
  * @desc get list product types by category id
  * @access public

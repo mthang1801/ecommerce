@@ -23,13 +23,13 @@ export const BackgrounLabel = styled.h1`
   top : 50%; 
   left : 50%;
   transform : translate(-50%, -50%);
-  font-size : 3.5em;
+  font-size : 3em;
   text-transform : uppercase ;
   font-weight : 700;
   color : white; 
 
   @media screen and (max-width: 992px){
-    font-size : 2.5em;
+    font-size : 2em;
   }
   @media screen and (max-width: 500px){
     font-size : 1.4em;

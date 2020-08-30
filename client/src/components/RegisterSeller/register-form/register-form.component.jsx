@@ -60,8 +60,7 @@ const RegisterForm = ({ user, register, setDisabledNext, save, scroll }) => {
   const [error, setError] = useState(null);
   const [tabletView, setTabletView] = useState(
     window.innerWidth < 992 && window.innerWidth >= 660
-  );
-  const formRef = useRef(null);
+  );  
   useEffect(() => {
     window.scrollTo({
       top: scroll,
@@ -99,7 +98,7 @@ const RegisterForm = ({ user, register, setDisabledNext, save, scroll }) => {
         }
       });
     return () => (_mounted = false);
-  }, [getListCities]);
+  }, []);
 
   useEffect(() => {
     if (

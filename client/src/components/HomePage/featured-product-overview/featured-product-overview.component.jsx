@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useState, useContext, useEffect, memo} from 'react'
 import {FeaturedProductOverViewContainer, Grid} from "./featured-product-overview.styles";
 import LatestProduct from "../products-latest/products-latest.component";
 import ProductsBestSeller from "../products-best-seller/product-best-seller.component";
@@ -7,7 +7,7 @@ import AppContext from "../../../context/app-viewport.context";
 const FeaturedProductOverView = () => {
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   const [tabletView, setTabletView] = useState(window.innerWidth < 992 && window.innerWidth >= 600);
-  const width = useContext(AppContext);
+  const width = useContext(AppContext);  
   useEffect(() => {
     if (width < 600) {
       setMobileView(true);

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState, memo} from 'react'
 import {BannerOverViewContainer, Grid, Carousel, SmallBanner} from "./banner-overview.styles";
 import Banner from "../banner/banner.component"
 import AppContext from "../../../context/app-viewport.context";
@@ -36,4 +36,4 @@ const BannerOverView = () => {
   )
 }
 
-export default BannerOverView
+export default memo(BannerOverView)

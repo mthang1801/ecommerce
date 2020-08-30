@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, memo } from "react";
 import { MasterHeaderContainer, Grid } from "./master-header.styles";
 import CategoryOverview from "../category-overview/category-overview.component";
 import MasterService from "../master-service/master-service.component";
@@ -29,4 +29,4 @@ const MasterHeader = (props) => {
   );
 };
 
-export default MasterHeader;
+export default memo(MasterHeader);

@@ -65,14 +65,13 @@ const CategoriesSlider = (props) => {
             ref={slideRef}
             slidesToShow={mobileView ? 2 : tabletView ? 3 : 4}
             swipeToSlide={true}
-            focusOnSelect={true}
+            focusOnSelect={false}
             autoplay
             pauseOnHover={false}
             autoplaySpeed={2000}
           >
             {categoriesGroup.map((group) =>
-              group.map((item) => {
-                console.log(item);
+              group.map((item) => {               
                 return (
                   <CategoryItem key={item.id} to={item.linkUrl}>
                     <CategoryImage src={`data:${item.imageUrl.mimetype};base64,${item.imageUrl.data}`} />

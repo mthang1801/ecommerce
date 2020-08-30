@@ -3,7 +3,6 @@ import Toolbar from "./components/Layout/header/toolbar/toolbar.component";
 import Navigation from "./components/Layout/navigations/navigations.component";
 import Footer from "./components/Layout/footer/footer.component";
 import Home from "./pages/home/home.component";
-import ShopGrid from "./pages/shop-grid/shop-grid.component";
 import Cart from "./pages/cart/cart.component";
 import ShopDetails from "./pages/shop-details/shop-details.component";
 import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.component";
@@ -20,7 +19,7 @@ import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
 import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
-
+import PageNotFound from "./pages/page-not-found/page-not-found.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -51,12 +50,12 @@ function App({ fetchUser, user, loading }) {
             <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/auth" exact component={Authentication} />
-              <Route path="/shop-grid" exact component={ShopGrid} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" exact component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/register-seller" exact component={RegisterSeller} />
+              <Route path="/:categoryUrl/products" exact component={Category} />
               <Route
                 path="/create-new-product"
                 exact

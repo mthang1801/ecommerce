@@ -11,6 +11,9 @@ const validator = require("validator");
 const productGroups = require("../models/product-groups");
 const path = require("path");
 const { v4: uuid } = require("uuid");
+
+const PRODUCTS_PER_PAGE = +process.env.PRODUCTS_PER_PAGE || 8;
+
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -62,7 +65,89 @@ exports.getCategoryList = async (req, res, next) => {
     next(error);
   }
 };
+exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
+  try {
+    let { pathUrl } = req.params;
+    const { page } = req.query;
+    if (pathUrl[0] !== "/") {
+      pathUrl = "/" + pathUrl;
+    }
+    console.time("start");
+    const category = await Category.findOne({
+      linkUrl: pathUrl,
+      status: "active",
+    }).populate("productTypes");
+    if (!category) {
+      const err = new Error("Page not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const discountProductList = await Product.find({
+      category: category._id,
+      "discount.value": { $gt: 0 },
+      "discount.end_at": { $gt: new Date() },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ discount: -1 })
+      .limit(9);
+    const topRatedProducts = await Product.find({
+      category: category._id,
+      status: "active",
+    })
+      .sort({ stars: -1 })
+      .limit(9);
+    const bestSellerProducts = await Product.find({
+      category: category._id,
+      sold_quantity: { $gt: 0 },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ sold_quantity: -1 })
+      .limit(9);
+    const productList = await Product.find({
+      category: category._id,
+      status: "active",
+    });
+    const latestProductList = await Product.find({
+      category: category._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .limit(9)
+      .skip((page - 1) * PRODUCTS_PER_PAGE)
+      .limit(PRODUCTS_PER_PAGE);
+    const numProducts = await Product.count({
+      category: category._id,
+      status: "active",
+    });
+    const maxPrice = await Product.findOne(
+      {
+        category: category._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
 
+    const numPages = Math.ceil(numProducts / PRODUCTS_PER_PAGE);
+    console.timeEnd("start");
+    res.status(200).json({
+      categoryList: category,
+      productTypeList: category.productTypes,
+      discountProductList,
+      topRatedProducts,
+      bestSellerProducts,
+      latestProductList,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getListProductTypesByCategoryId = async (req, res, next) => {
   try {
     const { id } = req.params;

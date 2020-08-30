@@ -69,10 +69,7 @@ const NavigationItems = () => {
       )}
       <Option smallView>
       <CustomLink to="/"> {smallView && <AiOutlineHome/>} Home</CustomLink>
-      </Option>
-      <Option smallView>
-        <CustomLink to="/shop-grid">{smallView && <AiOutlineShopping/>} Shop</CustomLink>
-      </Option>
+      </Option>      
       <Option ref={pageMenuRef} smallView>
         <CustomLink to="/pages">{smallView && <FaConnectdevelop/> }Pages</CustomLink>
         <PagesMenu show={showPageMenu} />

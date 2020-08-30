@@ -2,7 +2,6 @@ import React,  { useState, useEffect, useContext } from 'react'
 import {SellerOverviewContainer} from "./register-seller-overview.styles";
 import Steppers from "../steppers/steppers.component";
 import AppContext from "../../../context/app-viewport.context";
-import FormCreateProduct from "../../Product/form-create-product/form-create-product.component";
 const SellerOverview = () => {
   
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);

@@ -5,15 +5,8 @@ import userActionTypes from "./user.types";
 import axios from "axios";
 import urls from "../../utils/urls";
 import setAuthToken from "../../utils/setAuthToken";
-import { fetchMenuSuccess } from "../menu/menu.actions";
-import { fetchCategorySuccess } from "../category/category.actions";
 export function* fetchUser() {
   try {
-    const {
-      data: { menu, category },
-    } = yield axios.get(urls.FETCH_INITIAL_DATA);
-    yield put(fetchMenuSuccess(menu));
-    yield put(fetchCategorySuccess(category));
     if (!localStorage.userToken || !localStorage.userExpDate) {
       throw new Error("Authentication denied");
     }

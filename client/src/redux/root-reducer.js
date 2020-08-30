@@ -5,7 +5,6 @@ import sellerReducer from "./seller/seller.reducer";
 import categoryReducer from "./category/category.reducer";
 import productTypeReducer from "./product-type/product-type.reducer";
 import productReducer from "./product/product.reducer";
-import menuReducer from "./menu/menu.reducer";
 export default combineReducers({
   drawer: drawerReducer,
   user: userReducer,
@@ -13,5 +12,4 @@ export default combineReducers({
   category: categoryReducer,
   productType: productTypeReducer,
   product: productReducer,
-  menu: menuReducer,
 });

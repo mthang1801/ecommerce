@@ -7,7 +7,7 @@ export const Backdrop = styled.div`
   left : 0 ; 
   right : 0 ; 
   bottom : 0 ;
-  background-color : rgba(0,0,0,0.2);
+  background-color : rgba(0,0,0,0.3);
   z-index:  1;
 `
 
@@ -29,7 +29,7 @@ export const ProductItemContainer = styled.div`
   align-items: center;
   justify-content: center;  
   width: 100%;
-  height: 31.5%;
+  height: 250px;
   overflow:  hidden ; 
   position : relative; 
   padding : 0.5rem 1rem;   
@@ -39,7 +39,7 @@ export const ProductItemContainer = styled.div`
     background-color: #eee;
     ${Backdrop}{
       display: block; 
-      backdrop-filter: blur(2px);
+      opacity : 0.7;      
     };    
     ${ProductBtns}{
       visibility : visible; 
@@ -54,14 +54,17 @@ export const ProductItemContainer = styled.div`
 export const ProductImageContainer = styled.div`
   margin: auto;
   width: 40%;
+  @media screen and  (max-width : 800px){
+    width : 30%;
+  }
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: -1;
 `;
 export const ProductImage = styled.img`
-  width: 8rem;
-  height: 8rem;
+  width: 100%;
+  height: auto;
   z-index: -1;
 `;
 export const ProductInfo = styled.div`
@@ -69,6 +72,9 @@ export const ProductInfo = styled.div`
   flex-direction: column;
   height : 100%;
   width: 60%;
+  @media screen and  (max-width : 800px){
+    width : 70%;
+  }
   margin-left : 12px;
   text-align: left;  
   justify-content : center;

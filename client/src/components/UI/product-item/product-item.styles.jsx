@@ -1,17 +1,64 @@
 import styled from "styled-components";
 
+
+export const ButtonsGroup = styled.div`
+  position :absolute; 
+  width : 100%;
+  max-width : 12rem;
+  left : 50%;
+  bottom : 15%;    
+  font-size : 1.5em;  
+  display : flex ;   
+  justify-content : space-around;  
+  transform : translate(-50%,200%);
+  transition : transform .25s;
+  z-index: 2 ; 
+`
+export const Backdrop = styled.div`
+  display : none ; 
+  position : absolute; 
+  left: 0 ; 
+  right : 0 ; 
+  top : 0 ; 
+  bottom : 0 ; 
+  background-color : rgba(0,0,0,0.4);
+  z-index: 1; 
+`
 export const ProductItemContainer = styled.div`
+  padidng : 0.5rem 0;
   margin : 1.25rem auto;
-  display : flex;
-  padding : 1rem;
+  display : flex; 
+  height : 23rem;
   flex-direction : column;
   justify-content :center;
   align-items : center;
-  width: 90%;
-  height: 20rem; 
+  width: 95%;  
   border : 1px solid #ccc ;
   box-shadow : 1px 1px 2px rgba(0,0,0,0.15);
   border-radius : 5px;     
+  position : relative;
+  cursor : pointer ; 
+  &:hover {   
+    ${ButtonsGroup}{
+      transform: translate(-50%, 0%);
+    };   
+    ${Backdrop}{
+      display : block;
+    }
+  };
+  z-index:  0 ;
+  @media screen and (max-width : 992px){
+    height: 25rem; 
+    width : 75%;
+  }
+  @media screen and (max-width: 768px){
+    height: 25rem; 
+    width : 85%;
+  }
+  @media screen and (max-width: 600px){
+    width : 70%;
+    height:  25rem;
+  }
 `
 
 export const Button = styled.span`
@@ -32,28 +79,16 @@ export const Button = styled.span`
   transition : transform 1s;
 `
 
-export const ButtonsGroup = styled.div`
-  position :absolute; 
-  width : 100%;
-  max-width : 12rem;
-  left : 50%;
-  bottom : 15%;    
-  font-size : 1.5em;  
-  display : flex ; 
-  justify-content : space-around;  
-  transform : translate(-50%,200%);
-  transition : transform .25s;
-`
 
 export const ProductItemImageContainer = styled.div`
-  width : 100%; 
-  max-width : 10rem;
-  height: 60%;
+  width : 100%;  
+  height: 15rem;
+  max-height: 60%;
   position :relative;   
   overflow : hidden ; 
-  cursor : pointer;
-  &:hover ${ButtonsGroup}{   
-    transform: translate(-50%, 0%);
+  cursor : pointer;   
+  @media screen and (max-width:992px){
+    height:  70%; 
   }
 `
 
@@ -78,16 +113,21 @@ export const ProductItemImage = styled.img`
 export const ProductItemText = styled.div`
   display : flex ; 
   flex-direction : column;
+  align-items : center;
   text-align : center;
   margin : 1rem auto;
   font-size : 1.1em;
   line-height : 1.6;
-  height : 30%;
-  width : 100%;
- 
+  height : 40%;
+  width : 100%;  
+  padding : 1rem;  
+  @media screen and (max-width:992px){
+    height: 30%; 
+  }
 `
 export const ProductName = styled.p`
   width : 100%;
+  margin : 7px auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;  

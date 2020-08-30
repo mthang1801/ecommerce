@@ -18,4 +18,6 @@ export default {
   GET_BEST_SELLER_PRODUCTS: "/best-seller-products",
   GET_TOP_RATED_PRODUCTS: "/top-rated-products",
   GET_CATEGORY_LIST: "/category",
+  GET_CONTENT_LIST_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
+    `/category/${pathUrl}?page=${page}`,
 };
