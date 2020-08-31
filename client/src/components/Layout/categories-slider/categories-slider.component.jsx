@@ -16,6 +16,7 @@ const CategoriesSlider = (props) => {
   const [tabletView, setTabletView] = useState(window.innerWidth < 992);
   const width = useContext(AppContext);
   const [category, setCategory] = useState([]);
+  let dragging = false ;
   useEffect(() => {
     let _mounted = true;
     getCategoryList().then((data) => {
@@ -69,11 +70,13 @@ const CategoriesSlider = (props) => {
             autoplay
             pauseOnHover={false}
             autoplaySpeed={2000}
+            beforeChange={() => dragging= true} 
+            afterChange={()=> dragging = false}
           >
             {categoriesGroup.map((group) =>
               group.map((item) => {               
                 return (
-                  <CategoryItem key={item.id} to={item.linkUrl}>
+                  <CategoryItem key={item.id} to={item.linkUrl} onClick={e => dragging && e.preventDefault()}>
                     <CategoryImage src={`data:${item.imageUrl.mimetype};base64,${item.imageUrl.data}`} />
                     <CategoryName>{item.name}</CategoryName>
                   </CategoryItem>

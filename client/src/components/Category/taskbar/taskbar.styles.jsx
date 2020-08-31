@@ -12,15 +12,19 @@ export const TaskBarContainer = styled.div`
 
 export const Grid = styled.div`  
   display: ${props => ( (props.mobileView && props.hideSm) || (props.mobileView && props.hideMd)|| ( props.tabletView && props.hideMd ) ? "none" : "flex")};
-  width :  ${props =>  props.mobileView ? "100%" : props.tabletView ? "auto" : "33.33%" };
+  flex : 1 0 50%;
   align-items: center;  
+  text-align: center;
 `
-export const Paragraph = styled.p``
+export const Paragraph = styled.p`
+  
+`
 export const Strong = styled.strong``
 export const Select = styled.select`
-  padding : .5rem ;
-  margin-left : 1rem;  
-  height : 2rem;
+  padding : 0.5rem ;
+  font-size : 1em;
+  font-weight: bold ; 
+  margin-left : 1rem;    
 `
 export const Option = styled.option`
   font-size : 1.1em;

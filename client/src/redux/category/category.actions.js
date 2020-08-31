@@ -12,7 +12,6 @@ export const fetchCategorySuccess = ({
   discountProductList,
   topRatedProducts,
   bestSellerProducts,
-  latestProductList,
   productList,
   numProducts,
   numPages,
@@ -25,7 +24,6 @@ export const fetchCategorySuccess = ({
     discountProductList,
     topRatedProducts,
     bestSellerProducts,
-    latestProductList,
     productList,
     numProducts,
     numPages,
@@ -42,10 +40,40 @@ export const fetchCategoryFail = (err) => {
 export const fetchCategory = (path, page = 1) => async (dispatch) => {
   try {
     dispatch(fetchCategoryStart());
+    console.log(path, page);
     const { data } = await axios.get(
       urls.GET_CONTENT_LIST_BY_CATEGORY_PATH_URL(path, page)
     );
     dispatch(fetchCategorySuccess(data));
+  } catch (error) {
+    dispatch(fetchCategoryFail(error));
+  }
+};
+
+export const setCurrentPage = (curPage) => ({
+  type: categoryActionTypes.SET_CURRENT_PAGE,
+  payload: curPage,
+});
+
+export const fetchProductListStart = () => ({
+  type: categoryActionTypes.FETCH_PRODUCT_LIST_START,
+});
+export const fetchProductListSuccess = (productList) => ({
+  type: categoryActionTypes.FETCH_PRODUCT_LIST_SUCCESS,
+  payload: productList,
+});
+export const fetchProductListFail = (err) => ({
+  type: categoryActionTypes.FETCH_PRODUCT_LIST_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const fetchProductList = (pathUrl, page) => async (dispatch) => {
+  try {
+    dispatch(fetchProductListStart());
+    const { data } = await axios.get(
+      urls.GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL(pathUrl, page)
+    );
+    dispatch(fetchProductListSuccess(data));
   } catch (error) {
     dispatch(fetchCategoryFail(error));
   }

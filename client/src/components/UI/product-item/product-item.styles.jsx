@@ -27,11 +27,12 @@ export const Backdrop = styled.div`
 export const ProductItemContainer = styled.div`
   padidng : 0.5rem 0;
   margin : 1.25rem auto;
+  max-width: 260px;
   display : flex; 
   height : 23rem;
   flex-direction : column;
-  justify-content :center;
-  align-items : center;
+  justify-content : center; 
+  align-items : flex-start;    
   width: 95%;  
   border : 1px solid #ccc ;
   box-shadow : 1px 1px 2px rgba(0,0,0,0.15);
@@ -48,16 +49,17 @@ export const ProductItemContainer = styled.div`
   };
   z-index:  0 ;
   @media screen and (max-width : 992px){
+    max-width : auto;
     height: 25rem; 
-    width : 75%;
+    width : 80%;
   }
   @media screen and (max-width: 768px){
     height: 25rem; 
     width : 85%;
   }
   @media screen and (max-width: 600px){
-    width : 70%;
-    height:  25rem;
+    height:  30rem;
+    width : 70%;        
   }
 `
 
@@ -109,6 +111,7 @@ export const ProductDiscount = styled.div`
 export const ProductItemImage = styled.img`
   width : 100%;
   height : 100%;
+  object-fit: scale-down;
 `
 export const ProductItemText = styled.div`
   display : flex ; 
@@ -120,7 +123,7 @@ export const ProductItemText = styled.div`
   line-height : 1.6;
   height : 40%;
   width : 100%;  
-  padding : 1rem;  
+  padding : 1rem;    
   @media screen and (max-width:992px){
     height: 30%; 
   }

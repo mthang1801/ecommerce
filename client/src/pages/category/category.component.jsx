@@ -3,21 +3,26 @@ import {ShopGridPageContainer} from "./category.styles";
 import {default as CategoryOverview} from "../../components/Category/category-overview/category-overview.container";
 import MasterHeader from "../../components/Layout/master-header/master-header.component"
 import Background from "../../components/Layout/background/background.component"
-import {fetchCategory} from "../../redux/category/category.actions";
+import {fetchCategory, fetchProductList} from "../../redux/category/category.actions";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {selectCategoryError, selectCategoryLoading , selectCategoryList} from "../../redux/category/category.selectors"
+import {selectCategoryError, selectCategoryLoading , selectCategoryList, selectProductFetched} from "../../redux/category/category.selectors"
 import PageNotFound from "../page-not-found/page-not-found.component"
 import Loader from "../../components/UI/loader/loader.component"
-const ShopGridPage = ({match, fetchCategory, location, error, loading, categoryList}) => { 
-  console.log(error);
+const ShopGridPage = ({match, fetchCategory, location, error, loading, categoryList, fetchProductList, fetched}) => { 
+  
   useEffect(() => {
       let page = 1 ; 
-      if(location.search){
-        page = +location.search.split("=")[1];
-      }          
-        fetchCategory(match.params.categoryUrl, page)                  
-  }, [fetchCategory]);
+      let categoryUrl = match.params.categoryUrl
+    
+      if(location.search && fetched){
+        page = +location.search.split("=")[1];       
+        fetchProductList(categoryUrl, page);
+        return ; 
+      }         
+      fetchCategory(categoryUrl, page);
+                    
+  }, [fetchCategory, location.search, match.params.categoryUrl]);
   if(loading){
     return <Loader/>
   }
@@ -36,9 +41,11 @@ const ShopGridPage = ({match, fetchCategory, location, error, loading, categoryL
 const mapStateToProps = createStructuredSelector({
   error : selectCategoryError,
   loading : selectCategoryLoading,
-  categoryList : selectCategoryList
+  categoryList : selectCategoryList,
+  fetched : selectProductFetched
 })
 const mapDispatchToProps = dispatch => ({
-  fetchCategory : (path,page) => dispatch(fetchCategory(path,page))
+  fetchCategory : (path,page) => dispatch(fetchCategory(path,page)),
+  fetchProductList : (path, page) => dispatch(fetchProductList(path, page))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ShopGridPage)

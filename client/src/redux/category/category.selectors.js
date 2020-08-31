@@ -34,10 +34,7 @@ export const selectProductList = createSelector(
   selectCategory,
   (category) => category.productList
 );
-export const selectLatestProductList = createSelector(
-  selectCategory,
-  (category) => category.latestProductList
-);
+
 export const selectNumProducts = createSelector(
   selectCategory,
   (category) => category.numProducts
@@ -53,4 +50,19 @@ export const selectCategoryError = createSelector(
 export const selectMaxPrice = createSelector(
   selectCategory,
   (category) => category.maxPrice
+);
+
+export const selectCurrentPage = createSelector(
+  selectCategory,
+  (category) => category.currentPage
+);
+
+export const selectLoadingProductList = createSelector(
+  selectCategory,
+  (category) => category.loadingProductList
+);
+
+export const selectProductFetched = createSelector(
+  selectCategory,
+  (category) => category.fetched
 );

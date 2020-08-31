@@ -5,8 +5,8 @@ import PriceScope from "../price-scope/price-scope.component";
 import StarScope from "../star-scope/star-scope.component";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {selectProductTypeList, selectMaxPrice, selectLatestProductList} from  "../../../redux/category/category.selectors";
-const ShopGridLeftSide = ({mobileView, tabletView, productTypeList, maxPrice, latestProductList}) => {   
+import {selectProductTypeList, selectMaxPrice} from  "../../../redux/category/category.selectors";
+const ShopGridLeftSide = ({mobileView, tabletView, productTypeList, maxPrice,}) => {   
   return (
     <ShopGridLeftSideContainer>   
       <Department productTypeList={productTypeList}/>
@@ -18,8 +18,7 @@ const ShopGridLeftSide = ({mobileView, tabletView, productTypeList, maxPrice, la
 
 const mapStateToProps = createStructuredSelector({
   productTypeList : selectProductTypeList,
-  maxPrice : selectMaxPrice,
-  latestProductList : selectLatestProductList
+  maxPrice : selectMaxPrice
 })
 
 export default connect(mapStateToProps)(ShopGridLeftSide)

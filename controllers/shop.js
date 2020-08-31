@@ -12,8 +12,6 @@ const productGroups = require("../models/product-groups");
 const path = require("path");
 const { v4: uuid } = require("uuid");
 
-const PRODUCTS_PER_PAGE = +process.env.PRODUCTS_PER_PAGE || 8;
-
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -95,6 +93,7 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       category: category._id,
       status: "active",
     })
+      .populate("images")
       .sort({ stars: -1 })
       .limit(9);
     const bestSellerProducts = await Product.find({
@@ -108,17 +107,13 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
     const productList = await Product.find({
       category: category._id,
       status: "active",
-    });
-    const latestProductList = await Product.find({
-      category: category._id,
-      status: "active",
     })
       .populate("images")
       .sort({ createdAt: -1 })
       .limit(9)
-      .skip((page - 1) * PRODUCTS_PER_PAGE)
-      .limit(PRODUCTS_PER_PAGE);
-    const numProducts = await Product.count({
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
       category: category._id,
       status: "active",
     });
@@ -130,7 +125,7 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       { price: 1, _id: 0 }
     ).sort({ price: -1 });
 
-    const numPages = Math.ceil(numProducts / PRODUCTS_PER_PAGE);
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
     console.timeEnd("start");
     res.status(200).json({
       categoryList: category,
@@ -138,7 +133,6 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       discountProductList,
       topRatedProducts,
       bestSellerProducts,
-      latestProductList,
       productList,
       numProducts,
       numPages,
@@ -552,6 +546,35 @@ exports.getTopRatedProducts = async (req, res, next) => {
       .sort({ stars: -1 })
       .limit(12);
     res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
+  try {
+    let { linkUrl } = req.params;
+    const page = +req.query.page;
+    if (linkUrl[0] !== "/") {
+      linkUrl = "/" + linkUrl;
+    }
+    const category = await Category.findOne({
+      linkUrl: linkUrl,
+      status: "active",
+    });
+    if (!category) {
+      const err = new Error("category not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const product = await Product.find({
+      category: category._id,
+      status: "active",
+    })
+      .populate("images")
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    res.status(200).json(product);
   } catch (error) {
     next(error);
   }

@@ -1,45 +1,39 @@
 import React, { useState, useEffect, memo } from "react";
 import { ProductSliderWrapper, Title, Grid } from "./product-slider.styles";
 import { getLatestProducts } from "../../../utils/connectDB";
+import {withRouter} from "react-router-dom"
 import ProductItem from "../product-item/product-item.component";
 import Slider from "react-slick";
 
-const ProductSlider = ({ mobileView, tabletView, title, productList }) => {
+const ProductSlider = ({ mobileView, tabletView, title, productList, history , smallView }) => {
+  let dragging = false;
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: mobileView ? 1 : tabletView ? 2 : 4,
-    slidesToScroll: mobileView || tabletView ? 1  : 2,
+    slidesToShow: mobileView ? 1 : tabletView && productList.length ==1 ? 1 : tabletView && productList.length > 1 ? 2 : productList.length < 4 ?  productList.length : smallView ? 3 : 4,
+    slidesToScroll: mobileView || tabletView || productList.length === 1 ? 1  : 2,
     autoplay: true,
+    beforeChange: () => dragging = true,
+    afterChange: () => dragging = false,
   };
-  // const [latestProducts, setLatestProducts] = useState([]);
-
-  // let latestProductsGroup = [];
-  // let accumulatorProducts = [];
-  // latestProducts.forEach((product, idx) => {
-  //   if (idx !== 0 && idx % 3 === 0) {
-  //     latestProductsGroup.push(accumulatorProducts);
-  //     accumulatorProducts = [];
-  //   }
-  //   accumulatorProducts.push(product);
-  //   if (idx % 3 !== 0 && idx === latestProducts.length - 1) {
-  //     latestProductsGroup.push(accumulatorProducts);
-  //     accumulatorProducts = [];
-  //   }
-  // });
-
+    
+  const handleClick = (e,linkUrl) => {
+    if(!dragging){
+      history.push(linkUrl)
+    }
+  }
   return (
     <ProductSliderWrapper>
       <Title>{title}</Title>
-      <Slider {...settings} style={{ height: "300px" }} autoplaySpeed={3000}>
+      <Slider {...settings} style={{height:"100%"}} autoplaySpeed={3000}>
         {productList.length &&
           productList.map((product, id) => (
-            <ProductItem key={product._id} product={product} />
+            <ProductItem key={product._id} product={product} onClick={(e,linkUrl) => handleClick(e,linkUrl)} />
           ))}
       </Slider>
     </ProductSliderWrapper>
   );
 };
 
-export default memo(ProductSlider);
+export default withRouter(memo(ProductSlider));

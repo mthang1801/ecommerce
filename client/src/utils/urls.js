@@ -20,4 +20,6 @@ export default {
   GET_CATEGORY_LIST: "/category",
   GET_CONTENT_LIST_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
     `/category/${pathUrl}?page=${page}`,
+  GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
+    `/category/${pathUrl}/products?page=${page}`,
 };

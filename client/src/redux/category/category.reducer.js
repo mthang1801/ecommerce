@@ -6,12 +6,15 @@ const INITIAL_STATE = {
   discountProductList: [],
   topRatedProducts: [],
   bestSellerProducts: [],
-  latestProductList: [],
+  productList: [],
   numProducts: 0,
   numPages: 0,
   currentPage: 1,
   maxPrice: 0,
+  fetched: false,
   error: undefined,
+  loading: false,
+  loadingProductList: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -21,6 +24,13 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         error: undefined,
         loading: true,
+        fetched: true,
+      };
+    case categoryActionTypes.FETCH_PRODUCT_LIST_START:
+      return {
+        ...state,
+        error: undefined,
+        loadingProductList: true,
       };
     case categoryActionTypes.FETCH_CONTENT_LIST_BY_CATEGORY_PATH_URL_SUCCESS:
       return {
@@ -36,6 +46,24 @@ export default (state = INITIAL_STATE, action) => {
         numPages: +action.payload.numPages,
         maxPrice: +action.payload.maxPrice,
         loading: false,
+      };
+    case categoryActionTypes.FETCH_PRODUCT_LIST_SUCCESS:
+      return {
+        ...state,
+        productList: action.payload,
+        loadingProductList: false,
+      };
+    case categoryActionTypes.SET_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: +action.payload,
+        loadingProductList: false,
+      };
+    case categoryActionTypes.FETCH_PRODUCT_LIST_FAIL:
+      return {
+        ...state,
+        error: { msg: action.payload.msg, status: action.payload.status },
+        loadingProductList: false,
       };
     case categoryActionTypes.FETCH_CONTENT_LIST_BY_CATEGORY_PATH_URL_FAIL:
       return {

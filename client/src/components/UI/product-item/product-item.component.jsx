@@ -18,7 +18,7 @@ import Rating from '@material-ui/lab/Rating';
 import Chip from "@material-ui/core/Chip"
 import {timeCountDown} from "../../../utils/algorithms"
 import {withRouter} from "react-router-dom";
-const ProductItem = ({ product, history }) => {  
+const ProductItem = ({ product, history, onClick }) => {  
   const [discountDate, setDiscountDate] = useState(null);
   const [timerDiscount, setTimerDiscount] = useState(null);
   useEffect(() => {
@@ -34,7 +34,7 @@ const ProductItem = ({ product, history }) => {
   }, [product]);
 
   return (
-    <ProductItemContainer title={product.name} onClick={() => history.push(`${product.linkUrl}`)}>      
+    <ProductItemContainer title={product.name} onClick={(e) => onClick(e,product.linkUrl)}>      
       <ProductItemImageContainer>
         <Backdrop/>
         <ProductItemImage src={`data:${product.images[0].mimetype};base64,${product.images[0].data}`} />
@@ -63,7 +63,7 @@ const ProductItem = ({ product, history }) => {
               label={`còn ${timerDiscount}`}
               color="secondary"
               title={timerDiscount}
-              onMouseOver={e => e.stopPropagation()}
+              style={{width : "100%", overflow : "hidden", textOverflow: "ellipsis", whiteSpace : "nowrap"}}
             />
           ) : (
             <Chip size="small" label={`còn ${timerDiscount}`} color="primary" />

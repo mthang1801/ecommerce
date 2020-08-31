@@ -258,3 +258,12 @@ export const getCategoryList = () => {
     }
   });
 };
+
+export const getProductListByPageNumber = (page) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

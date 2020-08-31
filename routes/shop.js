@@ -98,4 +98,13 @@ router.get("/best-seller-products", shopController.getBestSellerProducts);
  * @access public
  */
 router.get("/top-rated-products", shopController.getTopRatedProducts);
+/**
+ * @route GET /:categoryLink/products
+ * @desc get product List per page by category Link
+ * @access public
+ */
+router.get(
+  "/category/:linkUrl/products",
+  shopController.getProductListPerPageByCategoryLink
+);
 module.exports = router;

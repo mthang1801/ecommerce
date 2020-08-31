@@ -2,8 +2,8 @@ import styled from "styled-components";
 export const ProductSliderWrapper = styled.section`  
   width : 100%; 
   text-align:center;  
-  height : 25rem; 
-  margin-bottom : 2rem ;
+  height : 26rem; 
+  margin-bottom : 2rem ; 
 `
 
 export const Title = styled.h2`

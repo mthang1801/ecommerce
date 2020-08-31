@@ -5,7 +5,8 @@ import sellerReducer from "./seller/seller.reducer";
 import categoryReducer from "./category/category.reducer";
 import productTypeReducer from "./product-type/product-type.reducer";
 import productReducer from "./product/product.reducer";
-export default combineReducers({
+
+const rootReducer = combineReducers({
   drawer: drawerReducer,
   user: userReducer,
   seller: sellerReducer,
@@ -13,3 +14,5 @@ export default combineReducers({
   productType: productTypeReducer,
   product: productReducer,
 });
+
+export default rootReducer;

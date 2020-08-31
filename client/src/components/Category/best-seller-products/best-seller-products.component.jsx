@@ -1,10 +1,11 @@
 import React from 'react'
-import ProductSlider from "../product-slider/product-slider.component";
+import ProductSlider from "../../UI/product-slider/product-slider.component";
+import {BestSellerProductsWrapper} from "./best-seller-products.styles";
 const BestSellerProducts = ({ mobileView, tabletView, productList }) => {
   return (
-    <React.Fragment>
-      <ProductSlider mobileView={mobileView} tabletView={tabletView} productList={productList} title="Sản phẩm bán chạy" />
-    </React.Fragment>
+    <BestSellerProductsWrapper>
+      <ProductSlider mobileView={mobileView} tabletView={tabletView} productList={productList} title="Sản phẩm bán chạy" smallView/>
+    </BestSellerProductsWrapper>
   )
 }
 
