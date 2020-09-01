@@ -1,26 +1,29 @@
-import React, { useState, useEffect, useRef, useContext} from "react";
+import React, { useState, useEffect, useRef, useContext, memo } from "react";
 import {
   CategoryMenuContainer,
   DropdownContent,
   CategoryList,
-  CustomLink
+  CustomLink,
 } from "./category-menu.styles";
 import CATEGORY_MENU from "../../../data/menu.json";
 import ProductsPopup from "../products-popup/products-popup.component";
 import AppContext from "../../../context/app-viewport.context";
-import {connect} from "react-redux";
-import {selectCategoryList} from "../../../redux/category/category.selectors"
-import {createStructuredSelector} from "reselect"
-const CategoryMenu = ({  }) => {  
-  const categoryList = Object.keys(CATEGORY_MENU).map(key => CATEGORY_MENU[key]);
-  
+import { connect } from "react-redux";
+import { selectCategoryList } from "../../../redux/category/category.selectors";
+import { createStructuredSelector } from "reselect";
+import DropdownMenu from "../dropdown-menu-content/dropdown-menu-content.component";
+const CategoryMenu = ({}) => {
+  const categoryList = Object.keys(CATEGORY_MENU).map(
+    (key) => CATEGORY_MENU[key]
+  );
+
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
   const [touched, setIsTouched] = useState(false);
   const [activeLink, setActiveLink] = useState(null);
-  const categoryRef = useRef(null); 
+  const categoryRef = useRef(null);
   const listRef = useRef(null);
-  
+
   const [smallView, setSmallView] = useState(window.innerWidth < 992);
   const width = useContext(AppContext);
   useEffect(() => {
@@ -51,41 +54,32 @@ const CategoryMenu = ({  }) => {
   const handleMouseEnter = (e, categoryId) => {
     setCtfId(categoryId);
     setIsTouched(true);
-    setActiveLink(categoryId);    
-  };    
-  const handleMouseLeave = (e) => {      
+    setActiveLink(categoryId);
   };
-  return (  
-    <CategoryMenuContainer ref={categoryRef} >    
-       <CategoryList ref={listRef}>
+
+  return (
+    <CategoryMenuContainer ref={categoryRef}>
+      <CategoryList ref={listRef}>
         {categoryList.map((item) => (
           <React.Fragment key={item._id}>
-            <CustomLink
+            <DropdownMenu
               onMouseEnter={(e) => handleMouseEnter(e, item._id)}
-              onMouseLeave={(e) => handleMouseLeave(e)}
-              to={item.linkUrl}
-              style={{ fontWeight: "400", textTransform: "capitalize" }}
-              active={item._id === activeLink}
-            >
-              {item.name}
-            </CustomLink>            
-            <DropdownContent>
-              {(
-                <ProductsPopup                  
-                  offsetWidth={offsetWidth}
-                  categoryId={ctgId}                 
-                  data={CATEGORY_MENU[ctgId]}
-                />
-              )} 
-            </DropdownContent>
+              item={item}
+              activeLink={activeLink}
+            />
+
+            <ProductsPopup
+              offsetWidth={offsetWidth}
+              categoryId={ctgId}
+              data={CATEGORY_MENU[ctgId]}
+            />
           </React.Fragment>
         ))}
-        
-      </CategoryList> 
+      </CategoryList>
     </CategoryMenuContainer>
   );
 };
 const mapStateToProps = createStructuredSelector({
-  categoryList : selectCategoryList
-})
-export default connect(mapStateToProps)(CategoryMenu);
+  categoryList: selectCategoryList,
+});
+export default memo(connect(mapStateToProps)(CategoryMenu));

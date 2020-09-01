@@ -34,7 +34,7 @@ const ProductItem = ({ product, history, onClick }) => {
   }, [product]);
 
   return (
-    <ProductItemContainer title={product.name} onClick={(e) => onClick(e,product.linkUrl)}>      
+    <ProductItemContainer title={product.name} onClick={(e) => onClick(product.linkUrl)}>      
       <ProductItemImageContainer>
         <Backdrop/>
         <ProductItemImage src={`data:${product.images[0].mimetype};base64,${product.images[0].data}`} />

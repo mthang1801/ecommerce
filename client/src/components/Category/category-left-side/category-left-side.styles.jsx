@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ShopGridLeftSideContainer = styled.div`
+export const CategoryLeftSideWrapper = styled.div`
   display : flex ; 
   flex-direction : column ;  
 `

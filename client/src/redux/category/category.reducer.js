@@ -44,6 +44,7 @@ export default (state = INITIAL_STATE, action) => {
         productList: action.payload.productList,
         numProducts: +action.payload.numProducts,
         numPages: +action.payload.numPages,
+        currentPage: +action.payload.currentPage,
         maxPrice: +action.payload.maxPrice,
         loading: false,
       };

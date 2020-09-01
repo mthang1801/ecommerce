@@ -3,12 +3,15 @@ const ProductTypes = require("../models/product-types");
 const Image = require("../models/images");
 const Product = require("../models/product");
 const User = require("../models/user");
+const Manufactor = require("../models/manufactor");
 const fs = require("fs-extra");
 const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
 const removeImage = require("../utils/removeImage");
 const validator = require("validator");
 const productGroups = require("../models/product-groups");
+const _ = require("lodash");
+const { toCapitalizeString } = require("../utils/algorithms");
 const path = require("path");
 const { v4: uuid } = require("uuid");
 
@@ -63,85 +66,7 @@ exports.getCategoryList = async (req, res, next) => {
     next(error);
   }
 };
-exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
-  try {
-    let { pathUrl } = req.params;
-    const { page } = req.query;
-    if (pathUrl[0] !== "/") {
-      pathUrl = "/" + pathUrl;
-    }
-    console.time("start");
-    const category = await Category.findOne({
-      linkUrl: pathUrl,
-      status: "active",
-    }).populate("productTypes");
-    if (!category) {
-      const err = new Error("Page not found");
-      err.statusCode = 404;
-      throw err;
-    }
-    const discountProductList = await Product.find({
-      category: category._id,
-      "discount.value": { $gt: 0 },
-      "discount.end_at": { $gt: new Date() },
-      status: "active",
-    })
-      .populate("images")
-      .sort({ discount: -1 })
-      .limit(9);
-    const topRatedProducts = await Product.find({
-      category: category._id,
-      status: "active",
-    })
-      .populate("images")
-      .sort({ stars: -1 })
-      .limit(9);
-    const bestSellerProducts = await Product.find({
-      category: category._id,
-      sold_quantity: { $gt: 0 },
-      status: "active",
-    })
-      .populate("images")
-      .sort({ sold_quantity: -1 })
-      .limit(9);
-    const productList = await Product.find({
-      category: category._id,
-      status: "active",
-    })
-      .populate("images")
-      .sort({ createdAt: -1 })
-      .limit(9)
-      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
-      .limit(+process.env.PRODUCTS_PER_PAGE);
-    const numProducts = await Product.countDocuments({
-      category: category._id,
-      status: "active",
-    });
-    const maxPrice = await Product.findOne(
-      {
-        category: category._id,
-        status: "active",
-      },
-      { price: 1, _id: 0 }
-    ).sort({ price: -1 });
 
-    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
-    console.timeEnd("start");
-    res.status(200).json({
-      categoryList: category,
-      productTypeList: category.productTypes,
-      discountProductList,
-      topRatedProducts,
-      bestSellerProducts,
-      productList,
-      numProducts,
-      numPages,
-      maxPrice: maxPrice.price,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
 exports.getListProductTypesByCategoryId = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -310,21 +235,39 @@ exports.getMenu = async (req, res, next) => {
         if (count == 5 || count == length) {
           let manufactorOfProductType = {
             name: "Nhà sản xuất",
-            linkUrl: productTypeItem + "/manufactors",
+            linkUrl: `/manufactors${categoryItem.linkUrl}`,
             productsMenu: [],
           };
-          productTypeItem = await productTypeItem
-            .populate({
-              path: "products",
-              select: ["_id", "name", "linkUrl", "manufactor"],
-            })
-            .execPopulate();
-          for await (let product of productTypeItem.products) {
-            manufactorOfProductType.productsMenu.push({
-              _id: uuid(),
-              name: product.manufactor,
-              linkUrl: "manufactor/" + product.manufactor.trim(),
-            });
+          let trackManufactorList = {};
+          let limit = 5;
+          for (let productType of categoryItem.productTypes) {
+            let productTypeList = await productType
+              .populate("manufactors")
+              .execPopulate();
+            let manufactorsList = productTypeList.manufactors;
+            for (let manufactor of manufactorsList) {
+              if (limit >= 0) {
+                if (!trackManufactorList[manufactor._id]) {
+                  manufactorOfProductType.productsMenu.push({
+                    _id: manufactor._id,
+                    name: manufactor.name,
+                    linkUrl: manufactor.linkUrl,
+                  });
+                  trackManufactorList[manufactor._id] = true;
+                  limit--;
+                }
+              } else {
+                manufactorOfProductType.productsMenu.push({
+                  _id: uuid(),
+                  name: "Xem thêm...",
+                  linkUrl: `/manufactors${categoryItem.linkUrl}`,
+                });
+                break;
+              }
+            }
+            if (limit < 0) {
+              break;
+            }
           }
           productTypes.push(manufactorOfProductType);
           break;
@@ -378,7 +321,11 @@ exports.postCreateProduct = async (req, res, next) => {
       information,
       manufactor,
     } = req.body;
-
+    //to Capitalize name
+    name = toCapitalizeString(name);
+    label = toCapitalizeString(label);
+    manufactor = toCapitalizeString(manufactor);
+    groupName = toCapitalizeString(groupName);
     // set name url for product
     const match = /[A-Za-z0-9]/;
     const nameUrl = name
@@ -429,6 +376,8 @@ exports.postCreateProduct = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+    let group;
+    //save at product groups model
     if (!productGroupId) {
       if (groupName) {
         let newProductGroup = new ProductGroup({
@@ -452,6 +401,7 @@ exports.postCreateProduct = async (req, res, next) => {
           productType.productGroups.push(
             mongoose.Types.ObjectId(newProductGroup._id)
           );
+          group = newProductGroup;
         } else {
           const err = new Error("Product Group Name has been existing");
           err.statusCode = 400;
@@ -467,8 +417,27 @@ exports.postCreateProduct = async (req, res, next) => {
       }
       productGroup.products.push(newProduct);
       await productGroup.save();
+      group = productGroup;
       newProduct.productGroup = productGroup._id;
     }
+
+    //check manufactor manufactors model
+    let manufactorDoc = await Manufactor.findOne({
+      name: { $regex: new RegExp(`^${manufactor}$`, "i") },
+    });
+    if (!manufactorDoc) {
+      manufactorDoc = new Manufactor({
+        name: manufactor,
+        linkUrl: `/manufactor/${encodeURIComponent(manufactor)}`,
+      });
+    }
+    manufactorDoc.products.push(newProduct._id);
+    if (group) {
+      manufactorDoc.productGroups.push(group._id);
+    }
+    newProduct.manufactor = manufactorDoc._id;
+    productType.manufactors.push(manufactorDoc._id);
+    await manufactorDoc.save();
 
     await newProduct.save();
     user.products.push(newProduct);
@@ -572,9 +541,214 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
       status: "active",
     })
       .populate("images")
+      .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
     res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
+  try {
+    let { pathUrl } = req.params;
+    const page = +req.query.page;
+    console.log(page);
+    if (pathUrl[0] !== "/") {
+      pathUrl = "/" + pathUrl;
+    }
+    console.time("start");
+    const category = await Category.findOne({
+      linkUrl: pathUrl,
+      status: "active",
+    }).populate("productTypes");
+    if (!category) {
+      const err = new Error("Page not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const discountProductList = await Product.find({
+      category: category._id,
+      "discount.value": { $gt: 0 },
+      "discount.end_at": { $gt: new Date() },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ discount: -1 })
+      .limit(9);
+    const topRatedProducts = await Product.find({
+      category: category._id,
+      status: "active",
+      stars: { $exists: true },
+    })
+      .populate("images")
+      .sort({ stars: -1 })
+      .limit(9);
+    const bestSellerProducts = await Product.find({
+      category: category._id,
+      sold_quantity: { $gt: 0 },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ sold_quantity: -1 })
+      .limit(9);
+    const productList = await Product.find({
+      category: category._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      category: category._id,
+      status: "active",
+    });
+    const maxPrice = await Product.findOne(
+      {
+        category: category._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    console.timeEnd("start");
+    res.status(200).json({
+      categoryList: category,
+      productTypeList: category.productTypes,
+      discountProductList,
+      topRatedProducts,
+      bestSellerProducts,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListPerPageByProductTypeUrl = async (req, res, next) => {
+  try {
+    let { categoryUrl, productTypeUrl } = req.params;
+    const page = +req.query.page;
+    console.log(categoryUrl, productTypeUrl, page);
+    if (categoryUrl[0] !== "/") {
+      categoryUrl = "/" + categoryUrl;
+    }
+    if (productTypeUrl[0] !== "/") {
+      productTypeUrl = "/" + productTypeUrl;
+    }
+    console.time("start");
+    let productType = await ProductTypes.findOne({
+      linkUrl: categoryUrl + productTypeUrl,
+      status: "active",
+    })
+      .populate("productGroups")
+      .populate("manufactors");
+    if (!productType) {
+      const err = new Error("Page not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const manufactorList = productType.manufactors;
+    const discountProductList = await Product.find({
+      productType: productType._id,
+      "discount.value": { $gt: 0 },
+      "discount.end_at": { $gt: new Date() },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ discount: -1 })
+      .limit(9);
+
+    const topRatedProducts = await Product.find({
+      productType: productType._id,
+      stars: { $exists: true },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ stars: -1 })
+      .limit(9);
+    const bestSellerProducts = await Product.find({
+      productType: productType._id,
+      sold_quantity: { $gt: 0 },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ sold_quantity: -1 })
+      .limit(9);
+    const productList = await Product.find({
+      productType: productType._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      productType: productType._id,
+      status: "active",
+    });
+    const maxPrice = await Product.findOne(
+      {
+        productType: productType._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    console.timeEnd("start");
+    res.status(200).json({
+      name: productType.name,
+      productGroupList: productType.productGroups,
+      manufactorList,
+      discountProductList,
+      topRatedProducts,
+      bestSellerProducts,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListWithSpecificPageByProductTypeUrl = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    let { categoryUrl, productTypeUrl } = req.params;
+    const page = +req.query.page;
+    if (categoryUrl[0] !== "/") {
+      categoryUrl = "/" + categoryUrl;
+    }
+    if (productTypeUrl[0] !== "/") {
+      productTypeUrl = "/" + productTypeUrl;
+    }
+    const productType = await ProductTypes.findOne({
+      linkUrl: categoryUrl + productTypeUrl,
+      status: "active",
+    });
+    if (!productType) {
+      const err = new Error("product Type not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productList = await Product.find({
+      productType: productType._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    res.status(200).json(productList);
   } catch (error) {
     next(error);
   }

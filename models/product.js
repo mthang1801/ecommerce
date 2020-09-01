@@ -71,7 +71,8 @@ const ProductSchema = new Schema(
       required: true,
     },
     manufactor: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "manufactors",
       required: true,
     },
     sold_quantity: {

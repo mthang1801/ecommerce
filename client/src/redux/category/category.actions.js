@@ -15,6 +15,7 @@ export const fetchCategorySuccess = ({
   productList,
   numProducts,
   numPages,
+  currentPage,
   maxPrice,
 }) => ({
   type: categoryActionTypes.FETCH_CONTENT_LIST_BY_CATEGORY_PATH_URL_SUCCESS,
@@ -27,6 +28,7 @@ export const fetchCategorySuccess = ({
     productList,
     numProducts,
     numPages,
+    currentPage,
     maxPrice,
   },
 });
@@ -40,10 +42,10 @@ export const fetchCategoryFail = (err) => {
 export const fetchCategory = (path, page = 1) => async (dispatch) => {
   try {
     dispatch(fetchCategoryStart());
-    console.log(path, page);
-    const { data } = await axios.get(
+    let { data } = await axios.get(
       urls.GET_CONTENT_LIST_BY_CATEGORY_PATH_URL(path, page)
     );
+    data.currentPage = page;
     dispatch(fetchCategorySuccess(data));
   } catch (error) {
     dispatch(fetchCategoryFail(error));

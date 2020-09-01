@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, memo} from "react";
 import {
   ProductsPopupItemContainer,
   LinkProductType,
@@ -19,4 +19,4 @@ const ProductsPopupItem = ({ productType, productList }) => {
     </ProductsPopupItemContainer>
   );
 };
-export default ProductsPopupItem;
+export default memo(ProductsPopupItem);

@@ -22,4 +22,12 @@ export default {
     `/category/${pathUrl}?page=${page}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
     `/category/${pathUrl}/products?page=${page}`,
+  GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL: (categoryUrl, productTypeUrl, page) =>
+    `/category/${categoryUrl}/product-type/${productTypeUrl}?page=${page}`,
+  GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL: (
+    categoryUrl,
+    productTypeUrl,
+    page
+  ) =>
+    `/category/${categoryUrl}/product-type/${productTypeUrl}/products?page=${page}`,
 };

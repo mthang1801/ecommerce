@@ -75,8 +75,8 @@ a{
 }
 
 .active-link{
-  padding : 0.3rem 0.6rem ;
-  border : 1px solid #ccc;  
+  padding : 0.4rem 0.8rem ;  
   border-radius: 3px;
-  color : #3498db;
+  color : white;
+  background-color : #192a56;
 }

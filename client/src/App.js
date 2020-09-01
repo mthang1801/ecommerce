@@ -11,7 +11,7 @@ import Contact from "./pages/contact/contact.component";
 import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
 import Category from "./pages/category/category.component";
-import ProductType from "./pages/productType/productType.component";
+import ProductType from "./pages/product-type/product-type.component";
 import Product from "./pages/product/product.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
@@ -56,6 +56,11 @@ function App({ fetchUser, user, loading }) {
               <Route path="/contact" exact component={Contact} />
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route path="/:categoryUrl/products" exact component={Category} />
+              <Route
+                path="/:categoryUrl/:productTypeUrl/products"
+                exact
+                component={ProductType}
+              />
               <Route
                 path="/create-new-product"
                 exact

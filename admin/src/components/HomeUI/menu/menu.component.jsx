@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {
   getMenu,
-  createMenu
+  createMenu,
+  updateManufactor
 } from "../../../utils/connectDB";
 import {JSONData, MenuWrapper} from "./menu.styles";
 import Button from '@material-ui/core/Button';
@@ -23,6 +24,9 @@ const Menu = ({match}) => {
       setAlert("Tạo file thất bại");
     });
   }
+  const handleClick = () => {
+    updateManufactor();
+  }
   return (  
     <MenuWrapper>    
       {alert && <h2>{alert}</h2>}
@@ -32,6 +36,7 @@ const Menu = ({match}) => {
       {menuList && <Button variant="contained" color="primary" onClick={handleCreateMenuFile} style={{marginLeft : "auto", display : "block"}}>
         Tạo file
       </Button>}
+      <Button onClick={handleClick}>Update</Button>
     </MenuWrapper>  
         
   )

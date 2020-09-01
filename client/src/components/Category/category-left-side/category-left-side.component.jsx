@@ -1,19 +1,19 @@
 import React from 'react'
-import {ShopGridLeftSideContainer} from "./category-left-side.styles";
-import Department from "../department/department.component";
-import PriceScope from "../price-scope/price-scope.component";
-import StarScope from "../star-scope/star-scope.component";
+import {CategoryLeftSideWrapper} from "./category-left-side.styles";
+import PriceScope from "../../Layout/price-scope/price-scope.component";
+import StarScope from "../../Layout/star-scope/star-scope.component";
+import LeftSideMenu from "../../Layout/left-side-menu/left-side-menu.component";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {selectProductTypeList, selectMaxPrice} from  "../../../redux/category/category.selectors";
-const ShopGridLeftSide = ({mobileView, tabletView, productTypeList, maxPrice,}) => {   
+const CategoryLeftSide = ({mobileView, tabletView, productTypeList, maxPrice,}) => {   
   return (
-    <ShopGridLeftSideContainer>   
-      <Department productTypeList={productTypeList}/>
+    <CategoryLeftSideWrapper>   
+      {productTypeList.length && <LeftSideMenu title="Danh mục Sản phẩm" list={productTypeList}/>}
       <PriceScope mobileView={mobileView} tabletView={tabletView} maxPrice={maxPrice}/>   
       <StarScope mobileView={mobileView} tabletView={tabletView}/>  
-    </ShopGridLeftSideContainer>
-  )
+    </CategoryLeftSideWrapper>
+  ) 
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -21,4 +21,4 @@ const mapStateToProps = createStructuredSelector({
   maxPrice : selectMaxPrice
 })
 
-export default connect(mapStateToProps)(ShopGridLeftSide)
+export default connect(mapStateToProps)(CategoryLeftSide)

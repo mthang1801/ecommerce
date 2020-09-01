@@ -5,6 +5,9 @@ const User = require("../models/user");
 const Image = require("../models/images");
 const fs = require("fs-extra");
 const removeImage = require("../utils/removeImage");
+const _ = require("lodash");
+const Manufactor = require("../models/manufactor");
+const { toCapitalizeString } = require("../utils/algorithms");
 exports.postCategory = async (req, res, next) => {
   try {
     let { name, linkUrl } = req.body;
@@ -187,6 +190,25 @@ exports.deleteProductTypes = async (req, res, next) => {
       await category.save();
     }
     res.status(200).json({ msg: "remove Success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateManufactor = async (req, res, next) => {
+  try {
+    console.time("start");
+    const productTypes = await ProductTypes.find();
+    const productList = await Product.find();
+    const manufactorList = await Manufactor.find();
+    for await (let manufactor of manufactorList) {
+      manufactor.linkUrl = `/manufactor/${encodeURIComponent(
+        manufactor.name.toLowerCase()
+      )}`;
+      await manufactor.save();
+    }
+
+    console.timeEnd("start");
   } catch (error) {
     next(error);
   }

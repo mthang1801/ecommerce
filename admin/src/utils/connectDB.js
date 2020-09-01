@@ -21,3 +21,13 @@ export const createMenu = (dataJSON) => {
     }
   });
 };
+export const updateManufactor = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post(urls.UPDATE_MANUFACTOR);
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

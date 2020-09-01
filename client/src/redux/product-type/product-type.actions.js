@@ -1,13 +1,95 @@
-import porductTypeActionTypes from "./product-type.types";
-
+import productTypeActionTypes from "./product-type.types";
+import axios from "axios";
+import urls from "../../utils/urls";
 export const fetchProductTypeStart = () => ({
-  type: porductTypeActionTypes.FETCH_PRODUCT_TYPE_LIST_START,
+  type: productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_START,
 });
-export const fetchProductTypeSuccess = (ProductTypeList) => ({
-  type: porductTypeActionTypes.FETCH_PRODUCT_TYPE_LIST_SUCCESS,
-  payload: ProductTypeList,
+export const fetchProductTypeSuccess = ({
+  name,
+  productGroupList,
+  manufactorList,
+  discountProductList,
+  topRatedProducts,
+  bestSellerProducts,
+  productList,
+  numProducts,
+  currentPage,
+  numPages,
+  maxPrice,
+}) => ({
+  type: productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_SUCCESS,
+  payload: {
+    name,
+    productGroupList,
+    manufactorList,
+    discountProductList,
+    topRatedProducts,
+    bestSellerProducts,
+    productList,
+    numProducts,
+    currentPage,
+    numPages,
+    maxPrice,
+  },
 });
 export const fetchProductTypeFail = (err) => ({
-  type: porductTypeActionTypes.FETCH_PRODUCT_TYPE_LIST_FAIL,
-  error: err,
+  type: productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
 });
+
+export const fetchProductType = (
+  categoryUrl,
+  productTypeUrl,
+  page = 1
+) => async (dispatch) => {
+  try {
+    dispatch(fetchProductTypeStart());
+    let { data } = await axios.get(
+      urls.GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL(
+        categoryUrl,
+        productTypeUrl,
+        page
+      )
+    );
+    data.currentPage = page;
+    dispatch(fetchProductTypeSuccess(data));
+  } catch (error) {
+    dispatch(fetchProductTypeFail(error));
+  }
+};
+
+export const setCurrentPage = (curPage) => ({
+  type: productTypeActionTypes.SET_CURRENT_PAGE,
+  payload: curPage,
+});
+
+export const fetchProductListStart = () => ({
+  type: productTypeActionTypes.FETCH_PRODUCT_LIST_START,
+});
+export const fetchProductListSuccess = (productList) => ({
+  type: productTypeActionTypes.FETCH_PRODUCT_LIST_SUCCESS,
+  payload: productList,
+});
+export const fetchProductListFail = (err) => ({
+  type: productTypeActionTypes.FETCH_PRODUCT_LIST_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const fetchProductList = (categoryUrl, productTypeUrl, page) => async (
+  dispatch
+) => {
+  try {
+    console.log(page);
+    dispatch(fetchProductListStart());
+    const { data } = await axios.get(
+      urls.GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL(
+        categoryUrl,
+        productTypeUrl,
+        page
+      )
+    );
+    dispatch(fetchProductListSuccess(data));
+  } catch (error) {
+    dispatch(fetchProductListFail(error));
+  }
+};

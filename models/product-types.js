@@ -35,7 +35,8 @@ const ProductTypesSchema = new mongoose.Schema(
     },
     manufactors: [
       {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "manufactors",
         required: true,
       },
     ],

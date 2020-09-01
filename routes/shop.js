@@ -107,4 +107,22 @@ router.get(
   "/category/:linkUrl/products",
   shopController.getProductListPerPageByCategoryLink
 );
+/**
+ * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
+ * @desc get list product by categoryUrl, productTypeUrl
+ * @access public
+ */
+router.get(
+  "/category/:categoryUrl/product-type/:productTypeUrl",
+  shopController.getProductListPerPageByProductTypeUrl
+);
+/**
+ * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
+ * @desc get list product by categoryUrl, productTypeUrl
+ * @access public
+ */
+router.get(
+  "/category/:categoryUrl/product-type/:productTypeUrl/products",
+  shopController.getProductListWithSpecificPageByProductTypeUrl
+);
 module.exports = router;

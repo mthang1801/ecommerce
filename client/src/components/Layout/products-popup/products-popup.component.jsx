@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { ProductsPopupContainer } from "./products-popup.styles";
 import ProductsPopupItem from "../products-popup-item/products-popup-item.component";
 const ProductsPopup = ({ offsetWidth, categoryId, data }) => {  
@@ -24,4 +24,4 @@ const ProductsPopup = ({ offsetWidth, categoryId, data }) => {
     </React.Fragment>
   );
 };
-export default ProductsPopup;
+export default memo(ProductsPopup);

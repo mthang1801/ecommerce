@@ -29,7 +29,6 @@ export const ProductItemContainer = styled.div`
   margin : 1.25rem auto;
   max-width: 260px;
   display : flex; 
-  height : 23rem;
   flex-direction : column;
   justify-content : center; 
   align-items : flex-start;    
@@ -38,6 +37,7 @@ export const ProductItemContainer = styled.div`
   box-shadow : 1px 1px 2px rgba(0,0,0,0.15);
   border-radius : 5px;     
   position : relative;
+  height: 25rem; 
   cursor : pointer ; 
   &:hover {   
     ${ButtonsGroup}{
@@ -50,16 +50,13 @@ export const ProductItemContainer = styled.div`
   z-index:  0 ;
   @media screen and (max-width : 992px){
     max-width : auto;
-    height: 25rem; 
-    width : 80%;
+    width : 90%;
   }
-  @media screen and (max-width: 768px){
-    height: 25rem; 
-    width : 85%;
+  @media screen and (max-width: 768px){ 
+    width : 95%;
   }
   @media screen and (max-width: 600px){
-    height:  30rem;
-    width : 70%;        
+    width : 85%;         
   }
 `
 
@@ -89,9 +86,6 @@ export const ProductItemImageContainer = styled.div`
   position :relative;   
   overflow : hidden ; 
   cursor : pointer;   
-  @media screen and (max-width:992px){
-    height:  70%; 
-  }
 `
 
 export const ProductDiscount = styled.div`
@@ -123,17 +117,15 @@ export const ProductItemText = styled.div`
   line-height : 1.6;
   height : 40%;
   width : 100%;  
-  padding : 1rem;    
-  @media screen and (max-width:992px){
-    height: 30%; 
-  }
+  padding : 1rem;      
 `
 export const ProductName = styled.p`
-  width : 100%;
-  margin : 7px auto;
-  white-space: nowrap;
+
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
 `
 export const ProductPrice = styled.div`
   display : flex ; 
