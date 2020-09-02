@@ -51,7 +51,8 @@ const ProductTypeRightSide = ({
     <ProductTypeRightSideWrapper>
       {!discountProductList.length &&
       !bestSellerProductList.length &&
-      !topRatedProductList.length ? (
+      !topRatedProductList.length&& 
+      !productList ? (
         <h4>Không tìm thấy sản phẩm nào</h4>
       ) : (
         <React.Fragment>

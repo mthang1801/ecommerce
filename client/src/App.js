@@ -13,6 +13,8 @@ import Authentication from "./pages/auth/auth.component";
 import Category from "./pages/category/category.component";
 import ProductType from "./pages/product-type/product-type.component";
 import Product from "./pages/product/product.component";
+import ProductGroup from "./pages/product-group/product-group.component";
+import Manufactor from "./pages/manufactor/manufactor.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
@@ -57,6 +59,11 @@ function App({ fetchUser, user, loading }) {
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route path="/:categoryUrl/products" exact component={Category} />
               <Route
+                path="/manufactor/:manufactorUrl/products"
+                exact
+                component={Manufactor}
+              />
+              <Route
                 path="/:categoryUrl/:productTypeUrl/products"
                 exact
                 component={ProductType}
@@ -65,6 +72,11 @@ function App({ fetchUser, user, loading }) {
                 path="/create-new-product"
                 exact
                 component={CreateProduct}
+              />
+              <Route
+                path="/manufactor/:manufactorUrl"
+                exact
+                component={Manufactor}
               />
               <Route
                 path="/:categoryUrl/:productTypeUrl/:productUrl"

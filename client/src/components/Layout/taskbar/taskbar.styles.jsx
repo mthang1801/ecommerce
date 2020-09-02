@@ -11,8 +11,9 @@ export const TaskBarContainer = styled.div`
 `
 
 export const Grid = styled.div`  
-  display: ${props => ( (props.mobileView && props.hideSm) || (props.mobileView && props.hideMd)|| ( props.tabletView && props.hideMd ) ? "none" : "flex")};
-  flex : 1 0 50%;
+  width: 100%;
+  display: flex;  
+  justify-content: center;
   align-items: center;  
   text-align: center;
 `

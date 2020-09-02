@@ -10,15 +10,15 @@ const TaskBar = ({mobileView,tabletView, numProducts}) => {
   const [view,setView] = useState("grid");
   return (
     <TaskBarContainer mobileView={mobileView} tabletView={tabletView}>     
-      <Grid mobileView={mobileView} tabletView={tabletView} hideSm>
+      <Grid mobileView={mobileView} tabletView={tabletView} >
         <Paragraph>Tìm thấy <Strong>{numProducts} </Strong>mặt hàng</Paragraph>
       </Grid>
-      <Grid mobileView={mobileView} tabletView={tabletView} hideMd>
+      {/* <Grid mobileView={mobileView} tabletView={tabletView} hideMd>
         <Settings>
           <Button active={view==="grid"} onClick={() => setView("grid")}><BsGridFill/></Button>
           <Button active={view==="list"} onClick={() => setView("list")}><FaListUl/></Button>
         </Settings>
-      </Grid>
+      </Grid> */}
     </TaskBarContainer>
   )
 }

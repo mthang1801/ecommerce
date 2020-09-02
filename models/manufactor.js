@@ -13,12 +13,14 @@ const ManufactorSchema = new mongoose.Schema(
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
         required: true,
       },
     ],
     productGroups: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "product-groups",
         required: true,
       },
     ],

@@ -170,134 +170,6 @@ exports.getListLinksProductTypes = async (req, res, next) => {
     next(error);
   }
 };
-exports.getMenu = async (req, res, next) => {
-  try {
-    let menu = {};
-    const category = await Category.find().populate("productTypes");
-    for await (let categoryItem of category) {
-      menu[categoryItem._id] = {
-        _id: categoryItem._id,
-        name: categoryItem.name,
-        linkUrl: categoryItem.linkUrl,
-      };
-      let productTypes = [];
-      let count = 0;
-      for await (let productTypeItem of categoryItem.productTypes) {
-        let productType = {
-          name: productTypeItem.name,
-          linkUrl: productTypeItem.linkUrl,
-          productsMenu: [],
-        };
-        let length;
-        if (productTypeItem.productGroups.length) {
-          length = productTypeItem.productGroups.length;
-          productTypeItem = await productTypeItem
-            .populate({
-              path: "productGroups",
-              select: ["_id", "name", "linkUrl"],
-              options: {
-                limit: 6,
-              },
-            })
-            .execPopulate();
-          for await (let group of productTypeItem.productGroups) {
-            productType.productsMenu.push({
-              _id: group._id,
-              name: group.name,
-              linkUrl: group.linkUrl,
-              options: {
-                limit: 6,
-                sort: { sold: -1 },
-              },
-            });
-          }
-        } else if (productTypeItem.products.length) {
-          length = productTypeItem.products.length;
-          productTypeItem = await productTypeItem
-            .populate({
-              path: "products",
-              select: ["_id", "name", "linkUrl"],
-            })
-            .execPopulate();
-          for await (let product of productTypeItem.products) {
-            productType.productsMenu.push({
-              _id: product._id,
-              name: product.name,
-              linkUrl: product.linkUrl,
-            });
-          }
-        }
-        if (productType.productsMenu.length) {
-          productTypes.push(productType);
-        }
-
-        count += 1;
-        if (count == 5 || count == length) {
-          let manufactorOfProductType = {
-            name: "Nhà sản xuất",
-            linkUrl: `/manufactors${categoryItem.linkUrl}`,
-            productsMenu: [],
-          };
-          let trackManufactorList = {};
-          let limit = 5;
-          for (let productType of categoryItem.productTypes) {
-            let productTypeList = await productType
-              .populate("manufactors")
-              .execPopulate();
-            let manufactorsList = productTypeList.manufactors;
-            for (let manufactor of manufactorsList) {
-              if (limit >= 0) {
-                if (!trackManufactorList[manufactor._id]) {
-                  manufactorOfProductType.productsMenu.push({
-                    _id: manufactor._id,
-                    name: manufactor.name,
-                    linkUrl: manufactor.linkUrl,
-                  });
-                  trackManufactorList[manufactor._id] = true;
-                  limit--;
-                }
-              } else {
-                manufactorOfProductType.productsMenu.push({
-                  _id: uuid(),
-                  name: "Xem thêm...",
-                  linkUrl: `/manufactors${categoryItem.linkUrl}`,
-                });
-                break;
-              }
-            }
-            if (limit < 0) {
-              break;
-            }
-          }
-          productTypes.push(manufactorOfProductType);
-          break;
-        }
-      }
-      menu[categoryItem._id].productTypes = productTypes;
-    }
-    res.status(200).json(JSON.stringify(menu));
-  } catch (error) {
-    next(error);
-  }
-};
-exports.postCreateMenu = async (req, res, next) => {
-  try {
-    const dataJSON = req.body;
-    await fs.writeFile(
-      path.join(
-        path.dirname(require.main.filename),
-        "client",
-        "src",
-        "data",
-        "menu.json"
-      ),
-      JSON.stringify(dataJSON)
-    );
-    res.status(201).json({ msg: "created success" });
-  } catch (error) {
-    next(error);
-  }
-};
 exports.postCreateProduct = async (req, res, next) => {
   try {
     if (!req.isAuthenticated || !req.user) {
@@ -343,7 +215,7 @@ exports.postCreateProduct = async (req, res, next) => {
     const newProduct = new Product({
       label,
       name,
-      linkUrl: `${rootUrl}/${encodeURIComponent(nameUrl)}`,
+      linkUrl: `${rootUrl}/${encodeURIComponent(name + Date.now())}`,
       price,
       description,
       information,
@@ -442,9 +314,9 @@ exports.postCreateProduct = async (req, res, next) => {
     await newProduct.save();
     user.products.push(newProduct);
     productType.products.push(newProduct);
-    const checkManufactorExisted = productType.manufactors.find(
-      (item) => item.toLowerCase() == manufactor.toLowerCase()
-    );
+    const checkManufactorExisted = await Manufactor.findOne({
+      name: { $regex: new RegExp(`^${manufactor}$`, "i") },
+    });
     if (!checkManufactorExisted) {
       productType.manufactors.push(manufactor);
     }
@@ -629,7 +501,7 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
     next(error);
   }
 };
-exports.getProductListPerPageByProductTypeUrl = async (req, res, next) => {
+exports.getListContentByProductTypeUrl = async (req, res, next) => {
   try {
     let { categoryUrl, productTypeUrl } = req.params;
     const page = +req.query.page;
@@ -748,6 +620,89 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
+    res.status(200).json(productList);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getListContentByManufactorUrl = async (req, res, next) => {
+  try {
+    console.time("manufactor");
+    const { manufactorUrl } = req.params;
+    const page = +req.query.page;
+    const manufactor = await Manufactor.findOne({
+      linkUrl: { $regex: new RegExp(`/manufactor/${manufactorUrl}`, "i") },
+    })
+      .populate("products")
+      .populate("productGroups");
+    if (!manufactor) {
+      const err = new Error("Manufactor not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productList = await Product.find({
+      manufactor: manufactor._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const productGroupList = manufactor.productGroups;
+    const numProducts = await Product.countDocuments({
+      manufactor: manufactor._id,
+      status: "active",
+    });
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    const maxPrice = await Product.findOne(
+      {
+        manufactor: manufactor._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    )
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    console.timeEnd("manufactor");
+    res.status(200).json({
+      name: manufactor.name,
+      productGroupList,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
+  try {
+    console.time("manufactor");
+    const { manufactorUrl } = req.params;
+    const page = +req.query.page;
+
+    const manufactor = await Manufactor.findOne({
+      linkUrl: { $regex: new RegExp(`/manufactor/${manufactorUrl}`, "i") },
+    })
+      .populate("products")
+      .populate("productGroups");
+
+    if (!manufactor) {
+      const err = new Error("Manufactor not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productList = await Product.find({
+      manufactor: manufactor._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    console.time("manufactor");
     res.status(200).json(productList);
   } catch (error) {
     next(error);

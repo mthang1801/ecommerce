@@ -1,7 +1,6 @@
 exports.toCapitalizeString = (str) => {
   let subArr = str.trim().split(" ");
   subArr = subArr.filter((x) => x.trim() !== "");
-  console.log(subArr);
   function capitalizeFirstHelper(arr) {
     if (arr.length == 1) {
       return [arr[0][0].toUpperCase() + arr[0].slice(1).toLowerCase()];

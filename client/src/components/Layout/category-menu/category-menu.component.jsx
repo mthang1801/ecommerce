@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, memo } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   CategoryMenuContainer,
   DropdownContent,
@@ -12,7 +12,9 @@ import { connect } from "react-redux";
 import { selectCategoryList } from "../../../redux/category/category.selectors";
 import { createStructuredSelector } from "reselect";
 import DropdownMenu from "../dropdown-menu-content/dropdown-menu-content.component";
-const CategoryMenu = ({}) => {
+import {withRouter} from "react-router-dom";
+
+const CategoryMenu = ({history}) => {
   const categoryList = Object.keys(CATEGORY_MENU).map(
     (key) => CATEGORY_MENU[key]
   );
@@ -66,15 +68,15 @@ const CategoryMenu = ({}) => {
               onMouseEnter={(e) => handleMouseEnter(e, item._id)}
               item={item}
               activeLink={activeLink}
-            />
-
-            <ProductsPopup
+              onClick={e => history.push(item.linkUrl)}
+            />           
+          </React.Fragment>
+        ))}
+         <ProductsPopup
               offsetWidth={offsetWidth}
               categoryId={ctgId}
               data={CATEGORY_MENU[ctgId]}
             />
-          </React.Fragment>
-        ))}
       </CategoryList>
     </CategoryMenuContainer>
   );
@@ -82,4 +84,4 @@ const CategoryMenu = ({}) => {
 const mapStateToProps = createStructuredSelector({
   categoryList: selectCategoryList,
 });
-export default memo(connect(mapStateToProps)(CategoryMenu));
+export default connect(mapStateToProps)(withRouter(CategoryMenu));

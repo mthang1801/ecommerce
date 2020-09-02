@@ -62,18 +62,7 @@ router.get(
   "/list-links-product-types",
   shopController.getListLinksProductTypes
 );
-/**
- * @route GET /menu
- * @desc get menu
- * @access public
- */
-router.get("/menu", shopController.getMenu);
-/**
- * @route POST /menu
- * @desc get menu
- * @access public
- */
-router.post("/menu", shopController.postCreateMenu);
+
 /**
  * @route POST /product
  * @desc create product
@@ -109,12 +98,12 @@ router.get(
 );
 /**
  * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
- * @desc get list product by categoryUrl, productTypeUrl
+ * @desc get list content by categoryUrl, productTypeUrl
  * @access public
  */
 router.get(
   "/category/:categoryUrl/product-type/:productTypeUrl",
-  shopController.getProductListPerPageByProductTypeUrl
+  shopController.getListContentByProductTypeUrl
 );
 /**
  * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
@@ -124,5 +113,23 @@ router.get(
 router.get(
   "/category/:categoryUrl/product-type/:productTypeUrl/products",
   shopController.getProductListWithSpecificPageByProductTypeUrl
+);
+/**
+ * @route GET /manufactor/:manufactorUrl/product-list
+ * @desc get list content by manufactorUrl
+ * @access public
+ */
+router.get(
+  "/manufactor/:manufactorUrl/product-list",
+  shopController.getListContentByManufactorUrl
+);
+/**
+ * @route GET /manufactor/:manufactorUrl/product-list/products
+ * @desc get list products per page by manufactorUrl
+ * @access public
+ */
+router.get(
+  "/manufactor/:manufactorUrl/product-list/products",
+  shopController.getListProdudctPerPageByManufactorUrl
 );
 module.exports = router;

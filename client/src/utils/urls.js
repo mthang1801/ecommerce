@@ -30,4 +30,8 @@ export default {
     page
   ) =>
     `/category/${categoryUrl}/product-type/${productTypeUrl}/products?page=${page}`,
+  GET_CONTENT_LIST_BY_MANUFACTOR_PATH_URL: (pathUrl, page) =>
+    `/manufactor/${pathUrl}/product-list?page=${page}`,
+  GET_PRODUCT_LIST_PER_PAGE_BY_MANUFACTOR_PATH_URL: (pathUrl, page) =>
+    `/manufactor/${pathUrl}/product-list/products?page=${page}`,
 };
