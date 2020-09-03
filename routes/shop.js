@@ -97,39 +97,57 @@ router.get(
   shopController.getProductListPerPageByCategoryLink
 );
 /**
- * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
+ * @route GET /category/:categoryPath/product-type/:productTypePath/
  * @desc get list content by categoryUrl, productTypeUrl
  * @access public
  */
 router.get(
-  "/category/:categoryUrl/product-type/:productTypeUrl",
+  "/category/:categoryPath/product-type/:productTypePath",
   shopController.getListContentByProductTypeUrl
 );
 /**
- * @route GET /category/:categoryUrl/product-type/:productTypeUrl/
+ * @route GET /category/:categoryPath/product-type/:productTypePath/
  * @desc get list product by categoryUrl, productTypeUrl
  * @access public
  */
 router.get(
-  "/category/:categoryUrl/product-type/:productTypeUrl/products",
+  "/category/:categoryPath/product-type/:productTypePath/products",
   shopController.getProductListWithSpecificPageByProductTypeUrl
 );
 /**
- * @route GET /manufactor/:manufactorUrl/product-list
+ * @route GET /manufactor/:manufactorPath/product-list
  * @desc get list content by manufactorUrl
  * @access public
  */
 router.get(
-  "/manufactor/:manufactorUrl/product-list",
+  "/manufactor/:manufactorPath/product-list",
   shopController.getListContentByManufactorUrl
 );
 /**
- * @route GET /manufactor/:manufactorUrl/product-list/products
+ * @route GET /manufactor/:manufactorPath/product-list/products
  * @desc get list products per page by manufactorUrl
  * @access public
  */
 router.get(
-  "/manufactor/:manufactorUrl/product-list/products",
+  "/manufactor/:manufactorPath/product-list/products",
   shopController.getListProdudctPerPageByManufactorUrl
+);
+/**
+ * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath
+ * @desc get list content product group
+ * @access public
+ */
+router.get(
+  "/:categoryPath/:productTypePath/product-group/:productGroupPath",
+  shopController.getListContentProductGroup
+);
+/**
+ * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath/products
+ * @desc get list product group per page
+ * @access public
+ */
+router.get(
+  "/:categoryPath/:productTypePath/product-group/:productGroupPath/products",
+  shopController.getListProductGroupPerPageByProductGroupUrl
 );
 module.exports = router;

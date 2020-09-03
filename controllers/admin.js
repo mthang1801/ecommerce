@@ -11,9 +11,7 @@ const Manufactor = require("../models/manufactor");
 const { toCapitalizeString } = require("../utils/algorithms");
 const { v4: uuid } = require("uuid");
 const path = require("path");
-const { encodeBase64 } = require("bcryptjs");
-const { encodeXText } = require("nodemailer/lib/shared");
-const { encode } = require("punycode");
+const { link } = require("fs");
 exports.postCategory = async (req, res, next) => {
   try {
     let { name, linkUrl } = req.body;
@@ -333,16 +331,13 @@ exports.postCreateMenu = async (req, res, next) => {
 exports.updateManufactor = async (req, res, next) => {
   try {
     console.time("start");
-    const productList = await Product.find();
-    for await (let product of productList) {
-      let curLinkUrl = product.linkUrl;
-      linkUrlArr = curLinkUrl.split("/");
-      linkUrlArr[linkUrlArr.length - 1] = encodeURIComponent(
-        product.name.toLowerCase() + Date.now()
-      );
-      product.linkUrl = linkUrlArr.join("/");
-
-      await product.save();
+    const productGroupList = await ProductGroup.find();
+    for await (let productGroup of productGroupList) {
+      let linkUrl = productGroup.linkUrl;
+      let linkUrlArr = linkUrl.split("/");
+      let groupUrl = linkUrlArr[4];
+      // console.log(encodeURIComponent(groupUrl));
+      console.log(productGroup);
     }
     console.timeEnd("start");
   } catch (error) {

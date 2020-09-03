@@ -38,16 +38,16 @@ export const fetchProductTypeFail = (err) => ({
 });
 
 export const fetchProductType = (
-  categoryUrl,
-  productTypeUrl,
+  categoryPath,
+  productTypePath,
   page = 1
 ) => async (dispatch) => {
   try {
     dispatch(fetchProductTypeStart());
     let { data } = await axios.get(
       urls.GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL(
-        categoryUrl,
-        productTypeUrl,
+        categoryPath,
+        productTypePath,
         page
       )
     );
@@ -75,7 +75,7 @@ export const fetchProductListFail = (err) => ({
   payload: { msg: err.response.data.message, status: err.response.status },
 });
 
-export const fetchProductList = (categoryUrl, productTypeUrl, page) => async (
+export const fetchProductList = (categoryPath, productTypePath, page) => async (
   dispatch
 ) => {
   try {
@@ -83,8 +83,8 @@ export const fetchProductList = (categoryUrl, productTypeUrl, page) => async (
     dispatch(fetchProductListStart());
     const { data } = await axios.get(
       urls.GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL(
-        categoryUrl,
-        productTypeUrl,
+        categoryPath,
+        productTypePath,
         page
       )
     );

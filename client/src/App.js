@@ -4,7 +4,7 @@ import Navigation from "./components/Layout/navigations/navigations.component";
 import Footer from "./components/Layout/footer/footer.component";
 import Home from "./pages/home/home.component";
 import Cart from "./pages/cart/cart.component";
-import ShopDetails from "./pages/shop-details/shop-details.component";
+import ShopDetails from "./pages/product-detail/product-detail.component";
 import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.component";
 import Checkout from "./pages/checkout/checkout.component";
 import Contact from "./pages/contact/contact.component";
@@ -12,7 +12,7 @@ import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
 import Category from "./pages/category/category.component";
 import ProductType from "./pages/product-type/product-type.component";
-import Product from "./pages/product/product.component";
+import ProductDetail from "./pages/product-detail/product-detail.component";
 import ProductGroup from "./pages/product-group/product-group.component";
 import Manufactor from "./pages/manufactor/manufactor.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -57,14 +57,28 @@ function App({ fetchUser, user, loading }) {
               <Route path="/checkout" exact component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/register-seller" exact component={RegisterSeller} />
-              <Route path="/:categoryUrl/products" exact component={Category} />
               <Route
-                path="/manufactor/:manufactorUrl/products"
+                path="/:categoryPath/:productTypePath/product-group/:productGroupPath/products"
+                exact
+                component={ProductGroup}
+              />
+              <Route
+                path="/:categoryPath/products"
+                exact
+                component={Category}
+              />
+              <Route
+                path="/manufactor/:manufactorPath/products"
                 exact
                 component={Manufactor}
               />
               <Route
-                path="/:categoryUrl/:productTypeUrl/products"
+                path="/:categoryPath/:productTypePath/product-group/:productGroupPath"
+                exact
+                component={ProductGroup}
+              />
+              <Route
+                path="/:categoryPath/:productTypePath/products"
                 exact
                 component={ProductType}
               />
@@ -74,20 +88,20 @@ function App({ fetchUser, user, loading }) {
                 component={CreateProduct}
               />
               <Route
-                path="/manufactor/:manufactorUrl"
+                path="/manufactor/:manufactorPath"
                 exact
                 component={Manufactor}
               />
               <Route
-                path="/:categoryUrl/:productTypeUrl/:productUrl"
-                component={Product}
+                path="/:categoryPath/:productTypePath/:productPath"
+                component={ProductDetail}
               />
               <Route
-                path="/:categoryUrl/:productTypeUrl"
+                path="/:categoryPath/:productTypePath"
                 component={ProductType}
               />
 
-              <Route path="/:categoryUrl" component={Category} />
+              <Route path="/:categoryPath" component={Category} />
             </Switch>
           </Suspense>
         </ErrorBoundary>

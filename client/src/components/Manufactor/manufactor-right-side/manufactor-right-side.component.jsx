@@ -26,9 +26,9 @@ const ManufactorRightSide = ({
 }) => {
   const [initialPage, setInitialPage] = useState(true);
   const movePage = page => {      
-    const categoryUrl = location.pathname.split("/")[1];   
-    const ManufactorUrl = location.pathname.split("/")[2];
-    history.push(`/${categoryUrl}/${ManufactorUrl}/products?page=${page}`);
+    const categoryPath = location.pathname.split("/")[1];   
+    const ManufactorPath = location.pathname.split("/")[2];
+    history.push(`/${categoryPath}/${ManufactorPath}/products?page=${page}`);
     setCurrentPage(page);
   }
   const handlePageClick = (data) => {       

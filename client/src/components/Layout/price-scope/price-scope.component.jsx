@@ -22,7 +22,7 @@ const PriceScope = ({maxPrice}) => {
   const handleChange = (e, newValue) => {
     setValue((newValue));
   };
-  return (
+  return (  
     <div className={classes.root}>
       <PriceLabel>Giá</PriceLabel>
       <Slider

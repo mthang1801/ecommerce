@@ -30,18 +30,18 @@ const ProductTypePage = ({
 }) => {
   useEffect(() => {
     let page = +location.search.split("=")[1] || 1;    
-    let { categoryUrl, productTypeUrl } = match.params;
+    let { categoryPath, productTypePath } = match.params;
     if (location.search && fetched) {
-      fetchProductList(categoryUrl, productTypeUrl, page);
+      fetchProductList(categoryPath, productTypePath, page);
       return;
     }
-    fetchProductType(categoryUrl, productTypeUrl, page);
+    fetchProductType(categoryPath, productTypePath, page);
   }, [
     fetchProductType,
     fetchProductList,
     location.search,
-    match.params.categoryUrl,
-    match.params.productTypeUrl,
+    match.params.categoryPath,
+    match.params.productTypePath,
   ]);
   if (loading) {
     return <Loader />;
@@ -66,7 +66,7 @@ const mapStateToProps = createStructuredSelector({
   name: selectName,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchProductType: (categoryUrl, productTypeUrl, page) => dispatch(fetchProductType(categoryUrl, productTypeUrl, page)),
-  fetchProductList: (categoryUrl, productTypeUrl, page) => dispatch(fetchProductList(categoryUrl, productTypeUrl, page)),
+  fetchProductType: (categoryPath, productTypePath, page) => dispatch(fetchProductType(categoryPath, productTypePath, page)),
+  fetchProductList: (categoryPath, productTypePath, page) => dispatch(fetchProductList(categoryPath, productTypePath, page)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTypePage);

@@ -35,9 +35,9 @@ const ProductTypeRightSide = ({
 }) => {
   const [initialPage, setInitialPage] = useState(true);
   const movePage = page => {      
-    const categoryUrl = location.pathname.split("/")[1];   
-    const productTypeUrl = location.pathname.split("/")[2];
-    history.push(`/${categoryUrl}/${productTypeUrl}/products?page=${page}`);
+    const categoryPath = location.pathname.split("/")[1];   
+    const productTypePath = location.pathname.split("/")[2];
+    history.push(`/${categoryPath}/${productTypePath}/products?page=${page}`);
     setCurrentPage(page);
   }
   const handlePageClick = (data) => {       

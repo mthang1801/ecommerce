@@ -42,7 +42,6 @@ export default (state = INITIAL_STATE, action) => {
         discountProductList: action.payload.discountProductList,
         topRatedProducts: action.payload.topRatedProducts,
         bestSellerProducts: action.payload.bestSellerProducts,
-        latestProductList: action.payload.latestProductList,
         productList: action.payload.productList,
         numProducts: +action.payload.numProducts,
         currentPage: +action.payload.currentPage,

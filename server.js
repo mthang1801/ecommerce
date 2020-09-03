@@ -6,12 +6,20 @@ const connectDB = require("./config/connectDB");
 const configViewEngine = require("./config/viewEngine");
 const CORS = require("./config/cors");
 const handlerError = require("./config/handleError");
+const morgan = require("morgan");
+const fs = require("fs-extra");
 const app = express();
 
 const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
-
+// create a write stream (in append mode)
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+// setup the logger
+app.use(morgan("combined", { stream: accessLogStream }));
 //config view Engine
 configViewEngine(app);
 

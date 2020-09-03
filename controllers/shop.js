@@ -8,12 +8,10 @@ const fs = require("fs-extra");
 const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
 const removeImage = require("../utils/removeImage");
-const validator = require("validator");
 const productGroups = require("../models/product-groups");
 const _ = require("lodash");
 const { toCapitalizeString } = require("../utils/algorithms");
 const path = require("path");
-const { v4: uuid } = require("uuid");
 
 exports.getInitialData = async (req, res, next) => {
   try {
@@ -254,7 +252,7 @@ exports.postCreateProduct = async (req, res, next) => {
       if (groupName) {
         let newProductGroup = new ProductGroup({
           name: groupName,
-          linkUrl: `${productType.linkUrl}/${encodeURIComponent(
+          linkUrl: `${productType.linkUrl}/product-group/${encodeURIComponent(
             groupName.toLowerCase()
           )}`,
           productType: productType,
@@ -503,18 +501,18 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
 };
 exports.getListContentByProductTypeUrl = async (req, res, next) => {
   try {
-    let { categoryUrl, productTypeUrl } = req.params;
+    let { categoryPath, productTypePath } = req.params;
     const page = +req.query.page;
-    console.log(categoryUrl, productTypeUrl, page);
-    if (categoryUrl[0] !== "/") {
-      categoryUrl = "/" + categoryUrl;
+    console.log(categoryPath, productTypePath, page);
+    if (categoryPath[0] !== "/") {
+      categoryPath = "/" + categoryPath;
     }
-    if (productTypeUrl[0] !== "/") {
-      productTypeUrl = "/" + productTypeUrl;
+    if (productTypePath[0] !== "/") {
+      productTypePath = "/" + productTypePath;
     }
     console.time("start");
     let productType = await ProductTypes.findOne({
-      linkUrl: categoryUrl + productTypeUrl,
+      linkUrl: categoryPath + productTypePath,
       status: "active",
     })
       .populate("productGroups")
@@ -595,16 +593,16 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
   next
 ) => {
   try {
-    let { categoryUrl, productTypeUrl } = req.params;
+    let { categoryPath, productTypePath } = req.params;
     const page = +req.query.page;
-    if (categoryUrl[0] !== "/") {
-      categoryUrl = "/" + categoryUrl;
+    if (categoryPath[0] !== "/") {
+      categoryPath = "/" + categoryPath;
     }
-    if (productTypeUrl[0] !== "/") {
-      productTypeUrl = "/" + productTypeUrl;
+    if (productTypePath[0] !== "/") {
+      productTypePath = "/" + productTypePath;
     }
     const productType = await ProductTypes.findOne({
-      linkUrl: categoryUrl + productTypeUrl,
+      linkUrl: categoryPath + productTypePath,
       status: "active",
     });
     if (!productType) {
@@ -628,10 +626,16 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
 exports.getListContentByManufactorUrl = async (req, res, next) => {
   try {
     console.time("manufactor");
-    const { manufactorUrl } = req.params;
+    const { manufactorPath } = req.params;
+    console.log(manufactorPath);
     const page = +req.query.page;
     const manufactor = await Manufactor.findOne({
-      linkUrl: { $regex: new RegExp(`/manufactor/${manufactorUrl}`, "i") },
+      linkUrl: {
+        $regex: new RegExp(
+          `/manufactor/${encodeURIComponent(manufactorPath)}`,
+          "i"
+        ),
+      },
     })
       .populate("products")
       .populate("productGroups");
@@ -680,11 +684,16 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
 exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
   try {
     console.time("manufactor");
-    const { manufactorUrl } = req.params;
+    const { manufactorPath } = req.params;
     const page = +req.query.page;
 
     const manufactor = await Manufactor.findOne({
-      linkUrl: { $regex: new RegExp(`/manufactor/${manufactorUrl}`, "i") },
+      linkUrl: {
+        $regex: new RegExp(
+          `/manufactor/${encodeURIComponent(manufactorPath)}`,
+          "i"
+        ),
+      },
     })
       .populate("products")
       .populate("productGroups");
@@ -703,6 +712,100 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
     console.time("manufactor");
+    res.status(200).json(productList);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getListContentProductGroup = async (req, res, next) => {
+  try {
+    const { categoryPath, productTypePath, productGroupPath } = req.params;
+    const page = +req.query.page;
+    const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
+      productGroupPath
+    )}`;
+    const productGroup = await ProductGroup.findOne({
+      linkUrl,
+    });
+    const discountProductList = await Product.find({
+      productGroup: productGroup._id,
+      "discount.value": { $gt: 0 },
+      "discount.end_at": { $gt: new Date() },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ discount: -1 })
+      .limit(9);
+
+    const topRatedProducts = await Product.find({
+      productGroup: productGroup._id,
+      stars: { $exists: true },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ stars: -1 })
+      .limit(9);
+    const bestSellerProducts = await Product.find({
+      productGroup: productGroup._id,
+      sold_quantity: { $gt: 0 },
+      status: "active",
+    })
+      .populate("images")
+      .sort({ sold_quantity: -1 })
+      .limit(9);
+    const productList = await Product.find({ productGroup: productGroup._id })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      productGroup: productGroup._id,
+    });
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    const maxPrice = await Product.findOne(
+      { productGroup: productGroup._id },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+    res.status(200).json({
+      name: productGroup.name,
+      discountProductList,
+      topRatedProducts,
+      bestSellerProducts,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getListProductGroupPerPageByProductGroupUrl = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { categoryPath, productTypePath, productGroupPath } = req.params;
+
+    const page = +req.query.page;
+    const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
+      productGroupPath
+    )}`;
+    const productGroup = await ProductGroup.findOne({ linkUrl });
+    if (!productGroup) {
+      const err = new Error("Product group not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productList = await Product.find({
+      productGroup: productGroup._id,
+      status: "active",
+    })
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
     res.status(200).json(productList);
   } catch (error) {
     next(error);

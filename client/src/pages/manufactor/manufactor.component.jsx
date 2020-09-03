@@ -29,18 +29,18 @@ const ManufactorPage = ({
 }) => {
   useEffect(() => {   
     let page = +location.search.split("=")[1] || 1;       
-    let { manufactorUrl } = match.params;  
-    console.log(manufactorUrl);
+    let { manufactorPath } = match.params;  
+    console.log(manufactorPath);
     if (location.search && fetched) {
-      fetchProductList(manufactorUrl, page);
+      fetchProductList(manufactorPath, page);
       return;
     } 
-    fetchManufactor(manufactorUrl, page);
+    fetchManufactor(manufactorPath, page);
   }, [
     fetchManufactor,
     fetchProductList,
     location.search,
-    match.params.manufactorUrl,
+    match.params.manufactorPath,
   ]);
   if (loading) {
     return <Loader />;

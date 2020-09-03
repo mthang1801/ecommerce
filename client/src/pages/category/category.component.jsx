@@ -13,16 +13,16 @@ const CategoryPage = ({match, fetchCategory, location, error, loading, categoryL
   
   useEffect(() => {
       let page = +location.search.split("=")[1] || 1 ;
-      let categoryUrl = match.params.categoryUrl;
+      let categoryPath = match.params.categoryPath;
     
       if(location.search && fetched){
                
-        fetchProductList(categoryUrl, page);
+        fetchProductList(categoryPath, page);
         return ; 
       }         
-      fetchCategory(categoryUrl, page);
+      fetchCategory(categoryPath, page);
                     
-  }, [fetchCategory, location.search, match.params.categoryUrl]);
+  }, [fetchCategory, location.search, match.params.categoryPath]);
   if(loading){
     return <Loader/>
   }

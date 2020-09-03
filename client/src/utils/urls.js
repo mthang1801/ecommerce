@@ -22,16 +22,30 @@ export default {
     `/category/${pathUrl}?page=${page}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
     `/category/${pathUrl}/products?page=${page}`,
-  GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL: (categoryUrl, productTypeUrl, page) =>
-    `/category/${categoryUrl}/product-type/${productTypeUrl}?page=${page}`,
+  GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL: (categoryPath, productTypePath, page) =>
+    `/category/${categoryPath}/product-type/${productTypePath}?page=${page}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL: (
-    categoryUrl,
-    productTypeUrl,
+    categoryPath,
+    productTypePath,
     page
   ) =>
-    `/category/${categoryUrl}/product-type/${productTypeUrl}/products?page=${page}`,
+    `/category/${categoryPath}/product-type/${productTypePath}/products?page=${page}`,
   GET_CONTENT_LIST_BY_MANUFACTOR_PATH_URL: (pathUrl, page) =>
     `/manufactor/${pathUrl}/product-list?page=${page}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_MANUFACTOR_PATH_URL: (pathUrl, page) =>
     `/manufactor/${pathUrl}/product-list/products?page=${page}`,
+  GET_CONTENT_LIST_BY_PRODUCT_GROUP_PATH_URL: (
+    categoryPath,
+    productTypePath,
+    productGroupPath,
+    page
+  ) =>
+    `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}?page=${page}`,
+  GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_GROUP_PATH_URL: (
+    categoryPath,
+    productTypePath,
+    productGroupPath,
+    page
+  ) =>
+    `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?page=${page}`,
 };
