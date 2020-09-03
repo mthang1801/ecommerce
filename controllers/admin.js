@@ -245,6 +245,7 @@ exports.getMenu = async (req, res, next) => {
             .populate({
               path: "products",
               select: ["_id", "name", "linkUrl"],
+              options: { sort: { createdAt: -1 } },
             })
             .execPopulate();
           for await (let product of productTypeItem.products) {
@@ -312,6 +313,8 @@ exports.getMenu = async (req, res, next) => {
 exports.postCreateMenu = async (req, res, next) => {
   try {
     const dataJSON = req.body;
+    const parseData = JSON.parse(JSON.stringify(dataJSON));
+    console.log(parseData);
     await fs.writeFile(
       path.join(
         path.dirname(require.main.filename),
@@ -320,7 +323,7 @@ exports.postCreateMenu = async (req, res, next) => {
         "data",
         "menu.json"
       ),
-      JSON.stringify(dataJSON)
+      JSON.stringify(parseData)
     );
     res.status(201).json({ msg: "created success" });
   } catch (error) {
@@ -331,13 +334,17 @@ exports.postCreateMenu = async (req, res, next) => {
 exports.updateManufactor = async (req, res, next) => {
   try {
     console.time("start");
-    const productGroupList = await ProductGroup.find();
-    for await (let productGroup of productGroupList) {
-      let linkUrl = productGroup.linkUrl;
-      let linkUrlArr = linkUrl.split("/");
-      let groupUrl = linkUrlArr[4];
-      // console.log(encodeURIComponent(groupUrl));
-      console.log(productGroup);
+    const productPhoneList = await Product.find({
+      linkUrl: { $regex: new RegExp("^/phones-tablets") },
+    });
+    for await (let product of productPhoneList) {
+      let linkUrl = encodeURIComponent(product.name);
+      let oldLinkUrl = product.linkUrl.split("/");
+      let pathArr = [...oldLinkUrl.slice(0, -1), linkUrl];
+      let newLinkUrl = pathArr.join("/");
+      product.linkUrl = newLinkUrl;
+      console.log(newLinkUrl);
+      await product.save();
     }
     console.timeEnd("start");
   } catch (error) {

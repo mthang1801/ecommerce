@@ -48,4 +48,9 @@ export default {
     page
   ) =>
     `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?page=${page}`,
+  GET_CONTENT_PRODUCT_DETAIL_BY_PRODUCT_PATH_URL: (
+    categoryPath,
+    productTypePath,
+    productPath
+  ) => `/${categoryPath}/${productTypePath}/${productPath}`,
 };

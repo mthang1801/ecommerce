@@ -150,4 +150,14 @@ router.get(
   "/:categoryPath/:productTypePath/product-group/:productGroupPath/products",
   shopController.getListProductGroupPerPageByProductGroupUrl
 );
+/**
+ * @route GET /:categoryPath/:productTypePath/:productPath
+ * @desc get content product by productUrl
+ * @access public
+ */
+router.get(
+  "/:categoryPath/:productTypePath/:productPath",
+  shopController.getContentProductByProductUrl
+);
+
 module.exports = router;

@@ -1,21 +1,13 @@
 exports.toCapitalizeString = (str) => {
   let subArr = str.trim().split(" ");
   subArr = subArr.filter((x) => x.trim() !== "");
-  function capitalizeFirstHelper(arr) {
-    if (arr.length == 1) {
-      return [arr[0][0].toUpperCase() + arr[0].slice(1).toLowerCase()];
-    }
-
-    let res = capitalizeFirstHelper(arr.slice(0, -1));
-    const string =
-      arr.slice(arr.length - 1)[0][0].toUpperCase() +
-      arr
-        .slice(arr.length - 1)[0]
-        .substr(1)
-        .toLowerCase();
-    res.push(string);
-    return res;
+  let newArr = [];
+  for (let subString of subArr) {
+    subString = subString.trim();
+    newArr.push(subString[0].toUpperCase() + subString.slice(1).toLowerCase());
   }
-  let newStr = capitalizeFirstHelper(subArr);
-  return newStr.join(" ");
+
+  let newStr = newArr.join(" ");
+  console.log(newStr);
+  return newStr;
 };

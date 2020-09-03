@@ -1,6 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { ProductsPopupContainer } from "./products-popup.styles";
 import ProductsPopupItem from "../products-popup-item/products-popup-item.component";
+
 const ProductsPopup = ({ offsetWidth, categoryId, data }) => {  
   return (
     <React.Fragment>

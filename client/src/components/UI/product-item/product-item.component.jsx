@@ -32,7 +32,10 @@ const ProductItem = ({ product, history, onClick }) => {
     }
     return () => clearInterval(timerInterval);
   }, [product]);
-
+  const onAddToCart = e => {
+    e.stopPropagation();
+    console.log("pl");
+  }
   return (
     <ProductItemContainer title={product.name} onClick={(e) => onClick(product.linkUrl)}>      
       <ProductItemImageContainer>
@@ -42,7 +45,7 @@ const ProductItem = ({ product, history, onClick }) => {
         <ButtonsGroup>
           <Button><FaHeart/></Button>
           <Button><FaEye/></Button>
-          <Button><FaShoppingCart/></Button>
+          <Button onClick={onAddToCart}><FaShoppingCart/></Button>
         </ButtonsGroup>
       </ProductItemImageContainer>
       <ProductItemText>

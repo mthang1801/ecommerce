@@ -198,12 +198,6 @@ exports.postCreateProduct = async (req, res, next) => {
     groupName = toCapitalizeString(groupName);
     // set name url for product
     const match = /[A-Za-z0-9]/;
-    const nameUrl = name
-      .split(" ")
-      .filter((character) => match.test(character))
-      .concat([Date.now()])
-      .join("-")
-      .toLowerCase();
     const product = await Product.findOne({
       name: new RegExp(["^", name, "$"].join(""), "i"),
     });
@@ -807,6 +801,25 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
     res.status(200).json(productList);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getContentProductByProductUrl = async (req, res, next) => {
+  try {
+    const { categoryPath, productTypePath, productPath } = req.params;
+    const linkUrl = `/${categoryPath}/${productTypePath}/${encodeURIComponent(
+      productPath
+    )}`;
+    console.log("///");
+    console.log(linkUrl);
+    const product = await Product.findOne({ linkUrl }).populate("images");
+    if (!product) {
+      const err = new Error("product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    res.status(200).json(product);
   } catch (error) {
     next(error);
   }

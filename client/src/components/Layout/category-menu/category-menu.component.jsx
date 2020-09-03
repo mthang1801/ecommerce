@@ -15,10 +15,9 @@ import DropdownMenu from "../dropdown-menu-content/dropdown-menu-content.compone
 import {withRouter} from "react-router-dom";
 
 const CategoryMenu = ({history}) => {
-  const categoryList = Object.keys(CATEGORY_MENU).map(
+  const categoryList = Object.keys(JSON.parse(JSON.stringify(CATEGORY_MENU))).map(
     (key) => CATEGORY_MENU[key]
-  );
-
+  ); 
   const [ctgId, setCtfId] = useState(null);
   const [offsetWidth, setOffsetWidth] = useState(0);
   const [touched, setIsTouched] = useState(false);
