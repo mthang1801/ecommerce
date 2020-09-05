@@ -12,6 +12,7 @@ const productGroups = require("../models/product-groups");
 const _ = require("lodash");
 const { toCapitalizeString } = require("../utils/algorithms");
 const path = require("path");
+const { populate } = require("../models/category");
 
 exports.getInitialData = async (req, res, next) => {
   try {
@@ -807,19 +808,54 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
 };
 exports.getContentProductByProductUrl = async (req, res, next) => {
   try {
+    console.time("productDetail");
     const { categoryPath, productTypePath, productPath } = req.params;
     const linkUrl = `/${categoryPath}/${productTypePath}/${encodeURIComponent(
       productPath
     )}`;
-    console.log("///");
-    console.log(linkUrl);
+
     const product = await Product.findOne({ linkUrl }).populate("images");
     if (!product) {
       const err = new Error("product not found");
       err.statusCode = 404;
       throw err;
     }
-    res.status(200).json(product);
+    const productGroup = await ProductGroup.findById(product.productGroup);
+    let collectionProducts = [];
+    if (productGroup) {
+      const products = await Product.find({
+        productGroup: productGroup._id,
+        status: "active",
+        _id: { $ne: product._id },
+      })
+        .populate("images")
+        .limit(8);
+      collectionProducts = [...collectionProducts, ...products];
+    }
+    const productType = await ProductTypes.findById(product.productType);
+    if (productType) {
+      const products = await Product.find({
+        productType: productType._id,
+        status: "active",
+        _id: { $ne: product._id },
+      })
+        .populate("images")
+        .limit(8);
+      collectionProducts = [...collectionProducts, ...products];
+    }
+    let checkProduct = {};
+    let relatedProducts = [];
+    collectionProducts.forEach((productItem) => {
+      if (
+        productItem._id.toString() != product._id.toString() &&
+        !checkProduct[productItem._id]
+      ) {
+        relatedProducts.push(productItem);
+        checkProduct[productItem._id] = true;
+      }
+    });
+    console.timeEnd("productDetail");
+    res.status(200).json({ product, relatedProducts });
   } catch (error) {
     next(error);
   }

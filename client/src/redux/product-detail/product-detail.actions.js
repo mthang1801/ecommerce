@@ -5,9 +5,9 @@ const fetchProductDetailStart = () => ({
   type: productDetailActionTypes.FETCH_PRODUCT_DETAIL_START,
 });
 
-const fetchProductDetailSuccess = (product) => ({
+const fetchProductDetailSuccess = (product, relatedProducts) => ({
   type: productDetailActionTypes.FETCH_PRODUCT_DETAIL_SUCCESS,
-  payload: product,
+  payload: { product, relatedProducts },
 });
 
 const fetchProductDetailFail = (err) => ({
@@ -22,14 +22,16 @@ export const fetchProductDetail = (
 ) => async (dispatch) => {
   try {
     dispatch(fetchProductDetailStart());
-    const { data } = await axios.get(
+    const {
+      data: { product, relatedProducts },
+    } = await axios.get(
       urls.GET_CONTENT_PRODUCT_DETAIL_BY_PRODUCT_PATH_URL(
         categoryPath,
         productTypePath,
         productPath
       )
     );
-    dispatch(fetchProductDetailSuccess(data));
+    dispatch(fetchProductDetailSuccess(product, relatedProducts));
   } catch (error) {
     dispatch(fetchProductDetailFail(error));
   }

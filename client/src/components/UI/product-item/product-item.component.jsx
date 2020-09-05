@@ -36,6 +36,7 @@ const ProductItem = ({ product, history, onClick }) => {
     e.stopPropagation();
     console.log("pl");
   }
+
   return (
     <ProductItemContainer title={product.name} onClick={(e) => onClick(product.linkUrl)}>      
       <ProductItemImageContainer>

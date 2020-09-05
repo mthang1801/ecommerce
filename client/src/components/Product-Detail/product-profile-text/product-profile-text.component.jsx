@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import {AiOutlineShoppingCart} from "react-icons/ai"
 import {
   ProductProfileTextContainer,
   Title,
@@ -19,7 +20,8 @@ import {
   Row,
   Icons,
   Icon,
-  Discount
+  Discount,
+  PriceAfterDiscount
 } from "./product-profile-text.styles";
 import { FaHeart } from "react-icons/fa";
 import {
@@ -28,8 +30,31 @@ import {
   TiSocialTwitter,
 } from "react-icons/ti";
 import Chip from "@material-ui/core/Chip";
-import {timeCountDown} from "../../../utils/algorithms"
-const ProductProfileText = ({ mobileView, tabletView, product }) => { 
+import {timeCountDown} from "../../../utils/algorithms";
+import {createStructuredSelector} from "reselect";
+import {selectCartItems, selectCartPosition} from "../../../redux/cart/cart.selectors";
+import {addItem, decreaseItem} from "../../../redux/cart/cart.actions";
+import {connect} from "react-redux";
+
+const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addItem, decreaseItem, cartPosition}) => { 
+  const productToCart = {
+    _id : product._id, 
+    name : product.name, 
+    price : product.price, 
+    discount : product.discount.value, 
+    label : product.label , 
+    image: product.images[0],
+  }
+  const [cartProduct, setCartProduct] = useState(undefined);
+  const [cartQuantity, setCartQuantity] = useState(0);  
+  useEffect(() => { 
+    const cartItem = cartItems.find(item => item._id === product._id);   
+    console.log(cartItem)
+    setCartProduct(cartItem) ;    
+    if(cartItem && cartItem.quantity){
+      setCartQuantity(cartItem.quantity)
+    }
+  }, [cartItems, product])
   const [countDown, setCountdown] = useState(null);
   useEffect(() => {
     let timerInterval ; 
@@ -40,10 +65,21 @@ const ProductProfileText = ({ mobileView, tabletView, product }) => {
     },1000)
     return () => clearInterval(timerInterval);
   }, [])
-  function unescapeHTML(html) {
-    var escapeEl = document.createElement("ul");
-    escapeEl.innerHTML = html;
-    return escapeEl.textContent;
+  const handleAddToCart = () => {
+    addItem(productToCart, cartQuantity)
+    window.scrollTo({
+      top: cartPosition,
+      behavior : "smooth"
+    });    
+  }
+  const handleDecreaseCartQuantity = e => {
+    if(cartQuantity > 1){
+      setCartQuantity(prevState => prevState - 1 );
+    }
+  }
+
+  const handleIncreaseCartQuantity = e => {
+    setCartQuantity(prevState => prevState + 1 );
   }
   return (
     <ProductProfileTextContainer
@@ -56,8 +92,7 @@ const ProductProfileText = ({ mobileView, tabletView, product }) => {
           {product.stars ? (
             <Rating
               name="simple-controlled"
-              value={product.stars}
-              onChange={(event, newValue) => {}}
+              value={product.stars}            
               precision={0.5}
               readOnly
               color="primary"
@@ -69,8 +104,14 @@ const ProductProfileText = ({ mobileView, tabletView, product }) => {
         </Reviews>
       ) : null}
 
-      <Price isDiscount={product.discount.value > 0 }>2.300.000 VND</Price>
-      {product.discount.value > 0 ? <Discount>Giảm giá {product.discount.value}%</Discount> : null}
+          <Price isDiscount={product.discount.value > 0 }>{product.price.toLocaleString("es-AR")} VND</Price>
+      {product.discount.value > 0 ? 
+        <React.Fragment>
+          <Discount>Giảm giá {product.discount.value}%</Discount>  
+          <PriceAfterDiscount>{(product.price * (100-product.discount.value) / 100).toLocaleString("es-AR")} VND</PriceAfterDiscount>
+        </React.Fragment>
+        : null}
+      
       {countDown && 
       <React.Fragment>
         <span style={{color : "#3f51b5", fontSize:"0.90em", fontWeight:"bold"}}>Thời gian khuyến mãi còn </span>
@@ -87,13 +128,13 @@ const ProductProfileText = ({ mobileView, tabletView, product }) => {
       </BriefTextsInfo>
       <ProductActions>
         <ProductQuantity>
-          <Button>-</Button>
-          <Paragraph>3</Paragraph>
-          <Button>+</Button>
+          <Button onClick={handleDecreaseCartQuantity}>-</Button>
+          <Paragraph>{cartQuantity} </Paragraph>
+          <Button onClick={handleIncreaseCartQuantity}>+</Button>
         </ProductQuantity>
-        <Button bgColor="#7fad39">Add to cart</Button>
-        <Button>
-          <FaHeart />
+        <Button bgColor="#7fad39" onClick={handleAddToCart}>Chọn mua <AiOutlineShoppingCart style={{fontSize: "1.2em"}}/></Button>
+        <Button bgColor="#3f51b5">
+          <FaHeart style={{color: "#e84118"}}/>
         </Button>
       </ProductActions>
       <hr />
@@ -134,5 +175,13 @@ const ProductProfileText = ({ mobileView, tabletView, product }) => {
     </ProductProfileTextContainer>
   );
 };
+const mapStateToProps = createStructuredSelector({
+  cartItems : selectCartItems,
+  cartPosition : selectCartPosition
+})
 
-export default ProductProfileText;
+const mapDispatchToProps = dispatch => ({
+  addItem : (item, quantity) => dispatch(addItem(item, quantity)), 
+  decreaseItem : (item) => dispatch(decreaseItem(item))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(ProductProfileText);

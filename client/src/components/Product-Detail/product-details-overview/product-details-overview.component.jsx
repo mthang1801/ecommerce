@@ -6,8 +6,8 @@ import ListRelatedProducts from "../list-related-products/list-related-products.
 import AppContext from "../../../context/app-viewport.context";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {selectProductDetailData} from "../../../redux/product-detail/product-detail.selectors"
-const ProductDetailOverView = ({product}) => {
+import {selectProductDetailData, selectProductDetailRelatedProducts} from "../../../redux/product-detail/product-detail.selectors"
+const ProductDetailOverView = ({product, relatedProducts}) => {
   const [mobileView, setMobileView] = useState(window.innerWidth < 768);
   const [tabletView, setTabletView] = useState(window.innerWidth < 992 && window.innerWidth >= 768);
   const width = useContext(AppContext);
@@ -22,17 +22,18 @@ const ProductDetailOverView = ({product}) => {
     } else {
       setTabletView(false);
     }
-  }, [width]);
+  }, [width]); 
   return (
     <ProductDetailOverViewContainer>
       <MainInterface mobileView={mobileView} tabletView={tabletView} product={product}/>
       <Taskbar mobileView={mobileView} tabletView={tabletView} product={product}/>
-      {/* <ListRelatedProducts mobileView={mobileView} tabletView={tabletView}/> */}
+      <ListRelatedProducts mobileView={mobileView} tabletView={tabletView} productList={relatedProducts}/>
     </ProductDetailOverViewContainer>
   )
 }
 const mapStateToProps = createStructuredSelector({
-  product : selectProductDetailData
+  product : selectProductDetailData,
+  relatedProducts : selectProductDetailRelatedProducts
 })
 
 export default connect(mapStateToProps)(ProductDetailOverView)

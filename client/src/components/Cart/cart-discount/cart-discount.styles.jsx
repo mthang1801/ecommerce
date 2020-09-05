@@ -11,14 +11,14 @@ export const CartDiscountContainer = styled.div`
 `
 
 export const Label = styled.h3`
-  font-size : 1.3em;
+  font-size : 1.1em;
   font-weight : bold ; 
   margin-bottom : 1rem;
 `
 
 export const Form = styled.form`
   width : 100%;
-  height : 3rem;
+  height : 2.5rem;
   display : flex; 
   justify-content : ${props => props.mobileView || props.tabletView ? "center" : "stretch" };
   align-items : ${props => props.mobileView || props.tabletView ? "center" : "stretch" };
@@ -27,16 +27,16 @@ export const Form = styled.form`
 export const Input = styled.input`
   padding : 1rem;  
   width : ${props => props.mobileView || props.tabletView ? "auto" : "50%" };
-  min-width : 70%;
+  min-width : 65%;
   height : 100%;
   font-size : ${props => props.mobileView || props.tabletView ? "1em" : "1.2em" };
   text-align :center;
 `
 
 export const Button = styled.button`   
-  min-width : 15%;
+  min-width : 20%;
   height : 100%;
-  padding :${props => props.mobileView || props.tabletView ? "0 0.5rem" : "1rem 2rem" };
+  padding : 0 1.25rem;
   margin-left: 1rem;
   outline : none ; 
   border:none ; 

@@ -10,6 +10,9 @@ export const MasterHeaderContainer = styled.div`
   position : relative;
   padding : 0 1.5rem;
   margin : 1rem auto;
+  @media screen and (max-width : 600px){
+    margin : 1rem auto 4rem auto;
+  }
 `
 
 

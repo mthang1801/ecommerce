@@ -12,7 +12,7 @@ const CartSummary = ({mobileView, tabletView}) => {
         <CartKey>Số tiền thanh toán</CartKey>
         <CartValue>118.221.000 VND</CartValue>
       </Grid>
-      <CheckoutButton mobileView={mobileView} tabletView={tabletView}>tiến hành thang toán</CheckoutButton>
+      <CheckoutButton mobileView={mobileView} tabletView={tabletView}>tiến hành thanh toán</CheckoutButton>
     </CartSummaryContainer>
   )
 }

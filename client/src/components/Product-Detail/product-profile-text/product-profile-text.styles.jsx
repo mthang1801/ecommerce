@@ -28,6 +28,11 @@ export const Price = styled.h4`
 export const Discount = styled.h4`
   color : #dd2222 ;
   text-decoration : ${({isDiscount}) => isDiscount ? "line-through" : "none"};
+  font-size : 1em;
+`
+export const PriceAfterDiscount = styled.h4`
+  color : #dd2222 ;
+  text-decoration : ${({isDiscount}) => isDiscount ? "line-through" : "none"};
   font-size : 1.4em;
 `
 
@@ -39,7 +44,7 @@ export const BriefTextsInfo = styled.ul`
 export const TextItem = styled.li``
 export const  ProductActions = styled.div`
   display : flex ;   
-  height : 3rem; 
+  height : 2.5rem; 
   align-items : center;  
   margin : 2rem auto;
   overflow : hidden ;
@@ -57,15 +62,16 @@ export const  ProductQuantity = styled.div`
 export const  Button = styled.button`
   outline : none ; 
   border : none  ;
-  padding : 1rem;
-  text-transform : uppercase ; 
+  padding : 0.75rem 1rem;
+  text-transform : capitalize ; 
   background-color : ${({bgColor}) => bgColor ? bgColor : "#404040"};
-  color : white;
-  fonto-weight : 600;
+  color : ${({color}) => color ? color : "white"};  
   height : 100%;
   display : flex ; 
   align-items : center;
   cursor : pointer; 
+  font-size : 1.1em;
+  border-radius : 3px;  
   &:hover{
     background-color : ${({bgColor}) => bgColor ? lighten("0.1",bgColor ) :  lighten("0.1","#404040")};
   }

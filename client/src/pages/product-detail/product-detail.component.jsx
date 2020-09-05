@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { ShopDetailsContainer } from "./product-detail.styles";
 import Background from "../../components/Layout/background/background.component";
 import ProductDetailsOverview from "../../components/Product-Detail/product-details-overview/product-details-overview.component";
@@ -22,11 +22,18 @@ const ShopDetailPage = ({
   loading,
   error,
 }) => {
+  const productDetailRef = useRef(null);
   useEffect(() => {
     const categoryPath = match.params.categoryPath;
     const productTypePath = match.params.productTypePath;
     const productPath = match.params.productPath;
     fetchProductDetail(categoryPath, productTypePath, productPath);
+    if(productDetailRef.current){
+      window.scrollTo({
+        top: productDetailRef.current.offsetTop , 
+        behavior : "auto"
+      })
+    }
   }, [
     fetchProductDetail,
     match.params.categoryPath,
@@ -42,7 +49,7 @@ const ShopDetailPage = ({
   return (
     <React.Fragment>
       {product ? (
-        <ShopDetailsContainer>
+        <ShopDetailsContainer ref={productDetailRef}>
           <MasterHeader />
           <Background label={product.label} />
           <ProductDetailsOverview/>

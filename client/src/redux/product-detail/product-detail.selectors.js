@@ -16,3 +16,8 @@ export const selectProductDetailError = createSelector(
   selectProductDetail,
   (productDetail) => productDetail.error
 );
+
+export const selectProductDetailRelatedProducts = createSelector(
+  selectProductDetail,
+  (productDetail) => productDetail.relatedProducts
+);

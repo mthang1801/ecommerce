@@ -1,19 +1,13 @@
 import React from "react";
 import { ListRelatedProductContainer,Title, ListProducts } from "./list-related-products.styles";
 import { getProductsPerpage} from "../../../utils/connectDB";
-import ProductItem from "../../UI/product-item/product-item.component";
-
-let relatedProducts = getProductsPerpage();
-const ListRelatedProduct = ({mobileView, tabletView}) => {
+import  ProductSlider from "../../UI/product-slider/product-slider.component"
+const ListRelatedProduct = ({mobileView, tabletView, productList}) => {  
   return (
     <ListRelatedProductContainer >
       <Title>Sản phẩm tương tự</Title>
       <ListProducts mobileView={mobileView} tabletView={tabletView}>
-        { relatedProducts
-          .filter((_, idx) => idx < 4 )
-          .map((product) => (
-            <ProductItem key={product._id} product={product} />
-          ))}
+        <ProductSlider mobileView={mobileView} tabletView={tabletView} productList={productList}/>
       </ListProducts>
     </ListRelatedProductContainer>
   );

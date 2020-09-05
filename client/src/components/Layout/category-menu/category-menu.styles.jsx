@@ -15,7 +15,7 @@ export const CategoryMenuContainer = styled.div`
   top : calc(100%);
   color : black;
   text-align : left ;
-  z-index: 1100;  
+  z-index: 1100;   
 `
 
 export const Dropdown = styled.div`

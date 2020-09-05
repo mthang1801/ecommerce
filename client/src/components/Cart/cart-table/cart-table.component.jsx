@@ -1,15 +1,17 @@
 import React from "react";
 import {
   CartTableContainer,
-  TableHeader,
+  ProductImage,
+  BtnActions,
   Row,
-  TableBody,
   TableRow,
+  TableBody,
   Image,
   Name,
   BtnRemove,
   TableFooter,
   Button,
+  ProductInfo,
 } from "./cart-table.styles";
 import { getCartItems } from "../../../utils/connectDB";
 const CartTable = ({ mobileView, tabletView }) => {
@@ -17,45 +19,50 @@ const CartTable = ({ mobileView, tabletView }) => {
 
   return (
     <CartTableContainer mobileView={mobileView} tabletView={tabletView}>
-      <TableHeader mobileView={mobileView} tabletView={tabletView}>
-        <Row product>Mặt Hàng</Row>
-        <Row>Đơn Giá</Row>
-        <Row>Số lượng</Row>
-        <Row>Giảm giá</Row>
-        <Row>Thành tiền</Row>
-        <Row></Row>
-      </TableHeader>
-      <TableBody mobileView={mobileView} tabletView={tabletView}>
-        {cartItems.map((cart) => (
-          <TableRow key={cart._id}>
-            <Row product>
-              {!mobileView && !tabletView && <Image src={cart.imageUrl} />}
-              <Name>{cart.name}</Name>
-            </Row>
-            <Row>{cart.price.toLocaleString("es-AR")}</Row>
-            <Row>
-              <Button>&#10094;</Button>
-              {cart.quantity}
-              <Button>&#10095;</Button>
-            </Row>
-            <Row>{cart.discount}%</Row>
-            <Row>
-              {(
-                (cart.price * cart.quantity * (100 - cart.discount)) /
-                100
-              ).toLocaleString("es-AR")}
-            </Row>
-            <Row>
-              <BtnRemove>&times;</BtnRemove>
-            </Row>
-          </TableRow>
-        ))}
-      </TableBody>
+      {cartItems.map((cart) => (
+        <TableRow key={cart._id}>
+          {!mobileView && !tabletView && (
+            <ProductImage>
+              <Image src={cart.imageUrl} />
+            </ProductImage>
+          )}
+          <ProductInfo mobileView={mobileView} tabletView={tabletView}>
+            <Name>{cart.name}</Name>
+            <p> cung cấp bởi : <a href="#">Mai Van Thang</a></p>
+            <p>Chỉ còn 5 sản phẩm</p>
+            <BtnActions>
+              <BtnRemove>Xóa</BtnRemove>
+            </BtnActions>
+          </ProductInfo>
+          <Row>{cart.price.toLocaleString("es-AR")}</Row>
+          <Row>
+            <Button>&#10094;</Button>
+            {cart.quantity}
+            <Button>&#10095;</Button>
+          </Row>
+          <Row>{cart.discount}%</Row>
+          <Row>
+            {(
+              (cart.price * cart.quantity * (100 - cart.discount)) /
+              100
+            ).toLocaleString("es-AR")}
+          </Row>
+          <Row>
+            <BtnRemove>&times;</BtnRemove>
+          </Row>
+        </TableRow>
+      ))}
       <TableFooter mobileView={mobileView} tabletView={tabletView}>
         <Row product></Row>
         <Row></Row>
         <Row></Row>
-        <Row style={{width: mobileView || tabletView ?  "30%" : "auto", fontSize : "0.9em", textAlign : "right"}}>
+        <Row
+          style={{
+            width: mobileView || tabletView ? "30%" : "auto",
+            fontSize: "0.9em",
+            textAlign: "right",
+          }}
+        >
           <strong>Tổng tiền</strong>
         </Row>
         <Row totalPrice>

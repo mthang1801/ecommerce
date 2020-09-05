@@ -2,6 +2,7 @@ import productDetailActionTypes from "./product-detail.types";
 
 const INITIAL_STATE = {
   product: null,
+  relatedProducts: [],
   loading: false,
   error: undefined,
 };
@@ -17,7 +18,8 @@ export default (state = INITIAL_STATE, action) => {
     case productDetailActionTypes.FETCH_PRODUCT_DETAIL_SUCCESS:
       return {
         ...state,
-        product: { ...action.payload },
+        product: { ...action.payload.product },
+        relatedProducts: [...action.payload.relatedProducts],
         loading: false,
       };
     case productDetailActionTypes.FETCH_PRODUCT_DETAIL_FAIL:
