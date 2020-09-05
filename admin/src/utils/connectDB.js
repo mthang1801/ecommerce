@@ -14,8 +14,10 @@ export const getMenu = () => {
 export const createMenu = (dataJSON) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(dataJSON);
-      const { data } = await axios.post(urls.POST_CREATE_MENU_FILE, dataJSON);
+      const { data } = await axios.post(
+        urls.POST_CREATE_MENU_FILE,
+        JSON.parse(JSON.stringify(dataJSON))
+      );
       resolve(true);
     } catch (error) {
       reject(error);

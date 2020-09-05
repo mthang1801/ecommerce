@@ -40,10 +40,10 @@ const ShopDetailPage = ({
     match.params.productTypePath,
     match.params.productPath,
   ]);
-  if (loading && !product) {
+  if (loading) {
     return <Loader />;
   }
-  if (error && error.msg) {
+  if (error && error.msg && !loading) {
     return <PageNotFound />;
   }
   return (

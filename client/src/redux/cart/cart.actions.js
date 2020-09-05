@@ -13,19 +13,19 @@ export const addItem = (item, quantity) => ({
   payload: { item, quantity },
 });
 
-export const increaseItem = (id) => ({
+export const increaseItem = (_id) => ({
   type: cartActionTypes.INCREASE_ITEM,
-  payload: { id },
+  payload: { _id },
 });
 
-export const decreaseItem = (item) => ({
+export const decreaseItem = (_id) => ({
   type: cartActionTypes.DECREASE_ITEM,
-  payload: item,
+  payload: { _id },
 });
 
-export const removeItem = (id) => ({
+export const removeItem = (_id) => ({
   type: cartActionTypes.REMOVE_ITEM,
-  payload: { id },
+  payload: { _id },
 });
 
 export const clearCartItems = () => ({

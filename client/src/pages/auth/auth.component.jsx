@@ -15,7 +15,7 @@ class AuthPage extends React.Component {
     if (user) {
       if (location.state) return <Redirect to={location.state.from} />;
       return <Redirect to="/" />;
-    }
+    }   
     return (
       <Switch>       
         <Route
@@ -25,7 +25,8 @@ class AuthPage extends React.Component {
         />
         <Route
           path={`${match.path}/signup`}
-          render={(props) => <SignUp authPath={match.path} {...props} />}
+          exact
+          render={(props) => <SignUp authPath={match.path}  {...props} />}
         />
         <Route
           path={`${match.path}/restore-account`}

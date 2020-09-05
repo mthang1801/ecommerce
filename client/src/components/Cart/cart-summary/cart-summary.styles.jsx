@@ -42,7 +42,7 @@ export const CheckoutButton = styled.button`
   padding : ${props => props.mobileView || props.tabletView ? "0.75rem 1rem" : "1rem 2rem"} ;
   border-radius : 5px; 
   color : white ;
-  font-size :  ${props => props.mobileView || props.tabletView ? "0.95em" : "1.1em"} ; 
+  font-size :  ${props => props.mobileView || props.tabletView ? "0.9em" : "1em"} ; 
   text-transform : capitalize ; 
   cursor : pointer;
   &:hover { 

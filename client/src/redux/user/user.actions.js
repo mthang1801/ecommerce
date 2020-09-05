@@ -90,3 +90,29 @@ export const restoreAccount = (email) => (dispatch) => {
     }
   });
 };
+
+export const updateUserInfoStart = () => ({
+  type: userActionTypes.UPDATE_USER_INFO_START,
+});
+
+export const updateUserInfoSuccess = (userInformation) => ({
+  type: userActionTypes.UPDATE_USER_INFO_SUCCESS,
+  payload: userInformation,
+});
+
+export const updateUserInfoFail = (err) => ({
+  type: userActionTypes.UPDATE_USER_INFO_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const updateUserInfo = (userInfo) => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(userInfo);
+      resolve(true);
+    } catch (error) {
+      updateUserInfoFail(error);
+      reject(error);
+    }
+  });
+};

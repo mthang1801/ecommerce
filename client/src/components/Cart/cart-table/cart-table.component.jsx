@@ -4,81 +4,71 @@ import {
   ProductImage,
   BtnActions,
   Row,
+  ButtonLink,  
   TableRow,
-  TableBody,
+  Column,
   Image,
   Name,
-  BtnRemove,
   TableFooter,
   Button,
-  ProductInfo,
+  ProductActionsChange,
+  Quantity,
+  TextContent,
+  UnitPrice,
+  TotalPrice
 } from "./cart-table.styles";
-import { getCartItems } from "../../../utils/connectDB";
-const CartTable = ({ mobileView, tabletView }) => {
-  const cartItems = getCartItems();
+import {createStructuredSelector} from "reselect";
+import {selectCartItems} from "../../../redux/cart/cart.selectors";
+import {connect} from "react-redux";
+import {increaseItem, decreaseItem, removeItem} from "../../../redux/cart/cart.actions"
+const CartTable = ({ mobileView, tabletView, cartItems, increaseItem, decreaseItem, removeItem }) => {
 
   return (
     <CartTableContainer mobileView={mobileView} tabletView={tabletView}>
-      {cartItems.map((cart) => (
-        <TableRow key={cart._id}>
-          {!mobileView && !tabletView && (
-            <ProductImage>
-              <Image src={cart.imageUrl} />
-            </ProductImage>
-          )}
-          <ProductInfo mobileView={mobileView} tabletView={tabletView}>
+      {cartItems.length ? cartItems.map((cart) => {
+        console.log(cart);
+        return  <TableRow key={cart._id}>
+        <ProductImage>
+          <Image src={`data:${cart.image.mimetype};base64,${cart.image.data}`} alt={cart.image.name} />
+        </ProductImage>
+
+        <TextContent>
+          <Column mobileView={mobileView} tabletView={tabletView} w40>
             <Name>{cart.name}</Name>
-            <p> cung cấp bởi : <a href="#">Mai Van Thang</a></p>
+            <p>
+              {" "}
+              cung cấp bởi : <a href="#">{cart.creator}</a>
+            </p>
             <p>Chỉ còn 5 sản phẩm</p>
             <BtnActions>
-              <BtnRemove>Xóa</BtnRemove>
+              <ButtonLink onClick={() => removeItem(cart._id)}>Xóa</ButtonLink>
+              <ButtonLink>Thêm vào DS mua sau</ButtonLink>
             </BtnActions>
-          </ProductInfo>
-          <Row>{cart.price.toLocaleString("es-AR")}</Row>
-          <Row>
-            <Button>&#10094;</Button>
-            {cart.quantity}
-            <Button>&#10095;</Button>
-          </Row>
-          <Row>{cart.discount}%</Row>
-          <Row>
-            {(
-              (cart.price * cart.quantity * (100 - cart.discount)) /
-              100
-            ).toLocaleString("es-AR")}
-          </Row>
-          <Row>
-            <BtnRemove>&times;</BtnRemove>
-          </Row>
-        </TableRow>
-      ))}
-      <TableFooter mobileView={mobileView} tabletView={tabletView}>
-        <Row product></Row>
-        <Row></Row>
-        <Row></Row>
-        <Row
-          style={{
-            width: mobileView || tabletView ? "30%" : "auto",
-            fontSize: "0.9em",
-            textAlign: "right",
-          }}
-        >
-          <strong>Tổng tiền</strong>
-        </Row>
-        <Row totalPrice>
-          {cartItems
-            .reduce(
-              (acc, item) =>
-                acc +
-                (item.price * item.quantity * (100 - item.discount)) / 100,
-              0
-            )
-            .toLocaleString("es-AR")}
-        </Row>
-        <Row></Row>
-      </TableFooter>
+          </Column>
+          <Column w30 style={{justifyContent : "flex-start"}}>
+            {cart.discount > 0 && <p style={{ color: "#dd2222" }}>Khuyến mãi : {cart.discount}%</p>}
+            <UnitPrice>{cart.price.toLocaleString("es-AR")}</UnitPrice>
+            <ProductActionsChange>
+              <Button onClick={() => decreaseItem(cart._id)}>-</Button>
+              <Quantity>{cart.quantity}</Quantity>
+              <Button onClick={() => increaseItem(cart._id)}>+</Button>
+            </ProductActionsChange>
+          </Column>
+          <Column>
+            <TotalPrice>{cart.discount > 0 ? (cart.price*cart.quantity*(100-cart.discount)/100).toLocaleString("es-AR")  : (cart.price * cart.quantity).toLocaleString("es-AR")}</TotalPrice>
+          </Column>
+        </TextContent>          
+      </TableRow>
+      }) : null }     
     </CartTableContainer>
   );
 };
-
-export default CartTable;
+const mapStateToProps = createStructuredSelector({
+  cartItems : selectCartItems
+})
+const mapDispatchToProps = dispatch => ({
+  increaseItem : (id) => dispatch(increaseItem(id)) , 
+  decreaseItem : (id) => dispatch(decreaseItem(id)),
+  removeItem : (id) => dispatch(removeItem(id))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(CartTable);

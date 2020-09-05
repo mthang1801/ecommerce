@@ -7,7 +7,7 @@ const CartPage = () => {
   return (
     <CartPageContainer>
       <MasterHeader/>
-      <Background label="Shopping Cart"/>
+      <Background label="Giỏ hàng"/>
       <CartOverview/>
     </CartPageContainer>
   )

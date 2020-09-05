@@ -814,7 +814,9 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
       productPath
     )}`;
 
-    const product = await Product.findOne({ linkUrl }).populate("images");
+    const product = await Product.findOne({ linkUrl })
+      .populate("images")
+      .populate("user");
     if (!product) {
       const err = new Error("product not found");
       err.statusCode = 404;

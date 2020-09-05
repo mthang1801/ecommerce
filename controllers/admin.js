@@ -212,6 +212,7 @@ exports.getMenu = async (req, res, next) => {
       let count = 0;
       for await (let productTypeItem of categoryItem.productTypes) {
         let productType = {
+          _id: uuid(),
           name: productTypeItem.name,
           linkUrl: productTypeItem.linkUrl,
           productsMenu: [],
@@ -230,7 +231,7 @@ exports.getMenu = async (req, res, next) => {
             .execPopulate();
           for await (let group of productTypeItem.productGroups) {
             productType.productsMenu.push({
-              _id: group._id,
+              _id: `${group._id}-${uuid()}`,
               name: group.name,
               linkUrl: group.linkUrl,
               options: {
@@ -250,7 +251,7 @@ exports.getMenu = async (req, res, next) => {
             .execPopulate();
           for await (let product of productTypeItem.products) {
             productType.productsMenu.push({
-              _id: product._id,
+              _id: `${product._id}-${uuid()}`,
               name: product.name,
               linkUrl: product.linkUrl,
             });
@@ -291,7 +292,6 @@ exports.getMenu = async (req, res, next) => {
                   name: "Xem thêm...",
                   linkUrl: `${categoryItem.linkUrl}/more`,
                 });
-                console.log(manufactorOfProductType);
                 break;
               }
             }
@@ -312,9 +312,7 @@ exports.getMenu = async (req, res, next) => {
 };
 exports.postCreateMenu = async (req, res, next) => {
   try {
-    const dataJSON = req.body;
-    const parseData = JSON.parse(JSON.stringify(dataJSON));
-    console.log(parseData);
+    let dataJSON = req.body;
     await fs.writeFile(
       path.join(
         path.dirname(require.main.filename),
@@ -323,7 +321,8 @@ exports.postCreateMenu = async (req, res, next) => {
         "data",
         "menu.json"
       ),
-      JSON.stringify(parseData)
+      JSON.stringify(dataJSON),
+      "utf8"
     );
     res.status(201).json({ msg: "created success" });
   } catch (error) {

@@ -9,26 +9,21 @@ export const addItemToCartUtility = (cartItems, itemToAdd, quantity) => {
 };
 
 export const removeCartItemUtility = (cartItems, itemToRemove) =>
-  cartItems.filter((item) => item.id !== itemToRemove.id);
+  cartItems.filter((item) => item._id !== itemToRemove._id);
 
-export const decreaseCartItemUtility = (cartItems, itemToDecrease) => {
-  let newCartItems = [];
-  console.log(cartItems);
-  console.log(itemToDecrease);
-  cartItems.forEach((item, idx) => {
-    if (item._id == itemToDecrease._id) {
-      if (item.quantity > 1) {
-        item.quantity = item.quantity - 1;
-        newCartItems = [...newCartItems, { ...item }];
-      }
-    }
+export const decreaseCartItemUtility = (cartItems, itemToDecrease) =>
+  cartItems.map((item) => {
+    return item._id === itemToDecrease._id
+      ? {
+          ...item,
+          quantity: item.quantity > 1 ? item.quantity - 1 : item.quantity,
+        }
+      : item;
   });
-  return newCartItems;
-};
 
 export const increaseCartItemUtility = (cartItems, itemToIncrease) =>
   cartItems.map((item) => {
-    return item.id === itemToIncrease.id
+    return item._id === itemToIncrease._id
       ? { ...item, quantity: item.quantity + 1 }
       : item;
   });

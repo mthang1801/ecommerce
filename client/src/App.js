@@ -51,7 +51,7 @@ function App({ fetchUser, user, loading }) {
           <Suspense fallback={<Loader />}>
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/auth" exact component={Authentication} />
+              <Route path="/auth" component={Authentication} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" exact component={Checkout} />

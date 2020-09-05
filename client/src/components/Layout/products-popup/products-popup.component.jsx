@@ -3,11 +3,12 @@ import { ProductsPopupContainer } from "./products-popup.styles";
 import ProductsPopupItem from "../products-popup-item/products-popup-item.component";
 
 const ProductsPopup = ({ offsetWidth, categoryId, data }) => {  
+  console.log(data);
   return (
     <React.Fragment>
       {categoryId ? (
         <ProductsPopupContainer offsetWidth={offsetWidth}>
-          {data.productTypes.map((productType) => {                     
+          {data.productTypes.map((productType) => {                                           
             return (
               <React.Fragment key={productType._id}>
               {productType.productsMenu.length ? (

@@ -18,6 +18,6 @@ export const CheckoutPreview = styled.div`
   border-top : 1px solid #ccc;
 `
 export const Grid = styled.div`
-  width : ${props => props.mobileView || props.tabletView ? "100%" :  props.w60 ? "55%" : "42%" } ;
+  width : ${props => props.mobileView || props.tabletView ? "100%" :  props.w60 ? "58%" : "40%" } ;
   margin-bottom : ${props => props.mobileView || props.tabletView ? "2rem" : 0};
 `

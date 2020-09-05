@@ -36,23 +36,28 @@ import {selectCartItems, selectCartPosition} from "../../../redux/cart/cart.sele
 import {addItem, decreaseItem} from "../../../redux/cart/cart.actions";
 import {connect} from "react-redux";
 
-const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addItem, decreaseItem, cartPosition}) => { 
-  const productToCart = {
-    _id : product._id, 
-    name : product.name, 
-    price : product.price, 
-    discount : product.discount.value, 
-    label : product.label , 
-    image: product.images[0],
-  }
+const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addItem, cartPosition}) => {   
+
+  const [productToCart, setProductToCart] = useState(null)
   const [cartProduct, setCartProduct] = useState(undefined);
-  const [cartQuantity, setCartQuantity] = useState(0);  
+  const [cartQuantity, setCartQuantity] = useState(1);  
   useEffect(() => { 
-    const cartItem = cartItems.find(item => item._id === product._id);   
-    console.log(cartItem)
+    const cartItem = cartItems.find(item => item._id === product._id);       
     setCartProduct(cartItem) ;    
     if(cartItem && cartItem.quantity){
       setCartQuantity(cartItem.quantity)
+    }else{
+      setCartQuantity(1);
+    }
+    console.log(product);
+    if(product){      
+      setProductToCart({ _id : product._id, 
+        name : product.name, 
+        price : product.price, 
+        discount : product.discount.value, 
+        label : product.label , 
+        image: product.images[0],    
+        creator : product.user.facebook.name || product.user.local.name || product.user.google.name})
     }
   }, [cartItems, product])
   const [countDown, setCountdown] = useState(null);
@@ -89,7 +94,7 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
       <Title>{product.name}</Title>
       {product.stars || product.comments.length ? (
         <Reviews>
-          {product.stars ? (
+          {product.stars && product.stars > 0 && product.stars <= 5? (
             <Rating
               name="simple-controlled"
               value={product.stars}            

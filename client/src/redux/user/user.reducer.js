@@ -11,6 +11,7 @@ export default (state = INITIAL_STATE, action) => {
     case userActionTypes.REGISTER_START:
     case userActionTypes.FETCH_USER_START:
     case userActionTypes.LOGIN_START:
+    case userActionTypes.UPDATE_USER_INFO_START:
       return {
         ...state,
         loading: true,
@@ -33,9 +34,16 @@ export default (state = INITIAL_STATE, action) => {
         user: null,
         loading: false,
       };
+    case userActionTypes.UPDATE_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, information: action.payload },
+        loading: false,
+      };
     case userActionTypes.REGISTER_FAIL:
     case userActionTypes.LOGIN_FAIL:
     case userActionTypes.RESTORE_ACCOUNT_FAIL:
+    case userActionTypes.UPDATE_USER_INFO_FAIL:
       return {
         ...state,
         error: action.payload,
