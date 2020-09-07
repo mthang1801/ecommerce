@@ -1,5 +1,6 @@
 import userActionTypes from "./user.types";
 import axios from "axios";
+import urls from "../../utils/urls";
 export const fetchUserStart = () => ({
   type: userActionTypes.FETCH_USER_START,
 });
@@ -91,28 +92,19 @@ export const restoreAccount = (email) => (dispatch) => {
   });
 };
 
-export const updateUserInfoStart = () => ({
-  type: userActionTypes.UPDATE_USER_INFO_START,
-});
-
 export const updateUserInfoSuccess = (userInformation) => ({
   type: userActionTypes.UPDATE_USER_INFO_SUCCESS,
   payload: userInformation,
 });
 
-export const updateUserInfoFail = (err) => ({
-  type: userActionTypes.UPDATE_USER_INFO_FAIL,
-  payload: { msg: err.response.data.message, status: err.response.status },
-});
-
 export const updateUserInfo = (userInfo) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(userInfo);
+      const { data } = await axios.put(urls.UPDATE_USER_INFO, { userInfo });
+      dispatch(updateUserInfoSuccess(data));
       resolve(true);
     } catch (error) {
-      updateUserInfoFail(error);
-      reject(error);
+      reject(error.response.data.message);
     }
   });
 };

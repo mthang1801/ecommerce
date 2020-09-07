@@ -1,10 +1,15 @@
 const User = require("../models/user");
+const Product = require("../models/product");
+const Order = require("../models/ordered");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { restoreAccount } = require("../lang/vi");
 const sendEmail = require("../config/mailer");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuid } = require("uuid");
+const orderConfirmationEmail = require("../lang/vi");
+const sendMail = require("../config/mailer");
+const ordered = require("../models/ordered");
 exports.postUserRegister = async (req, res, next) => {
   try {
     const errors = [];
@@ -43,6 +48,9 @@ exports.postUserRegister = async (req, res, next) => {
         name,
         email,
         password: hashPassword,
+      },
+      infomation: {
+        email,
       },
     });
     await newUser.save();
@@ -102,7 +110,7 @@ exports.postRestoreAccount = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    user.local.verify_token = uuidv4();
+    user.local.verify_token = uuid();
     user.local.expiration_token = new Date(
       Date.now() + process.env.RESTORE_ACCOUNT_EXP_DATE * 1000
     );
@@ -280,6 +288,95 @@ exports.putUpdateUserAsSeller = async (req, res, next) => {
     }),
       await user.save();
     res.status(200).json({ msg: "Updated success" });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.putUpdateInformation = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { userInfo } = req.body;
+    const user = await User.findById(req.user._id);
+    user.information = { ...userInfo };
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postPayment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 404;
+      throw error;
+    }
+    const { currentUser, cartItems, methodDelivery, userMessage } = req.body;
+    const { method } = req.params;
+    if (
+      !currentUser ||
+      !currentUser.information.first_name ||
+      !currentUser.information.last_name ||
+      !currentUser.information.city ||
+      !currentUser.information.district ||
+      !currentUser.information.ward ||
+      !currentUser.information.address ||
+      !currentUser.information.email ||
+      !currentUser.information.phone
+    ) {
+      const error = new Error("User information is invalid");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    if (currentUser._id.toString() !== req.user._id.toString()) {
+      const error = new Error("User not match");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    if (method === "cod") {
+      const products = cartItems.map((item) => ({
+        _id: item._id,
+        quantity: item.quantity,
+        price: item.price,
+        discount: item.discount,
+      }));
+      const totalPrice = products.reduce(
+        (accumulator, item) =>
+          accumulator +
+          ((item.price * (100 - item.discount)) / 100) * item.quantity,
+        0
+      );
+      const timeExpire =
+        methodDelivery === "fast"
+          ? new Date(+new Date() + 24 * 60 * 60 * 1000)
+          : new Date(+new Date() + 24 * 7 * 60 * 60 * 1000);
+      console.log(timeExpire);
+      const newOrdered = new Order({
+        user: req.user._id,
+        products,
+        method_delivery: methodDelivery,
+        user_message: userMessage,
+        time_expire: timeExpire,
+        method_payment: "cod",
+        totalPrice,
+      });
+      user.ordered.push(newOrdered._id);
+      await newOrdered.save();
+      await user.save();
+      return res.status(200).json(newOrdered);
+    }
   } catch (error) {
     next(error);
   }

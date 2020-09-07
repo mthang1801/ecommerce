@@ -267,3 +267,25 @@ export const getProductListByPageNumber = (page) => {
     }
   });
 };
+
+export const postCODPayment = (
+  currentUser,
+  cartItems,
+  methodDelivery,
+  userMessage
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(methodDelivery);
+      const { data } = await axios.post(urls.POST_COD_PAYMENT, {
+        currentUser,
+        cartItems,
+        methodDelivery,
+        userMessage,
+      });
+      resolve(data);
+    } catch (error) {
+      reject(error.response.data.message);
+    }
+  });
+};

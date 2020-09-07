@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const CheckoutOverviewContainer = styled.div`
-  width: 90%;
+  width: 95%;
   margin : 3rem auto;
+  display : flex;  
+  justify-content : space-between;
 `
 
 export const Title = styled.h2`
@@ -11,11 +13,11 @@ export const Title = styled.h2`
   margin-bottom: 1rem;
 `
 export const CheckoutPreview = styled.div`
+  width: 100%;
   display : flex ; 
   justify-content : ${props => props.mobileView || props.tabletView ? "center" : "space-between"};
   flex-direction : ${props => props.mobileView || props.tabletView ? "column" : "row"};
-  padding-top : 2rem ;
-  border-top : 1px solid #ccc;
+  
 `
 export const Grid = styled.div`
   width : ${props => props.mobileView || props.tabletView ? "100%" :  props.w60 ? "58%" : "40%" } ;

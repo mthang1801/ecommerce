@@ -5,6 +5,7 @@ import {
   increaseCartItemUtility,
   removeCartItemUtility,
 } from "./cart.utils";
+import cart from "../../data/cart";
 const INITIAL_STATE = {
   cartItems: [],
   show: false,
@@ -50,8 +51,10 @@ const cartReducer = (state = INITIAL_STATE, action) => {
       };
     case cartActionTypes.CLEAR_CART_ITEMS:
       return {
-        ...state,
         cartItems: [],
+        show: false,
+        cartPosition: null,
+        openToolTip: false,
       };
     case cartActionTypes.SET_CART_CHECKOUT_POSITION:
       return {

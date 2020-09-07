@@ -11,7 +11,9 @@ import {
   ProductOldPrice,
   ButtonsGroup,
   Button, 
-  Backdrop   
+  Backdrop   ,
+  ProductUtil,
+  Icon
 } from "./product-item.styles";
 import {FaHeart, FaShoppingCart, FaEye} from "react-icons/fa";
 import Rating from '@material-ui/lab/Rating';
@@ -48,18 +50,22 @@ const ProductItem = ({ product, history, onClick }) => {
           <Button><FaEye/></Button>
           <Button onClick={onAddToCart}><FaShoppingCart/></Button>
         </ButtonsGroup>
-      </ProductItemImageContainer>
+      </ProductItemImageContainer>      
       <ProductItemText>
+        <ProductUtil>
         {product.stars && <Rating
           name="product-stars"
           value={product.stars}
           readOnly
         />}
+        {product.ship_fee === 0 && <Icon src={require("../../../assets/free-ship.jpg")}></Icon>}
+        </ProductUtil>
+      
         <ProductName>{product.name}</ProductName>       
         <ProductPrice>
         {product.discount.value > 0 && <ProductOldPrice>{product.price.toLocaleString("es-AR")}Đ</ProductOldPrice>}
           <ProductNewPrice>{(product.price * (100-product.discount.value)/100).toLocaleString("es-AR")}Đ</ProductNewPrice>                 
-        </ProductPrice>
+        </ProductPrice>      
         {discountDate ? (
           discountDate < 7 ? (
             <Chip

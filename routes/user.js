@@ -56,4 +56,17 @@ router.post("/verify/update-account", userController.postUpdateAccount);
  * @access private
  */
 router.put("/register-seller", isAuth, userController.putUpdateUserAsSeller);
+/**
+ * @route PUT /user/update-information
+ * @desc Update user information
+ * @access private
+ */
+router.put("/update-information", isAuth, userController.putUpdateInformation);
+/**
+ * @route POST /user/payment/:method
+ * @desc Update user information
+ * @access private
+ */
+router.post("/payment/:method", isAuth, userController.postPayment);
+
 module.exports = router;

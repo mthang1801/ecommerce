@@ -1,11 +1,22 @@
-import styled from "styled-components";
+import styled , {keyframes} from "styled-components";
 import {darken} from "polished";
+const OrderFormAnimation = keyframes`
+0% {
+  opacity : 0; 
+  transform : translateX(100%);
+}
+100%{
+  opacity : 1 ;
+  transform : translateX(0);
+}
+`
 export const OrderFormContainer = styled.div`
   width : 100%;
   display : flex ; 
   flex-direction : column;
   padding : 1.25rem;
   background-color : #f5f5f5;
+  animation : ${OrderFormAnimation} 0.5s;
 `
 export const Title = styled.h3`
   font-weight : bold ; 
@@ -24,6 +35,9 @@ export const Row = styled.div`
   padding : .5rem ;
 `
 export const Grid = styled.div` 
+  &:first-child{
+    width: 70%;
+  };  
   overflow : hidden ;
 `
 export const Strong = styled.span`

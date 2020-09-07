@@ -21,7 +21,7 @@ import {
   Icons,
   Icon,
   Discount,
-  PriceAfterDiscount
+  PriceAfterDiscount,
 } from "./product-profile-text.styles";
 import { FaHeart } from "react-icons/fa";
 import {
@@ -30,12 +30,14 @@ import {
   TiSocialTwitter,
 } from "react-icons/ti";
 import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
+import FavoriteBorderOutlined from "@material-ui/icons/FavoriteBorderOutlined";
 import {timeCountDown} from "../../../utils/algorithms";
 import {createStructuredSelector} from "reselect";
 import {selectCartItems, selectCartPosition} from "../../../redux/cart/cart.selectors";
 import {addItem, decreaseItem} from "../../../redux/cart/cart.actions";
 import {connect} from "react-redux";
-
+import LocalShippingOutlinedIcon from '@material-ui/icons/LocalShippingOutlined';
 const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addItem, cartPosition}) => {   
 
   const [productToCart, setProductToCart] = useState(null)
@@ -51,7 +53,11 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
     }
     console.log(product);
     if(product){      
-      setProductToCart({ _id : product._id, 
+      setProductToCart({ 
+        _id : product._id, 
+        ship_fee : product.ship_fee,
+        fast_delivery : product.fast_delivery, 
+        store_quantity : product.quantity,       
         name : product.name, 
         price : product.price, 
         discount : product.discount.value, 
@@ -108,7 +114,7 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
           ) : null}
         </Reviews>
       ) : null}
-
+      {product.ship_fee === 0 ? <Chip icon={<LocalShippingOutlinedIcon style={{color :"white"}}/>}  label="Miễn phí vận chuyển" style={{margin :"1rem 0",backgroundColor:"#dd2222", color:"white"}}/> : null}
           <Price isDiscount={product.discount.value > 0 }>{product.price.toLocaleString("es-AR")} VND</Price>
       {product.discount.value > 0 ? 
         <React.Fragment>
@@ -138,9 +144,9 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
           <Button onClick={handleIncreaseCartQuantity}>+</Button>
         </ProductQuantity>
         <Button bgColor="#7fad39" onClick={handleAddToCart}>Chọn mua <AiOutlineShoppingCart style={{fontSize: "1.2em"}}/></Button>
-        <Button bgColor="#3f51b5">
-          <FaHeart style={{color: "#e84118"}}/>
-        </Button>
+        <IconButton>
+          <FavoriteBorderOutlined style={{color: "#e84118"}}/>
+        </IconButton>
       </ProductActions>
       <hr />
       <ProductStatus mobileView={mobileView} tabletView={tabletView}>

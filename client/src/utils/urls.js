@@ -53,4 +53,6 @@ export default {
     productTypePath,
     productPath
   ) => `/${categoryPath}/${productTypePath}/${productPath}`,
+  UPDATE_USER_INFO: `/user/update-information`,
+  POST_COD_PAYMENT: `/user/payment/cod`,
 };

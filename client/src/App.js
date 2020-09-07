@@ -6,7 +6,7 @@ import Home from "./pages/home/home.component";
 import Cart from "./pages/cart/cart.component";
 import ShopDetails from "./pages/product-detail/product-detail.component";
 import SideDrawer from "./components/Layout/header/side-drawer/side-drawer.component";
-import Checkout from "./pages/checkout/checkout.component";
+import { default as Checkout } from "./pages/checkout/checkout.container";
 import Contact from "./pages/contact/contact.component";
 import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
@@ -22,6 +22,7 @@ import GlobalStyle from "./global.styles";
 import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
 import PageNotFound from "./pages/page-not-found/page-not-found.component";
+import OrderedComplete from "./pages/ordered-complete/ordered-complete.component";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -54,7 +55,12 @@ function App({ fetchUser, user, loading }) {
               <Route path="/auth" component={Authentication} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
-              <Route path="/checkout" exact component={Checkout} />
+              <Route
+                path={`/ordered/complete`}
+                exact
+                component={OrderedComplete}
+              />
+              <Route path="/checkout" component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route

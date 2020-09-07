@@ -30,8 +30,7 @@ const CartTable = ({ mobileView, tabletView, cartItems, increaseItem, decreaseIt
         return  <TableRow key={cart._id}>
         <ProductImage>
           <Image src={`data:${cart.image.mimetype};base64,${cart.image.data}`} alt={cart.image.name} />
-        </ProductImage>
-
+        </ProductImage>        
         <TextContent>
           <Column mobileView={mobileView} tabletView={tabletView} w40>
             <Name>{cart.name}</Name>
@@ -39,7 +38,7 @@ const CartTable = ({ mobileView, tabletView, cartItems, increaseItem, decreaseIt
               {" "}
               cung cấp bởi : <a href="#">{cart.creator}</a>
             </p>
-            <p>Chỉ còn 5 sản phẩm</p>
+            <p>Còn {cart.store_quantity} sản phẩm.</p>
             <BtnActions>
               <ButtonLink onClick={() => removeItem(cart._id)}>Xóa</ButtonLink>
               <ButtonLink>Thêm vào DS mua sau</ButtonLink>

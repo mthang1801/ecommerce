@@ -9,9 +9,13 @@ import {
   Paragraph,
   CheckoutBtn
 } from "./order-form.styles";
-const OrderForm = () => {
+import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {selectCartItems, selectTotalPrice, selectTotalFeeShip} from "../../../redux/cart/cart.selectors"
+const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip}, ref)  => {
+
   return (
-    <OrderFormContainer>
+    <OrderFormContainer ref={ref}>
       <Title>Đơn thanh toán</Title>
       <OrderList>
         <Row>
@@ -22,62 +26,55 @@ const OrderForm = () => {
             <Strong>Đơn giá</Strong>
           </Grid>
         </Row>
+        {cartItems && cartItems.map((item) => (
+          <Row key={item._id}>
+            <Grid>{item.name}</Grid>
+            <Grid>
+              <Strong price>{item.discount ? (item.price * (100-item.discount) * item.quantity/100).toLocaleString("es-AR") : (item.quantity * item.price).toLocaleString("es-AR")}</Strong>
+            </Grid>
+          </Row>
+        ))}                
+      </OrderList>      
+      <OrderList>
         <Row>
-          <Grid>Vegetable’s Package</Grid>
           <Grid>
-            <Strong price>300.000 VND</Strong>
+            <Strong>Tổng tiền SP</Strong>
           </Grid>
-        </Row>
-        <Row>
-          <Grid>Fresh Vegetable</Grid>
           <Grid>
-            <Strong price>150.000 VND</Strong>
-          </Grid>
-        </Row>
-        <Row>
-          <Grid>Organic Bananas</Grid>
-          <Grid>
-            <Strong price>450.000 VND</Strong>
+            {" "}
+            <Strong total>{totalPrice.toLocaleString("es-AR")}</Strong>
           </Grid>
         </Row>
       </OrderList>
       <OrderList>
         <Row>
           <Grid>
-            {" "}
-            <Strong>Tổng tiền trước thuế</Strong>
+            <Strong>Phí vận chuyển</Strong>
           </Grid>
           <Grid>
             {" "}
-            <Strong>900.000</Strong>
+            <Strong total>{totalPrice < 1000000 ? totalFeeShip.toLocaleString("es-AR") : 0}</Strong>
           </Grid>
         </Row>
       </OrderList>
       <OrderList>
         <Row>
           <Grid>
-            <Strong>Thuế VAT</Strong>
-          </Grid>
-          <Grid>
-            <Strong>10%</Strong>{" "}
-          </Grid>
-        </Row>
-      </OrderList>
-      <OrderList>
-        <Row>
-          <Grid>
-            <Strong>Tổng tiền sau thuế</Strong>
+            <Strong>Tổng tiền thanh toán</Strong>
           </Grid>
           <Grid>
             {" "}
-            <Strong total>990.000</Strong>
+            <Strong total>{totalPrice < 1000000 ?  (totalPrice+totalFeeShip).toLocaleString("es-AR") : totalPrice.toLocaleString("es-AR") }</Strong>
           </Grid>
         </Row>
       </OrderList>
-      <Paragraph>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur tenetur ad aut harum magnam at? Earum placeat incidunt repellendus libero saepe sed quasi illo, mollitia ipsam quia assumenda consequatur repudiandae.</Paragraph>
-      <CheckoutBtn>Tiến hành đặt hàng</CheckoutBtn>
+      <Paragraph>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur tenetur ad aut harum magnam at? Earum placeat incidunt repellendus libero saepe sed quasi illo, mollitia ipsam quia assumenda consequatur repudiandae.</Paragraph>     
     </OrderFormContainer>
   );
-};
-
-export default OrderForm;
+});
+const mapStateToProps = createStructuredSelector({
+  cartItems : selectCartItems,
+  totalPrice : selectTotalPrice,
+  totalFeeShip : selectTotalFeeShip
+})
+export default connect(mapStateToProps)(OrderForm);

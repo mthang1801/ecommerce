@@ -14,9 +14,16 @@ export const selectCountItem = createSelector(selectCartItems, (cartItems) =>
 
 export const selectTotalPrice = createSelector(selectCartItems, (cartItems) =>
   cartItems.reduce(
-    (accumulator, item) => accumulator + item.quantity * item.price,
+    (accumulator, item) =>
+      accumulator +
+      (item.discount
+        ? ((item.price * (100 - item.discount)) / 100) * item.quantity
+        : item.quantity * item.price),
     0
   )
+);
+export const selectTotalFeeShip = createSelector(selectCartItems, (cartItems) =>
+  cartItems.reduce((accumulator, item) => accumulator + item.ship_fee, 0)
 );
 
 export const selectCartPosition = createSelector(

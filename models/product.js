@@ -96,6 +96,18 @@ const ProductSchema = new Schema(
         required: true,
       },
     ],
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    fast_delivery: {
+      type: Boolean,
+      default: true,
+    },
+    ship_fee: {
+      type: Number,
+      default: 10000,
+    },
   },
   { timestamps: true, strict: false }
 );

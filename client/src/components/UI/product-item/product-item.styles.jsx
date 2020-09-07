@@ -124,7 +124,7 @@ export const ProductName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;
 `
 export const ProductPrice = styled.div`
@@ -141,4 +141,12 @@ export const ProductOldPrice = styled.span`
   font-size : 1em;
   text-decoration : line-through;
 `
-
+export const ProductUtil = styled.div`
+  width : 100%; 
+  display : flex ;
+  justify-content : space-around ; 
+  align-items : center;
+`
+export const Icon = styled.img`
+  width : 30%;  
+`
