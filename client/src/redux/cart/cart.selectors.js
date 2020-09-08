@@ -30,3 +30,17 @@ export const selectCartPosition = createSelector(
   selectCart,
   (cart) => cart.cartPosition
 );
+export const selectOrderedDetail = createSelector(
+  selectCart,
+  (cart) => cart.orderedDetail
+);
+
+export const selectMethodDelivery = createSelector(
+  selectCart,
+  (cart) => cart.methodDelivery
+);
+
+export const selectFastDeliveryCost = createSelector(
+  selectCart,
+  (cart) => cart.fastDeliveryCost
+);

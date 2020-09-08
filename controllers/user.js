@@ -9,7 +9,9 @@ const sendEmail = require("../config/mailer");
 const { v4: uuid } = require("uuid");
 const orderConfirmationEmail = require("../lang/vi");
 const sendMail = require("../config/mailer");
-const ordered = require("../models/ordered");
+const connectDB = require("../config/connectDB");
+const Stripe = require("stripe");
+const stripe = Stripe("sk_test_gRVFD4jSoam6nmNkUzn1L3IP00uiTerqJ0");
 exports.postUserRegister = async (req, res, next) => {
   try {
     const errors = [];
@@ -315,7 +317,14 @@ exports.postPayment = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    const { currentUser, cartItems, methodDelivery, userMessage } = req.body;
+    const {
+      currentUser,
+      cartItems,
+      methodDelivery,
+      userMessage,
+      totalPrice,
+      token,
+    } = req.body;
     const { method } = req.params;
     if (
       !currentUser ||
@@ -345,38 +354,69 @@ exports.postPayment = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+    const products = cartItems.map((item) => ({
+      _id: item._id,
+      quantity: item.quantity,
+      price: item.price,
+      discount: item.discount,
+    }));
+    const timeExpire =
+      methodDelivery === "fast"
+        ? new Date(+new Date() + 24 * 60 * 60 * 1000)
+        : new Date(+new Date() + 24 * 7 * 60 * 60 * 1000);
+    const newOrdered = new Order({
+      user: req.user._id,
+      products,
+      method_delivery: methodDelivery,
+      user_message: userMessage,
+      time_expire: timeExpire,
+      totalPrice,
+    });
     if (method === "cod") {
-      const products = cartItems.map((item) => ({
-        _id: item._id,
-        quantity: item.quantity,
-        price: item.price,
-        discount: item.discount,
-      }));
-      const totalPrice = products.reduce(
-        (accumulator, item) =>
-          accumulator +
-          ((item.price * (100 - item.discount)) / 100) * item.quantity,
-        0
+      newOrdered.method_payment = method;
+    } else if (method === "card") {
+      newOrdered.method_payment = method;
+      if (!token) {
+        const error = new Error("Token is empty");
+        error.statusCode = 400;
+        throw error;
+      }
+      const body = {
+        source: token.id,
+        amount: +totalPrice,
+        currency: "vnd",
+      };
+
+      const charge = await stripe.charges.create(
+        body,
+        (stripeErr, stripeRes) => {
+          if (stripeErr) {
+            const error = new Error(stripeErr);
+            error.statusCode = 400;
+            throw error;
+          }
+        }
       );
-      const timeExpire =
-        methodDelivery === "fast"
-          ? new Date(+new Date() + 24 * 60 * 60 * 1000)
-          : new Date(+new Date() + 24 * 7 * 60 * 60 * 1000);
-      console.log(timeExpire);
-      const newOrdered = new Order({
-        user: req.user._id,
-        products,
-        method_delivery: methodDelivery,
-        user_message: userMessage,
-        time_expire: timeExpire,
-        method_payment: "cod",
-        totalPrice,
-      });
-      user.ordered.push(newOrdered._id);
-      await newOrdered.save();
-      await user.save();
-      return res.status(200).json(newOrdered);
+    } else {
+      const error = new Error("Method payment is invalid");
+      error.statusCode = 400;
+      throw error;
     }
+
+    const conn = await connectDB();
+    let session = await conn.startSession();
+    session.startTransaction();
+    for await (let productItem of products) {
+      const product = await Product.findById(productItem);
+      product.sold_quantity += productItem.quantity;
+      await product.save();
+    }
+    user.ordered.push(newOrdered._id);
+    await newOrdered.save();
+    await user.save();
+    await session.commitTransaction();
+    console.log(newOrdered);
+    return res.status(200).json(newOrdered);
   } catch (error) {
     next(error);
   }

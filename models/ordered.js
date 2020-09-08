@@ -35,11 +35,9 @@ const OrderedSchema = new mongoose.Schema(
       },
     },
     method_payment: {
-      type: {
-        type: String,
-        enum: ["cod", "payment"],
-        default: "cod",
-      },
+      type: String,
+      enum: ["cod", "card"],
+      default: "cod",
     },
   },
   { timestamps: true }

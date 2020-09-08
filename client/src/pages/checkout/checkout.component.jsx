@@ -12,8 +12,9 @@ import {
   selectCurrentUser,
   selectUserLoading,
 } from "../../redux/user/user.selectors";
+import CheckoutComplete from "../../components/Checkout/checkout-complete/checkout-complete.component"
+import PageNotFound from "../page-not-found/page-not-found.component";
 import { selectCartItems } from "../../redux/cart/cart.selectors";
-import OrderedComplete from "../ordered-complete/ordered-complete.component";
 import { connect } from "react-redux";
 const CheckoutPage = ({ match, currentUser, loading, cartItems }) => {
   const checkOutFormContition = (user) => {
@@ -68,8 +69,12 @@ const CheckoutPage = ({ match, currentUser, loading, cartItems }) => {
               )
             }
           />
-         
-         
+          <Route
+              path={`${match.path}/complete`}
+              exact
+              component={CheckoutComplete}
+              />
+         <Route path="*" component={PageNotFound}/>
         </Switch>
       ) : null}
     </CheckoutPageContainer>

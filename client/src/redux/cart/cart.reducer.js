@@ -5,12 +5,15 @@ import {
   increaseCartItemUtility,
   removeCartItemUtility,
 } from "./cart.utils";
-import cart from "../../data/cart";
+
 const INITIAL_STATE = {
   cartItems: [],
   show: false,
   cartPosition: null,
   openToolTip: false,
+  orderedDetail: null,
+  methodDelivery: "normal",
+  fastDeliveryCost: 0,
 };
 
 const cartReducer = (state = INITIAL_STATE, action) => {
@@ -51,15 +54,29 @@ const cartReducer = (state = INITIAL_STATE, action) => {
       };
     case cartActionTypes.CLEAR_CART_ITEMS:
       return {
+        ...state,
         cartItems: [],
         show: false,
         cartPosition: null,
         openToolTip: false,
+        methodDelivery: "normal",
+        fastDeliveryCost: 0,
       };
     case cartActionTypes.SET_CART_CHECKOUT_POSITION:
       return {
         ...state,
         cartPosition: +action.payload,
+      };
+    case cartActionTypes.ORDERED_DETAIL:
+      return {
+        ...state,
+        orderedDetail: { ...action.payload },
+      };
+    case cartActionTypes.SET_METHOD_DELIVERY:
+      return {
+        ...state,
+        methodDelivery: action.payload,
+        fastDeliveryCost: action.payload === "fast" ? 12000 : 0,
       };
     default:
       return state;

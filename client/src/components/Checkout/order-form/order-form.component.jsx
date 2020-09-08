@@ -11,9 +11,9 @@ import {
 } from "./order-form.styles";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {selectCartItems, selectTotalPrice, selectTotalFeeShip} from "../../../redux/cart/cart.selectors"
-const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip}, ref)  => {
-
+import {selectCartItems, selectTotalPrice, selectTotalFeeShip, selectFastDeliveryCost} from "../../../redux/cart/cart.selectors"
+const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip, fastDeliveryCost}, ref)  => {
+  
   return (
     <OrderFormContainer ref={ref}>
       <Title>Đơn thanh toán</Title>
@@ -49,11 +49,11 @@ const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip}, ref)
       <OrderList>
         <Row>
           <Grid>
-            <Strong>Phí vận chuyển</Strong>
+            <Strong>Phí vận chuyển {fastDeliveryCost > 0 ? "(giao nhanh)" :""}</Strong>
           </Grid>
           <Grid>
             {" "}
-            <Strong total>{totalPrice < 1000000 ? totalFeeShip.toLocaleString("es-AR") : 0}</Strong>
+            <Strong total>{(totalFeeShip + fastDeliveryCost).toLocaleString("es-AR")}</Strong>
           </Grid>
         </Row>
       </OrderList>
@@ -64,7 +64,7 @@ const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip}, ref)
           </Grid>
           <Grid>
             {" "}
-            <Strong total>{totalPrice < 1000000 ?  (totalPrice+totalFeeShip).toLocaleString("es-AR") : totalPrice.toLocaleString("es-AR") }</Strong>
+            <Strong total>{(totalPrice+totalFeeShip+fastDeliveryCost).toLocaleString("es-AR")}</Strong>
           </Grid>
         </Row>
       </OrderList>
@@ -75,6 +75,7 @@ const OrderForm = React.forwardRef( ({cartItems, totalPrice, totalFeeShip}, ref)
 const mapStateToProps = createStructuredSelector({
   cartItems : selectCartItems,
   totalPrice : selectTotalPrice,
-  totalFeeShip : selectTotalFeeShip
+  totalFeeShip : selectTotalFeeShip,
+  fastDeliveryCost : selectFastDeliveryCost
 })
 export default connect(mapStateToProps)(OrderForm);

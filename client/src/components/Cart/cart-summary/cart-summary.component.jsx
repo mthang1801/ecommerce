@@ -11,6 +11,7 @@ import {
   selectTotalPrice,
   selectCountItem,
   selectTotalFeeShip,
+  selectFastDeliveryCost
 } from "../../../redux/cart/cart.selectors";
 import { createStructuredSelector } from "reselect";
 import { connect, ReactReduxContext } from "react-redux";
@@ -22,6 +23,7 @@ const CartSummary = ({
   countItem,
   history,
   totalFeeShip,
+  fastDeliveryCost
 }) => {
   return (
     <CartSummaryContainer>
@@ -46,7 +48,7 @@ const CartSummary = ({
             <CartKey>Phí vận chuyển</CartKey>
             <CartValue>
               <span style={{ fontWeight: "bold" }}>
-                {totalFeeShip.toLocaleString("es-AR")}
+                {(fastDeliveryCost + totalFeeShip).toLocaleString("es-AR")}
               </span>
             </CartValue>
           </Grid>
@@ -54,7 +56,7 @@ const CartSummary = ({
             <CartKey>Tổng tiền</CartKey>
             <CartValue>
               <span style={{ fontWeight: "bold" }}>
-                {(totalPrice + totalFeeShip).toLocaleString("es-AR")}
+                {(totalPrice + totalFeeShip + fastDeliveryCost).toLocaleString("es-AR")}
               </span>
             </CartValue>
           </Grid>
@@ -76,6 +78,7 @@ const mapStateToProps = createStructuredSelector({
   countItem: selectCountItem,
   totalPrice: selectTotalPrice,
   totalFeeShip: selectTotalFeeShip,
+  fastDeliveryCost : selectFastDeliveryCost
 });
 
 export default connect(mapStateToProps)(withRouter(CartSummary));

@@ -36,3 +36,13 @@ export const setCartCheckoutPosition = (position) => ({
   type: cartActionTypes.SET_CART_CHECKOUT_POSITION,
   payload: position,
 });
+
+export const orderedDetail = (ordered) => ({
+  type: cartActionTypes.ORDERED_DETAIL,
+  payload: ordered,
+});
+
+export const setMethodDelivery = (method) => ({
+  type: cartActionTypes.SET_METHOD_DELIVERY,
+  payload: method,
+});

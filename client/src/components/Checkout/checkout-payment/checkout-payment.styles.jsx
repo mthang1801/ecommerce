@@ -60,3 +60,10 @@ export const Button = styled.button`
     background-color: ${darken("0.2", "#283593")};
   }
 `;
+
+
+export const CheckoutEmpty = styled.div`
+  width : 100%; 
+  display : flex;
+  justify-content : center;
+`

@@ -272,7 +272,8 @@ export const postCODPayment = (
   currentUser,
   cartItems,
   methodDelivery,
-  userMessage
+  userMessage,
+  totalPrice
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -282,6 +283,32 @@ export const postCODPayment = (
         cartItems,
         methodDelivery,
         userMessage,
+        totalPrice,
+      });
+      resolve(data);
+    } catch (error) {
+      reject(error.response.data.message);
+    }
+  });
+};
+
+export const postCardPayment = (
+  currentUser,
+  cartItems,
+  methodDelivery,
+  userMessage,
+  totalPrice,
+  token
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post(urls.POST_CARD_PAYMENT, {
+        currentUser,
+        cartItems,
+        methodDelivery,
+        userMessage,
+        totalPrice,
+        token,
       });
       resolve(data);
     } catch (error) {
