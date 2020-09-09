@@ -1,8 +1,9 @@
 import React from 'react'
 import "./custom-spinner.styles.css" ;
+import {SpinnerOverlay, SpinnerContainer} from "./custom-spinner.styles";
 const CustomSpinner = () => {
   return (
-    <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <SpinnerOverlay><SpinnerContainer/></SpinnerOverlay>
   )
 }
 

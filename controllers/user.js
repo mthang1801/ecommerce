@@ -415,7 +415,7 @@ exports.postPayment = async (req, res, next) => {
     await newOrdered.save();
     await user.save();
     await session.commitTransaction();
-    console.log(newOrdered);
+
     return res.status(200).json(newOrdered);
   } catch (error) {
     next(error);

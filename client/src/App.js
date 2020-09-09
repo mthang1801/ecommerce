@@ -15,10 +15,12 @@ import ProductType from "./pages/product-type/product-type.component";
 import ProductDetail from "./pages/product-detail/product-detail.component";
 import ProductGroup from "./pages/product-group/product-group.component";
 import Manufactor from "./pages/manufactor/manufactor.component";
+import OrderedHistory from "./pages/ordered/ordered.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
+import ProductReviews from "./pages/product-reviews/product-reviews.component";
 import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
@@ -55,6 +57,8 @@ function App({ fetchUser, user, loading }) {
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" component={Checkout} />
               <Route path="/contact" exact component={Contact} />
+              <Route path="/ordered-history" exact component={OrderedHistory} />
+              <Route path="/reviews/:productPath" component={ProductReviews} />
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route
                 path="/:categoryPath/:productTypePath/product-group/:productGroupPath/products"

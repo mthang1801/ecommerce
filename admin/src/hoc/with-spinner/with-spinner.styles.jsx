@@ -1,6 +1,6 @@
 import styled from "styled-components"
 export const SpinnerOverlay = styled.div`
-  height: 60vh;
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -9,11 +9,11 @@ export const SpinnerOverlay = styled.div`
 
 export const SpinnerContainer = styled.div`
   display: inline-block;
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   border: 3px solid rgba(195, 195, 195, 0.6);
   border-radius: 50%;
-  border-top-color: #636767;
+  border-top-color: #1a237e;
   animation: spin 1s ease-in-out infinite;
   -webkit-animation: spin 1s ease-in-out infinite;
   @keyframes spin {

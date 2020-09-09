@@ -56,4 +56,5 @@ export default {
   UPDATE_USER_INFO: `/user/update-information`,
   POST_COD_PAYMENT: `/user/payment/cod`,
   POST_CARD_PAYMENT: `/user/payment/card`,
+  FETCH_ORDERED_LIST: `/ordered`,
 };

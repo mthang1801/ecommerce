@@ -1,6 +1,6 @@
 import React from "react";
 import StripeCheckout from "react-stripe-checkout";
-import {Button} from "../../Checkout/checkout-button/checkout-button.styles";
+import {Button} from "./stripe-button.styles";
 const StripeButton = ({totalPrice, setStripeToken }) => {
   const publish_key =
     "pk_test_GqeDNGLAbXcAnQ8xs8OAzKcW00uS9xIftb";

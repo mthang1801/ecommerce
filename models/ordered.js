@@ -28,6 +28,9 @@ const OrderedSchema = new mongoose.Schema(
     user_message: {
       type: String,
     },
+    time_complete: {
+      type: Date,
+    },
     time_expire: {
       type: Date,
       default: function () {

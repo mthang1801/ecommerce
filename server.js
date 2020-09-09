@@ -13,6 +13,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
+const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 // create a write stream (in append mode)
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "access.log"),

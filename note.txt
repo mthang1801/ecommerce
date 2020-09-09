@@ -1,0 +1,2 @@
+- Chưa cập nhật tính năng chặn chủ shop tự mua sản phẩm của mình
+- Chưa thêm tính năng chèn hình ảnh vào mục thông tin sản phẩm

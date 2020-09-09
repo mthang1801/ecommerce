@@ -5,10 +5,7 @@ const CORS = (app) => {
       "Access-Control-Allow-Methods",
       "GET, POST, UPDATE, DELETE, PATH, OPTIONS, PUT"
     );
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authentication"
-    );
+    res.setHeader("Access-Control-Allow-Headers", "*");
     if (req.method === "OPTIONS") {
       res.sendStatus(200);
     }
