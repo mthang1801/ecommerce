@@ -105,7 +105,7 @@ const OrderedListPreview = ({ orderedItem }) => {
                     {((product.price * product.quantity * (100 - product.discount)) / 100).toLocaleString("es-AR")}
                   </Td>
                   <Td width={10}>
-                    <Link to="/">Đánh giá</Link>
+                    <Link to={`/product/reviews/${product._id}`}>Đánh giá</Link>
                   </Td>
                 </Row>                      
             ))}

@@ -13,3 +13,8 @@ export const selectUserLoading = createSelector(
 );
 
 export const selectUserError = createSelector(selectUser, (user) => user.error);
+
+export const selectUserFetched = createSelector(
+  selectUser,
+  (user) => user.fetched
+);

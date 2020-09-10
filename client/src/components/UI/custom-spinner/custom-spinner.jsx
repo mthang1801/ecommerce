@@ -1,9 +1,9 @@
 import React from 'react'
 import "./custom-spinner.styles.css" ;
 import {SpinnerOverlay, SpinnerContainer} from "./custom-spinner.styles";
-const CustomSpinner = () => {
+const CustomSpinner = ({smallScreen}) => {
   return (
-    <SpinnerOverlay><SpinnerContainer/></SpinnerOverlay>
+    <SpinnerOverlay smallScreen={smallScreen}><SpinnerContainer/></SpinnerOverlay>
   )
 }
 

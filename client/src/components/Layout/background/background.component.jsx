@@ -4,7 +4,7 @@ import {BackgroundContainer, BackgrounLabel, BackgroundImageContainer} from "./b
 const Background = ({label}) => {
   return (
     <BackgroundContainer >     
-      <BackgrounLabel>{label}</BackgrounLabel>
+      <BackgrounLabel smallSize={label.length > 15} >{label}</BackgrounLabel>
     </BackgroundContainer>
   )
 }

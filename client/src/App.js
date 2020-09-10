@@ -58,7 +58,10 @@ function App({ fetchUser, user, loading }) {
               <Route path="/checkout" component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/ordered-history" exact component={OrderedHistory} />
-              <Route path="/reviews/:productPath" component={ProductReviews} />
+              <Route
+                path="/product/reviews/:productId"
+                component={ProductReviews}
+              />
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route
                 path="/:categoryPath/:productTypePath/product-group/:productGroupPath/products"

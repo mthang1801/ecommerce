@@ -24,6 +24,16 @@ router.get(
   shopController.getContentListByCategoryLinkUrl
 );
 /**
+ * @route GET /product/reviews//:productId
+ * @desc get product review by id
+ * @access private
+ */
+router.get(
+  "/product/reviews/:productId",
+  isAuth,
+  shopController.getProductReviewsById
+);
+/**
  * @route GET /category/:id/product-type
  * @desc get list product types by category id
  * @access public

@@ -797,7 +797,7 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
       productGroup: productGroup._id,
       status: "active",
     })
-      .populate("images")
+      .populate({ path: "images", options: { limit: 1 } })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -858,6 +858,31 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
     });
     console.timeEnd("productDetail");
     res.status(200).json({ product, relatedProducts });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductReviewsById = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const product = await Product.findById(productId)
+      .populate({
+        path: "images",
+        options: { limit: 1 },
+      })
+      .populate({ path: "user", select: "information" });
+    if (!product) {
+      const error = new Error("Product not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json(product);
   } catch (error) {
     next(error);
   }

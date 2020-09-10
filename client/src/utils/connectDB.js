@@ -316,3 +316,12 @@ export const postCardPayment = (
     }
   });
 };
+export const postReviewsProduct = (stars, comment) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post();
+    } catch (error) {
+      reject(error.response.data.message);
+    }
+  });
+};

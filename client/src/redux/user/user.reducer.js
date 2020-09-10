@@ -2,6 +2,7 @@ import userActionTypes from "./user.types";
 
 const INITIAL_STATE = {
   user: null,
+  fetched: false,
   loading: false,
   error: undefined,
 };
@@ -22,6 +23,7 @@ export default (state = INITIAL_STATE, action) => {
     case userActionTypes.RESTORE_ACCOUNT_START:
       return {
         ...state,
+        fetched: true,
         user: action.payload,
         loading: false,
       };
@@ -44,6 +46,7 @@ export default (state = INITIAL_STATE, action) => {
     case userActionTypes.RESTORE_ACCOUNT_FAIL:
       return {
         ...state,
+        fetched: true,
         error: action.payload,
         loading: false,
       };
