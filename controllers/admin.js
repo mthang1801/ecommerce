@@ -8,8 +8,8 @@ const fs = require("fs-extra");
 const removeImage = require("../utils/removeImage");
 const _ = require("lodash");
 const Manufactor = require("../models/manufactor");
-const { toCapitalizeString } = require("../utils/algorithms");
 const { v4: uuid } = require("uuid");
+const Ordered = require("../models/ordered");
 const path = require("path");
 const { link } = require("fs");
 exports.postCategory = async (req, res, next) => {
@@ -333,17 +333,12 @@ exports.postCreateMenu = async (req, res, next) => {
 exports.updateManufactor = async (req, res, next) => {
   try {
     console.time("start");
-    const productPhoneList = await Product.find({
-      linkUrl: { $regex: new RegExp("^/phones-tablets") },
-    });
-    for await (let product of productPhoneList) {
-      let linkUrl = encodeURIComponent(product.name);
-      let oldLinkUrl = product.linkUrl.split("/");
-      let pathArr = [...oldLinkUrl.slice(0, -1), linkUrl];
-      let newLinkUrl = pathArr.join("/");
-      product.linkUrl = newLinkUrl;
-      console.log(newLinkUrl);
-      await product.save();
+    const orderedList = await Ordered.find();
+    for await (let orderedItem of orderedList) {
+      if (orderedItem.time_expire.getTime() < Date.now()) {
+        orderedItem.status = "completed";
+        await orderedItem.save();
+      }
     }
     console.timeEnd("start");
   } catch (error) {

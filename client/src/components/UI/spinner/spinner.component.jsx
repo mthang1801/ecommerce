@@ -1,8 +1,8 @@
 import React from 'react'
 import {SpinnerOverlay, SpinnerContainer} from "./spinner.styles.jsx";
-const Spinner = () => {
+const Spinner = ({loadChildComponent}) => {
   return (
-    <SpinnerOverlay><SpinnerContainer/></SpinnerOverlay>
+    <SpinnerOverlay loadChildComponent={loadChildComponent}><SpinnerContainer/></SpinnerOverlay>
   )
 }
 

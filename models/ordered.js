@@ -19,6 +19,7 @@ const OrderedSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+      enum: ["active", "completed"],
       default: "active",
     },
     method_delivery: {

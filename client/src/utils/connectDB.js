@@ -316,12 +316,47 @@ export const postCardPayment = (
     }
   });
 };
-export const postReviewsProduct = (stars, comment) => {
+export const postReviewsProduct = (productId, stars, comment) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { data } = await axios.post();
+      const { data } = await axios.post(urls.POST_REVIEWS_PRODUCT(productId), {
+        stars,
+        comment,
+      });
+      resolve(true);
     } catch (error) {
       reject(error.response.data.message);
+    }
+  });
+};
+export const updateReviewsProduct = (
+  productId,
+  stars,
+  comment,
+  updatedMyReview
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.put(urls.UPDATE_REVIEWS_PRODUCT(productId), {
+        stars,
+        comment,
+        updatedMyReview: { ...updatedMyReview },
+      });
+      resolve(data);
+    } catch (error) {
+      reject(error.response.data.message);
+    }
+  });
+};
+export const getCommentReviewsByProductId = (productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.get(
+        urls.GET_PRODUCT_COMMENT_REVIEWS(productId)
+      );
+      resolve(data);
+    } catch (error) {
+      reject(error);
     }
   });
 };

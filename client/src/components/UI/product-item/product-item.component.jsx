@@ -20,6 +20,7 @@ import Rating from '@material-ui/lab/Rating';
 import Chip from "@material-ui/core/Chip"
 import {timeCountDown} from "../../../utils/algorithms"
 import {withRouter} from "react-router-dom";
+
 const ProductItem = ({ product, history, onClick }) => {  
   const [discountDate, setDiscountDate] = useState(null);
   const [timerDiscount, setTimerDiscount] = useState(null);

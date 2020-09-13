@@ -9,11 +9,14 @@ const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
 const removeImage = require("../utils/removeImage");
 const productGroups = require("../models/product-groups");
+const Comment = require("../models/comments");
+const Vote = require("../models/vote");
 const _ = require("lodash");
 const { toCapitalizeString } = require("../utils/algorithms");
 const path = require("path");
 const { populate } = require("../models/category");
-
+const vote = require("../models/vote");
+const Response = require("../models/response");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -864,13 +867,12 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
 };
 exports.getProductReviewsById = async (req, res, next) => {
   try {
-    const { productId } = req.params;
     if (!req.isAuthenticated || !req.user) {
       const error = new Error("Unauthorized");
       error.statusCode = 401;
       throw error;
     }
-
+    const { productId } = req.params;
     const product = await Product.findById(productId)
       .populate({
         path: "images",
@@ -882,7 +884,190 @@ exports.getProductReviewsById = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+    //check user has reviewed or not
+    let __product = product._doc;
+    const myVoteReview = await Vote.findOne({
+      product: product._id,
+      user: req.user._id,
+    });
+    __product.my_vote_review = myVoteReview;
+    const myCommentReview = await Comment.findOne({
+      product: product._id,
+      user: req.user._id,
+    });
+    __product.my_comment_review = myCommentReview;
+    __product.numberOfVotes = __product.votes.length;
+    delete __product.votes;
+    delete __product.comments;
+    res.status(200).json(__product);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postProductReviewsById = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { productId } = req.params;
+    let { stars, comment } = req.body;
+    stars = +stars == 0 ? 1 : +stars;
+    const product = await Product.findById(productId).populate("votes");
+    if (comment) {
+      const newComment = new Comment({
+        product: productId,
+        user: req.user._id,
+        text: comment,
+      });
+      product.comments.push(newComment._id);
+      await newComment.save();
+    }
+    if (stars) {
+      const newVote = new Vote({
+        product: productId,
+        user: req.user._id,
+        value: stars,
+      });
+      if (product.votes.length) {
+        const totalScores = product.votes.reduce(
+          (accumulator, item) => accumulator + parseFloat(item.value),
+          +stars
+        );
+        product.stars = totalScores / (product.votes.length + 1);
+      } else {
+        product.stars = stars;
+      }
+      product.votes.push(newVote);
+      await newVote.save();
+    }
+    await product.save();
     res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.updateProductReviewById = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { productId } = req.params;
+    let { stars, comment, updatedMyReview } = req.body;
+    const product = await Product.findById(productId).populate({
+      path: "votes",
+      select: "value",
+    });
+    if (!product || product.status !== "active") {
+      const error = new Error("Product was not found or disabled");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    stars = +stars == 0 ? 1 : +stars;
+    console.log(stars);
+    if (stars) {
+      if (updatedMyReview.updatedVote) {
+        const vote = await Vote.findById(updatedMyReview.updatedVote._id);
+        if (!vote) {
+          const error = new Error("Vote not found");
+          error.statusCode = 404;
+          throw error;
+        }
+        console.log(product.votes);
+        const totalScores = product.votes.reduce((accumulator, item) => {
+          if (item._id === vote._id) {
+            return accumulator + stars;
+          }
+          return accumulator + parseFloat(item.value);
+        }, 0);
+        console.log(totalScores);
+        product.stars = totalScores / product.votes.length;
+        vote.value = stars;
+        await vote.save();
+      } else {
+        const newVote = new Vote({
+          product: productId,
+          user: req.user._id,
+          value: stars,
+        });
+        if (product.votes.length) {
+          const totalScores = product.votes.reduce(
+            (accumulator, item) => accumulator + parseFloat(item.value),
+            +stars
+          );
+          product.stars = totalScores / (product.votes.length + 1);
+        } else {
+          product.stars = stars;
+        }
+        product.votes.push(newVote);
+        await newVote.save();
+      }
+    }
+    if (comment) {
+      if (updatedMyReview.updatedComment) {
+        const oldComment = await Comment.findById(
+          updatedMyReview.updatedComment._id
+        );
+        if (!oldComment) {
+          const error = new Error("Comment not found");
+          error.statusCode = 404;
+          throw error;
+        }
+        oldComment.text = comment;
+        await oldComment.save();
+      } else {
+        const newComment = new Comment({
+          product: productId,
+          user: req.user._id,
+          text: comment,
+        });
+        product.comments.push(newComment._id);
+        await newComment.save();
+      }
+    }
+    await product.save();
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getCommentReviewsByProductId = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    console.log(productId);
+    const product = await Product.findById(productId);
+    if (!product || product.status !== "active") {
+      const error = new Error("Product not found or disabled");
+      error.statusCode = 404;
+      throw error;
+    }
+    let commentList = {
+      comments: [],
+    };
+    let comments = await Comment.find({ product: productId })
+      .populate("user")
+      .sort({ createdAt: -1 })
+      .limit(2);
+    let countComments = await Comment.countDocuments({ product: productId });
+    commentList.countComments = countComments;
+    for await (let comment of comments) {
+      let responseList = await Response.find({ comment: comment._id })
+        .populate("user")
+        .sort({ createdAt: -1 })
+        .limit(2);
+      let countResponses = await Response.countDocuments({
+        comment: comment._id,
+      });
+
+      comment.responses = responseList;
+      comment.countResponses = countResponses;
+      commentList.comments.push(comment);
+    }
+    res.status(200).json(commentList);
   } catch (error) {
     next(error);
   }

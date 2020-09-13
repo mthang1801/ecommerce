@@ -5,13 +5,14 @@ export const ProductReviewsOverviewWrapper = styled.div`
   display : flex ; 
   flex-direction : column ;   
   justify-content : center;
+  margin : 3rem 0;
  
 `
 export const Row = styled.div`
   width : 100%; 
   display : flex; 
-  align-items :flex-start;
-  margin: 1rem 2rem;   
+  align-items :flex-start;  
+  padding: 1rem 2rem;   
   @media screen and (max-width: 600px){
     flex-direction : column;
     & > * {
@@ -46,4 +47,9 @@ export const TextArea = styled.textarea`
   @media screen and (max-width:600px){
     height: 8rem;
   }
+`
+
+export const CompleteReview = styled.div`
+  text-aliign : center; 
+  margin : 4rem auto;
 `

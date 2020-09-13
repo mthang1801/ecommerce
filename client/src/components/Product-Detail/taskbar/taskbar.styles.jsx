@@ -41,16 +41,8 @@ export const ListItem = styled.span`
 export const TaskContent = styled.div`
   margin : 1rem;
   padding : 1rem;
-`
-
-export const TaskContentItem = styled.article`
-  opacity : ${({show}) => show ? 1 : 0};
-  height : ${({show}) => show ? "100%" : 0};
-  transition : opacity 0.5s;
-  display : flex ; 
-  flex-direction : column ; 
-  align-items : flex-start;
-  
+  height: ${({readMore,taskHeight}) => readMore ? "auto" : taskHeight > 2000 ? `${taskHeight/10}px` : taskHeight > 1000 ? `${taskHeight/5}px` : taskHeight > 500 ? `${taskHeight/2}px` : "180px" };   
+  position : relative; 
 `
 
 export  const ReadMore = styled.span`

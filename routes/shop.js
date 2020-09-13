@@ -24,7 +24,7 @@ router.get(
   shopController.getContentListByCategoryLinkUrl
 );
 /**
- * @route GET /product/reviews//:productId
+ * @route GET /product/reviews/:productId
  * @desc get product review by id
  * @access private
  */
@@ -32,6 +32,35 @@ router.get(
   "/product/reviews/:productId",
   isAuth,
   shopController.getProductReviewsById
+);
+/**
+ * @route POST /product/reviews/:productId
+ * @desc post product review by id
+ * @access private
+ */
+router.post(
+  "/product/reviews/:productId",
+  isAuth,
+  shopController.postProductReviewsById
+);
+/**
+ * @route PUT /product/reviews/:productId
+ * @desc update product review by id
+ * @access private
+ */
+router.put(
+  "/product/reviews/:productId",
+  isAuth,
+  shopController.updateProductReviewById
+);
+/**
+ * @route GET /product/reviews/:productId/comment
+ * @desc get comments review by product Id
+ * @access public
+ */
+router.get(
+  "/product/reviews/:productId/comments",
+  shopController.getCommentReviewsByProductId
 );
 /**
  * @route GET /category/:id/product-type

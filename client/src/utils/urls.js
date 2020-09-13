@@ -58,5 +58,8 @@ export default {
   POST_CARD_PAYMENT: `/user/payment/card`,
   FETCH_ORDERED_LIST: `/ordered`,
   GET_PRODUCT_REVIEWS: (productId) => `/product/reviews/${productId}`,
-  POST_REVIEWS_PRODUCT: (stars, comment) => `/product/reviews/${productId}`,
+  POST_REVIEWS_PRODUCT: (productId) => `/product/reviews/${productId}`,
+  UPDATE_REVIEWS_PRODUCT: (productId) => `/product/reviews/${productId}`,
+  GET_PRODUCT_COMMENT_REVIEWS: (productId) =>
+    `/product/reviews/${productId}/comments`,
 };

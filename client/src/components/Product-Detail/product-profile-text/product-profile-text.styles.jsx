@@ -71,7 +71,14 @@ export const  Button = styled.button`
   align-items : center;
   cursor : pointer; 
   font-size : 1.1em;
-  border-radius : 3px;  
+  &:first-child{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  };
+  &:last-child{
+    border-top-right-radius : 4px; 
+    border-bottom-right-radius : 4px; 
+  }
   &:hover{
     background-color : ${({bgColor}) => bgColor ? lighten("0.1",bgColor ) :  lighten("0.1","#404040")};
   }

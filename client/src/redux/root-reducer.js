@@ -12,6 +12,7 @@ import orderedReducer from "./ordered/ordered.reducer";
 import cartReducer from "./cart/cart.reducer";
 import productReviewsReducer from "./product-reviews/product-reviews.reducer";
 import storage from "redux-persist/lib/storage";
+import commentReviewsReducer from "./product-reviews/product-reviews.reducer";
 import { persistReducer } from "redux-persist";
 const rootPersistConfig = {
   key: "root",
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   cart: persistReducer(cartPersistConfig, cartReducer),
   ordered: orderedReducer,
   productReviews: productReviewsReducer,
+  commentReviews: commentReviewsReducer,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);
