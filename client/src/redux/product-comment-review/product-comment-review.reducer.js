@@ -2,6 +2,7 @@ import productCommentReviewsActionTypes from "./product-comment-review.types";
 
 const INITIAL_STATE = {
   comments: [],
+  numberOfComments: 0,
   loading: false,
   error: undefined,
 };
@@ -18,7 +19,8 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        comment: [...action.payload],
+        comments: action.payload.comments,
+        numberOfComments: action.payload.numberOfComments,
       };
     case productCommentReviewsActionTypes.FETCH_PRODUCT_COMMENT_REVIEW_FAIL:
       return {

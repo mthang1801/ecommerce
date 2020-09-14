@@ -193,6 +193,11 @@ exports.postUpdateAccount = async (req, res, next) => {
 exports.postUserLoginFacebook = async (req, res, next) => {
   try {
     const { id, name, email } = req.body;
+    if (!id || !name || !email) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
     let user = await User.findOne({ "facebook.id": id });
     if (!user) {
       user = new User({
@@ -221,6 +226,11 @@ exports.postUserLoginFacebook = async (req, res, next) => {
 exports.postUserLoginGoogle = async (req, res, next) => {
   try {
     const { id, name, email } = req.body;
+    if (!id || !name || !email) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
     let user = await User.findOne({ "google.id": id });
     if (!user) {
       user = new User({

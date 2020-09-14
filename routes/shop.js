@@ -195,7 +195,7 @@ router.get(
  * @access public
  */
 router.get(
-  "/:categoryPath/:productTypePath/:productPath",
+  "/product-detail/:categoryPath/:productTypePath/:productPath",
   shopController.getContentProductByProductUrl
 );
 

@@ -1037,6 +1037,7 @@ exports.updateProductReviewById = async (req, res, next) => {
 };
 exports.getCommentReviewsByProductId = async (req, res, next) => {
   try {
+    console.time("start-get-comment-review");
     const { productId } = req.params;
     console.log(productId);
     const product = await Product.findById(productId);
@@ -1054,20 +1055,40 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
       .limit(2);
     let countComments = await Comment.countDocuments({ product: productId });
     commentList.countComments = countComments;
+    const userCreateProduct = await product.user;
+    console.log(userCreateProduct);
     for await (let comment of comments) {
       let responseList = await Response.find({ comment: comment._id })
         .populate("user")
         .sort({ createdAt: -1 })
         .limit(2);
+      commentList.countComments += comment.responses.length;
       let countResponses = await Response.countDocuments({
         comment: comment._id,
       });
 
+      comment.user = {
+        name:
+          comment.user.facebook.name ||
+          comment.user.google.name ||
+          comment.user.local.name,
+        avatar: comment.user.avatar,
+        _id: comment.user._id,
+      };
+
       comment.responses = responseList;
       comment.countResponses = countResponses;
-      commentList.comments.push(comment);
+      if (userCreateProduct == comment.user._id) {
+        commentList.comments.unshift(comment);
+      } else {
+        commentList.comments.push(comment);
+      }
     }
-    res.status(200).json(commentList);
+    console.timeEnd("start-get-comment-review");
+    res.status(200).json({
+      comments: commentList.comments,
+      numberOfComments: commentList.countComments,
+    });
   } catch (error) {
     next(error);
   }

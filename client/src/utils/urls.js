@@ -52,7 +52,7 @@ export default {
     categoryPath,
     productTypePath,
     productPath
-  ) => `/${categoryPath}/${productTypePath}/${productPath}`,
+  ) => `/product-detail/${categoryPath}/${productTypePath}/${productPath}`,
   UPDATE_USER_INFO: `/user/update-information`,
   POST_COD_PAYMENT: `/user/payment/cod`,
   POST_CARD_PAYMENT: `/user/payment/card`,

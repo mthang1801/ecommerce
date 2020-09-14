@@ -29,7 +29,7 @@ const Taskbar = ({mobileView, tabletView, product}) => {
       <TaskContent readMore={readMore} taskHeight={taskHeight}>
         {task=== "description" ? <TaskContentItem show={task==="description"} content={product.description} readMore={readMore} setReadMore={() =>setReadMore(!readMore)} showReadMore={showReadMore} setShowReadMore={() => setShowReadMore(!showReadMore)} setTaskHeight={value => setTaskHeight(value)}/> : null}          
         {task=== "information" ? <TaskContentItem show={task==="information"} content={product.information} readMore={readMore} setReadMore={() =>setReadMore(!readMore)} showReadMore={showReadMore} setShowReadMore={() => setShowReadMore(!showReadMore)} setTaskHeight={value => setTaskHeight(value)}/> : null}          
-        {task=== "reviews" ? <CommentReviews  show={task==="reviews"} productId={product._id} /> : null}
+        {task=== "reviews" ? <CommentReviews  show={task==="reviews"} productId={product._id} readMore={readMore} setReadMore={() =>setReadMore(!readMore)} showReadMore={showReadMore} setShowReadMore={() => setShowReadMore(!showReadMore)} setTaskHeight={value => setTaskHeight(value)} /> : null}
        
       </TaskContent>
     </TaskbarContainer>

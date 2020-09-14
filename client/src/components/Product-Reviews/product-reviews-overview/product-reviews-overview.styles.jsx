@@ -46,7 +46,8 @@ export const TextArea = styled.textarea`
   }
   @media screen and (max-width:600px){
     height: 8rem;
-  }
+  };
+  font-family : Roboto, sans serif;
 `
 
 export const CompleteReview = styled.div`

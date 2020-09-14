@@ -41,7 +41,7 @@ export const ListItem = styled.span`
 export const TaskContent = styled.div`
   margin : 1rem;
   padding : 1rem;
-  height: ${({readMore,taskHeight}) => readMore ? "auto" : taskHeight > 2000 ? `${taskHeight/10}px` : taskHeight > 1000 ? `${taskHeight/5}px` : taskHeight > 500 ? `${taskHeight/2}px` : "180px" };   
+  height: ${({readMore,taskHeight}) => readMore ? "auto" : taskHeight > 2000 ? `${taskHeight/10}px` : taskHeight > 1000 ? `${taskHeight/5}px` : taskHeight > 500 ? `${taskHeight/2}px` : "auto" };   
   position : relative; 
 `
 
