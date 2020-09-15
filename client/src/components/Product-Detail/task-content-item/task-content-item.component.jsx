@@ -14,7 +14,7 @@ const TaskbarContent = ({content, show, readMore, setReadMore, setTaskHeight}) =
   
   return (
     <TaskbarContentWrapper show={show} >
-      <EmbberContent dangerouslySetInnerHTML={{__html : content}} ref={contentRef} />
+      <EmbberContent dangerouslySetInnerHTML={{__html : content}} ref={contentRef} showReadMore={showReadMore} readMore={readMore}/>
       {showReadMore  ? <ReadMore onClick={() => setReadMore(true)}>{!readMore ? "Xem thêm" : "Thu gọn"}</ReadMore> : null}      
     </TaskbarContentWrapper>
   )

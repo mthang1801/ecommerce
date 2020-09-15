@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { ProductsTopRatedWrapper } from "./products-top-rated.styles";
 import { getTopRatedProducts } from "../../../utils/connectDB";
 import ProductSlider from "../../UI/product-slider/product-slider.component";
@@ -22,4 +22,4 @@ const ProductsTopRated = ({ mobileView, tabletView }) => {
   </ProductsTopRatedWrapper>;
 };
 
-export default ProductsTopRated;
+export default memo(ProductsTopRated);

@@ -198,5 +198,25 @@ router.get(
   "/product-detail/:categoryPath/:productTypePath/:productPath",
   shopController.getContentProductByProductUrl
 );
+/**
+ * @route POST /product-detail/comment/:commentId/like
+ * @desc like comment
+ * @access private
+ */
+router.post(
+  "/product-detail/comment/:commentId/like",
+  isAuth,
+  shopController.postLikeOrUnlikeComment
+);
+/**
+ * @route POST /product-detail/comment/:commentId/dislike
+ * @desc like comment
+ * @access private
+ */
+router.post(
+  "/product-detail/comment/:commentId/dislike",
+  isAuth,
+  shopController.postDislikeOrUndislikeComment
+);
 
 module.exports = router;

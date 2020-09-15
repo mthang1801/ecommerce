@@ -53,6 +53,9 @@ const INITIAL_STATE = {
     discountExpDate: null,
     description: "",
     information: "",
+    weight: 0,
+    quantity: 0,
+    ship_fee: 0,
   },
 };
 

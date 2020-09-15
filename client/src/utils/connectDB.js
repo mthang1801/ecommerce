@@ -203,6 +203,9 @@ export const createNewProduct = (product) => {
       formData.append("description", product.description);
       formData.append("information", product.information);
       formData.append("manufactor", product.manufactor);
+      formData.append("weight", +product.weight);
+      formData.append("quantity", +product.quantity);
+      formData.append("ship_fee", +product.ship_fee);
       for (let file of product.image) {
         formData.append("multiple-images", file);
       }
@@ -357,6 +360,30 @@ export const getCommentReviewsByProductId = (productId) => {
       resolve(data);
     } catch (error) {
       reject(error);
+    }
+  });
+};
+export const postLikeOrUnlikeComment = (commentId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post(
+        urls.POST_LIKE_OR_UNLIKE_COMMENT(commentId)
+      );
+      resolve(data.msg);
+    } catch (error) {
+      reject(error.response.data.message);
+    }
+  });
+};
+export const postDislikeOrUnDislikeComment = (commentId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post(
+        urls.POST_DISLIKE_OR_UNDISLIKE_COMMENT(commentId)
+      );
+      resolve(data.msg);
+    } catch (error) {
+      reject(error.response.data.message);
     }
   });
 };

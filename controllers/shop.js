@@ -17,6 +17,8 @@ const path = require("path");
 const { populate } = require("../models/category");
 const vote = require("../models/vote");
 const Response = require("../models/response");
+const encodeLinkUrl = require("../utils/encodeUrl");
+const connectDB = require("../config/connectDB");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -194,6 +196,9 @@ exports.postCreateProduct = async (req, res, next) => {
       description,
       information,
       manufactor,
+      quantity,
+      weight,
+      ship_fee,
     } = req.body;
     //to Capitalize name
     name = toCapitalizeString(name);
@@ -211,7 +216,7 @@ exports.postCreateProduct = async (req, res, next) => {
     const newProduct = new Product({
       label,
       name,
-      linkUrl: `${rootUrl}/${encodeURIComponent(name + Date.now())}`,
+      linkUrl: `${rootUrl}/${encodeLinkUrl(name.toLowerCase())}`,
       price,
       description,
       information,
@@ -219,6 +224,9 @@ exports.postCreateProduct = async (req, res, next) => {
       productType: productTypeId,
       category: categoryId,
       manufactor,
+      quantity,
+      weight,
+      ship_fee,
     });
 
     if (+discount > 0 && discountExpDate) {
@@ -250,7 +258,7 @@ exports.postCreateProduct = async (req, res, next) => {
       if (groupName) {
         let newProductGroup = new ProductGroup({
           name: groupName,
-          linkUrl: `${productType.linkUrl}/product-group/${encodeURIComponent(
+          linkUrl: `${productType.linkUrl}/product-group/${encodeLinkUrl(
             groupName.toLowerCase()
           )}`,
           productType: productType,
@@ -296,7 +304,7 @@ exports.postCreateProduct = async (req, res, next) => {
     if (!manufactorDoc) {
       manufactorDoc = new Manufactor({
         name: manufactor,
-        linkUrl: `/manufactor/${encodeURIComponent(manufactor)}`,
+        linkUrl: `/manufactor/${encodeLinkUrl(manufactor.toLowerCase())}`,
       });
     }
     manufactorDoc.products.push(newProduct._id);
@@ -421,7 +429,6 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
   try {
     let { pathUrl } = req.params;
     const page = +req.query.page;
-    console.log(page);
     if (pathUrl[0] !== "/") {
       pathUrl = "/" + pathUrl;
     }
@@ -501,7 +508,6 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
   try {
     let { categoryPath, productTypePath } = req.params;
     const page = +req.query.page;
-    console.log(categoryPath, productTypePath, page);
     if (categoryPath[0] !== "/") {
       categoryPath = "/" + categoryPath;
     }
@@ -625,7 +631,6 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
   try {
     console.time("manufactor");
     const { manufactorPath } = req.params;
-    console.log(manufactorPath);
     const page = +req.query.page;
     const manufactor = await Manufactor.findOne({
       linkUrl: {
@@ -722,6 +727,7 @@ exports.getListContentProductGroup = async (req, res, next) => {
     const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
       productGroupPath
     )}`;
+    console.log(linkUrl);
     const productGroup = await ProductGroup.findOne({
       linkUrl,
     });
@@ -785,11 +791,11 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
 ) => {
   try {
     const { categoryPath, productTypePath, productGroupPath } = req.params;
-
     const page = +req.query.page;
     const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
       productGroupPath
     )}`;
+    console.log(linkUrl);
     const productGroup = await ProductGroup.findOne({ linkUrl });
     if (!productGroup) {
       const err = new Error("Product group not found");
@@ -800,7 +806,7 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
       productGroup: productGroup._id,
       status: "active",
     })
-      .populate({ path: "images", options: { limit: 1 } })
+      .populate({ path: "images" })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -813,6 +819,7 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
   try {
     console.time("productDetail");
     const { categoryPath, productTypePath, productPath } = req.params;
+
     const linkUrl = `/${categoryPath}/${productTypePath}/${encodeURIComponent(
       productPath
     )}`;
@@ -911,6 +918,12 @@ exports.postProductReviewsById = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
     const { productId } = req.params;
     let { stars, comment } = req.body;
     stars = +stars == 0 ? 1 : +stars;
@@ -922,6 +935,8 @@ exports.postProductReviewsById = async (req, res, next) => {
         text: comment,
       });
       product.comments.push(newComment._id);
+      //save commentId at user
+      user.comments.push(newComment._id);
       await newComment.save();
     }
     if (stars) {
@@ -939,10 +954,12 @@ exports.postProductReviewsById = async (req, res, next) => {
       } else {
         product.stars = stars;
       }
+      user.votes.push(newVote._id);
       product.votes.push(newVote);
       await newVote.save();
     }
     await product.save();
+    await user.save();
     res.status(200).json(product);
   } catch (error) {
     next(error);
@@ -951,6 +968,12 @@ exports.postProductReviewsById = async (req, res, next) => {
 exports.updateProductReviewById = async (req, res, next) => {
   try {
     if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
       const error = new Error("Unauthorized");
       error.statusCode = 401;
       throw error;
@@ -968,7 +991,7 @@ exports.updateProductReviewById = async (req, res, next) => {
     }
 
     stars = +stars == 0 ? 1 : +stars;
-    console.log(stars);
+
     if (stars) {
       if (updatedMyReview.updatedVote) {
         const vote = await Vote.findById(updatedMyReview.updatedVote._id);
@@ -977,14 +1000,12 @@ exports.updateProductReviewById = async (req, res, next) => {
           error.statusCode = 404;
           throw error;
         }
-        console.log(product.votes);
         const totalScores = product.votes.reduce((accumulator, item) => {
           if (item._id === vote._id) {
             return accumulator + stars;
           }
           return accumulator + parseFloat(item.value);
         }, 0);
-        console.log(totalScores);
         product.stars = totalScores / product.votes.length;
         vote.value = stars;
         await vote.save();
@@ -1005,6 +1026,7 @@ exports.updateProductReviewById = async (req, res, next) => {
         }
         product.votes.push(newVote);
         await newVote.save();
+        await user.save();
       }
     }
     if (comment) {
@@ -1026,7 +1048,9 @@ exports.updateProductReviewById = async (req, res, next) => {
           text: comment,
         });
         product.comments.push(newComment._id);
+        user.comments.push(newComment._id);
         await newComment.save();
+        await user.save();
       }
     }
     await product.save();
@@ -1039,7 +1063,6 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
   try {
     console.time("start-get-comment-review");
     const { productId } = req.params;
-    console.log(productId);
     const product = await Product.findById(productId);
     if (!product || product.status !== "active") {
       const error = new Error("Product not found or disabled");
@@ -1056,7 +1079,6 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
     let countComments = await Comment.countDocuments({ product: productId });
     commentList.countComments = countComments;
     const userCreateProduct = await product.user;
-    console.log(userCreateProduct);
     for await (let comment of comments) {
       let responseList = await Response.find({ comment: comment._id })
         .populate("user")
@@ -1089,6 +1111,78 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
       comments: commentList.comments,
       numberOfComments: commentList.countComments,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postLikeOrUnlikeComment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { commentId } = req.params;
+    if (!commentId) {
+      const error = new Error("request error");
+      throw error;
+    }
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      const error = new Error("Comment not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    //check user has liked this comment.If user has liked, remove this like, otherwise add like to this comment
+    // check user has disliked this comment. If user has disliked, remove disliked;
+    comment.dislikes.pull(req.user._id);
+    const checkUserHasLiked = comment.likes.find(
+      (userId) => userId == req.user._id
+    );
+    if (checkUserHasLiked) {
+      comment.likes.pull(req.user._id);
+      await comment.save();
+      return res.status(200).json({ msg: "unlike success" });
+    }
+    comment.likes.push(req.user._id);
+    await comment.save();
+    res.status(200).json({ msg: "like success" });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postDislikeOrUndislikeComment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { commentId } = req.params;
+    if (!commentId) {
+      const error = new Error("request error");
+      throw error;
+    }
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      const error = new Error("Comment not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    //check user has disliked this comment.If user has disliked, remove this dislike, otherwise add dislike to this comment
+    // check user has liked this comment. If user has liked, remove liked;
+    comment.likes.pull(req.user._id);
+    const checkUserHasDisiked = comment.dislikes.find(
+      (userId) => userId == req.user._id
+    );
+    if (checkUserHasDisiked) {
+      comment.dislikes.pull(req.user._id);
+      await comment.save();
+      return res.status(200).json({ msg: "undislike success" });
+    }
+    comment.dislikes.push(req.user._id);
+    await comment.save();
+    res.status(200).json({ msg: "dislike success" });
   } catch (error) {
     next(error);
   }

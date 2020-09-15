@@ -62,4 +62,8 @@ export default {
   UPDATE_REVIEWS_PRODUCT: (productId) => `/product/reviews/${productId}`,
   GET_PRODUCT_COMMENT_REVIEWS: (productId) =>
     `/product/reviews/${productId}/comments`,
+  POST_LIKE_OR_UNLIKE_COMMENT: (commentId) =>
+    `/product-detail/comment/${commentId}/like`,
+  POST_DISLIKE_OR_UNDISLIKE_COMMENT: (commentId) =>
+    `/product-detail/comment/${commentId}/dislike`,
 };

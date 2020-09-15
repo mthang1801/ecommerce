@@ -1,5 +1,10 @@
 import productCommentReviewsActionTypes from "./product-comment-review.types";
-
+import {
+  setLikeForComment,
+  setUnlikeForComment,
+  setDislikeForComment,
+  setUndislikeForComment,
+} from "./product-comment-review.utils";
 const INITIAL_STATE = {
   comments: [],
   numberOfComments: 0,
@@ -27,6 +32,42 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case productCommentReviewsActionTypes.SET_LIKE_FOR_COMMENT:
+      return {
+        ...state,
+        comments: setLikeForComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_UNLIKE_FOR_COMMENT:
+      return {
+        ...state,
+        comments: setUnlikeForComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_DISLIKE_FOR_COMMENT:
+      return {
+        ...state,
+        comments: setDislikeForComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_UNDISLIKE_FOR_COMMENT:
+      return {
+        ...state,
+        comments: setUndislikeForComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.userId
+        ),
       };
     default:
       return state;

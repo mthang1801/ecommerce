@@ -11,10 +11,10 @@ export const CustomFormContainer = styled.form`
   box-shadow : 0 3px 6px rgba(0,0,0,0.15);
   display : flex ; 
   flex-direction : column ; 
-  align-items : center;  
+  align-items : center;    
   @media screen and (max-width: 500px){    
     padding : 1.5rem 2rem;
-  }
+  };
 `
 export const FormHeader = styled.div`
   margin-bottom: 2rem;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import ProductSlider from "../../UI/product-slider/product-slider.component";
 import {getBestSellerProducts} from "../../../utils/connectDB"
 import {ProductsBestSellerWrapper} from "./product-best-seller.styles";
@@ -21,4 +21,4 @@ const ProductsBestSeller = ({ mobileView, tabletView }) => {
   );
 };
 
-export default ProductsBestSeller;
+export default memo(ProductsBestSeller);

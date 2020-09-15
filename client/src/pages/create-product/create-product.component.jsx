@@ -22,7 +22,7 @@ const CreateProductPage = ({user, match}) => {
   } 
   return (
     <CreateProductPageWrapper ref={backgroundRef}>
-      <Background label="Đăng Sản Phẩm"/>
+      <Background label="Đang Bán Sản Phẩm"/>
       <FormCreateProduct scroll={scroll}/>
     </CreateProductPageWrapper>
   )

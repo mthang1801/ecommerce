@@ -4,49 +4,95 @@ import {
   Image,
   Row,
   ReadMore,
-  CommentText, 
+  CommentText,
   ButtonLink,
 } from "./comment-reviews-item.styles";
 import Moment from "react-moment";
 import { FcBusinessman } from "react-icons/fc";
-import {connect} from "react-redux";
-import {selectCurrentUser} from "../../../redux/user/user.selectors";
-import {createStructuredSelector} from "reselect"
-import {withRouter, Redirect} from "react-router-dom";
-const CommentReviewsItem = ({ comment, product , setCommentItemHeight, currentUser, match}) => {
-  const commentItemReadMore = useRef(null) 
+import { connect } from "react-redux";
+import { selectCurrentUser } from "../../../redux/user/user.selectors";
+import { createStructuredSelector } from "reselect";
+import { withRouter, Redirect } from "react-router-dom";
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import {postLikeOrUnlikeComment, postDislikeOrUnDislikeComment} from "../../../utils/connectDB"
+import { setLikeForComment, setUnlikeForComment, setDislikeForComment, setUndislikeForComment} from "../../../redux/product-comment-review/product-comment-review.actions"
+const CommentReviewsItem = ({
+  comment,
+  product,
+  setCommentItemHeight,
+  currentUser,
+  match,
+  history,
+  setLikeForComment,
+  setUnlikeForComment,
+  setDislikeForComment,
+  setUndislikeForComment
+}) => {
+  const commentItemReadMore = useRef(null);
   const [readMore, setReadMore] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const [text, setText] = useState("");
   useEffect(() => {
-    console.log(commentItemReadMore.current.scrollHeight, commentItemReadMore.current.clientHeight)
-    if(comment.text.length > 150){
+    console.log(
+      commentItemReadMore.current.scrollHeight,
+      commentItemReadMore.current.clientHeight
+    );
+    if (comment.text.length > 150) {
       setShowReadMore(true);
-      setText(comment.text.substr(0,200)); 
+      setText(comment.text.substr(0, 200));
       // setCommentItemHeight(commentItemReadMore.current.scrollHeight - )
-    }else{
+    } else {
       setShowReadMore(false);
-      setText(comment.text)      
-    }  
-  }, [comment])  
-  const handleSetReadMore = () => {
-    if(readMore){
-      setReadMore(false);
-      setText(comment.text.substr(0,200));
-    }else{
-      setReadMore(true)
       setText(comment.text);
     }
-  }
-  const handleClickLikeButton = () => {       
-    if(!currentUser){
-      let splitUrl = match.url.split("/");
-      splitUrl[splitUrl.length -1] = encodeURI(splitUrl[splitUrl.length -1]);
-      let url = splitUrl.join("/");
-      console.log(url);
-      return ;
+  }, [comment]);
+  const handleSetReadMore = () => {
+    if (readMore) {
+      setReadMore(false);
+      setText(comment.text.substr(0, 200));
+    } else {
+      setReadMore(true);
+      setText(comment.text);
     }
-  }
+  };
+  const handleClickLikeButton = () => {
+    if (!currentUser) {
+      let splitUrl = match.url.split("/");
+      splitUrl[splitUrl.length - 1] = encodeURIComponent(
+        splitUrl[splitUrl.length - 1]
+      );
+      const encodeUrl = splitUrl.join("/");
+      return history.push({ pathname: "/auth", state: { from: encodeUrl } });
+    }
+    postLikeOrUnlikeComment(comment._id)
+      .then((msg) => {
+        if(msg == "like success"){
+          setLikeForComment(comment._id, currentUser._id)
+        }else{
+          setUnlikeForComment(comment._id, currentUser._id)
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleClickDislikeButton = () => {
+    if (!currentUser) {
+      let splitUrl = match.url.split("/");
+      splitUrl[splitUrl.length - 1] = encodeURIComponent(
+        splitUrl[splitUrl.length - 1]
+      );
+      const encodeUrl = splitUrl.join("/");
+      return history.push({ pathname: "/auth", state: { from: encodeUrl } });
+    }
+    postDislikeOrUnDislikeComment(comment._id)
+      .then((msg) => {
+        if(msg == "dislike success"){
+          setDislikeForComment(comment._id, currentUser._id)
+        }else{
+          setUndislikeForComment(comment._id, currentUser._id)
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <CommentReviewsItemWrapper ref={commentItemReadMore}>
       <Row>
@@ -57,7 +103,7 @@ const CommentReviewsItem = ({ comment, product , setCommentItemHeight, currentUs
               : null
           }
         />
-        <Row style={{flexDirection:"column"}}>
+        <Row style={{ flexDirection: "column" }}>
           <CommentText>
             <p>
               <strong>
@@ -74,12 +120,31 @@ const CommentReviewsItem = ({ comment, product , setCommentItemHeight, currentUs
                 <Moment format="DD-MM-YYYY HH:mm">{comment.updatedAt}</Moment>
               </span>{" "}
             </p>
-            <p>{text} {showReadMore  ? <span>... <ReadMore onClick={handleSetReadMore}>{!readMore ? "Xem thêm" : "Thu gọn"}</ReadMore></span> : null} </p>
-           
-          </CommentText>       
+            <p>
+              {text}{" "}
+              {showReadMore ? (
+                <span>
+                  ...{" "}
+                  <ReadMore onClick={handleSetReadMore}>
+                    {!readMore ? "Xem thêm" : "Thu gọn"}
+                  </ReadMore>
+                </span>
+              ) : null}{" "}
+            </p>
+          </CommentText>
           <div>
-            <ButtonLink onClick={handleClickLikeButton}>Thích ({comment.likes.length})</ButtonLink>
-            <ButtonLink>Không thích ({comment.dislikes.length})</ButtonLink>
+            <ButtonLink onClick={handleClickLikeButton}>
+              <span style={{ fontSize: "1em", verticalAlign: "middle" }}>
+                <AiOutlineLike />
+              </span>{" "}
+              ({comment.likes.length})
+            </ButtonLink>
+            <ButtonLink onClick={handleClickDislikeButton}>
+              <span style={{ fontSize: "1em", verticalAlign: "middle" }}>
+                <AiOutlineDislike />
+              </span>{" "}
+              ({comment.dislikes.length})
+            </ButtonLink>
             <ButtonLink>Trả lời</ButtonLink>
           </div>
         </Row>
@@ -88,6 +153,12 @@ const CommentReviewsItem = ({ comment, product , setCommentItemHeight, currentUs
   );
 };
 const mapStateToProps = createStructuredSelector({
-  currentUser : selectCurrentUser
+  currentUser: selectCurrentUser,
+});
+const mapDispatchToProps = dispatch => ({
+  setLikeForComment : (commentId, userId) => dispatch(setLikeForComment(commentId, userId)),
+  setUnlikeForComment : (commentId, userId) => dispatch(setUnlikeForComment(commentId, userId)),
+  setDislikeForComment : (commentId, userId) => dispatch(setDislikeForComment(commentId, userId)),
+  setUndislikeForComment : (commentId, userId) => dispatch(setUndislikeForComment(commentId, userId)),
 })
-export default connect(mapStateToProps)(withRouter(CommentReviewsItem));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CommentReviewsItem));

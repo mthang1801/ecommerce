@@ -17,7 +17,7 @@ export const FormCompleteWrapper = styled.form`
     width: 90%;
     padding: 1rem 1.5rem;
   };
-  font-family : 
+  font-family : Roboto, sans serif;
 `;
 
 const checkAnimation = keyframes`

@@ -25,7 +25,7 @@ app.use(morgan("combined", { stream: accessLogStream }));
 configViewEngine(app);
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 //Handler Access-Control-Allow-Origin
 CORS(app);

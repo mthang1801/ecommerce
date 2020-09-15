@@ -17,7 +17,7 @@ const CategoriesSlider = (props) => {
   const [category, setCategory] = useState([]);
   let dragging = false;
   useEffect(() => {
-    let _mounted = true;
+    let _mounted = true;  
     getCategoryList().then((data) => {
       if (_mounted) {
         setCategory(data);

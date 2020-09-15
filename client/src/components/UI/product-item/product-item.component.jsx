@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, memo} from "react";
 import {
   ProductItemContainer,
   ProductItemImageContainer,
@@ -36,10 +36,9 @@ const ProductItem = ({ product, history, onClick }) => {
     return () => clearInterval(timerInterval);
   }, [product]);
   const onAddToCart = e => {
-    e.stopPropagation();
-    console.log("pl");
+    e.stopPropagation();    
   }
-
+  // console.log(product)
   return (
     <ProductItemContainer title={product.name} onClick={(e) => onClick(product.linkUrl)}>      
       <ProductItemImageContainer>
@@ -85,4 +84,4 @@ const ProductItem = ({ product, history, onClick }) => {
   );
 };
 
-export default withRouter(ProductItem);
+export default memo(withRouter(ProductItem));

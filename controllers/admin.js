@@ -312,7 +312,9 @@ exports.getMenu = async (req, res, next) => {
 };
 exports.postCreateMenu = async (req, res, next) => {
   try {
-    let dataJSON = req.body;
+    let { data } = req.body;
+    console.log(data);
+
     await fs.writeFile(
       path.join(
         path.dirname(require.main.filename),
@@ -321,7 +323,7 @@ exports.postCreateMenu = async (req, res, next) => {
         "data",
         "menu.json"
       ),
-      JSON.stringify(dataJSON),
+      data,
       "utf8"
     );
     res.status(201).json({ msg: "created success" });
@@ -341,6 +343,34 @@ exports.updateManufactor = async (req, res, next) => {
       }
     }
     console.timeEnd("start");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProductList = async (req, res, next) => {
+  try {
+    console.time("start-get-admin-product-list");
+    const productList = await Manufactor.find();
+    console.timeEnd("start-get-admin-product-list");
+    res.status(200).json(productList);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.updateProductList = async (req, res, next) => {
+  try {
+    console.time("update-product-list");
+
+    const { productList } = req.body;
+    console.log(productList);
+    for await (let product of productList) {
+      let __product = await Manufactor.findById(product._id);
+      __product.linkUrl = product.linkUrl;
+      console.log(__product.linkUrl);
+      await __product.save();
+    }
+    console.timeEnd("update-product-list");
   } catch (error) {
     next(error);
   }

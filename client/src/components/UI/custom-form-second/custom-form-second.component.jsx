@@ -52,9 +52,9 @@ export const Input = styled.input`
   font-size : 1.1em;
   border : none ; 
   outline : none ; 
-  border-bottom :1px solid #424242;
+  border-bottom :1px solid #198cf0;
   &:focus { 
-    border-bottom : 2px solid #002984;
+    border-bottom : 2px solid #0e7fe1;
   };
   margin-top : ${({inputFile}) => inputFile ? "0.5rem" : 0};
   z-index :  0;
@@ -101,10 +101,10 @@ display : flex ;
     margin-bottom : 2rem;
   }
   position : relative;
-  visibility : ${({isDiscount}) => isDiscount ? "visible" : "hidden"};
-  width : ${({isDiscount}) => isDiscount ? "100%" : "50%"};
-  height : ${({isDiscount}) => isDiscount ? "auto" : 0};
-  transition : ${({isDiscount}) => isDiscount ? "all 0.25s" : "none"};
+  visibility : ${({show}) => show ? "visible" : "hidden"};
+  width : ${({show}) => show ? "100%" : "50%"};
+  height : ${({show}) => show ? "auto" : 0};
+  transition : ${({show}) => show ? "all 0.25s" : "none"};
 `
 
 export const PlainText= styled.span`

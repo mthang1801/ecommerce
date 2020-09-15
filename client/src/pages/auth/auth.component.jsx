@@ -12,6 +12,7 @@ class AuthPage extends React.Component {
   
   render() {    
     const { match, location, user } = this.props;
+    console.log(location)
     if (user) {
       if (location.state) return <Redirect to={location.state.from} />;
       return <Redirect to="/" />;

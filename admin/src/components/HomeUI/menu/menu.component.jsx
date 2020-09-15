@@ -11,22 +11,21 @@ const Menu = ({match}) => {
   const [menuList, setMenuList] = useState(null);
   const [alert, setAlert] = useState(null);
   useEffect(() => {
-    getMenu().then(data => {
-      console.log(JSON.parse(data));
-      setMenuList(data);
+    getMenu().then(data => {      
+      console.log(data);
+      setMenuList(JSON.stringify(data));
     });
   }, [getMenu]);
 
   const handleCreateMenuFile = e => {
+   
     createMenu(menuList).then(res => {
+     
       setAlert("Tạo file thành công");
     }).catch(err => {
       setAlert("Tạo file thất bại");
     });
-  }
-  const handleClick = () => {
-    updateManufactor();
-  }
+  } 
   return (  
     <MenuWrapper>    
       {alert && <h2>{alert}</h2>}
@@ -35,8 +34,7 @@ const Menu = ({match}) => {
       </JSONData>
       {menuList && <Button variant="contained" color="primary" onClick={handleCreateMenuFile} style={{marginLeft : "auto", display : "block"}}>
         Tạo file
-      </Button>}
-      <Button onClick={handleClick}>Update</Button>
+      </Button>}     
     </MenuWrapper>  
         
   )

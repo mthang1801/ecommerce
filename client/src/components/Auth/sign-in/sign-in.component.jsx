@@ -11,6 +11,10 @@ import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.componen
 import FacebookLogin from "../../UI/facebook-login/facebook-login.component";
 import GoogleLogin from "../../UI/google-login/google-login.component";
 class SignIn extends React.Component{
+  constructor(props){
+    super(props);
+    this.signInRef = React.createRef();
+  }
   state = {
     email : "", 
     password : "",
@@ -19,11 +23,17 @@ class SignIn extends React.Component{
     loaded : false ,
     captcha_value :null
   }
+
+
   timer = null ;
   componentDidMount(){
     this.timer = setTimeout(() => {
       this.setState({loaded: true})
     },1000)    
+    window.scrollTo({
+      top : this.signInRef.current.offsetTop, 
+      behavior : "smooth"
+    })
   }
   componentWillUnmount(){
     clearTimeout(this.timer);
@@ -62,10 +72,10 @@ class SignIn extends React.Component{
     const {email, password, error, disabled, loaded} = this.state;   
     const {authPath}  = this.props;   
     return (
-      <CustomFormContainer onSubmit={this.onSubmitSigninForm}>
+      <CustomFormContainer onSubmit={this.onSubmitSigninForm} ref={this.signInRef}>
         <FormHeader>
-          <Title>Sign In</Title>
-          <SubTitle>Sign in your account via email and password.</SubTitle>
+          <Title>Đăng nhập</Title>
+          <SubTitle>Đăng nhập tài khoản bằng email và mật khẩu</SubTitle>
         </FormHeader>
         {error &&  <ErrorMessage>{error}</ErrorMessage>}
         <FlashForm>

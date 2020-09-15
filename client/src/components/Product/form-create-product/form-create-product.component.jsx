@@ -47,6 +47,7 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
   const [listProductType, setListProductType] = useState([]);
   const [listProductGroup, setListProductGroup] = useState([]);
   const [hideAddProductGroup, setHideAddProductGroup] = useState(true); 
+  const [isFeeShip, setIsFeeShip] = useState(false);
   const {
     selectedCategory,
     selectedProductType,
@@ -61,6 +62,9 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
     discountExpDate,
     description,
     information,
+    weight,
+    quantity,
+    ship_fee
   } = product;
   const [disabled, setDisabled] = useState(true);
   const [listBase64Image, setListBase64Image] = useState([]);
@@ -195,7 +199,9 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
       !name.trim() ||
       !hideAddProductGroup && !selectedProductGroup.name ||
       !image.length ||
-      !price ||
+      !price ||      
+      weight === 0 || 
+      quantity === 0 ||
       price === 0 ||
       (isDiscount &&
         (!discount ||
@@ -208,8 +214,9 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
       !manufactor
     ) {
       return false;
+    }else{
+      return true
     }
-    return true;
   };
 
   useEffect(() => {
@@ -229,7 +236,10 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
     information,
     manufactor,
     price,
-    image
+    image,
+    weight, 
+    quantity , 
+    ship_fee
   ]);
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -408,6 +418,49 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
             <PlainText>Giá SP là bắt buộc (*)</PlainText>
           </FormGroup>
           <FormInline>
+            <FormGroup>
+              <Label>Số Lượng</Label>
+              <Input type="number" value={quantity == 0 ? "" : quantity} onChange={e => save({quantity : +e.target.value})} />
+            </FormGroup>
+            <FormGroup>
+              <Label>Khối Lượng (kg)</Label>
+              <Input type="number" value={weight == 0 ? "" : weight} onChange={e => save({weight : +e.target.value})} />
+            </FormGroup>
+          </FormInline>
+          <FormInline>
+            <FormGroup style={{ width: "auto" }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isFeeShip}
+                    onChange={(e) => {
+                      if(isFeeShip){
+                        save({ship_fee : 0})
+                      }     
+                      setIsFeeShip(prevState => !prevState)                                   
+                    }}
+                    name="fee-ship"
+                    color="primary"
+                  />
+                }
+                label="Phí vận chuyển"
+              />
+            </FormGroup>
+            <FormGroup style={{ flex: 1 }}>
+              <FormGroupAnimation show={isFeeShip}>
+                <Label>
+                  <Required>Phí vận chuyển</Required>
+                </Label>
+                <Input
+                  type="number"
+                  placeholder="VND"
+                  value={ship_fee || ""}
+                  onChange={(e) => save({ ship_fee: +e.target.value })}
+                />
+              </FormGroupAnimation>
+            </FormGroup>
+          </FormInline>
+          <FormInline>
             <FormGroup style={{ width: "auto" }}>
               <FormControlLabel
                 control={
@@ -427,7 +480,7 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
               />
             </FormGroup>
             <FormGroup style={{ flex: 1 }}>
-              <FormGroupAnimation isDiscount={isDiscount}>
+              <FormGroupAnimation show={isDiscount}>
                 <Label>
                   <Required>Khuyến mãi</Required>
                 </Label>
@@ -440,7 +493,7 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
               </FormGroupAnimation>
             </FormGroup>
             <FormGroup style={{ flex: 1 }}>
-              <FormGroupAnimation isDiscount={isDiscount}>
+              <FormGroupAnimation show={isDiscount}>
                 <Label>
                   <Required>Thời hạn</Required>
                 </Label>
@@ -459,6 +512,7 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
               </FormGroupAnimation>
             </FormGroup>
           </FormInline>
+          
           <FormGroup>
             <FormGroupAnimation isDiscount={isDiscount}>
               <Label>
@@ -473,6 +527,7 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
               />
             </FormGroupAnimation>
           </FormGroup>
+          
           <List isDiscount={isDiscount} style={{ marginBottom: "6rem" }}>
             <h4>Mô tả sản phẩm</h4>
             <CKEditor

@@ -29,3 +29,22 @@ export const fetchProductCommentReview = (productId) => async (dispatch) => {
     dispatch(fetchProductCommentReviewFail(error));
   }
 };
+
+export const setLikeForComment = (commentId, userId) => ({
+  type: productCommentReviewActionTypes.SET_LIKE_FOR_COMMENT,
+  payload: { commentId, userId },
+});
+
+export const setUnlikeForComment = (commentId, userId) => ({
+  type: productCommentReviewActionTypes.SET_UNLIKE_FOR_COMMENT,
+  payload: { commentId, userId },
+});
+export const setDislikeForComment = (commentId, userId) => ({
+  type: productCommentReviewActionTypes.SET_DISLIKE_FOR_COMMENT,
+  payload: { commentId, userId },
+});
+
+export const setUndislikeForComment = (commentId, userId) => ({
+  type: productCommentReviewActionTypes.SET_UNDISLIKE_FOR_COMMENT,
+  payload: { commentId, userId },
+});

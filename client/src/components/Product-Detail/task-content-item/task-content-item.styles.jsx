@@ -23,7 +23,9 @@ export const EmbberContent = styled.div`
   overflow : hidden ;
   text-overflow : ellipsis ; 
   line-height: 1.5;
+  line-break: anywhere;
   word-wrap : break-word;
+  position : ${({readMore, showReadMore}) => !showReadMore ? "unset" : readMore ?"unset" : "absolute"}
 `
 
 export const ReadMore = styled.span`

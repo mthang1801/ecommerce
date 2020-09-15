@@ -7,7 +7,7 @@ const LatestProducts = ({ mobileView, tabletView }) => {
   const [latestProducts, setLatestProducts] = useState([]);
 
   useEffect(() => {
-    let _mounted = true ;
+    let _mounted = true ;    
     getLatestProducts().then((data) => {
       if(_mounted){
         setLatestProducts(data);

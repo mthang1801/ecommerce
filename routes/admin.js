@@ -11,4 +11,6 @@ router.delete("/product-types", adminController.deleteProductTypes);
 router.post("/manufactor", adminController.updateManufactor);
 router.get("/menu", adminController.getMenu);
 router.post("/menu", adminController.postCreateMenu);
+router.get("/product-list", adminController.getProductList);
+router.put("/product-list", adminController.updateProductList);
 module.exports = router;

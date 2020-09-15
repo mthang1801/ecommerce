@@ -23,15 +23,15 @@ const ProductSlider = ({ mobileView, tabletView, title, productList, history , s
     if(!dragging){
       history.push(linkUrl)
     }
-  }
+  }  
   return (
     <ProductSliderWrapper>
       <Title>{title}</Title>
       <Slider {...settings} style={{height:"100%"}} autoplaySpeed={3000}>
-        {productList.length &&
+        {productList.length ?
           productList.map((product, id) => (
             <ProductItem key={product._id} product={product} onClick={(linkUrl) => handleClick(linkUrl)} />
-          ))}
+          )) : null}
       </Slider>
     </ProductSliderWrapper>
   );

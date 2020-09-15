@@ -108,6 +108,10 @@ const ProductSchema = new Schema(
       type: Number,
       default: 10000,
     },
+    weight: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true, strict: false }
 );

@@ -28,6 +28,7 @@ const ShopDetailPage = ({
     const categoryPath = match.params.categoryPath;
     const productTypePath = match.params.productTypePath;
     const productPath = match.params.productPath;    
+   
     fetchProductDetail(categoryPath, productTypePath, productPath);    
     if(productDetailRef.current){
       window.scrollTo({
