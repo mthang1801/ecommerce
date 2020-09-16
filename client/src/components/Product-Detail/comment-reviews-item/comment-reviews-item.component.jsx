@@ -6,13 +6,16 @@ import {
   ReadMore,
   CommentText,
   ButtonLink,
+  TextArea,
+  ResponseComment
 } from "./comment-reviews-item.styles";
 import Moment from "react-moment";
+import Button from "@material-ui/core/Button"
 import { FcBusinessman } from "react-icons/fc";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter, Redirect, Link } from "react-router-dom";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import {postLikeOrUnlikeComment, postDislikeOrUnDislikeComment} from "../../../utils/connectDB"
 import { setLikeForComment, setUnlikeForComment, setDislikeForComment, setUndislikeForComment} from "../../../redux/product-comment-review/product-comment-review.actions"
@@ -29,9 +32,13 @@ const CommentReviewsItem = ({
   setUndislikeForComment
 }) => {
   const commentItemReadMore = useRef(null);
+  const responseRef = useRef(null);
   const [readMore, setReadMore] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const [text, setText] = useState("");
+  const [isResponseComment, setIsReponseComment] = useState(false);
+  const [responseComment, setResponseComment] = useState(`${comment.user.name}, `);
+  const timeShowResponse = 700 ; 
   useEffect(() => {
     console.log(
       commentItemReadMore.current.scrollHeight,
@@ -39,13 +46,12 @@ const CommentReviewsItem = ({
     );
     if (comment.text.length > 150) {
       setShowReadMore(true);
-      setText(comment.text.substr(0, 200));
-      // setCommentItemHeight(commentItemReadMore.current.scrollHeight - )
+      setText(comment.text.substr(0, 200));    
     } else {
       setShowReadMore(false);
       setText(comment.text);
     }
-  }, [comment]);
+  }, [comment]); 
   const handleSetReadMore = () => {
     if (readMore) {
       setReadMore(false);
@@ -93,6 +99,28 @@ const CommentReviewsItem = ({
       })
       .catch((err) => console.log(err));
   };
+  const handleClickResponseCommentButton = () => {
+    if (!currentUser) {
+      let splitUrl = match.url.split("/");
+      splitUrl[splitUrl.length - 1] = encodeURIComponent(
+        splitUrl[splitUrl.length - 1]
+      );
+      const encodeUrl = splitUrl.join("/");
+      return history.push({ pathname: "/auth", state: { from: encodeUrl } });
+    }
+    setIsReponseComment(true);   
+    setTimeout(()=> {
+      responseRef.current.focus();    
+      responseRef.current.setSelectionRange(responseRef.current.value.length,responseRef.current.value.length);
+    }, timeShowResponse)     
+  }
+  const handleSubmitResponseComment = (e) => {
+    e.preventDefault(); 
+    if(!responseComment){
+      return ; 
+    }
+    
+  }
   return (
     <CommentReviewsItemWrapper ref={commentItemReadMore}>
       <Row>
@@ -124,7 +152,7 @@ const CommentReviewsItem = ({
               {text}{" "}
               {showReadMore ? (
                 <span>
-                  ...{" "}
+                  {!readMore ? "..." : " " }
                   <ReadMore onClick={handleSetReadMore}>
                     {!readMore ? "Xem thêm" : "Thu gọn"}
                   </ReadMore>
@@ -145,10 +173,16 @@ const CommentReviewsItem = ({
               </span>{" "}
               ({comment.dislikes.length})
             </ButtonLink>
-            <ButtonLink>Trả lời</ButtonLink>
+            {currentUser && currentUser._id !== comment.user._id || !currentUser ? <ButtonLink onClick={handleClickResponseCommentButton}>Trả lời</ButtonLink> :  null}
           </div>
-        </Row>
+          {isResponseComment ? 
+          <ResponseComment onSubmit={handleSubmitResponseComment}>
+            <TextArea timeShowResponse={timeShowResponse}  ref={responseRef} value={responseComment} onChange={e => setResponseComment(e.target.value)}/> 
+            <Button color="primary" variant="contained" style={{margin : "10px 0"}} size="small">Gửi bình luận</Button>
+          </ResponseComment>: null}
+        </Row>        
       </Row>
+     
     </CommentReviewsItemWrapper>
   );
 };

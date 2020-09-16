@@ -4,7 +4,9 @@ import {
   setUnlikeForComment,
   setDislikeForComment,
   setUndislikeForComment,
+  setResponseComment,
 } from "./product-comment-review.utils";
+import { setResponseComment } from "./product-comment-review.actions";
 const INITIAL_STATE = {
   comments: [],
   numberOfComments: 0,
@@ -67,6 +69,15 @@ export default (state = INITIAL_STATE, action) => {
           state.comments,
           action.payload.commentId,
           action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_RESPONSE_COMMENT:
+      return {
+        ...state,
+        comments: setResponseComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.response
         ),
       };
     default:

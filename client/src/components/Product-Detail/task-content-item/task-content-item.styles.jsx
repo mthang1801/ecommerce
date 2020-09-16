@@ -19,13 +19,14 @@ export const TaskbarContentWrapper = styled.div`
 
 export const EmbberContent = styled.div`
   width: 100%; 
-  height : 90%;
+  height : 95%;
   overflow : hidden ;
   text-overflow : ellipsis ; 
-  line-height: 1.5;
+  line-height: 1.4;
   line-break: anywhere;
   word-wrap : break-word;
-  position : ${({readMore, showReadMore}) => !showReadMore ? "unset" : readMore ?"unset" : "absolute"}
+  position : ${({readMore, showReadMore}) => !showReadMore ? "unset" : readMore ?"unset" : "absolute"};
+  z-index: 1;
 `
 
 export const ReadMore = styled.span`

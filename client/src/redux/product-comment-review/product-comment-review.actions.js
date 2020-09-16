@@ -48,3 +48,8 @@ export const setUndislikeForComment = (commentId, userId) => ({
   type: productCommentReviewActionTypes.SET_UNDISLIKE_FOR_COMMENT,
   payload: { commentId, userId },
 });
+
+export const setResponseComment = (commentId, response) => ({
+  type: productCommentReviewActionTypes.SET_RESPONSE_COMMENT,
+  payload: { commentId, response },
+});

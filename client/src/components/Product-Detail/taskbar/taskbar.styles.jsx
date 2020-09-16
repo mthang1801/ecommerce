@@ -5,6 +5,7 @@ export const TaskbarContainer = styled.div`
   width : 100%;
   display : flex ;
   flex-direction : column;
+  z-index:  0;
 `
 export const Wrapper = styled.div`  
   position : relative ; 

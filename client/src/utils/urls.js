@@ -66,4 +66,6 @@ export default {
     `/product-detail/comment/${commentId}/like`,
   POST_DISLIKE_OR_UNDISLIKE_COMMENT: (commentId) =>
     `/product-detail/comment/${commentId}/dislike`,
+  POST_RESPONSE_COMMENT: (commentId) =>
+    `/product-detail/comment/${commentId}/response`,
 };

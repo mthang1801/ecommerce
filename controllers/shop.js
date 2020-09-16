@@ -824,7 +824,7 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
       productPath
     )}`;
 
-    const product = await Product.findOne({ linkUrl })
+    let product = await Product.findOne({ linkUrl })
       .populate("images")
       .populate("user");
     if (!product) {
@@ -855,6 +855,7 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
         .limit(8);
       collectionProducts = [...collectionProducts, ...products];
     }
+
     let checkProduct = {};
     let relatedProducts = [];
     collectionProducts.forEach((productItem) => {
@@ -867,6 +868,8 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
       }
     });
     console.timeEnd("productDetail");
+    let __product = product._doc;
+    __product.user.name = __product.user.facebook.name || __product.us;
     res.status(200).json({ product, relatedProducts });
   } catch (error) {
     next(error);

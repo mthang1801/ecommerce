@@ -34,3 +34,11 @@ export const setUndislikeForComment = (comments, commentId, userId) => {
     return comment;
   });
 };
+
+export const setResponseComment = (comments, commentId, response) => {
+  return comments.map((comment) => {
+    if (comment._id == commentId) {
+      // comment.responses = 
+    }
+  })
+}

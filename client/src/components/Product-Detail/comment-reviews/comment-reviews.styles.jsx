@@ -32,7 +32,7 @@ export const TextArea = styled.textarea`
   resize : none ; 
   font-family : Roboto, sans serif;
 `
-export const CommentsPost = styled.div`
+export const CommentsPost = styled.form`
   width : 100%; 
   height: 35%;
   margin-bottom : 1rem
