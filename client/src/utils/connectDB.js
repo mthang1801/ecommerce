@@ -363,27 +363,3 @@ export const getCommentReviewsByProductId = (productId) => {
     }
   });
 };
-export const postLikeOrUnlikeComment = (commentId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { data } = await axios.post(
-        urls.POST_LIKE_OR_UNLIKE_COMMENT(commentId)
-      );
-      resolve(data.msg);
-    } catch (error) {
-      reject(error.response.data.message);
-    }
-  });
-};
-export const postDislikeOrUnDislikeComment = (commentId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { data } = await axios.post(
-        urls.POST_DISLIKE_OR_UNDISLIKE_COMMENT(commentId)
-      );
-      resolve(data.msg);
-    } catch (error) {
-      reject(error.response.data.message);
-    }
-  });
-};

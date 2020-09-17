@@ -57,15 +57,21 @@ export default {
   POST_COD_PAYMENT: `/user/payment/cod`,
   POST_CARD_PAYMENT: `/user/payment/card`,
   FETCH_ORDERED_LIST: `/ordered`,
-  GET_PRODUCT_REVIEWS: (productId) => `/product/reviews/${productId}`,
-  POST_REVIEWS_PRODUCT: (productId) => `/product/reviews/${productId}`,
-  UPDATE_REVIEWS_PRODUCT: (productId) => `/product/reviews/${productId}`,
+  GET_PRODUCT_REVIEWS: (productId) => `/product-detail/reviews/${productId}`,
+  POST_REVIEWS_PRODUCT: (productId) => `/product-detail/reviews/${productId}`,
+  UPDATE_REVIEWS_PRODUCT: (productId) => `/product-detail/reviews/${productId}`,
   GET_PRODUCT_COMMENT_REVIEWS: (productId) =>
-    `/product/reviews/${productId}/comments`,
+    `/product-detail/reviews/${productId}/comments`,
   POST_LIKE_OR_UNLIKE_COMMENT: (commentId) =>
     `/product-detail/comment/${commentId}/like`,
   POST_DISLIKE_OR_UNDISLIKE_COMMENT: (commentId) =>
     `/product-detail/comment/${commentId}/dislike`,
   POST_RESPONSE_COMMENT: (commentId) =>
     `/product-detail/comment/${commentId}/response`,
+  POST_LIKE_OR_UNLIKE_RESPONSE_COMMENT: (responseId) =>
+    `/product-detail/comment/response/${responseId}/like`,
+  POST_DISLIKE_OR_UNDISLIKE_RESPONSE_COMMENT: (responseId) =>
+    `/product-detail/comment/response/${responseId}/dislike`,
+  POST_RESPONSE_TO_REPONSE_COMMENT: (commentId) =>
+    `/product-detail/comment/${commentId}/response/`,
 };

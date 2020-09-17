@@ -882,13 +882,15 @@ exports.getProductReviewsById = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    console.time("get product reviews by Id");
     const { productId } = req.params;
     const product = await Product.findById(productId)
       .populate({
         path: "images",
         options: { limit: 1 },
       })
-      .populate({ path: "user", select: "information" });
+      .populate({ path: "user", select: "information" })
+      .populate({ path: "responses" });
     if (!product) {
       const error = new Error("Product not found");
       error.statusCode = 404;
@@ -909,6 +911,7 @@ exports.getProductReviewsById = async (req, res, next) => {
     __product.numberOfVotes = __product.votes.length;
     delete __product.votes;
     delete __product.comments;
+    console.timeEnd("get product reviews by Id");
     res.status(200).json(__product);
   } catch (error) {
     next(error);
@@ -1067,6 +1070,7 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
     console.time("start-get-comment-review");
     const { productId } = req.params;
     const product = await Product.findById(productId);
+
     if (!product || product.status !== "active") {
       const error = new Error("Product not found or disabled");
       error.statusCode = 404;
@@ -1082,11 +1086,17 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
     let countComments = await Comment.countDocuments({ product: productId });
     commentList.countComments = countComments;
     const userCreateProduct = await product.user;
+    let responseList = [];
     for await (let comment of comments) {
-      let responseList = await Response.find({ comment: comment._id })
-        .populate("user")
+      let responses = await Response.find({ comment: comment._id })
+        .populate({
+          path: "user",
+          select: "_id avatar google.name facebook.name local.name",
+        })
         .sort({ createdAt: -1 })
         .limit(2);
+
+      responseList = [...responseList, ...responses];
       commentList.countComments += comment.responses.length;
       let countResponses = await Response.countDocuments({
         comment: comment._id,
@@ -1101,7 +1111,6 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
         _id: comment.user._id,
       };
 
-      comment.responses = responseList;
       comment.countResponses = countResponses;
       if (userCreateProduct == comment.user._id) {
         commentList.comments.unshift(comment);
@@ -1112,6 +1121,7 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
     console.timeEnd("start-get-comment-review");
     res.status(200).json({
       comments: commentList.comments,
+      responses: responseList,
       numberOfComments: commentList.countComments,
     });
   } catch (error) {
@@ -1175,10 +1185,10 @@ exports.postDislikeOrUndislikeComment = async (req, res, next) => {
     //check user has disliked this comment.If user has disliked, remove this dislike, otherwise add dislike to this comment
     // check user has liked this comment. If user has liked, remove liked;
     comment.likes.pull(req.user._id);
-    const checkUserHasDisiked = comment.dislikes.find(
+    const checkUserHasDisliked = comment.dislikes.find(
       (userId) => userId == req.user._id
     );
-    if (checkUserHasDisiked) {
+    if (checkUserHasDisliked) {
       comment.dislikes.pull(req.user._id);
       await comment.save();
       return res.status(200).json({ msg: "undislike success" });
@@ -1186,6 +1196,155 @@ exports.postDislikeOrUndislikeComment = async (req, res, next) => {
     comment.dislikes.push(req.user._id);
     await comment.save();
     res.status(200).json({ msg: "dislike success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.postResponseComment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { text } = req.body;
+    const { commentId } = req.params;
+    console.log(commentId);
+    if (!text || !commentId) {
+      const error = new Error("response error");
+      error.statusCode = 400;
+      throw error;
+    }
+    const comment = await Comment.findById(commentId);
+    console.log(comment);
+    if (!comment) {
+      const error = new Error("Comment not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const newResponse = new Response({
+      comment: comment._id,
+      user: req.user._id,
+      text,
+    });
+
+    comment.responses.push(newResponse._id);
+
+    await comment.save();
+    await newResponse.save();
+    res.status(201).json(newResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postLikeOrUnlikeResponseComment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { responseId } = req.params;
+    if (!responseId) {
+      const error = new Error("request error");
+      throw error;
+    }
+    const response = await Response.findById(responseId);
+    if (!response) {
+      const error = new Error("Comment not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    //check user has liked this comment.If user has liked, remove this like, otherwise add like to this comment
+    // check user has disliked this comment. If user has disliked, remove disliked;
+    response.dislikes.pull(req.user._id);
+    const checkUserHasLiked = response.likes.find(
+      (userId) => userId == req.user._id
+    );
+    if (checkUserHasLiked) {
+      response.likes.pull(req.user._id);
+      await response.save();
+      return res.status(200).json({ msg: "unlike success" });
+    }
+    response.likes.push(req.user._id);
+    await response.save();
+    res.status(200).json({ msg: "like success" });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postDislikeOrUndislikeResponseComment = async (req, res, next) => {
+  try {
+    console.time("dislike or undislike response comment");
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { responseId } = req.params;
+    if (!responseId) {
+      const error = new Error("request error");
+      throw error;
+    }
+    const response = await Response.findById(responseId);
+    if (!response) {
+      const error = new Error("response not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    //check user has disliked this comment.If user has disliked, remove this dislike, otherwise add dislike to this comment
+    // check user has liked this comment. If user has liked, remove liked;
+    response.likes.pull(req.user._id);
+    const checkUserHasDisliked = response.dislikes.find(
+      (userId) => userId == req.user._id
+    );
+    if (checkUserHasDisliked) {
+      response.dislikes.pull(req.user._id);
+      await response.save();
+      return res.status(200).json({ msg: "undislike success" });
+    }
+    response.dislikes.push(req.user._id);
+    console.time("dislike or undislike response comment");
+    await response.save();
+    res.status(200).json({ msg: "dislike success" });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.postReponseToResponsecomment = async (req, res, next) => {
+  try {
+    if (!req.isAuthenticated || !req.user) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { text } = req.body;
+    const { commentId } = req.params;
+
+    if (!text || !commentId) {
+      const error = new Error("response error");
+      error.statusCode = 400;
+      throw error;
+    }
+    const comment = await Comment.findById(commentId);
+    console.log(comment);
+    if (!comment) {
+      const error = new Error("Comment not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const newResponse = new Response({
+      comment: comment._id,
+      user: req.user._id,
+      text,
+    });
+
+    comment.responses.push(newResponse._id);
+
+    await comment.save();
+    await newResponse.save();
+    res.status(201).json(newResponse);
   } catch (error) {
     next(error);
   }

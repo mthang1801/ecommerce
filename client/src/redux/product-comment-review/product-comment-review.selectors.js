@@ -21,3 +21,8 @@ export const selectCommentReviewsError = createSelector(
   selectCommentReviews,
   (commentReviews) => (commentReviews.error ? commentReviews.error.msg : null)
 );
+
+export const selectCommentResponses = createSelector(
+  selectCommentReviews,
+  (commentReviews) => commentReviews.responses
+);

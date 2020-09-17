@@ -24,8 +24,7 @@ const CommentReviews = ({ product, show, productId, comments, loading, error, fe
     if (productId) {
       fetchProductCommentReview(productId)
     }
-    if(commentsRef.current.scrollHeight > commentsRef.current.clientHeight ){  
-      console.log(commentsRef.current.scrollHeight)    
+    if(commentsRef.current.scrollHeight > commentsRef.current.clientHeight ){          
       setShowReadMore(true);         
       setTaskHeight(commentsRef.current.scrollHeight + commentItemHeight)
      }
@@ -33,6 +32,7 @@ const CommentReviews = ({ product, show, productId, comments, loading, error, fe
       _mounted = false;
     };
   }, [productId]);
+  
   return (
     <CommentReviewsWrapper ref={commentsRef} show={show}>
       {loading ? (

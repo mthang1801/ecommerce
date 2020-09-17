@@ -1,57 +1,75 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
   CommentReviewsItemWrapper,
-  Image,
+  Avatar,
   Row,
   ReadMore,
   CommentText,
   ButtonLink,
   TextArea,
-  ResponseComment
+  ResponseComment,
+  ResponseWrapper,
 } from "./comment-reviews-item.styles";
 import Moment from "react-moment";
-import Button from "@material-ui/core/Button"
+import Button from "@material-ui/core/Button";
 import { FcBusinessman } from "react-icons/fc";
 import { connect } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/user.selectors";
+import { selectCommentResponses } from "../../../redux/product-comment-review/product-comment-review.selectors";
 import { createStructuredSelector } from "reselect";
 import { withRouter, Redirect, Link } from "react-router-dom";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
-import {postLikeOrUnlikeComment, postDislikeOrUnDislikeComment} from "../../../utils/connectDB"
-import { setLikeForComment, setUnlikeForComment, setDislikeForComment, setUndislikeForComment} from "../../../redux/product-comment-review/product-comment-review.actions"
+import {
+  postLikeOrUnlikeComment,
+  postDislikeOrUndislikeComment,
+  postResponseComment,
+  postLikeOrUnlikeResponseComment,
+  postDislikeOrUndislikeResponseComment,
+  postResponseToResponseComment
+} from "../../../redux/product-comment-review/product-comment-review.actions";
+import ResponseItem from "../response-item/response-item.component";
 const CommentReviewsItem = ({
   comment,
   product,
-  setCommentItemHeight,
   currentUser,
   match,
   history,
-  setLikeForComment,
-  setUnlikeForComment,
-  setDislikeForComment,
-  setUndislikeForComment
+  postLikeOrUnlikeComment,
+  postDislikeOrUndislikeComment,
+  postResponseComment,
+  responses,
+  postLikeOrUnlikeResponseComment,
+  postDislikeOrUndislikeResponseComment,
+  postResponseToResponseComment
+  
 }) => {
   const commentItemReadMore = useRef(null);
   const responseRef = useRef(null);
+  const commentResponseRef = useRef(null);
   const [readMore, setReadMore] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const [text, setText] = useState("");
   const [isResponseComment, setIsReponseComment] = useState(false);
-  const [responseComment, setResponseComment] = useState(`${comment.user.name}, `);
-  const timeShowResponse = 700 ; 
+  const [responseComment, setResponseComment] = useState(
+    `${comment.user.name}, `
+  );
+  const [responseList, setResponseList] = useState([]);
+  const timeShowResponse = 700;
   useEffect(() => {
-    console.log(
-      commentItemReadMore.current.scrollHeight,
-      commentItemReadMore.current.clientHeight
+    console.log("change")   
+    setResponseList(
+      responses.filter((response) => response.comment == comment._id)
     );
-    if (comment.text.length > 150) {
+  },[responses]);
+  useEffect(() => {
+    if (comment.text.length > 200) {
       setShowReadMore(true);
-      setText(comment.text.substr(0, 200));    
+      setText(comment.text.substr(0, 200));
     } else {
       setShowReadMore(false);
       setText(comment.text);
     }
-  }, [comment]); 
+  }, [comment]);
   const handleSetReadMore = () => {
     if (readMore) {
       setReadMore(false);
@@ -70,15 +88,7 @@ const CommentReviewsItem = ({
       const encodeUrl = splitUrl.join("/");
       return history.push({ pathname: "/auth", state: { from: encodeUrl } });
     }
-    postLikeOrUnlikeComment(comment._id)
-      .then((msg) => {
-        if(msg == "like success"){
-          setLikeForComment(comment._id, currentUser._id)
-        }else{
-          setUnlikeForComment(comment._id, currentUser._id)
-        }
-      })
-      .catch((err) => console.log(err));
+    postLikeOrUnlikeComment(comment._id, currentUser._id);
   };
   const handleClickDislikeButton = () => {
     if (!currentUser) {
@@ -89,15 +99,7 @@ const CommentReviewsItem = ({
       const encodeUrl = splitUrl.join("/");
       return history.push({ pathname: "/auth", state: { from: encodeUrl } });
     }
-    postDislikeOrUnDislikeComment(comment._id)
-      .then((msg) => {
-        if(msg == "dislike success"){
-          setDislikeForComment(comment._id, currentUser._id)
-        }else{
-          setUndislikeForComment(comment._id, currentUser._id)
-        }
-      })
-      .catch((err) => console.log(err));
+    postDislikeOrUndislikeComment(comment._id, currentUser._id);
   };
   const handleClickResponseCommentButton = () => {
     if (!currentUser) {
@@ -108,23 +110,55 @@ const CommentReviewsItem = ({
       const encodeUrl = splitUrl.join("/");
       return history.push({ pathname: "/auth", state: { from: encodeUrl } });
     }
-    setIsReponseComment(true);   
-    setTimeout(()=> {
-      responseRef.current.focus();    
-      responseRef.current.setSelectionRange(responseRef.current.value.length,responseRef.current.value.length);
-    }, timeShowResponse)     
-  }
+    setIsReponseComment(true);
+    setTimeout(() => {
+      responseRef.current.focus();
+      responseRef.current.setSelectionRange(
+        responseRef.current.value.length,
+        responseRef.current.value.length
+      );
+    }, timeShowResponse);
+  };
   const handleSubmitResponseComment = (e) => {
-    e.preventDefault(); 
-    if(!responseComment){
+    e.preventDefault();
+    if (!responseComment) {
+      return;
+    }
+
+    postResponseComment(comment._id, responseComment);
+  };
+  const handleClickLikeResponseButton = (responseId) => {
+    if (!currentUser) {
+      let splitUrl = match.url.split("/");
+      splitUrl[splitUrl.length - 1] = encodeURIComponent(
+        splitUrl[splitUrl.length - 1]
+      );
+      const encodeUrl = splitUrl.join("/");
+      return history.push({ pathname: "/auth", state: { from: encodeUrl } });
+    }  
+    postLikeOrUnlikeResponseComment(responseId , currentUser._id ) 
+  };
+  const handleClickDislikeReponseButton = (responseId) => {
+    if (!currentUser) {
+      let splitUrl = match.url.split("/");
+      splitUrl[splitUrl.length - 1] = encodeURIComponent(
+        splitUrl[splitUrl.length - 1]
+      );
+      const encodeUrl = splitUrl.join("/");
+      return history.push({ pathname: "/auth", state: { from: encodeUrl } });
+    }   
+    postDislikeOrUndislikeResponseComment(responseId, currentUser._id)
+  };
+  const handleSubmitResponseToResponseComment = text => {
+    if(!text){
       return ; 
     }
-    
+    postResponseToResponseComment(comment._id, currentUser._id , text)
   }
   return (
     <CommentReviewsItemWrapper ref={commentItemReadMore}>
       <Row>
-        <Image
+        <Avatar
           src={
             comment.user.avatar === "avatar-default.png"
               ? `http://localhost:5000/images/${comment.user.avatar}`
@@ -145,14 +179,14 @@ const CommentReviewsItem = ({
                 )}
               </strong>{" "}
               <span style={{ color: "rgba(0,0,0,0.75)" }}>
-                <Moment format="DD-MM-YYYY HH:mm">{comment.updatedAt}</Moment>
+                <Moment format="DD-MM-YYYY HH:mm">{comment.createdAt}</Moment>
               </span>{" "}
             </p>
             <p>
               {text}{" "}
               {showReadMore ? (
                 <span>
-                  {!readMore ? "..." : " " }
+                  {!readMore ? "..." : " "}
                   <ReadMore onClick={handleSetReadMore}>
                     {!readMore ? "Xem thêm" : "Thu gọn"}
                   </ReadMore>
@@ -173,26 +207,69 @@ const CommentReviewsItem = ({
               </span>{" "}
               ({comment.dislikes.length})
             </ButtonLink>
-            {currentUser && currentUser._id !== comment.user._id || !currentUser ? <ButtonLink onClick={handleClickResponseCommentButton}>Trả lời</ButtonLink> :  null}
+            {(currentUser && currentUser._id !== comment.user._id) ||
+            !currentUser ? (
+              <ButtonLink onClick={handleClickResponseCommentButton}>
+                Trả lời
+              </ButtonLink>
+            ) : null}
           </div>
-          {isResponseComment ? 
-          <ResponseComment onSubmit={handleSubmitResponseComment}>
-            <TextArea timeShowResponse={timeShowResponse}  ref={responseRef} value={responseComment} onChange={e => setResponseComment(e.target.value)}/> 
-            <Button color="primary" variant="contained" style={{margin : "10px 0"}} size="small">Gửi bình luận</Button>
-          </ResponseComment>: null}
-        </Row>        
+          {isResponseComment ? (
+            <ResponseComment>
+              <TextArea
+                timeShowResponse={timeShowResponse}
+                ref={responseRef}
+                value={responseComment}
+                onChange={(e) => setResponseComment(e.target.value)}
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                style={{ margin: "10px 0" }}
+                size="small"
+                onClick={handleSubmitResponseComment}
+              >
+                Gửi bình luận
+              </Button>
+            </ResponseComment>
+          ) : null}
+          <ResponseWrapper ref={commentResponseRef}>
+            {responseList.length
+              ? responseList.map((response) => (
+                  <ResponseItem
+                    key={response._id}
+                    product={product}
+                    response={response}                    
+                    comment={comment}
+                    currentUser={currentUser}
+                    handleClickLikeResponseButton={(responseId) => handleClickLikeResponseButton(responseId)}
+                    handleClickDislikeReponseButton={(responseId) => handleClickDislikeReponseButton(responseId)}
+                    handleSubmitResponseToResponseComment={(text) => handleSubmitResponseToResponseComment(text)}
+                  />
+                ))
+              : null}
+          </ResponseWrapper>
+        </Row>
       </Row>
-     
     </CommentReviewsItemWrapper>
   );
 };
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  responses: selectCommentResponses,
 });
-const mapDispatchToProps = dispatch => ({
-  setLikeForComment : (commentId, userId) => dispatch(setLikeForComment(commentId, userId)),
-  setUnlikeForComment : (commentId, userId) => dispatch(setUnlikeForComment(commentId, userId)),
-  setDislikeForComment : (commentId, userId) => dispatch(setDislikeForComment(commentId, userId)),
-  setUndislikeForComment : (commentId, userId) => dispatch(setUndislikeForComment(commentId, userId)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CommentReviewsItem));
+const mapDispatchToProps = (dispatch) => ({
+  postDislikeOrUndislikeComment: (commentId, userId) =>
+    dispatch(postDislikeOrUndislikeComment(commentId, userId)),
+  postLikeOrUnlikeComment: (commentId, userId) =>
+    dispatch(postLikeOrUnlikeComment(commentId, userId)),
+  postResponseComment: (commentId, text) =>
+    dispatch(postResponseComment(commentId, text)),
+    postLikeOrUnlikeResponseComment : (responseId, userId) => dispatch(postLikeOrUnlikeResponseComment(responseId, userId)),
+    postDislikeOrUndislikeResponseComment : (responseId, userId) => dispatch(postDislikeOrUndislikeResponseComment(responseId, userId)),
+    postResponseToResponseComment : (commentId, userId, text) => dispatch(postResponseToResponseComment(commentId, userId, text))
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CommentReviewsItem));

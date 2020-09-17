@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {lighten} from "polished"
 export const TaskbarContainer = styled.div`
-  margin : ${props => props.mobileView || props.tabletView ? "2rem auto" : "4rem auto"} ;
+  margin : 2rem  0 ;
   width : 100%;
   display : flex ;
   flex-direction : column;

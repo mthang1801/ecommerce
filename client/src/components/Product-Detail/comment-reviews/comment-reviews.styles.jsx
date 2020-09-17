@@ -10,8 +10,7 @@ const taskbarContentAnimation = keyframes`
   }
 `
 export const CommentReviewsWrapper = styled.div`
-  width : 100%; 
-  height : 100%; 
+  width : 100%;   
   position : relative;  
   overflow : hidden ; 
   animation : ${taskbarContentAnimation} 0.5s;

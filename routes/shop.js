@@ -23,43 +23,14 @@ router.get(
   "/category/:pathUrl",
   shopController.getContentListByCategoryLinkUrl
 );
+
 /**
- * @route GET /product/reviews/:productId
- * @desc get product review by id
- * @access private
- */
-router.get(
-  "/product/reviews/:productId",
-  isAuth,
-  shopController.getProductReviewsById
-);
-/**
- * @route POST /product/reviews/:productId
- * @desc post product review by id
- * @access private
- */
-router.post(
-  "/product/reviews/:productId",
-  isAuth,
-  shopController.postProductReviewsById
-);
-/**
- * @route PUT /product/reviews/:productId
- * @desc update product review by id
- * @access private
- */
-router.put(
-  "/product/reviews/:productId",
-  isAuth,
-  shopController.updateProductReviewById
-);
-/**
- * @route GET /product/reviews/:productId/comment
+ * @route GET /product-detail/reviews/:productId/comment
  * @desc get comments review by product Id
  * @access public
  */
 router.get(
-  "/product/reviews/:productId/comments",
+  "/product-detail/reviews/:productId/comments",
   shopController.getCommentReviewsByProductId
 );
 /**
@@ -199,6 +170,36 @@ router.get(
   shopController.getContentProductByProductUrl
 );
 /**
+ * @route GET /product-detail/reviews/:productId
+ * @desc get product review by id
+ * @access private
+ */
+router.get(
+  "/product-detail/reviews/:productId",
+  isAuth,
+  shopController.getProductReviewsById
+);
+/**
+ * @route POST /product-detail/reviews/:productId
+ * @desc post product review by id
+ * @access private
+ */
+router.post(
+  "/product-detail/reviews/:productId",
+  isAuth,
+  shopController.postProductReviewsById
+);
+/**
+ * @route PUT /product-detail/reviews/:productId
+ * @desc update product review by id
+ * @access private
+ */
+router.put(
+  "/product-detail/reviews/:productId",
+  isAuth,
+  shopController.updateProductReviewById
+);
+/**
  * @route POST /product-detail/comment/:commentId/like
  * @desc like comment
  * @access private
@@ -217,6 +218,36 @@ router.post(
   "/product-detail/comment/:commentId/dislike",
   isAuth,
   shopController.postDislikeOrUndislikeComment
+);
+/**
+ * @route POST /product-detail/comment/response/:responseId/like
+ * @desc like comment
+ * @access private
+ */
+router.post(
+  "/product-detail/comment/response/:responseId/like",
+  isAuth,
+  shopController.postLikeOrUnlikeResponseComment
+);
+/**
+ * @route POST /product-detail/comment/response/:responseId/dislike
+ * @desc like comment
+ * @access private
+ */
+router.post(
+  "/product-detail/comment/response/:responseId/dislike",
+  isAuth,
+  shopController.postDislikeOrUndislikeResponseComment
+);
+/**
+ * @route POST /product-detail/comment/response/:responseId/response
+ * @desc like comment
+ * @access private
+ */
+router.post(
+  "/product-detail/comment/:commentId/response/",
+  isAuth,
+  shopController.postReponseToResponsecomment
 );
 
 module.exports = router;

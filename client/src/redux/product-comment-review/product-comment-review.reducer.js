@@ -1,3 +1,4 @@
+import { setResponseToResponseComment } from "./product-comment-review.actions";
 import productCommentReviewsActionTypes from "./product-comment-review.types";
 import {
   setLikeForComment,
@@ -5,10 +6,14 @@ import {
   setDislikeForComment,
   setUndislikeForComment,
   setResponseComment,
+  setLikeForResponseComment,
+  setUnlikeForResponseComment,
+  setDislikeForResponseComment,
+  setUndislikeForResponseComment,
 } from "./product-comment-review.utils";
-import { setResponseComment } from "./product-comment-review.actions";
 const INITIAL_STATE = {
   comments: [],
+  responses: [],
   numberOfComments: 0,
   loading: false,
   error: undefined,
@@ -27,6 +32,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         comments: action.payload.comments,
+        responses: action.payload.responses,
         numberOfComments: action.payload.numberOfComments,
       };
     case productCommentReviewsActionTypes.FETCH_PRODUCT_COMMENT_REVIEW_FAIL:
@@ -79,6 +85,53 @@ export default (state = INITIAL_STATE, action) => {
           action.payload.commentId,
           action.payload.response
         ),
+      };
+    case productCommentReviewsActionTypes.SET_LIKE_FOR_RESPONSE_COMMENT:
+      return {
+        ...state,
+        responses: setLikeForResponseComment(
+          state.responses,
+          action.payload.responseId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_UNLIKE_FOR_RESPONSE_COMMENT:
+      return {
+        ...state,
+        responses: setUnlikeForResponseComment(
+          state.responses,
+          action.payload.responseId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_DISLIKE_FOR_RESPONSE_COMMENT:
+      return {
+        ...state,
+        responses: setDislikeForResponseComment(
+          state.responses,
+          action.payload.responseId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_UNDISLIKE_FOR_RESPONSE_COMMENT:
+      return {
+        ...state,
+        responses: setUndislikeForResponseComment(
+          state.responses,
+          action.payload.responseId,
+          action.payload.userId
+        ),
+      };
+    case productCommentReviewsActionTypes.SET_RESPONSE_TO_RESPONSE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.map((comment) => {
+          if (comment._id == action.payload.commentId) {
+            comment.responses.push(action.payload.userId);
+          }
+          return comment;
+        }),
+        responses: [...state.responses, action.payload.response],
       };
     default:
       return state;

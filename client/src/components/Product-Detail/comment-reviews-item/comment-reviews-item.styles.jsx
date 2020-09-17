@@ -13,9 +13,9 @@ export const Row = styled.div`
   justify-content: space-between;
 `;
 
-export const Image = styled.img`
-  width: 60px;
-  height: 60px;
+export const Avatar = styled.img`
+  width: 36px;
+  height: 36px;
   margin-right: 1rem;
 `;
 export const CommentText = styled.div`
@@ -91,3 +91,12 @@ export const TextArea = styled.textarea`
   };
   animation : ${textAreaAnimation} ${({timeShowResponse}) => timeShowResponse ? `${timeShowResponse}ms` : "700ms"}; 
 `;
+
+export const ResponseWrapper = styled.div`
+  width : 100%; 
+  display : flex;  
+  flex-direction : column; 
+  & > *{
+    margin : 1rem 0;
+  }
+`
