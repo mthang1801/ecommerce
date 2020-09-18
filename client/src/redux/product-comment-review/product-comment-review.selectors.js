@@ -16,6 +16,10 @@ export const selectNumberOfComments = createSelector(
   selectCommentReviews,
   (commentReviews) => commentReviews.numberOfComments
 );
+export const selectNumberOfCommentsAndResponses = createSelector(
+  selectCommentReviews,
+  (commentReviews) => commentReviews.numberOfCommentsAndResponses
+);
 
 export const selectCommentReviewsError = createSelector(
   selectCommentReviews,

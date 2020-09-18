@@ -25,7 +25,8 @@ import {
   postResponseComment,
   postLikeOrUnlikeResponseComment,
   postDislikeOrUndislikeResponseComment,
-  postResponseToResponseComment
+  postResponseToResponseComment,
+  getReadMoreResponses
 } from "../../../redux/product-comment-review/product-comment-review.actions";
 import ResponseItem from "../response-item/response-item.component";
 const CommentReviewsItem = ({
@@ -40,8 +41,8 @@ const CommentReviewsItem = ({
   responses,
   postLikeOrUnlikeResponseComment,
   postDislikeOrUndislikeResponseComment,
-  postResponseToResponseComment
-  
+  postResponseToResponseComment,
+  getReadMoreResponses
 }) => {
   const commentItemReadMore = useRef(null);
   const responseRef = useRef(null);
@@ -50,13 +51,15 @@ const CommentReviewsItem = ({
   const [showReadMore, setShowReadMore] = useState(false);
   const [text, setText] = useState("");
   const [isResponseComment, setIsReponseComment] = useState(false);
+  const commentDefault = comment.user.local ? comment.user.local.name :
+  comment.user.google ? comment.user.google.name :
+  comment.user.facebook ? comment.user.facebook.name + ", ": "";
   const [responseComment, setResponseComment] = useState(
-    `${comment.user.name}, `
+    `${commentDefault}, `
   );
   const [responseList, setResponseList] = useState([]);
   const timeShowResponse = 700;
-  useEffect(() => {
-    console.log("change")   
+  useEffect(() => {    
     setResponseList(
       responses.filter((response) => response.comment == comment._id)
     );
@@ -124,8 +127,9 @@ const CommentReviewsItem = ({
     if (!responseComment) {
       return;
     }
-
     postResponseComment(comment._id, responseComment);
+    setIsReponseComment(false);
+    setResponseComment(commentDefault)
   };
   const handleClickLikeResponseButton = (responseId) => {
     if (!currentUser) {
@@ -155,6 +159,11 @@ const CommentReviewsItem = ({
     }
     postResponseToResponseComment(comment._id, currentUser._id , text)
   }
+
+  const readMoreResponses = e => {
+    getReadMoreResponses(comment._id, responseList.length)
+  }
+
   return (
     <CommentReviewsItemWrapper ref={commentItemReadMore}>
       <Row>
@@ -248,6 +257,7 @@ const CommentReviewsItem = ({
                   />
                 ))
               : null}
+            {responseList.length < comment.countCommentResponses ? <ReadMore onClick={readMoreResponses}>Xem thêm phản hồi</ReadMore> : null}
           </ResponseWrapper>
         </Row>
       </Row>
@@ -267,7 +277,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(postResponseComment(commentId, text)),
     postLikeOrUnlikeResponseComment : (responseId, userId) => dispatch(postLikeOrUnlikeResponseComment(responseId, userId)),
     postDislikeOrUndislikeResponseComment : (responseId, userId) => dispatch(postDislikeOrUndislikeResponseComment(responseId, userId)),
-    postResponseToResponseComment : (commentId, userId, text) => dispatch(postResponseToResponseComment(commentId, userId, text))
+    postResponseToResponseComment : (commentId, userId, text) => dispatch(postResponseToResponseComment(commentId, userId, text)),
+    getReadMoreResponses : (commentId, skip) => dispatch(getReadMoreResponses(commentId, skip))
 });
 export default connect(
   mapStateToProps,

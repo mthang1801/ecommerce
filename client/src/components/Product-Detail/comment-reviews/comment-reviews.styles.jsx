@@ -11,9 +11,11 @@ const taskbarContentAnimation = keyframes`
 `
 export const CommentReviewsWrapper = styled.div`
   width : 100%;   
+  height: 100%;
   position : relative;  
   overflow : hidden ; 
   animation : ${taskbarContentAnimation} 0.5s;
+  z-index:  0 ; 
 `
 
 export const TextArea = styled.textarea`
@@ -46,4 +48,20 @@ export const CommentsGet = styled.div`
 export const ReadMore = styled.div`
   position : absolute; 
   top : 100%;
+`
+
+export const ButtonReadMore = styled.button`
+  outline : none ; 
+  border : none ; 
+  display : block ;
+  cursor : pointer; 
+  background-color :#3f51b5 ;
+  padding : 0.75rem ; 
+    width: 100%;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  &:hover{
+    background-color : #0b1e87;
+  }
 `

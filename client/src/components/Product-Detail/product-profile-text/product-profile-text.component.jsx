@@ -50,8 +50,7 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
       setCartQuantity(cartItem.quantity)
     }else{
       setCartQuantity(1);
-    }
-    console.log(product);
+    }    
     if(product){      
       setProductToCart({ 
         _id : product._id, 

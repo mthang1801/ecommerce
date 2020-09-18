@@ -8,10 +8,7 @@ import {
 import Slider from "react-slick";
 
 const ProductImages = ({images}) => {
-  const [currentImg, setCurrentImg] = useState(images[0]);
-  React.useEffect(() => {
-    console.log(currentImg);
-  }, [currentImg]);
+  const [currentImg, setCurrentImg] = useState(images[0]);  
   const settings = {
     dots: true,
     infinite: true,

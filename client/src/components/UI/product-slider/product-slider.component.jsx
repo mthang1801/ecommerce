@@ -5,8 +5,7 @@ import {withRouter} from "react-router-dom"
 import ProductItem from "../product-item/product-item.component";
 import Slider from "react-slick";
 
-const ProductSlider = ({ mobileView, tabletView, title, productList, history , smallView }) => {
-  console.log(mobileView,tabletView)
+const ProductSlider = ({ mobileView, tabletView, title, productList, history , smallView }) => { 
   let dragging = false;
   const settings = {
     dots: false,

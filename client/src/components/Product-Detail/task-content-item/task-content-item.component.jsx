@@ -4,8 +4,7 @@ const TaskbarContent = ({content, show, readMore, setReadMore, setTaskHeight}) =
   const contentRef = useRef(null);
   const [text, setText] = useState(null);   
   const [showReadMore, setShowReadMore] = useState(false);
-  useEffect(() => {                
-    console.log(contentRef.current.scrollHeight, contentRef.current.clientHeight)
+  useEffect(() => {                  
    if(contentRef.current.scrollHeight > contentRef.current.clientHeight || content.length > 200 ){
     setShowReadMore(true);        
    }

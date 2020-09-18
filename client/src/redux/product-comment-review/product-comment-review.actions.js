@@ -8,7 +8,8 @@ const fetchProductCommentReviewStart = () => ({
 const fetchProductCommentReviewSuccess = (
   comments,
   responses,
-  numberOfComments
+  numberOfComments,
+  numberOfCommentsAndResponses
 ) => {
   return {
     type: productCommentReviewActionTypes.FETCH_PRODUCT_COMMENT_REVIEW_SUCCESS,
@@ -16,6 +17,7 @@ const fetchProductCommentReviewSuccess = (
       comments,
       responses,
       numberOfComments,
+      numberOfCommentsAndResponses,
     },
   };
 };
@@ -29,11 +31,21 @@ export const fetchProductCommentReview = (productId) => async (dispatch) => {
   try {
     dispatch(fetchProductCommentReviewStart());
     const {
-      data: { comments, responses, numberOfComments },
+      data: {
+        comments,
+        responses,
+        numberOfComments,
+        numberOfCommentsAndResponses,
+      },
     } = await axios.get(urls.GET_PRODUCT_COMMENT_REVIEWS(productId));
 
     dispatch(
-      fetchProductCommentReviewSuccess(comments, responses, numberOfComments)
+      fetchProductCommentReviewSuccess(
+        comments,
+        responses,
+        numberOfComments,
+        numberOfCommentsAndResponses
+      )
     );
   } catch (error) {
     dispatch(fetchProductCommentReviewFail(error));
@@ -185,5 +197,45 @@ export const postResponseToResponseComment = (
     dispatch(setResponseToResponseComment(commentId, userId, data));
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const setReadMoreResponses = (commentId, responses) => ({
+  type: productCommentReviewActionTypes.GET_READ_MORE_RESPONSES,
+  payload: { commentId, responses },
+});
+
+export const getReadMoreResponses = (commentId, skip) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(urls.READ_MORE_RESPONSES(commentId, skip));
+    dispatch(setReadMoreResponses(commentId, data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchReadMoreCommentsStart = () => ({
+  type: productCommentReviewActionTypes.FETCH_READ_MORE_COMMENTS_START,
+});
+
+export const fetchReadMoreCommentsSuccess = (comments, responses) => ({
+  type: productCommentReviewActionTypes.FETCH_READ_MORE_COMMENTS_SUCCESS,
+  payload: { comments, responses },
+});
+
+export const fetchReadMoreCommentsFail = (err) => ({
+  type: productCommentReviewActionTypes.FETCH_READ_MORE_COMMENTS_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const fetchMoreComments = (productId, skip) => async (dispatch) => {
+  try {
+    dispatch(fetchReadMoreCommentsStart());
+    const {
+      data: { comments, responses },
+    } = await axios.get(urls.GET_MORE_COMMENTS(productId, skip));
+    dispatch(fetchReadMoreCommentsSuccess(comments, responses));
+  } catch (error) {
+    dispatch(fetchReadMoreCommentsFail(error));
   }
 };

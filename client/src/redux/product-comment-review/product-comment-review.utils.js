@@ -38,7 +38,7 @@ export const setUndislikeForComment = (comments, commentId, userId) => {
 export const setResponseComment = (comments, commentId, response) => {
   return comments.map((comment) => {
     if (comment._id == commentId) {
-      comment.responses.push(response);
+      comment.responses.push(response._id);
     }
     return comment;
   });
@@ -76,4 +76,22 @@ export const setUndislikeForResponseComment = (responses, responseId, userId) =>
       response.dislikes = response.dislikes.filter((_id) => _id != userId);
     }
     return response;
+  });
+
+export const updateCommentToResponseComment = (comments, commentId, userId) =>
+  comments.map((comment) => {
+    if (comment._id == commentId) {
+      comment.responses.push(userId);
+    }
+    return comment;
+  });
+export const updateResponseCommentReadMore = (comments, commentId, responses) =>
+  comments.map((comment) => {
+    if (comment._id == commentId) {
+      comment.responses = [
+        ...comment.responses,
+        responses.map((response) => response._id),
+      ];
+    }
+    return comment;
   });

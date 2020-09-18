@@ -19,7 +19,7 @@ export const TaskbarContentWrapper = styled.div`
 
 export const EmbberContent = styled.div`
   width: 100%; 
-  height : 95%;
+  height : 90%;
   overflow : hidden ;
   text-overflow : ellipsis ; 
   line-height: 1.4;

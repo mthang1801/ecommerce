@@ -39,9 +39,10 @@ const ResponseItem = ({
   const [readMore, setReadMore] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const [isResponseComment, setIsReponseComment] = useState(false);
-  const [responseComment, setResponseComment] = useState(
-    `${comment.user.name}, `
-  );
+  const defaultResponseComment = response.user.local ? response.user.local.name :
+    response.user.google ? response.user.google.name :
+    response.user.facebook ? response.user.facebook.name + ", ": "";
+  const [responseComment, setResponseComment] = useState(defaultResponseComment);
   const timeShowResponse = 700 ; 
   useEffect(() => {
     if (response.text.length > 200) {
@@ -87,11 +88,11 @@ const ResponseItem = ({
         <Avatar src={`http://localhost:5000/images/${response.user.avatar}`} />
         <Row style={{ flexDirection: "column" }}>
           <ResponseText>
-            {/* <p>
+            <p>
               <strong>
-                {(response.user.local.name ||
-                  response.user.google.name ||
-                  response.user.facebook.name)}{" "}
+              {(response.user.local ? response.user.local.name :
+                response.user.google ?  response.user.google.name :
+                response.user.facebook ? response.user.facebook.name : "")}{" "}
                 {response.user._id === product.user._id ? (
                   <span style={{ color: "#3f51b5" }}>
                     Nhà bán hàng <FcBusinessman />
@@ -103,7 +104,7 @@ const ResponseItem = ({
               <span style={{ color: "rgba(0,0,0,0.75)" }}>
                 <Moment format="DD-MM-YYYY HH:mm">{response.createdAt}</Moment>
               </span>{" "}
-            </p> */}
+            </p>
             <p>
               {text}{" "}
               {showReadMore ? (
@@ -149,7 +150,12 @@ const ResponseItem = ({
                 variant="contained"
                 style={{ margin: "10px 0" }}
                 size="small"
-                onClick={() => handleSubmitResponseToResponseComment(responseComment)}
+                onClick={() => {
+                  handleSubmitResponseToResponseComment(responseComment)
+                  setIsReponseComment(false);
+                  setResponseComment(defaultResponseComment);
+                }
+              }
               >
                 Gửi bình luận
               </Button>

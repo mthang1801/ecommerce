@@ -42,9 +42,10 @@ export const ListItem = styled.span`
 export const TaskContent = styled.div`
   margin : 1rem;
   padding : 1rem;
-  height: ${({readMore,taskHeight}) => readMore ? "auto" : taskHeight > 2000 ? `${taskHeight/10}px` : taskHeight > 1000 ? `${taskHeight/5}px` : taskHeight > 500 ? `${taskHeight/2}px` : "auto" };   
+  min-height: 200px;
   position : relative; 
 `
+// height: ${({readMore,taskHeight}) => readMore ? "auto" : taskHeight > 2000 ? `${taskHeight/10}px` : taskHeight > 1000 ? `${taskHeight/5}px` : taskHeight > 500 ? `${taskHeight/2}px` : "auto" };   
 
 export  const ReadMore = styled.span`
   margin : 1rem auto;

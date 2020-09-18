@@ -10,11 +10,14 @@ import {
   setUnlikeForResponseComment,
   setDislikeForResponseComment,
   setUndislikeForResponseComment,
+  updateCommentToResponseComment,
+  updateResponseCommentReadMore,
 } from "./product-comment-review.utils";
 const INITIAL_STATE = {
   comments: [],
   responses: [],
   numberOfComments: 0,
+  numberOfCommentsAndResponses: 0,
   loading: false,
   error: undefined,
 };
@@ -22,6 +25,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case productCommentReviewsActionTypes.FETCH_PRODUCT_COMMENT_REVIEW_START:
+    case productCommentReviewsActionTypes.FETCH_READ_MORE_COMMENTS_START:
       return {
         ...state,
         loading: true,
@@ -34,8 +38,18 @@ export default (state = INITIAL_STATE, action) => {
         comments: action.payload.comments,
         responses: action.payload.responses,
         numberOfComments: action.payload.numberOfComments,
+        numberOfCommentsAndResponses:
+          action.payload.numberOfCommentsAndResponses,
+      };
+    case productCommentReviewsActionTypes.FETCH_READ_MORE_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        comments: [...state.comments, ...action.payload.comments],
+        responses: [...state.responses, ...action.payload.responses],
+        loading: false,
       };
     case productCommentReviewsActionTypes.FETCH_PRODUCT_COMMENT_REVIEW_FAIL:
+    case productCommentReviewsActionTypes.FETCH_READ_MORE_COMMENTS_FAIL:
       return {
         ...state,
         loading: false,
@@ -85,6 +99,7 @@ export default (state = INITIAL_STATE, action) => {
           action.payload.commentId,
           action.payload.response
         ),
+        responses: [...state.responses, action.payload.response],
       };
     case productCommentReviewsActionTypes.SET_LIKE_FOR_RESPONSE_COMMENT:
       return {
@@ -125,13 +140,22 @@ export default (state = INITIAL_STATE, action) => {
     case productCommentReviewsActionTypes.SET_RESPONSE_TO_RESPONSE_COMMENT:
       return {
         ...state,
-        comments: state.comments.map((comment) => {
-          if (comment._id == action.payload.commentId) {
-            comment.responses.push(action.payload.userId);
-          }
-          return comment;
-        }),
+        comments: updateCommentToResponseComment(
+          state.comments,
+          action.payload.commentId,
+          action.payload.userId
+        ),
         responses: [...state.responses, action.payload.response],
+      };
+    case productCommentReviewsActionTypes.GET_READ_MORE_RESPONSES:
+      return {
+        ...state,
+        comments: updateResponseCommentReadMore(
+          state.comments,
+          action.payload.commentId,
+          action.payload.responses
+        ),
+        responses: [...state.responses, ...action.payload.responses],
       };
     default:
       return state;

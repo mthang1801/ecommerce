@@ -1079,50 +1079,60 @@ exports.getCommentReviewsByProductId = async (req, res, next) => {
     let commentList = {
       comments: [],
     };
-    let comments = await Comment.find({ product: productId })
+    //count all comments and responses
+    let countComments = await Comment.countDocuments({ product: productId });
+    let comments = await Comment.find({ product: productId });
+    let countResponses = 0;
+    for await (let comment of comments) {
+      countResponses += await Response.countDocuments({ comment: comment._id });
+    }
+    commentList.countCommentsAndResponses = countComments + countResponses;
+    comments = await Comment.find({ product: productId })
       .populate("user")
       .sort({ createdAt: -1 })
-      .limit(2);
-    let countComments = await Comment.countDocuments({ product: productId });
-    commentList.countComments = countComments;
+      .limit(+process.env.COMMENT_AND_RESPONSE_COMMENT_LIMIT);
     const userCreateProduct = await product.user;
     let responseList = [];
     for await (let comment of comments) {
+      let __comment = comment._doc;
       let responses = await Response.find({ comment: comment._id })
         .populate({
           path: "user",
           select: "_id avatar google.name facebook.name local.name",
         })
         .sort({ createdAt: -1 })
-        .limit(2);
+        .limit(+process.env.COMMENT_AND_RESPONSE_COMMENT_LIMIT);
 
       responseList = [...responseList, ...responses];
-      commentList.countComments += comment.responses.length;
-      let countResponses = await Response.countDocuments({
+      let countCommentResponses = await Response.countDocuments({
         comment: comment._id,
       });
-
-      comment.user = {
+      if (__comment.responses.length == comment.responses.length) {
+        __comment.responses = [];
+      }
+      __comment.responses.push(responses.map((response) => response._id));
+      __comment.countCommentResponses = countCommentResponses;
+      __comment.user = {
         name:
-          comment.user.facebook.name ||
-          comment.user.google.name ||
-          comment.user.local.name,
-        avatar: comment.user.avatar,
-        _id: comment.user._id,
+          __comment.user.facebook.name ||
+          __comment.user.google.name ||
+          __comment.user.local.name,
+        avatar: __comment.user.avatar,
+        _id: __comment.user._id,
       };
 
-      comment.countResponses = countResponses;
-      if (userCreateProduct == comment.user._id) {
-        commentList.comments.unshift(comment);
+      if (userCreateProduct == __comment.user._id) {
+        commentList.comments.unshift(__comment);
       } else {
-        commentList.comments.push(comment);
+        commentList.comments.push(__comment);
       }
     }
     console.timeEnd("start-get-comment-review");
     res.status(200).json({
       comments: commentList.comments,
       responses: responseList,
-      numberOfComments: commentList.countComments,
+      numberOfComments: countComments,
+      numberOfCommentsAndResponses: commentList.countCommentsAndResponses,
     });
   } catch (error) {
     next(error);
@@ -1344,7 +1354,104 @@ exports.postReponseToResponsecomment = async (req, res, next) => {
 
     await comment.save();
     await newResponse.save();
-    res.status(201).json(newResponse);
+    const __newResponse = await newResponse
+      .populate({
+        path: "user",
+        select: "_id avatar google.name facebook.name local.name",
+      })
+      .execPopulate();
+    res.status(201).json(__newResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getReadmoreResponsesComment = async (req, res, next) => {
+  try {
+    const { commentId } = req.params;
+    const skip = +req.query.skip;
+    if (!commentId || !skip) {
+      const error = new Error("responses not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const responses = await Response.find({ comment: commentId })
+      .populate({
+        path: "user",
+        select: "_id avatar facebook google local",
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(+process.env.COMMENT_AND_RESPONSE_COMMENT_LIMIT);
+    res.status(200).json(responses);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.readMoreComments = async (req, res, next) => {
+  try {
+    console.time("read-more-comments");
+    const { productId } = req.params;
+    const skip = +req.query.skip;
+    const product = await Product.findById(productId).populate({
+      path: "user",
+      select: "_id avatar facebook.name google.name local.name",
+    });
+    if (!productId || !skip) {
+      const error = new Error("comments not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const comments = await Comment.find({ product: productId })
+      .populate({
+        path: "user",
+        select: "_id avatar facebook.name google.name local.name",
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(+process.env.COMMENT_AND_RESPONSE_COMMENT_LIMIT);
+    let commentList = {
+      comments: [],
+    };
+    const userCreateProduct = await product.user;
+    let responseList = [];
+    for await (let comment of comments) {
+      let __comment = comment._doc;
+      let responses = await Response.find({ comment: comment._id })
+        .populate({
+          path: "user",
+          select: "_id avatar google.name facebook.name local.name",
+        })
+        .sort({ createdAt: -1 })
+        .limit(+process.env.COMMENT_AND_RESPONSE_COMMENT_LIMIT);
+      let countCommentResponses = await Response.countDocuments({
+        comment: comment._id,
+      });
+      responseList = [...responseList, ...responses];
+      if (__comment.responses.length == comment.responses.length) {
+        __comment.responses = [];
+      }
+      __comment.responses.push(responses.map((response) => response._id));
+      __comment.countCommentResponses = countCommentResponses;
+      __comment.user = {
+        name:
+          __comment.user.facebook.name ||
+          __comment.user.google.name ||
+          __comment.user.local.name,
+        avatar: __comment.user.avatar,
+        _id: __comment.user._id,
+      };
+
+      if (userCreateProduct == __comment.user._id) {
+        commentList.comments.unshift(__comment);
+      } else {
+        commentList.comments.push(__comment);
+      }
+    }
+    console.timeEnd("start-get-comment-review");
+    res.status(200).json({
+      comments: commentList.comments,
+      responses: responseList,
+    });
   } catch (error) {
     next(error);
   }

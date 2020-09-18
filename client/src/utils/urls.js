@@ -74,4 +74,8 @@ export default {
     `/product-detail/comment/response/${responseId}/dislike`,
   POST_RESPONSE_TO_REPONSE_COMMENT: (commentId) =>
     `/product-detail/comment/${commentId}/response/`,
+  READ_MORE_RESPONSES: (commentId, skip) =>
+    `/product-detail/comment/${commentId}/response/readmore?skip=${skip}`,
+  GET_MORE_COMMENTS: (productId, skip) =>
+    `/product-detail/${productId}/comments/readmore?skip=${skip}`,
 };

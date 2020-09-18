@@ -25,15 +25,6 @@ router.get(
 );
 
 /**
- * @route GET /product-detail/reviews/:productId/comment
- * @desc get comments review by product Id
- * @access public
- */
-router.get(
-  "/product-detail/reviews/:productId/comments",
-  shopController.getCommentReviewsByProductId
-);
-/**
  * @route GET /category/:id/product-type
  * @desc get list product types by category id
  * @access public
@@ -161,13 +152,13 @@ router.get(
   shopController.getListProductGroupPerPageByProductGroupUrl
 );
 /**
- * @route GET /:categoryPath/:productTypePath/:productPath
- * @desc get content product by productUrl
+ * @route GET /product-detail/reviews/:productId/comment
+ * @desc get comments review by product Id
  * @access public
  */
 router.get(
-  "/product-detail/:categoryPath/:productTypePath/:productPath",
-  shopController.getContentProductByProductUrl
+  "/product-detail/reviews/:productId/comments",
+  shopController.getCommentReviewsByProductId
 );
 /**
  * @route GET /product-detail/reviews/:productId
@@ -249,5 +240,31 @@ router.post(
   isAuth,
   shopController.postReponseToResponsecomment
 );
-
+/**
+ * @route GET /product-detail/comment/response/:responseId/response
+ * @desc read more responses by comment id
+ * @access public
+ */
+router.get(
+  "/product-detail/comment/:commentId/response/readmore",
+  shopController.getReadmoreResponsesComment
+);
+/**
+ * @route GET /product-detail/:productId/comments/readmore
+ * @desc read more comment by productId
+ * @access public
+ */
+router.get(
+  "/product-detail/:productId/comments/readmore",
+  shopController.readMoreComments
+);
+/**
+ * @route GET /:categoryPath/:productTypePath/:productPath
+ * @desc get content product by productUrl
+ * @access public
+ */
+router.get(
+  "/product-detail/:categoryPath/:productTypePath/:productPath",
+  shopController.getContentProductByProductUrl
+);
 module.exports = router;
