@@ -15,7 +15,7 @@ import {
   selectProductFetched,
   selectName,
 } from "../../redux/manufactor/manufactor.selectors";
-import PageNotFound from "../page-not-found/page-not-found.component";
+import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
 const ManufactorPage = ({
   match,
@@ -51,7 +51,7 @@ const ManufactorPage = ({
   return (
     <ManufactorWrapper>
       <MasterHeader />
-      <Background label={name} />
+      <Background label={`Trang chủ / Nhà sản xuất / ${name}`} />
       <ManufactorOverview />
     </ManufactorWrapper>
   );

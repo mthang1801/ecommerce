@@ -16,7 +16,7 @@ import {
   selectProductFetched,
   selectName,
 } from "../../redux/product-type/product-type.selectors";
-import PageNotFound from "../page-not-found/page-not-found.component";
+import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
 const ProductTypePage = ({
   match,
@@ -52,7 +52,7 @@ const ProductTypePage = ({
   return (
     <ProductTypeWrapper>
       <MasterHeader />
-      <Background label={name} />
+      <Background label={`Trang chủ / Danh mục sản phẩm / Loại sản phẩm / ${name}`} />
       <ProductTypeOverview />
     </ProductTypeWrapper>
   );

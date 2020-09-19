@@ -49,15 +49,16 @@ export const updateLinkUrl = (productList) => {
       productList = JSON.parse(productList);
       let newProductList = [];
       for (let [index, product] of productList.entries()) {
-        if (index <= 100) {
-          let splitLinkUrl = product.linkUrl.split("/");
-          let rootLink = splitLinkUrl.slice(0, 2).join("/");
-          console.log(rootLink);
+        if (index < 100) {
+          let decodeLinkUrl = decodeURIComponent(product.linkUrl);
+          let splitLinkUrl = decodeLinkUrl.split("/");
+          let rootLink = splitLinkUrl.slice(0, 3).join("/");
           let pathWithoutSpecialCharacter = product.name
             .toLowerCase()
             .replace(/[^\w\s]/gi, "");
           let productPath = encodeURIComponent(pathWithoutSpecialCharacter);
           product.linkUrl = `${rootLink}/${productPath}`;
+          console.log(product.linkUrl);
           newProductList.push(product);
         }
       }

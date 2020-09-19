@@ -4,7 +4,9 @@ import {
   ToolbarLeft,
   ToolbarItem,
   ToolbarRight,
-  Logout
+  Logout,
+  Avatar,
+  User
 } from "./toolbar.styles";
 import {
   TiUser,
@@ -13,6 +15,7 @@ import {FiLogOut} from "react-icons/fi"
 import ToggleLanguage from "../../toggle-languages/toggle-languages.component";
 import Icon from "../../../UI/custom-icon/custom-icon.component";
 import { CustomLink } from "../../../UI/custom-link/custom-link.component";
+import ToggleUser from "../../toggle-user/toggle-user.component"
 import AppContext from "../../../../context/app-viewport.context";
 import {selectCurrentUser} from "../../../../redux/user/user.selectors"
 import {createStructuredSelector} from "reselect";
@@ -31,43 +34,18 @@ const Toolbar = ({user,logout}) => {
   if (!smallView)
     return (
       <ToolbarContainer>
-        <ToolbarLeft>
-          {user && <ToolbarItem>{user.name}</ToolbarItem>}
+        <ToolbarLeft>          
           {!smallView && (
-            <ToolbarItem mediumView={width<1200}>Miễn phí vận chuyển cho đơn hàng từ 200.000</ToolbarItem>
+            <ToolbarItem mediumView={width<1200}>Miễn phí vận chuyển cho đơn hàng từ 500.000</ToolbarItem>
           )}
         </ToolbarLeft>
         <ToolbarRight>        
           <ToolbarItem>
             <ToggleLanguage />
-          </ToolbarItem>
-          <ToolbarItem>
-            {user && (user.role !== "seller" ? 
-             <CustomLink to="/register-seller" style={{textTransform:"capitalize", fontWeight : 400}}>Trở thành Nhà Bán Hàng</CustomLink> 
-             :
-             <CustomLink to="/create-new-product" style={{textTransform:"capitalize", fontWeight : 400}}>Bán Sản phẩm</CustomLink> )
-          }
-           
-          </ToolbarItem>
-          <ToolbarItem>
-            {user ? <Logout onClick={() => logout()}>
-                <Icon icon={<FiLogOut/>}
-                style={{ transform: "scale(1.5)", marginRight: "1rem" }}/>
-                Đăng xuất
-              </Logout>: (
-               <CustomLink
-               to="/auth"
-               style={{ textTransform: "capitialize" }}
-             >
-               <Icon
-                 icon={<TiUser />}
-                 style={{ transform: "scale(1.5)", marginRight: "1rem" }}
-               />
-               Login
-             </CustomLink> 
-            )}
-           
-          </ToolbarItem>
+          </ToolbarItem>          
+          <ToolbarItem style={{width : width > 1200 ? "30%" : "35%"}}>            
+             <ToggleUser user={user}/>
+          </ToolbarItem>           
         </ToolbarRight>
       </ToolbarContainer>
     );

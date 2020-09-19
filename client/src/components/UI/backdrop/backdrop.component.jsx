@@ -1,15 +1,19 @@
 import React from 'react'
 import {BackdropContainer} from "./backdrop.styles";
 import {setCloseDrawer} from "../../../redux/drawer/drawer.actions";
-import {connect} from "react-redux";
-const Backdrop = ({setCloseDrawer, show}) => {
+const Backdrop = ({setCloseDrawer, show, onClick}) => {
+  const handleClick = () => {
+    if(setCloseDrawer){
+      setCloseDrawer();
+    }
+    if(onClick){
+      onClick();
+    }
+    
+  }
   return (
-    <BackdropContainer onClick={setCloseDrawer} show={show} />
+    <BackdropContainer onClick={handleClick} show={show} />
   )
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setCloseDrawer: () => dispatch(setCloseDrawer()),
-});
-
-export default connect(null, mapDispatchToProps)(Backdrop)
+export default Backdrop

@@ -12,7 +12,7 @@ import {
   selectProductDetailError,
 } from "../../redux/product-detail/product-detail.selectors";
 import {selectUserFetched, selectUserLoading} from "../../redux/user/user.selectors";
-import PageNotFound from "../page-not-found/page-not-found.component";
+import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
 import { withRouter } from "react-router-dom";
 const ShopDetailPage = ({
@@ -28,7 +28,7 @@ const ShopDetailPage = ({
     const categoryPath = match.params.categoryPath;
     const productTypePath = match.params.productTypePath;
     const productPath = match.params.productPath;    
-   
+    console.log(categoryPath, productTypePath, productPath)
     fetchProductDetail(categoryPath, productTypePath, productPath);    
     if(productDetailRef.current){
       window.scrollTo({
@@ -53,7 +53,7 @@ const ShopDetailPage = ({
       {product ? (
         <ShopDetailsContainer ref={productDetailRef}>
           <MasterHeader />
-          <Background label={product.label} />
+          <Background label={`Trang chủ/ Danh mục sản phẩm/ Loại Sản phẩm / Sản phẩm / ${product.label}`} />
           <ProductDetailsOverview/>
         </ShopDetailsContainer>
       ) : null}

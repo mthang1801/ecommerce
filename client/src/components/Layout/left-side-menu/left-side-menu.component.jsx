@@ -4,39 +4,31 @@ import { CustomLink } from "../../UI/custom-link/custom-link.component";
 const LeftSideMenu = ({ title, list }) => {
   const [shortList, setShortList] = useState([]);
   const [showReadMore, setShowReadMore] = useState(false);
+  const [readMore, setReadMore] = useState(false);
   useEffect(() => {       
-    if(list.length > 9 )    {
-      setShortList(list.filter((_,idx) => idx < 9).map(item => item));
+    if(list.length > 5 )    {
+      setShortList(list.filter((_,idx) => idx < 5).map(item => item));
       setShowReadMore(true);
+    }else{
+      setShortList(list.map(item => item));
+      setShowReadMore(false);
     }
   }, [list])
 
   const handleClickReadMore = () => {    
-    if(showReadMore){
-      setShortList([...list]);
-      setShowReadMore(false);
+    if(readMore){      
+      setShortList(list.filter((_,idx) => idx < 5).map(item => item));
+      setReadMore(false);
     }else{
-      setShortList(list.filter((_,idx) => idx < 9).map(item => item));
-      setShowReadMore(true);
+      setShortList([...list]);
+      setReadMore(true);
     }
    
   }
   return (
     <LeftSideMenuWrapper>
       <Title>{title}</Title>
-      {list && list.length < 9 ?
-        list.map((listItem) => (
-          <CustomLink
-            key={listItem._id}
-            to={listItem.linkUrl}
-            style={{
-              fontWeight: "normal",
-              textTransform: "capitalize",
-            }}
-          >
-            {listItem.name} <span style={{ color: "#757575", fontSize: "0.8em" }}>({listItem.products.length})</span>
-          </CustomLink>
-        )) : (
+      
           <React.Fragment>
             {shortList.map((listItem) => (
               <CustomLink
@@ -49,9 +41,9 @@ const LeftSideMenu = ({ title, list }) => {
               >
                 {listItem.name} <span style={{ color: "#757575", fontSize: "0.8em" }}>({listItem.products.length})</span>
               </CustomLink>))}
-              <ReadMore onClick={handleClickReadMore}>{showReadMore ? "Xem thêm" :  "Thu gọn" } </ReadMore>
+              {showReadMore ? <ReadMore onClick={handleClickReadMore}>{!readMore ? "Xem thêm" :  "Thu gọn" } </ReadMore> : null}
           </React.Fragment>
-        )}
+        
     </LeftSideMenuWrapper>
   );
 };

@@ -7,7 +7,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import RegisterForm from "../register-form/register-form.component";
 import TermsAndPrivacy from "../terms-and-privacy/term-and-privacy.component";
-import FormCreateProduct from "../form-create-product/form-create-product.component";
+import FormCreateProduct from "../../Product/form-create-product/form-create-product.component";
 import { connect } from "react-redux";
 import {
   selectCreateProductForm,
@@ -58,8 +58,7 @@ function getStepContent(stepIndex, disabledNext, setDisabledNext,scroll) {
       );
     case 2:
       return (
-        <FormCreateProduct
-          scroll={scroll}
+        <FormCreateProduct          
           disabledNext={disabledNext}
           setDisabledNext={setDisabledNext}
         />
@@ -78,8 +77,11 @@ const Steppers = ({ mobileView, tabletView, register, product, clearAll }) => {
   const steps = getSteps();
   const stepRef = useRef(null);
   useEffect(() =>{
-    setScroll(stepRef.current.offsetTop);
-  },[stepRef.current.offsetTop])
+    if(stepRef.current){
+      setScroll(stepRef.current.offsetTop);
+    }
+    
+  },[stepRef])
   const handleNext = async () => {
     console.log("call");
     if (activeStep === steps.length - 1) {

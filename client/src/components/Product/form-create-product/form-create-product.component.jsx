@@ -42,7 +42,7 @@ import { selectCreateProductForm } from "../../../redux/seller/seller.selectors"
 import { createStructuredSelector } from "reselect";
 import { createNewProduct } from "../../../utils/connectDB";
 import FormComplete from "../form-complete/form-complete.component";
-const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
+const FormCreateProduct = ({disabledNext, save, product, scroll, clearAll, setDisabledNext }) => {
   const [listCatogory, setListCategory] = useState([]);
   const [listProductType, setListProductType] = useState([]);
   const [listProductGroup, setListProductGroup] = useState([]);
@@ -221,8 +221,13 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
 
   useEffect(() => {
     if (!isValidForm()) {
+      if(setDisabledNext){
+        setDisabledNext(true);
+      }
+      
       return setDisabled(true);
     }
+    if(setDisabledNext) {setDisabledNext(false)} ;
     setDisabled(false);
   }, [
     selectedCategory,
@@ -574,15 +579,15 @@ const FormCreateProduct = ({ save, product, scroll, clearAll }) => {
             />
             <PlainText>Bắt buộc(*)</PlainText>
           </List>
-          <Button
+          {disabledNext === undefined ? <Button
             type="submit"
             variant="contained"
             color="primary"
             style={{ display: "block", margin: "auto" }}
             disabled={disabled}
           >
-            Tạo Sản Phẩm
-          </Button>
+            Tạo Sản Phẩm 
+          </Button>: null }
         </Form>
       </Grid>
       <Grid smallView={smallView}>

@@ -8,7 +8,6 @@ export const CategoryMenuContainer = styled.div`
   border : 1px solid #ccc;
   transition : height 0.3s ;
   position :absolute;  
-  z-index : 1500;
   bottom :0;
   left: 0 ;
   background-color : white;

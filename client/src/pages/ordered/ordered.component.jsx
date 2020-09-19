@@ -5,6 +5,7 @@ import { createStructuredSelector } from "reselect";
 import { selectCurrentUser, selectUserLoading } from "../../redux/user/user.selectors";
 import { OrderedListContainer } from "./ordered.styles";
 import { default as OrderedListOverview } from "../../components/Ordered/ordered-list-overview/ordered-list-overview.container";
+import Background from "../../components/Layout/background/background.component"
 import { Redirect } from "react-router-dom";
 const Ordered = ({ fetchOrderedList, currentUser, match,userLoading }) => {
   useEffect(() => {
@@ -18,6 +19,7 @@ const Ordered = ({ fetchOrderedList, currentUser, match,userLoading }) => {
     );
   return (
     <OrderedListContainer>
+      <Background label={`Trang chủ / Lịch sử giao dịch`}/>
       <OrderedListOverview />
     </OrderedListContainer>
   );

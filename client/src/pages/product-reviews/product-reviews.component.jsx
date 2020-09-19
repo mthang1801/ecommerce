@@ -6,7 +6,7 @@ import {selectProductReviewsItem, selectProductReviewsLoading, selectProductRevi
 import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux";
 import MasterHeader from "../../components/Layout/master-header/master-header.component"
-import PageNotFound from "../page-not-found/page-not-found.component"
+import PageNotFound from "../page-error/page-error.component"
 import Background from "../../components/Layout/background/background.component"
 import Loader from "../../components/UI/loader/loader.component"
 import {default as ProductReviews} from "../../components/Product-Reviews/product-reviews-overview/product-reviews-overview.container"
@@ -25,7 +25,7 @@ const ProductReviewsPage = ({fetchProductReviews, match, currentUser, userLoadin
   return (
     <ProductReviewsWrapper>
       <MasterHeader/>
-      <Background label={`Đánh giá sản phẩm`}/> 
+      <Background label={`Trang chủ / Đánh giá sản phẩm`}/> 
       <ProductReviews/>      
     </ProductReviewsWrapper>
   )

@@ -79,7 +79,6 @@ export const fetchProductList = (categoryPath, productTypePath, page) => async (
   dispatch
 ) => {
   try {
-    console.log(page);
     dispatch(fetchProductListStart());
     const { data } = await axios.get(
       urls.GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL(
@@ -91,5 +90,59 @@ export const fetchProductList = (categoryPath, productTypePath, page) => async (
     dispatch(fetchProductListSuccess(data));
   } catch (error) {
     dispatch(fetchProductListFail(error));
+  }
+};
+
+export const filterProductsByPriceStart = () => ({
+  type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_START,
+});
+
+export const filterProductsByPriceSuccess = (
+  productList,
+  numProducts,
+  currentPage,
+  numPages,
+  maxPrice
+) => ({
+  type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS,
+  payload: { productList, numProducts, currentPage, numPages, maxPrice },
+});
+
+export const filterProductsByPriceFail = (err) => ({
+  type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const filterProductsByPrice = (
+  categoryPath,
+  productTypePath,
+  minPrice,
+  maxPrice,
+  page = 1
+) => async (dispatch) => {
+  try {
+    dispatch(filterProductsByPriceStart());
+    const {
+      data: { productList, numProducts, currentPage, numPages, maxPrice },
+    } = await axios.get(
+      urls.GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_TYPE(
+        categoryPath,
+        productTypePath,
+        minPrice,
+        maxPrice,
+        page
+      )
+    );
+    dispatch(
+      filterProductsByPriceSuccess(
+        productList,
+        numProducts,
+        currentPage,
+        numPages,
+        maxPrice
+      )
+    );
+  } catch (error) {
+    dispatch(filterProductsByPriceFail(error));
   }
 };

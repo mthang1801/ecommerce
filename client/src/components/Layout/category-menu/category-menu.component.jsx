@@ -59,7 +59,7 @@ const CategoryMenu = ({history}) => {
   };
 
   return (
-    <CategoryMenuContainer ref={categoryRef}>
+    <CategoryMenuContainer ref={categoryRef} smallView={smallView}>
       <CategoryList ref={listRef}>
         {categoryList.map((item) => (
           <React.Fragment key={item._id}>
@@ -71,11 +71,11 @@ const CategoryMenu = ({history}) => {
             />           
           </React.Fragment>
         ))}
-         <ProductsPopup
+        {!smallView ? <ProductsPopup
               offsetWidth={offsetWidth}
               categoryId={ctgId}
               data={CATEGORY_MENU[ctgId]}
-            />
+            /> :null }
       </CategoryList>
     </CategoryMenuContainer>
   );

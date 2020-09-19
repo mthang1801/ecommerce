@@ -20,9 +20,12 @@ const CreateProductPage = ({user, match}) => {
       state : {from : match.path}
     }} />
   } 
+  if(user && user.role !== "seller"){
+    return <Redirect to="/"/>
+  }
   return (
     <CreateProductPageWrapper ref={backgroundRef}>
-      <Background label="Đang Bán Sản Phẩm"/>
+      <Background label="Trang chủ/ Đăng bán sản phẩm"/>
       <FormCreateProduct scroll={scroll}/>
     </CreateProductPageWrapper>
   )

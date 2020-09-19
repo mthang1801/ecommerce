@@ -77,3 +77,8 @@ export const selectManufactorList = createSelector(
   selectProductType,
   (productType) => productType.manufactorList
 );
+
+export const selectProductsIsFilter = createSelector(
+  selectProductType,
+  (productType) => productType.isFilter
+);

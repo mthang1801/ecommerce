@@ -62,8 +62,8 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
         discount : product.discount.value, 
         label : product.label , 
         image: product.images[0],    
-        creator : product.user.facebook.name || product.user.local.name || product.user.google.name})
-    }
+        creator : product.user.information.first_name + " " + product.user.information.last_name
+    })}
   }, [cartItems, product])
   const [countDown, setCountdown] = useState(null);
   useEffect(() => {
@@ -134,7 +134,7 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
       />
       </React.Fragment>}
       <BriefTextsInfo>
-        <div dangerouslySetInnerHTML={{ __html: product.description }}></div>
+        <div dangerouslySetInnerHTML={{ __html: product.information }}></div>
       </BriefTextsInfo>
       <ProductActions>
         <ProductQuantity>
@@ -152,18 +152,18 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
         <StatusText>Tình trạng sản phẩm</StatusText>
         <Row>
           <Span>Trạng thái</Span>
-          <Span>{product.status === "active" ? "Còn hàng" : "Hết hàng"}</Span>
+          <Span>{product.quantity > product.sold_quantity ? "Còn hàng" : "Hết hàng"}</Span>
         </Row>
         <Row>
           <Span>Vận chuyển</Span>
           <Span>
-            trong vòng 1 ngày{" "}
-            <Span color="#dd2222">(miễn phí vận chuyển hôm nay)</Span>
+            <Span>{product.ship_fee === 0 ?   <Span color="#dd2222">(miễn phí vận chuyển hôm nay)</Span> : <Span color="#dd2222">{product.ship_fee} Đ</Span>}</Span>
+          
           </Span>
         </Row>
         <Row>
           <Span>Khối lượng</Span>
-          <Span>2.3kg</Span>
+          <Span>{product.weight > 1000 ? `${(product.weight / 1000)}kg` : `${product.weight}g` }</Span>
         </Row>
         <Row>
           <Span>Chia sẻ</Span>

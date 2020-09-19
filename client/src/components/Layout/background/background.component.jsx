@@ -1,10 +1,14 @@
 import React from 'react'
 import Logo from "../../../assets/img/background.jpg";
-import {BackgroundContainer, BackgrounLabel, BackgroundImageContainer} from "./background.styles";
+import {BackgroundContainer, BackgroundItem} from "./background.styles";
 const Background = ({label}) => {
+  const labelArray = label.split("/");
+
   return (
     <BackgroundContainer >     
-      <BackgrounLabel smallSize={label.length > 15} >{label}</BackgrounLabel>
+      {labelArray.length ? labelArray.map((labelItem, index) => (
+        <BackgroundItem key={index} >{labelItem}</BackgroundItem>
+      )) : null}
     </BackgroundContainer>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, Suspense, lazy, useContext } from "react";
 import Toolbar from "./components/Layout/header/toolbar/toolbar.component";
 import Navigation from "./components/Layout/navigations/navigations.component";
 import Footer from "./components/Layout/footer/footer.component";
@@ -10,7 +10,6 @@ import { default as Checkout } from "./pages/checkout/checkout.container";
 import Contact from "./pages/contact/contact.component";
 import CreateProduct from "./pages/create-product/create-product.component";
 import Authentication from "./pages/auth/auth.component";
-import Category from "./pages/category/category.component";
 import ProductType from "./pages/product-type/product-type.component";
 import ProductDetail from "./pages/product-detail/product-detail.component";
 import ProductGroup from "./pages/product-group/product-group.component";
@@ -31,8 +30,11 @@ import {
 } from "./redux/user/user.selectors";
 import ErrorBoundary from "./components/UI/error-boundary/error-boundary.component";
 import Loader from "./components/UI/loader/loader.component";
+
+const Category = lazy(() => import("./pages/category/category.component"));
 function App({ fetchUser, user, loading }) {
   const [width] = useWindowSize();
+  console.log(width);
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
@@ -44,7 +46,7 @@ function App({ fetchUser, user, loading }) {
     <Router>
       <AppContext.Provider value={width}>
         <GlobalStyle />
-        <SideDrawer />
+        {width < 992 ? <SideDrawer /> : null}
         <Toolbar />
         <Navigation />
 
@@ -58,6 +60,7 @@ function App({ fetchUser, user, loading }) {
               <Route path="/checkout" component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/ordered-history" exact component={OrderedHistory} />
+
               <Route
                 path="/product/reviews/:productId"
                 component={ProductReviews}
@@ -106,7 +109,6 @@ function App({ fetchUser, user, loading }) {
                 path="/:categoryPath/:productTypePath"
                 component={ProductType}
               />
-
               <Route path="/:categoryPath" component={Category} />
             </Switch>
           </Suspense>

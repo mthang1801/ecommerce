@@ -27,7 +27,8 @@ export const ToolbarItem = styled.div`
   padding : 0 1rem;
   &:not(:first-child){
     border-left : 1px solid #ccc;
-  }  
+  }  ;
+  width : auto;
   height : 100%; 
   display :  ${({mediumView}) => mediumView ? "none" : "flex"} ; 
   align-items : center;  
@@ -50,4 +51,18 @@ export const Icons = styled.div`
 
 export const Logout = styled.span`
   cursor : pointer ; 
+`
+export const User = styled.div`
+  display : flex;   
+  cursor : pointer; 
+  &:hover{
+    color : #7fad39 !important;
+  }
+`
+export const Avatar = styled.img`
+  width : 1.5rem; 
+  height: 1.5rem ; 
+  border-radius: 50%;
+  border : 1px solid #ccc;
+  margin-right : 7px;
 `

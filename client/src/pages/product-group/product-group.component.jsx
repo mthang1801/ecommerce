@@ -15,7 +15,7 @@ import {
   selectProductGroupLoading,
   selectName
 } from "../../redux/product-group/product-group.selectors";
-import PageNotFound from "../page-not-found/page-not-found.component";
+import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
 const ProductGroupPage = ({
   match,
@@ -53,7 +53,7 @@ const ProductGroupPage = ({
   return (
     <ProductGroupWrapper>
       <MasterHeader />
-      <Background label={name} />
+      <Background label={`Trang chủ / Danh mục sản phẩm / Loại sản phẩm / Nhóm sản phẩm / ${name}`} />
       <ProductGroupOverview />
     </ProductGroupWrapper>
   );

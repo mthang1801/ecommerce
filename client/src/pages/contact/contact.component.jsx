@@ -7,7 +7,7 @@ const ContactPage = () => {
   return (
     <ContactPageContainer>
       <MasterHeader/>
-      <Background label="Contact"/>
+      <Background label="Trang chủ/ Liên hệ"/>
       <ContactOverview/>      
     </ContactPageContainer>
   )

@@ -13,7 +13,7 @@ import {
   selectUserLoading,
 } from "../../redux/user/user.selectors";
 import CheckoutComplete from "../../components/Checkout/checkout-complete/checkout-complete.component"
-import PageNotFound from "../page-not-found/page-not-found.component";
+import PageNotFound from "../page-error/page-error.component";
 import { selectCartItems } from "../../redux/cart/cart.selectors";
 import { connect } from "react-redux";
 const CheckoutPage = ({ match, currentUser, loading, cartItems }) => {
@@ -48,7 +48,7 @@ const CheckoutPage = ({ match, currentUser, loading, cartItems }) => {
   return (
     <CheckoutPageContainer>
       <MasterHeader />
-      <Background label="Checkout" />
+      <Background label="Trang chủ/ Tiến hành thanh toán" />
       {!loading && currentUser ? (
         <Switch>           
            <Route

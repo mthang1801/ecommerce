@@ -12,17 +12,20 @@ export const DesktopContainer = styled.div`
 `
 
 export const LeftSide = styled.div`
-  width : 25%;
+  max-width : 25%;
+  min-width : 15%; 
 `
 export const MidSide = styled.div` 
-  width : 50%;
+  min-width : 50%;
   display : flex ; 
+  flex-grow : 1; 
   height : 100%;
   align-items:center;
   justify-content : center;
 `
 export const RightSide = styled.div`
-  width : 25%;
+  max-width : 25%;
+  min-width : 20%;
   height : 100%;  
 `
 

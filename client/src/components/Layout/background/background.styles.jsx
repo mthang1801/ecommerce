@@ -2,10 +2,8 @@ import styled from "styled-components";
 
 export const BackgroundContainer = styled.div`
   position :relative ;
-  width : 100%; 
-  height : 10rem;
-  background : linear-gradient(to right bottom, #d1e3ff 0%, #3364b0 50%, #004dc4 100%);
-  font-family: Roboto Condensed, sans-serif;
+  margin : 0 2rem;   
+  display : flex;
   overflow : hidden ;
   text-overflow: ellipsis;
     white-space: nowrap;
@@ -38,3 +36,52 @@ export const BackgrounLabel = styled.h1`
     font-size : 1.4em;
   }
 `
+export const BackgroundItem = styled.div`
+  background-color : #3f51b5;
+  color : white; 
+  padding : 0.5rem 1.5rem 0.5rem 0.25rem;
+  margin : 0;
+  position :relative;
+  &:first-child{
+    margin-left: 0 ; 
+  };
+  &:last-child{
+    margin-right :0;
+  };
+ &:not(:last-child){
+  &:after{
+    content: "❭";
+    position: absolute;
+    font-size: 2.75rem;    
+    top: 0;
+    transform: translate(-25%,-25%);
+  }
+ }
+ &:last-child{
+  &:before{
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: 1.3rem solid;
+    top: 0;
+    right: 0;
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+    border-color: transparent white transparent transparent;
+ }
+`
+//  &:not(:first-child){
+//   &:before{
+//     content: "";
+//     height: 0;
+//     width: 0;
+//     position: absolute;
+//     border: 1.8rem solid;
+//     top: 0;
+//     left: 0;
+//     transform: translateX(0);    
+//     border-color: transparent transparent  transparent white;   
+//   }
+//  

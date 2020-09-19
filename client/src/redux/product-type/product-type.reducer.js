@@ -16,6 +16,7 @@ const INITIAL_STATE = {
   error: undefined,
   loading: false,
   loadingProductList: false,
+  isFilter: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -32,6 +33,14 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         error: undefined,
         loadingProductList: true,
+        isFilter: false,
+      };
+    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_START:
+      return {
+        ...state,
+        error: undefined,
+        loadingProductList: true,
+        isFilter: true,
       };
     case productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_SUCCESS:
       return {
@@ -55,6 +64,16 @@ export default (state = INITIAL_STATE, action) => {
         productList: action.payload,
         loadingProductList: false,
       };
+    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS:
+      return {
+        ...state,
+        productList: action.payload.productList,
+        numProducts: +action.payload.numProducts,
+        currentPage: +action.payload.currentPage,
+        numPages: +action.payload.numPages,
+        maxPrice: +action.payload.maxPrice,
+        loading: false,
+      };
     case productTypeActionTypes.SET_CURRENT_PAGE:
       return {
         ...state,
@@ -62,6 +81,7 @@ export default (state = INITIAL_STATE, action) => {
         loadingProductList: false,
       };
     case productTypeActionTypes.FETCH_PRODUCT_LIST_FAIL:
+    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL:
       return {
         ...state,
         error: { msg: action.payload.msg, status: action.payload.status },

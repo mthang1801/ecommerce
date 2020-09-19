@@ -351,7 +351,9 @@ exports.updateManufactor = async (req, res, next) => {
 exports.getProductList = async (req, res, next) => {
   try {
     console.time("start-get-admin-product-list");
-    const productList = await Manufactor.find();
+    const productList = await Product.find({
+      linkUrl: new RegExp("^%2F", "i"),
+    });
     console.timeEnd("start-get-admin-product-list");
     res.status(200).json(productList);
   } catch (error) {
@@ -365,7 +367,7 @@ exports.updateProductList = async (req, res, next) => {
     const { productList } = req.body;
     console.log(productList);
     for await (let product of productList) {
-      let __product = await Manufactor.findById(product._id);
+      let __product = await Product.findById(product._id);
       __product.linkUrl = product.linkUrl;
       console.log(__product.linkUrl);
       await __product.save();

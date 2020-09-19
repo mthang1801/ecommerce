@@ -78,4 +78,12 @@ export default {
     `/product-detail/comment/${commentId}/response/readmore?skip=${skip}`,
   GET_MORE_COMMENTS: (productId, skip) =>
     `/product-detail/${productId}/comments/readmore?skip=${skip}`,
+  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_TYPE: (
+    categoryPath,
+    productTypePath,
+    minPrice,
+    maxPrice,
+    page
+  ) =>
+    `/category/${categoryPath}/product-type/${productTypePath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
 };

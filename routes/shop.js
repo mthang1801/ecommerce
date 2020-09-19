@@ -33,6 +33,7 @@ router.get(
   "/category/:id/product-type",
   shopController.getListProductTypesByCategoryId
 );
+
 /**
  * @route GET /product-type/:id/product-group
  * @desc get list product group by productType ID
@@ -105,6 +106,15 @@ router.get(
 router.get(
   "/category/:categoryPath/product-type/:productTypePath",
   shopController.getListContentByProductTypeUrl
+);
+/**
+ * @route GET /category/:categoryPath/product-type/:productTypePath/products/query
+ * @desc filter list product by price in productType
+ * @access public
+ */
+router.get(
+  " /category/:categoryPath/productType/:productTypePath/products/query",
+  shopController.getProductListByFilterPriceInProductType
 );
 /**
  * @route GET /category/:categoryPath/product-type/:productTypePath/

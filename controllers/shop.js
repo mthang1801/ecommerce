@@ -362,10 +362,11 @@ exports.postCreateProduct = async (req, res, next) => {
 
 exports.getLatestProducts = async (req, res, next) => {
   try {
-    const products = await Product.find()
-      .populate("images")
+    const products = await Product.find({}, { images: { $slice: 1 } })
+      .populate({ path: "images" })
       .sort({ createdAt: -1 })
       .limit(12);
+    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -374,7 +375,7 @@ exports.getLatestProducts = async (req, res, next) => {
 
 exports.getBestSellerProducts = async (req, res, next) => {
   try {
-    const products = await Product.find()
+    const products = await Product.find({}, { images: { $slice: 1 } })
       .populate("images")
       .sort({ sold_quantity: -1 })
       .limit(12);
@@ -386,7 +387,10 @@ exports.getBestSellerProducts = async (req, res, next) => {
 
 exports.getTopRatedProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ stars: { $gt: 4 } })
+    const products = await Product.find(
+      { stars: { $gt: 4 } },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ stars: -1 })
       .limit(12);
@@ -398,6 +402,7 @@ exports.getTopRatedProducts = async (req, res, next) => {
 
 exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
   try {
+    console.time("getProductListPerPageByCategoryLink");
     let { linkUrl } = req.params;
     const page = +req.query.page;
     if (linkUrl[0] !== "/") {
@@ -420,6 +425,7 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
+    console.timeEnd("getProductListPerPageByCategoryLink");
     res.status(200).json(product);
   } catch (error) {
     next(error);
@@ -427,6 +433,7 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
 };
 exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
   try {
+    console.time("getContentListByCategoryLinkUrl");
     let { pathUrl } = req.params;
     const page = +req.query.page;
     if (pathUrl[0] !== "/") {
@@ -488,7 +495,7 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
     ).sort({ price: -1 });
 
     const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
-    console.timeEnd("start");
+    console.timeEnd("getContentListByCategoryLinkUrl");
     res.status(200).json({
       categoryList: category,
       productTypeList: category.productTypes,
@@ -587,6 +594,17 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       numPages,
       maxPrice: maxPrice.price,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListByFilterPriceInProductType = async (req, res, next) => {
+  try {
+    let { categoryPath, productTypePath } = req.params;
+    const page = +req.query.page;
+    const minPrice = +req.query.min_price;
+    const maxPrice = +req.query.max_price;
+    console.log(categoryPath, productTypePath, page, minPrice, maxPrice);
   } catch (error) {
     next(error);
   }
@@ -826,7 +844,7 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
 
     let product = await Product.findOne({ linkUrl })
       .populate("images")
-      .populate("user");
+      .populate({ path: "user", select: "_id avatar information" });
     if (!product) {
       const err = new Error("product not found");
       err.statusCode = 404;
@@ -868,8 +886,6 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
       }
     });
     console.timeEnd("productDetail");
-    let __product = product._doc;
-    __product.user.name = __product.user.facebook.name || __product.us;
     res.status(200).json({ product, relatedProducts });
   } catch (error) {
     next(error);

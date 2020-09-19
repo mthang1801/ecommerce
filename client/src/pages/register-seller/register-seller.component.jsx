@@ -21,7 +21,7 @@ const SellerPage = ({user, match, history}) => {
   return (
     <SellerPageContainer>
       <MasterHeader/>
-      <Background label={"Seller"}/>
+      <Background label={"Trang chủ / Đăng ký trở thành nhà bán hàng"}/>
       <SellerOverview/>
     </SellerPageContainer>
   )
