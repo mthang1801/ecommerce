@@ -67,6 +67,7 @@ export default (state = INITIAL_STATE, action) => {
     case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS:
       return {
         ...state,
+        name: action.payload.name,
         productList: action.payload.productList,
         numProducts: +action.payload.numProducts,
         currentPage: +action.payload.currentPage,

@@ -97,6 +97,7 @@ const filterProductsByPriceStart = () => ({
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_START,
 });
 const filterProductsByPriceSuccess = (
+  name,
   productList,
   numProducts,
   currentPage,
@@ -104,7 +105,7 @@ const filterProductsByPriceSuccess = (
   maxPrice
 ) => ({
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS,
-  payload: { productList, numProducts, currentPage, numPages, maxPrice },
+  payload: { name, productList, numProducts, currentPage, numPages, maxPrice },
 });
 const filterProductsByPriceFail = (err) => ({
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL,
@@ -121,7 +122,7 @@ export const filterProductsByPrice = (
   try {
     dispatch(filterProductsByPriceStart());
     const {
-      data: { productList, numProducts, currentPage, numPages, maxPrice },
+      data: { name, productList, numProducts, currentPage, numPages, maxPrice },
     } = await axios.get(
       urls.GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_TYPE(
         categoryPath,
@@ -133,6 +134,7 @@ export const filterProductsByPrice = (
     );
     dispatch(
       filterProductsByPriceSuccess(
+        name,
         productList,
         numProducts,
         currentPage,

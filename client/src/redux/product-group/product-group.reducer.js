@@ -14,6 +14,7 @@ const INITIAL_STATE = {
   error: undefined,
   loading: false,
   loadingProductList: false,
+  isFilter: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -24,12 +25,21 @@ export default (state = INITIAL_STATE, action) => {
         error: undefined,
         loading: true,
         fetched: true,
+        isFilter: false,
       };
     case productGroupActionTypes.FETCH_PRODUCT_LIST_START:
       return {
         ...state,
         error: undefined,
         loadingProductList: true,
+        isFilter: false,
+      };
+    case productGroupActionTypes.FILTER_PRODUCTS_BY_PRICE_START:
+      return {
+        ...state,
+        error: undefined,
+        loadingProductList: true,
+        isFilter: true,
       };
     case productGroupActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_GROUP_SUCCESS:
       return {
@@ -50,6 +60,17 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         productList: action.payload,
         loadingProductList: false,
+      };
+    case productGroupActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS:
+      return {
+        ...state,
+        name: action.payload.name,
+        productList: action.payload.productList,
+        numProducts: +action.payload.numProducts,
+        currentPage: +action.payload.currentPage,
+        numPages: +action.payload.numPages,
+        maxPrice: +action.payload.maxPrice,
+        loading: false,
       };
     case productGroupActionTypes.SET_CURRENT_PAGE:
       return {

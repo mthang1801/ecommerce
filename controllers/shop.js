@@ -702,6 +702,7 @@ exports.getProductListByFilterPriceInProductType = async (req, res, next) => {
     ).sort({ price: -1 });
     console.timeEnd("getProductListByFilterPriceInProductType");
     res.status(200).json({
+      name: productType.name,
       productList,
       numProducts,
       currentPage: page,
@@ -900,6 +901,7 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
 
 exports.getListContentProductGroup = async (req, res, next) => {
   try {
+    console.time("getListContentProductGroup");
     const { categoryPath, productTypePath, productGroupPath } = req.params;
     const page = +req.query.page;
     const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
@@ -947,6 +949,7 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { productGroup: productGroup._id },
       { price: 1, _id: 0 }
     ).sort({ price: -1 });
+    console.timeEnd("getListContentProductGroup");
     res.status(200).json({
       name: productGroup.name,
       discountProductList,
@@ -956,6 +959,51 @@ exports.getListContentProductGroup = async (req, res, next) => {
       numProducts,
       numPages,
       maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListInProductGroupByFilterPrice = async (req, res, next) => {
+  try {
+    console.time("getProductListInProductGroupByFilterPrice");
+    const { categoryPath, productTypePath, productGroupPath } = req.params;
+    const page = +req.query.page;
+    const min_price = +req.query.min_price;
+    const max_price = +req.query.max_price;
+    const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
+      productGroupPath
+    )}`;
+    const productGroup = await ProductGroup.findOne({
+      linkUrl,
+    });
+    const productList = await Product.find(
+      {
+        productGroup: productGroup._id,
+        price: { $lte: max_price, $gte: min_price },
+      },
+      { images: { $slice: 1 } }
+    )
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      productGroup: productGroup._id,
+      price: { $lte: max_price, $gte: min_price },
+    });
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    const productMaxPrice = await Product.findOne(
+      { productGroup: productGroup._id },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+    console.timeEnd("getProductListInProductGroupByFilterPrice");
+    res.status(200).json({
+      name: productGroup.name,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: productMaxPrice.price,
     });
   } catch (error) {
     next(error);

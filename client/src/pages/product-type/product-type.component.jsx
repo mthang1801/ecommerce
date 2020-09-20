@@ -32,14 +32,12 @@ const ProductTypePage = ({
   isFilter,
   filterProductsByPrice
 }) => {
-  useEffect(() => {
-    // let page = +location.search.split("=")[1] || 1;    
+  useEffect(() => {     
     let { categoryPath, productTypePath } = match.params;        
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
-    const page = +urlParams.get("page") || 1 ; 
-    console.log(isFilter,max_price ,min_price)    
+    const page = +urlParams.get("page") || 1 ;         
     if (location.search && fetched && !max_price && !min_price) {
       fetchProductList(categoryPath, productTypePath, page);
       return;
@@ -60,12 +58,10 @@ const ProductTypePage = ({
     match.params.categoryPath,
     match.params.productTypePath,
   ]);
-  if (loading) {
-    return <Loader />;
-  }
   if (error && error.status == 404) {
     return <PageNotFound />;
   }
+  if(!loading && name)
   return (
     <ProductTypeWrapper>
       <MasterHeader />
@@ -73,6 +69,7 @@ const ProductTypePage = ({
       <ProductTypeOverview />
     </ProductTypeWrapper>
   );
+  return <Loader/>
 };
 
 const mapStateToProps = createStructuredSelector({

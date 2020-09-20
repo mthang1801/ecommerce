@@ -96,3 +96,66 @@ export const fetchProductList = (
     dispatch(fetchProductListFail(error));
   }
 };
+
+const filterProductsByPriceStart = () => ({
+  type: productGroupActionTypes.FILTER_PRODUCTS_BY_PRICE_START,
+});
+const filterProductsByPriceSuccess = (
+  name,
+  productList,
+  numProducts,
+  currentPage,
+  numPages,
+  maxPrice
+) => ({
+  type: productGroupActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS,
+  payload: {
+    name,
+    productList,
+    numProducts,
+    currentPage,
+    numPages,
+    maxPrice,
+  },
+});
+const filterProductsByPriceFail = (err) => ({
+  type: productGroupActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const filterProductsByPrice = (
+  categoryPath,
+  productTypePath,
+  productGroupPath,
+  minPriceChange,
+  maxPriceChange,
+  page = 1
+) => async (dispatch) => {
+  try {
+    dispatch(filterProductsByPriceStart());
+    const {
+      data: { name, productList, numProducts, currentPage, numPages, maxPrice },
+    } = await axios.get(
+      urls.GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_GROUP(
+        categoryPath,
+        productTypePath,
+        productGroupPath,
+        minPriceChange,
+        maxPriceChange,
+        page
+      )
+    );
+    dispatch(
+      filterProductsByPriceSuccess(
+        name,
+        productList,
+        numProducts,
+        currentPage,
+        numPages,
+        maxPrice
+      )
+    );
+  } catch (error) {
+    dispatch(filterProductsByPriceFail(error));
+  }
+};

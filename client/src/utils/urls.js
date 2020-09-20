@@ -100,4 +100,13 @@ export default {
     page
   ) =>
     `/manufactor/${manufactorPath}/product-list/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
+  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_GROUP: (
+    categoryPath,
+    productTypePath,
+    productGroupPath,
+    minPrice,
+    maxPrice,
+    page
+  ) =>
+    `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
 };

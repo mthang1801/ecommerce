@@ -170,6 +170,15 @@ router.get(
   shopController.getListContentProductGroup
 );
 /**
+ * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath:/products/query
+ * @desc get product list by filter price
+ * @access public
+ */
+router.get(
+  "/:categoryPath/:productTypePath/product-group/:productGroupPath/products/query",
+  shopController.getProductListInProductGroupByFilterPrice
+);
+/**
  * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath/products
  * @desc get list product group per page
  * @access public

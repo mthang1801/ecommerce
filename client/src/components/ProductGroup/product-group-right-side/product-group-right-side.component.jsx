@@ -1,4 +1,4 @@
-import React,  {useState } from "react";
+import React,  {useState, useRef, useEffect } from "react";
 import SalesOff from "../../Layout/sales-off/sale-off.component";
 import BestSellerProducts from "../../Layout/best-seller-products/best-seller-products.component";
 import TopRatedProducts from "../../Layout/top-rated-products/top-rated-products.component";
@@ -33,15 +33,31 @@ const ProductGroupRightSide = ({
   location,
   setCurrentPage
 }) => {
+  const productGroupRef = useRef(null);
   const [initialPage, setInitialPage] = useState(true);
   const movePage = page => {      
     const categoryPath = location.pathname.split("/")[1];   
     const productTypePath = location.pathname.split("/")[2];
     const productGroupPath = location.pathname.split("/")[4];
-  
-    history.push(`/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?page=${page}`);
+    const urlParams = new URLSearchParams(window.location.search);
+    const min_price = +urlParams.get("min_price");
+    const max_price = +urlParams.get("max_price");  
+    if(max_price > 0){
+      history.push(`/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?min_price=${min_price}&max_price=${max_price}&page=${page}`);
+    }else{
+      history.push(`/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?page=${page}`);
+    }
+    
     setCurrentPage(page);
   }
+  useEffect(() => {
+    if(productGroupRef.current){    
+      window.scrollTo({
+        top : productGroupRef.current.offsetTop,
+        behavior : "auto"
+      })
+    }
+  }, [productGroupRef, productList])
   const handlePageClick = (data) => {       
     if(!initialPage){
       const currentPage = data.selected +1 ; 
@@ -50,7 +66,7 @@ const ProductGroupRightSide = ({
     return setInitialPage(!initialPage);
   };
   return (
-    <ProductGroupRightSideWrapper>
+    <ProductGroupRightSideWrapper ref={productGroupRef}>
       {!discountProductList.length &&
       !bestSellerProductList.length &&
       !topRatedProductList.length&& 
