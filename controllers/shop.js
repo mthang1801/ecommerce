@@ -544,6 +544,7 @@ exports.getProductListInCategoryByFilterPrice = async (req, res, next) => {
       status: "active",
       price: { $gte: minPrice, $lte: maxPrice },
     });
+
     const numPages = Math.ceil(numProducts / process.env.PRODUCTS_PER_PAGE);
     const productMaxPrice = await Product.findOne(
       {
@@ -749,7 +750,7 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
 };
 exports.getListContentByManufactorUrl = async (req, res, next) => {
   try {
-    console.time("manufactor");
+    console.time("getListContentByManufactorUrl");
     const { manufactorPath } = req.params;
     const page = +req.query.page;
     const manufactor = await Manufactor.findOne({
@@ -781,24 +782,80 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
       status: "active",
     });
     const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
-    const maxPrice = await Product.findOne(
+    const productMaxPrice = await Product.findOne(
       {
         manufactor: manufactor._id,
         status: "active",
       },
       { price: 1, _id: 0 }
-    )
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
-      .limit(+process.env.PRODUCTS_PER_PAGE);
-    console.timeEnd("manufactor");
+    ).sort({ price: -1 });
+    console.timeEnd("getListContentByManufactorUrl");
     res.status(200).json({
       name: manufactor.name,
       productGroupList,
       productList,
       numProducts,
       numPages,
-      maxPrice: maxPrice.price,
+      maxPrice: productMaxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListInManufactorByFilterPrice = async (req, res, next) => {
+  try {
+    console.time("getProductListInManufactorByFilterPrice");
+    const { manufactorPath } = req.params;
+    const page = +req.query.page;
+    const minPrice = +req.query.min_price;
+    const maxPrice = +req.query.max_price;
+    let manufactorUrl = `/manufactor/${encodeURIComponent(manufactorPath)}`;
+    const manufactor = await Manufactor.findOne({
+      linkUrl: manufactorUrl,
+    })
+      .populate("products")
+      .populate("productGroups");
+    if (!manufactor) {
+      const err = new Error("Manufactor not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    console.log(manufactor);
+    const productList = await Product.find(
+      {
+        manufactor: manufactor._id,
+        status: "active",
+        price: { $gte: minPrice, $lte: maxPrice },
+      },
+      { images: { $slice: 1 } }
+    )
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const productGroupList = manufactor.productGroups;
+    const numProducts = await Product.countDocuments({
+      manufactor: manufactor._id,
+      status: "active",
+      price: { $gte: minPrice, $lte: maxPrice },
+    });
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    const productMaxPrice = await Product.findOne(
+      {
+        manufactor: manufactor._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+
+    console.timeEnd("getProductListInManufactorByFilterPrice");
+    res.status(200).json({
+      name: manufactor.name,
+      productGroupList,
+      productList,
+      numProducts,
+      numPages,
+      maxPrice: productMaxPrice.price,
     });
   } catch (error) {
     next(error);
@@ -806,7 +863,7 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
 };
 exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
   try {
-    console.time("manufactor");
+    console.time("getListProdudctPerPageByManufactorUrl");
     const { manufactorPath } = req.params;
     const page = +req.query.page;
 
@@ -834,12 +891,13 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
-    console.time("manufactor");
+    console.time("getListProdudctPerPageByManufactorUrl");
     res.status(200).json(productList);
   } catch (error) {
     next(error);
   }
 };
+
 exports.getListContentProductGroup = async (req, res, next) => {
   try {
     const { categoryPath, productTypePath, productGroupPath } = req.params;

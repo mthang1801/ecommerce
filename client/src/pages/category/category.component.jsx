@@ -34,8 +34,7 @@ const CategoryPage = ({
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
-    const page = +urlParams.get("page") || 1;
-    console.log(min_price, max_price)
+    const page = +urlParams.get("page") || 1;    
     let categoryPath = match.params.categoryPath;
     if (location.search && fetched && !max_price && !min_price) {
       fetchProductList(categoryPath, page);
@@ -47,8 +46,7 @@ const CategoryPage = ({
       fetchCategory(categoryPath, page);
     }    
   }, [fetchCategory, location.search, match.params.categoryPath, match.url]);
-  useEffect(() => {
-    console.log(match.url)
+  useEffect(() => {   
     if(categoryRef.current){
       window.scrollTo({
         top : categoryRef.current.offsetTop, 

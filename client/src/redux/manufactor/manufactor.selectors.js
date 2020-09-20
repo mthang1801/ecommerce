@@ -53,3 +53,8 @@ export const selectProductFetched = createSelector(
   selectManufactor,
   (manufactor) => manufactor.fetched
 );
+
+export const selectProductsIsFilter = createSelector(
+  selectManufactor,
+  (manufactor) => manufactor.isFilter
+);

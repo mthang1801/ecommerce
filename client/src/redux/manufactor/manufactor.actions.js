@@ -73,3 +73,72 @@ export const fetchProductList = (pathUrl, page) => async (dispatch) => {
     dispatch(fetchProductListFail(error));
   }
 };
+const filterProductsByPriceStart = () => ({
+  type: manufactorActionTypes.FILTER_PRODUCTS_BY_PRICE_START,
+});
+const filterProductsByPriceSuccess = (
+  name,
+  productGroupList,
+  productList,
+  numProducts,
+  currentPage,
+  numPages,
+  maxPrice
+) => ({
+  type: manufactorActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS,
+  payload: {
+    name,
+    productGroupList,
+    productList,
+    numProducts,
+    currentPage,
+    numPages,
+    maxPrice,
+  },
+});
+const filterProductsByPriceFail = (err) => ({
+  type: manufactorActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL,
+  payload: { msg: err.response.data.message, status: err.response.status },
+});
+
+export const filterProductsByPrice = (
+  manufactorPath,
+  minPriceChange,
+  maxPriceChange,
+  page = 1
+) => async (dispatch) => {
+  try {
+    dispatch(filterProductsByPriceStart());
+    const {
+      data: {
+        name,
+        productGroupList,
+        productList,
+        numProducts,
+        currentPage,
+        numPages,
+        maxPrice,
+      },
+    } = await axios.get(
+      urls.GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_MANUFACTOR(
+        manufactorPath,
+        minPriceChange,
+        maxPriceChange,
+        page
+      )
+    );
+    dispatch(
+      filterProductsByPriceSuccess(
+        name,
+        productGroupList,
+        productList,
+        numProducts,
+        currentPage,
+        numPages,
+        maxPrice
+      )
+    );
+  } catch (error) {
+    dispatch(filterProductsByPriceFail(error));
+  }
+};

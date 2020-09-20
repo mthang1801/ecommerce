@@ -10,7 +10,7 @@ import {
   selectProductList,
   selectNumPages,
   selectNumProducts,
-  selectCurrentPage,
+  selectCurrentPage,  
 } from "../../../redux/manufactor/manufactor.selectors";
 import {withRouter} from "react-router-dom"
 const ManufactorRightSide = ({
@@ -25,10 +25,16 @@ const ManufactorRightSide = ({
   setCurrentPage
 }) => {
   const [initialPage, setInitialPage] = useState(true);
-  const movePage = page => {      
-    const categoryPath = location.pathname.split("/")[1];   
-    const ManufactorPath = location.pathname.split("/")[2];
-    history.push(`/${categoryPath}/${ManufactorPath}/products?page=${page}`);
+  const movePage = page => {           
+    const manufactorPath = location.pathname.split("/")[2];    
+    const urlParams = new URLSearchParams(window.location.search);
+    const min_price = +urlParams.get("min_price");
+    const max_price = +urlParams.get("max_price");  
+    if(max_price > 0 ){
+      history.push(`/manufactor/${manufactorPath}/products?page=${page}&min_price=${min_price}&max_price=${max_price}`);
+    }else{
+      history.push(`/manufactor/${manufactorPath}/products?page=${page}`);
+    }   
     setCurrentPage(page);
   }
   const handlePageClick = (data) => {       

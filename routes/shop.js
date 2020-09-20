@@ -152,6 +152,15 @@ router.get(
   shopController.getListProdudctPerPageByManufactorUrl
 );
 /**
+ * @route GET /manufactor/:manufactorPath/product-list/products
+ * @desc get list products per page by manufactorUrl
+ * @access public
+ */
+router.get(
+  "/manufactor/:manufactorPath/product-list/products/query",
+  shopController.getProductListInManufactorByFilterPrice
+);
+/**
  * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath
  * @desc get list content product group
  * @access public

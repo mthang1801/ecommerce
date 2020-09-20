@@ -93,4 +93,11 @@ export default {
     page
   ) =>
     `/category/${categoryPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
+  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_MANUFACTOR: (
+    manufactorPath,
+    minPrice,
+    maxPrice,
+    page
+  ) =>
+    `/manufactor/${manufactorPath}/product-list/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
 };

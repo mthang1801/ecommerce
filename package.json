@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "install-client": "npm install --prefix client",
+    "intall-admin" : "npm install --prefix admin",     
     "admin": "npm start --prefix admin",
     "client": "npm start --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1",
