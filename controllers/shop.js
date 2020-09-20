@@ -416,10 +416,13 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    const product = await Product.find({
-      category: category._id,
-      status: "active",
-    })
+    const product = await Product.find(
+      {
+        category: category._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -448,35 +451,47 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    const discountProductList = await Product.find({
-      category: category._id,
-      "discount.value": { $gt: 0 },
-      "discount.end_at": { $gt: new Date() },
-      status: "active",
-    })
+    const discountProductList = await Product.find(
+      {
+        category: category._id,
+        "discount.value": { $gt: 0 },
+        "discount.end_at": { $gt: new Date() },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ discount: -1 })
       .limit(9);
-    const topRatedProducts = await Product.find({
-      category: category._id,
-      status: "active",
-      stars: { $exists: true },
-    })
+    const topRatedProducts = await Product.find(
+      {
+        category: category._id,
+        status: "active",
+        stars: { $exists: true },
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ stars: -1 })
       .limit(9);
-    const bestSellerProducts = await Product.find({
-      category: category._id,
-      sold_quantity: { $gt: 0 },
-      status: "active",
-    })
+    const bestSellerProducts = await Product.find(
+      {
+        category: category._id,
+        sold_quantity: { $gt: 0 },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ sold_quantity: -1 })
       .limit(9);
-    const productList = await Product.find({
-      category: category._id,
-      status: "active",
-    })
+    const productList = await Product.find(
+      {
+        category: category._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -589,36 +604,48 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       throw err;
     }
     const manufactorList = productType.manufactors;
-    const discountProductList = await Product.find({
-      productType: productType._id,
-      "discount.value": { $gt: 0 },
-      "discount.end_at": { $gt: new Date() },
-      status: "active",
-    })
+    const discountProductList = await Product.find(
+      {
+        productType: productType._id,
+        "discount.value": { $gt: 0 },
+        "discount.end_at": { $gt: new Date() },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ discount: -1 })
       .limit(9);
 
-    const topRatedProducts = await Product.find({
-      productType: productType._id,
-      stars: { $exists: true },
-      status: "active",
-    })
+    const topRatedProducts = await Product.find(
+      {
+        productType: productType._id,
+        stars: { $exists: true },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ stars: -1 })
       .limit(9);
-    const bestSellerProducts = await Product.find({
-      productType: productType._id,
-      sold_quantity: { $gt: 0 },
-      status: "active",
-    })
+    const bestSellerProducts = await Product.find(
+      {
+        productType: productType._id,
+        sold_quantity: { $gt: 0 },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ sold_quantity: -1 })
       .limit(9);
-    const productList = await Product.find({
-      productType: productType._id,
-      status: "active",
-    })
+    const productList = await Product.find(
+      {
+        productType: productType._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -736,10 +763,13 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
       err.statusCode = 404;
       throw err;
     }
-    const productList = await Product.find({
-      productType: productType._id,
-      status: "active",
-    })
+    const productList = await Product.find(
+      {
+        productType: productType._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -769,10 +799,13 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    const productList = await Product.find({
-      manufactor: manufactor._id,
-      status: "active",
-    })
+    const productList = await Product.find(
+      {
+        manufactor: manufactor._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -884,10 +917,13 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    const productList = await Product.find({
-      manufactor: manufactor._id,
-      status: "active",
-    })
+    const productList = await Product.find(
+      {
+        manufactor: manufactor._id,
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -910,33 +946,45 @@ exports.getListContentProductGroup = async (req, res, next) => {
     const productGroup = await ProductGroup.findOne({
       linkUrl,
     });
-    const discountProductList = await Product.find({
-      productGroup: productGroup._id,
-      "discount.value": { $gt: 0 },
-      "discount.end_at": { $gt: new Date() },
-      status: "active",
-    })
+    const discountProductList = await Product.find(
+      {
+        productGroup: productGroup._id,
+        "discount.value": { $gt: 0 },
+        "discount.end_at": { $gt: new Date() },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ discount: -1 })
       .limit(9);
 
-    const topRatedProducts = await Product.find({
-      productGroup: productGroup._id,
-      stars: { $exists: true },
-      status: "active",
-    })
+    const topRatedProducts = await Product.find(
+      {
+        productGroup: productGroup._id,
+        stars: { $exists: true },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ stars: -1 })
       .limit(9);
-    const bestSellerProducts = await Product.find({
-      productGroup: productGroup._id,
-      sold_quantity: { $gt: 0 },
-      status: "active",
-    })
+    const bestSellerProducts = await Product.find(
+      {
+        productGroup: productGroup._id,
+        sold_quantity: { $gt: 0 },
+        status: "active",
+      },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ sold_quantity: -1 })
       .limit(9);
-    const productList = await Product.find({ productGroup: productGroup._id })
+    const productList = await Product.find(
+      { productGroup: productGroup._id },
+      { images: { $slice: 1 } }
+    )
       .populate("images")
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
@@ -1059,11 +1107,14 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
     const productGroup = await ProductGroup.findById(product.productGroup);
     let collectionProducts = [];
     if (productGroup) {
-      const products = await Product.find({
-        productGroup: productGroup._id,
-        status: "active",
-        _id: { $ne: product._id },
-      })
+      const products = await Product.find(
+        {
+          productGroup: productGroup._id,
+          status: "active",
+          _id: { $ne: product._id },
+        },
+        { images: { $slice: 1 } }
+      )
         .populate("images")
         .limit(8);
       collectionProducts = [...collectionProducts, ...products];
