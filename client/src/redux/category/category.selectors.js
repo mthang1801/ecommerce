@@ -66,3 +66,8 @@ export const selectProductFetched = createSelector(
   selectCategory,
   (category) => category.fetched
 );
+
+export const selectProductsIsFilter = createSelector(
+  selectCategory,
+  (category) => category.isFilter
+);

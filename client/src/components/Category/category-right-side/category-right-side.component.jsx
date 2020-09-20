@@ -18,6 +18,7 @@ import {
   selectNumPages,
   selectNumProducts,
   selectCurrentPage,
+  selectProductsIsFilter,
 } from "../../../redux/category/category.selectors";
 
 const CategoryRightSide = ({
@@ -32,12 +33,21 @@ const CategoryRightSide = ({
   numPages,
   location,
   history,
-  setCurrentPage
+  setCurrentPage,
+  isFilter
 }) => {
   const [initialPage, setInitialPage] = useState(true);
   const movePage = page => {
     const pathName = location.pathname.split("/")[1];    
-    history.push(`/${pathName}/products?page=${page}`);
+    const urlParams = new URLSearchParams(window.location.search);
+    const min_price = +urlParams.get("min_price");
+    const max_price = +urlParams.get("max_price"); 
+    if(max_price > 0 ){
+      history.push(`/${pathName}/products?page=${page}&min_price=${min_price}&max_price=${max_price}`);
+    }else{
+      history.push(`/${pathName}/products?page=${page}&`);
+    }
+    
     setCurrentPage(page);
   }
  
@@ -56,28 +66,31 @@ const CategoryRightSide = ({
       !productList.length ? (
         <h4>Không tìm thấy sản phẩm nào</h4>
       ) : (
-        <React.Fragment>
-          {discountProductList.length && (
+      <React.Fragment>
+        {!isFilter ?  (<React.Fragment>
+          {discountProductList.length? (
             <SalesOff
               mobileView={mobileView}
               tabletView={tabletView}
               productList={discountProductList}
             />
-          )}
-          {bestSellerProductList.length && (
+          ): null}
+          {bestSellerProductList.length ? (
             <BestSellerProducts
               mobileView={mobileView}
               tabletView={tabletView}
               productList={bestSellerProductList}
             />
-          )}
-          {topRatedProductList.length && (
+          ): null}
+          {topRatedProductList.length ? (
             <TopRatedProducts
               mobileView={mobileView}
               tabletView={tabletView}
               productList={topRatedProductList}
             />
-          )}
+          ): null}
+          </React.Fragment>) : null}
+
           <TaskBar
             mobileView={mobileView}
             tabletView={tabletView}
@@ -106,6 +119,7 @@ const mapStateToProps = createStructuredSelector({
   numProducts: selectNumProducts,
   numPages: selectNumPages,
   currentPage: selectCurrentPage,
+  isFilter : selectProductsIsFilter
 });
 
 const mapDispatchToProps = dispatch => ({

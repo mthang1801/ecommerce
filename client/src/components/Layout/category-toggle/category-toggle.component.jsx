@@ -3,8 +3,7 @@ import {CategoryToggleContainer, CategoryLeft, Slash, CategoryMiddle, CategoryRi
 import Icon from "../../UI/custom-icon/custom-icon.component"
 import { FaArrowDown, FaArrowUp} from "react-icons/fa"
 import CategoryMenu from "../category-menu/category-menu.component";
-const CategoryToggle = ({show, smallView, onMouseEnter, onMouseLeave, onClick}) => {
-  console.log(show)
+const CategoryToggle = ({show, smallView, onMouseEnter, onMouseLeave, onClick}) => {  
   return (
     <CategoryToggleContainer onClick={onClick}  onMouseEnter={!smallView ? onMouseEnter : ()=>{}} onMouseLeave={!smallView ? onMouseLeave : ()=>{}}>    
       <CategoryLeft>

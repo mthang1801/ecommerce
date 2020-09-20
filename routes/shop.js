@@ -15,15 +15,23 @@ router.get("/initial-data", shopController.getInitialData);
  */
 router.get("/category", shopController.getCategoryList);
 /**
- * @route GET /category/:pathUrl?page=
+ * @route GET /category/:categoryPath?page=
  * @desc get list content by category path
  * @access public
  */
 router.get(
-  "/category/:pathUrl",
+  "/category/:categoryPath",
   shopController.getContentListByCategoryLinkUrl
 );
-
+/**
+ * @route GET /category/:categoryPath/products/query
+ * @desc get product List per page by category Link
+ * @access public
+ */
+router.get(
+  "/category/:categoryPath/products/query",
+  shopController.getProductListInCategoryByFilterPrice
+);
 /**
  * @route GET /category/:id/product-type
  * @desc get list product types by category id
@@ -90,7 +98,7 @@ router.get("/best-seller-products", shopController.getBestSellerProducts);
  */
 router.get("/top-rated-products", shopController.getTopRatedProducts);
 /**
- * @route GET /:categoryLink/products
+ * @route GET /category/:linkUrl/products
  * @desc get product List per page by category Link
  * @access public
  */
@@ -113,7 +121,7 @@ router.get(
  * @access public
  */
 router.get(
-  " /category/:categoryPath/productType/:productTypePath/products/query",
+  "/category/:categoryPath/product-type/:productTypePath/products/query",
   shopController.getProductListByFilterPriceInProductType
 );
 /**

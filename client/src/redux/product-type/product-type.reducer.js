@@ -72,7 +72,7 @@ export default (state = INITIAL_STATE, action) => {
         currentPage: +action.payload.currentPage,
         numPages: +action.payload.numPages,
         maxPrice: +action.payload.maxPrice,
-        loading: false,
+        loadingProductList: false,
       };
     case productTypeActionTypes.SET_CURRENT_PAGE:
       return {

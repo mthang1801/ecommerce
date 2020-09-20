@@ -366,7 +366,6 @@ exports.getLatestProducts = async (req, res, next) => {
       .populate({ path: "images" })
       .sort({ createdAt: -1 })
       .limit(12);
-    console.log(products);
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -434,14 +433,14 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
 exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
   try {
     console.time("getContentListByCategoryLinkUrl");
-    let { pathUrl } = req.params;
+    let { categoryPath } = req.params;
     const page = +req.query.page;
-    if (pathUrl[0] !== "/") {
-      pathUrl = "/" + pathUrl;
+    if (categoryPath[0] !== "/") {
+      categoryPath = "/" + categoryPath;
     }
     console.time("start");
     const category = await Category.findOne({
-      linkUrl: pathUrl,
+      linkUrl: categoryPath,
       status: "active",
     }).populate("productTypes");
     if (!category) {
@@ -506,6 +505,61 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       numProducts,
       numPages,
       maxPrice: maxPrice.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getProductListInCategoryByFilterPrice = async (req, res, next) => {
+  try {
+    console.time("getProductListInCategoryByFilterPrice");
+    let { categoryPath } = req.params;
+    const page = +req.query.page;
+    const minPrice = +req.query.min_price;
+    const maxPrice = +req.query.max_price;
+    if (categoryPath[0] !== "/") {
+      categoryPath = "/" + categoryPath;
+    }
+    const category = await Category.findOne({ linkUrl: categoryPath });
+    console.timeEnd("getProductListInCategoryByFilterPrice");
+    if (!category) {
+      const error = new Error("category not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const productList = await Product.find(
+      {
+        category: category._id,
+        status: "active",
+        price: { $gte: minPrice, $lte: maxPrice },
+      },
+      { images: { $slice: 1 } }
+    )
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      category: category._id,
+      status: "active",
+      price: { $gte: minPrice, $lte: maxPrice },
+    });
+    const numPages = Math.ceil(numProducts / process.env.PRODUCTS_PER_PAGE);
+    const productMaxPrice = await Product.findOne(
+      {
+        category: category._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+    console.timeEnd("getProductListByFilterPriceInProductType");
+    res.status(200).json({
+      categoryList: category,
+      productList,
+      numProducts,
+      currentPage: page,
+      numPages,
+      maxPrice: productMaxPrice.price,
     });
   } catch (error) {
     next(error);
@@ -600,11 +654,59 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
 };
 exports.getProductListByFilterPriceInProductType = async (req, res, next) => {
   try {
+    console.time("getProductListByFilterPriceInProductType");
     let { categoryPath, productTypePath } = req.params;
     const page = +req.query.page;
     const minPrice = +req.query.min_price;
     const maxPrice = +req.query.max_price;
-    console.log(categoryPath, productTypePath, page, minPrice, maxPrice);
+    if (categoryPath[0] !== "/") {
+      categoryPath = "/" + categoryPath;
+    }
+    if (productTypePath[0] !== "/") {
+      productTypePath = "/" + productTypePath;
+    }
+    const productType = await ProductTypes.findOne({
+      linkUrl: categoryPath + productTypePath,
+      status: "active",
+    });
+    if (!productType) {
+      const err = new Error("product Type not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const productList = await Product.find(
+      {
+        productType: productType._id,
+        status: "active",
+        price: { $gte: minPrice, $lte: maxPrice },
+      },
+      { images: { $slice: 1 } }
+    )
+      .populate("images")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numProducts = await Product.countDocuments({
+      productType: productType._id,
+      status: "active",
+      price: { $gte: minPrice, $lte: maxPrice },
+    });
+    const numPages = Math.ceil(numProducts / process.env.PRODUCTS_PER_PAGE);
+    const productMaxPrice = await Product.findOne(
+      {
+        productType: productType._id,
+        status: "active",
+      },
+      { price: 1, _id: 0 }
+    ).sort({ price: -1 });
+    console.timeEnd("getProductListByFilterPriceInProductType");
+    res.status(200).json({
+      productList,
+      numProducts,
+      currentPage: page,
+      numPages,
+      maxPrice: productMaxPrice.price,
+    });
   } catch (error) {
     next(error);
   }
@@ -745,7 +847,6 @@ exports.getListContentProductGroup = async (req, res, next) => {
     const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
       productGroupPath
     )}`;
-    console.log(linkUrl);
     const productGroup = await ProductGroup.findOne({
       linkUrl,
     });
@@ -813,7 +914,6 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
     const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
       productGroupPath
     )}`;
-    console.log(linkUrl);
     const productGroup = await ProductGroup.findOne({ linkUrl });
     if (!productGroup) {
       const err = new Error("Product group not found");
@@ -1236,14 +1336,12 @@ exports.postResponseComment = async (req, res, next) => {
     }
     const { text } = req.body;
     const { commentId } = req.params;
-    console.log(commentId);
     if (!text || !commentId) {
       const error = new Error("response error");
       error.statusCode = 400;
       throw error;
     }
     const comment = await Comment.findById(commentId);
-    console.log(comment);
     if (!comment) {
       const error = new Error("Comment not found");
       error.statusCode = 404;
@@ -1354,7 +1452,6 @@ exports.postReponseToResponsecomment = async (req, res, next) => {
       throw error;
     }
     const comment = await Comment.findById(commentId);
-    console.log(comment);
     if (!comment) {
       const error = new Error("Comment not found");
       error.statusCode = 404;

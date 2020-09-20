@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useLayoutEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import {PriceLabel} from "./price-scope.styles";
@@ -18,8 +18,11 @@ function valuetext(value) {
 
 const PriceScope = ({maxPrice, setMaxPriceChange, setMinPriceChange, setFilter}) => {
   const classes = useStyles();
+  const urlParams = new URLSearchParams(window.location.search);  
   const [value, setValue] = React.useState([0, maxPrice]);
-
+  useLayoutEffect(() => {
+    setValue([+urlParams.get("min_price"), +urlParams.get("max_price") === 0 ? maxPrice : +urlParams.get("max_price")])
+  }, [window.location.search])
   const handleChange = (e, newValue) => {
     setValue(newValue);
   }

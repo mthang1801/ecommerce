@@ -86,4 +86,11 @@ export default {
     page
   ) =>
     `/category/${categoryPath}/product-type/${productTypePath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
+  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_CATEGORY: (
+    categoryPath,
+    minPrice,
+    maxPrice,
+    page
+  ) =>
+    `/category/${categoryPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
 };

@@ -1,6 +1,7 @@
 import productTypeActionTypes from "./product-type.types";
 import axios from "axios";
 import urls from "../../utils/urls";
+import { filter } from "bluebird";
 export const fetchProductTypeStart = () => ({
   type: productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_START,
 });
@@ -92,12 +93,10 @@ export const fetchProductList = (categoryPath, productTypePath, page) => async (
     dispatch(fetchProductListFail(error));
   }
 };
-
-export const filterProductsByPriceStart = () => ({
+const filterProductsByPriceStart = () => ({
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_START,
 });
-
-export const filterProductsByPriceSuccess = (
+const filterProductsByPriceSuccess = (
   productList,
   numProducts,
   currentPage,
@@ -107,8 +106,7 @@ export const filterProductsByPriceSuccess = (
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS,
   payload: { productList, numProducts, currentPage, numPages, maxPrice },
 });
-
-export const filterProductsByPriceFail = (err) => ({
+const filterProductsByPriceFail = (err) => ({
   type: productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL,
   payload: { msg: err.response.data.message, status: err.response.status },
 });
@@ -116,8 +114,8 @@ export const filterProductsByPriceFail = (err) => ({
 export const filterProductsByPrice = (
   categoryPath,
   productTypePath,
-  minPrice,
-  maxPrice,
+  minPriceChange,
+  maxPriceChange,
   page = 1
 ) => async (dispatch) => {
   try {
@@ -128,8 +126,8 @@ export const filterProductsByPrice = (
       urls.GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_TYPE(
         categoryPath,
         productTypePath,
-        minPrice,
-        maxPrice,
+        minPriceChange,
+        maxPriceChange,
         page
       )
     );
