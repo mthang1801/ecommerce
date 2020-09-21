@@ -50,7 +50,7 @@ const CategoryRightSide = ({
     
     setCurrentPage(page);
   }
- 
+  
   const handlePageClick = (data) => {   
     if(!initialPage){
       const currentPage = data.selected +1 ; 

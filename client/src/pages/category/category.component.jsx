@@ -46,14 +46,7 @@ const CategoryPage = ({
       fetchCategory(categoryPath, page);
     }    
   }, [fetchCategory, location.search, match.params.categoryPath, match.url]);
-  useEffect(() => {   
-    if(categoryRef.current){
-      window.scrollTo({
-        top : categoryRef.current.offsetTop, 
-        behavior : "auto"
-      })
-    }
-  }, [match.url, window.location.search, categoryRef])
+ 
   if (error) {
     return <PageError error={error.msg} />;
   }

@@ -48,6 +48,7 @@ exports.getInitialData = async (req, res, next) => {
 };
 exports.getCategoryList = async (req, res, next) => {
   try {
+    console.time("getCategoryList");
     const searchKey = req.query.search || "";
     if (searchKey) {
       const categoryFilter = await Category.find({
@@ -63,8 +64,8 @@ exports.getCategoryList = async (req, res, next) => {
       });
       return res.status(200).json(categoryFilter);
     }
-    const categoryList = await Category.find().populate("imageUrl").limit(15);
-
+    const categoryList = await Category.find().populate("imageUrl");
+    console.timeEnd("getCategoryList");
     res.status(200).json(categoryList);
   } catch (error) {
     next(error);
@@ -362,10 +363,21 @@ exports.postCreateProduct = async (req, res, next) => {
 
 exports.getLatestProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({}, { images: { $slice: 1 } })
+    console.time("getLatestProducts");
+    const products = await Product.find(
+      {},
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
+    )
       .populate({ path: "images" })
       .sort({ createdAt: -1 })
       .limit(12);
+    console.timeEnd("getLatestProducts");
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -374,10 +386,21 @@ exports.getLatestProducts = async (req, res, next) => {
 
 exports.getBestSellerProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({}, { images: { $slice: 1 } })
+    console.time("getBestSellerProducts");
+    const products = await Product.find(
+      {},
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
+    )
       .populate("images")
       .sort({ sold_quantity: -1 })
       .limit(12);
+    console.timeEnd("getBestSellerProducts");
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -386,13 +409,21 @@ exports.getBestSellerProducts = async (req, res, next) => {
 
 exports.getTopRatedProducts = async (req, res, next) => {
   try {
+    console.time("getTopRatedProducts");
     const products = await Product.find(
       { stars: { $gt: 4 } },
-      { images: { $slice: 1 } }
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
     )
       .populate("images")
       .sort({ stars: -1 })
       .limit(12);
+    console.timeEnd("getTopRatedProducts");
     res.status(200).json(products);
   } catch (error) {
     next(error);

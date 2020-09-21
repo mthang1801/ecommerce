@@ -1,13 +1,13 @@
-import React from "react";
-import SignIn from "../../components/Auth/sign-in/sign-in.component";
-import SignUp from "../../components/Auth/sign-up/sign-up.component";
-import RestoreAccount from "../../components/Auth/restore-account/restore-account.component";
-import RestoreAccountDone from "../../components/Auth/restore-account-done/restore-account-done.component";
+import React, {lazy} from "react";
 import { Switch, Route } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux";
 import {selectCurrentUser} from "../../redux/user/user.selectors"
+const SignIn = lazy(() => import("../../components/Auth/sign-in/sign-in.component"));
+const SignUp = lazy(() => import("../../components/Auth/sign-up/sign-up.component"));
+const RestoreAccount = lazy(() => import("../../components/Auth/restore-account/restore-account.component"));
+const RestoreAccountDone = lazy(() => import("../../components/Auth/restore-account-done/restore-account-done.component"));
 class AuthPage extends React.Component {
   
   render() {    

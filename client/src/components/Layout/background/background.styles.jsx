@@ -57,20 +57,6 @@ export const BackgroundItem = styled.div`
     transform: translate(-25%,-25%);
   }
  }
- &:last-child{
-  &:before{
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    border: 1.3rem solid;
-    top: 0;
-    right: 0;
-    -webkit-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0);
-    border-color: transparent white transparent transparent;
- }
 `
 //  &:not(:first-child){
 //   &:before{
