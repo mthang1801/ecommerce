@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "./utils/useWindowSize.util";
 import AppContext from "./context/app-viewport.context";
 import GlobalStyle from "./global.styles";
-import { default as RegisterSeller } from "./pages/register-seller/register-seller.container";
 import { fetchUserStart } from "./redux/user/user.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -45,6 +44,9 @@ const Manufactor = lazy(() =>
 const OrderedHistory = lazy(() => import("./pages/ordered/ordered.component"));
 const ProductReviews = lazy(() =>
   import("./pages/product-reviews/product-reviews.component")
+);
+const RegisterSeller = lazy(() =>
+  import("./pages/register-seller/register-seller.container")
 );
 function App({ fetchUser, user, loading }) {
   const [width] = useWindowSize();

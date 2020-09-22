@@ -76,7 +76,7 @@ const CheckoutPage = ({ match, currentUser, loading, cartItems }) => {
               />
          <Route path="*" component={PageNotFound}/>
         </Switch>
-      ) : null}
+      ) : <Redirect to={{pathname : "/auth", state : {from : match.url}}}/>}
     </CheckoutPageContainer>
   );
 };

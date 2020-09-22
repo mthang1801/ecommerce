@@ -8,6 +8,7 @@ const ProductsBestSeller = ({ mobileView, tabletView }) => {
     let _mounted = true;
     getBestSellerProducts().then(data => {
       if(_mounted){
+        console.log(data);
         setBestSellerProducts(data);
       }
     });

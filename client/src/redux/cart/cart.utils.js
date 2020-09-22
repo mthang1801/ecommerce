@@ -4,7 +4,9 @@ export const addItemToCartUtility = (cartItems, itemToAdd, quantity) => {
   );
   if (!checkExistedCartItem) return [...cartItems, { ...itemToAdd, quantity }];
   return cartItems.map((item) => {
-    return item._id === itemToAdd._id ? { ...item, quantity } : item;
+    return item._id === itemToAdd._id
+      ? { ...item, quantity: item.quantity + quantity }
+      : item;
   });
 };
 

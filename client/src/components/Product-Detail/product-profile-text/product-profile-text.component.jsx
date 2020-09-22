@@ -38,6 +38,7 @@ import {selectCartItems, selectCartPosition} from "../../../redux/cart/cart.sele
 import {addItem, decreaseItem} from "../../../redux/cart/cart.actions";
 import {connect} from "react-redux";
 import LocalShippingOutlinedIcon from '@material-ui/icons/LocalShippingOutlined';
+import {addProductToCart} from "../../../utils/algorithms"
 const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addItem, cartPosition}) => {   
 
   const [productToCart, setProductToCart] = useState(null)
@@ -52,18 +53,7 @@ const ProductProfileText = ({ mobileView, tabletView, product , cartItems, addIt
       setCartQuantity(1);
     }    
     if(product){      
-      setProductToCart({ 
-        _id : product._id, 
-        ship_fee : product.ship_fee,
-        fast_delivery : product.fast_delivery, 
-        store_quantity : product.quantity,       
-        name : product.name, 
-        price : product.price, 
-        discount : product.discount.value, 
-        label : product.label , 
-        image: product.images[0],    
-        creator : product.user.information.first_name + " " + product.user.information.last_name
-    })}
+      setProductToCart(addProductToCart(product))}
   }, [cartItems, product])
   const [countDown, setCountdown] = useState(null);
   useEffect(() => {

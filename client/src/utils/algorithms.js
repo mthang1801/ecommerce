@@ -37,3 +37,18 @@ export const timeCountDown = (endTime) => {
     timeString,
   };
 };
+export const addProductToCart = (product) => ({
+  _id: product._id,
+  ship_fee: product.ship_fee,
+  fast_delivery: product.fast_delivery,
+  store_quantity: product.quantity,
+  name: product.name,
+  price: product.price,
+  discount: product.discount.value,
+  label: product.label,
+  image: product.images[0],
+  creator:
+    product.user.information.first_name +
+    " " +
+    product.user.information.last_name,
+});

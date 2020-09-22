@@ -57,18 +57,26 @@ const CheckoutPayment = ({
         clearCartItems();
         history.push("/checkout/complete");
       })
-      .catch((err) => setError(err.response.data.message));
+      .catch((err) => {
+        console.log(err)
+        setError(err.response.data.message)
+      });
   };
 
   useEffect(() => {
-    if(stripeToken){
+    if(stripeToken && totalPrice+totalFeeShip+fastDeliveryCost < 99999999){
       postCardPayment(currentUser, cartItems, methodDelivery, userMessage, totalPrice+totalFeeShip+fastDeliveryCost, stripeToken)
       .then(data => {
         orderedDetail(data);
         clearCartItems();
         history.push("/checkout/complete");
       })
-      .catch((err) => setError(err.response.data.message));
+      .catch((err) => 
+      {        
+        setError("Giao dịch thất bại, tài khoản giao dịch không vượt quá 99.999.999 đ")
+      });
+    }else{
+      setError("Giao dịch thất bại, tài khoản giao dịch không vượt quá 99.999.999 đ")
     }
   }, [stripeToken])
   if (loading) {

@@ -84,6 +84,20 @@ const UserSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    favorite_products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
+        required: true,
+      },
+    ],
+    viewed_products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
+        required: true,
+      },
+    ],
   },
   { timestamps: true, strict: false }
 );

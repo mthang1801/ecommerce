@@ -393,20 +393,17 @@ exports.postPayment = async (req, res, next) => {
       }
       const body = {
         source: token.id,
-        amount: +totalPrice,
+        amount: +totalPrice.toFixed(0),
         currency: "vnd",
       };
 
-      const charge = await stripe.charges.create(
-        body,
-        (stripeErr, stripeRes) => {
-          if (stripeErr) {
-            const error = new Error(stripeErr);
-            error.statusCode = 400;
-            throw error;
-          }
+      await stripe.charges.create(body, (stripeErr, stripeRes) => {
+        if (stripeErr) {
+          const error = new Error(stripeErr);
+          error.statusCode = 400;
+          throw error;
         }
-      );
+      });
     } else {
       const error = new Error("Method payment is invalid");
       error.statusCode = 400;

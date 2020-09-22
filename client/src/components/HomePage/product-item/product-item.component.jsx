@@ -17,7 +17,9 @@ import { AiFillEye, AiOutlineShoppingCart } from "react-icons/ai";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
-const ProductItem = ({ product }) => {
+import {connect} from "react-redux";
+import {addItem} from "../../../redux/cart/cart.actions"
+const ProductItem = ({ product, addItem }) => {
   const [discountDate, setDiscountDate] = useState(null);
   const [timerDiscount, setTimerDiscount] = useState(null);
   useEffect(() => {
@@ -94,12 +96,14 @@ const ProductItem = ({ product }) => {
         <Button to={product.linkUrl}>
           <AiFillEye />
         </Button>
-        <Button>
+        <Button >
           <AiOutlineShoppingCart />
         </Button>
       </ProductBtns>
     </ProductItemContainer>
   );
 };
-
-export default memo(ProductItem);
+const mapDispatchToProps = dispatch => ({
+  addItem : (product) => dispatch(addItem(product))
+})
+export default connect(null, mapDispatchToProps)(memo(ProductItem));

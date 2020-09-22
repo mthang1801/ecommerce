@@ -62,7 +62,7 @@ const CheckoutOverview = ({
     <CheckoutOverviewContainer>
       <CheckoutPreview mobileView={mobileView} tabletView={tabletView}>
         <Grid w60 mobileView={mobileView} tabletView={tabletView}>
-          {error ? <h4>{error}</h4> : null}
+          {error ? <h4 style={{margin: "1.5rem", color : "#dd2222"}}>{error}</h4> : null}
           <CheckoutForm            
             currentUser={currentUser}
             showOrder={showOrder}

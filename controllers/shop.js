@@ -375,6 +375,10 @@ exports.getLatestProducts = async (req, res, next) => {
       }
     )
       .populate({ path: "images" })
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .limit(12);
     console.timeEnd("getLatestProducts");
@@ -398,6 +402,10 @@ exports.getBestSellerProducts = async (req, res, next) => {
       }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ sold_quantity: -1 })
       .limit(12);
     console.timeEnd("getBestSellerProducts");
@@ -421,6 +429,10 @@ exports.getTopRatedProducts = async (req, res, next) => {
       }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ stars: -1 })
       .limit(12);
     console.timeEnd("getTopRatedProducts");
@@ -455,6 +467,10 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -492,6 +508,10 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ discount: -1 })
       .limit(9);
     const topRatedProducts = await Product.find(
@@ -503,6 +523,10 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ stars: -1 })
       .limit(9);
     const bestSellerProducts = await Product.find(
@@ -514,6 +538,10 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ sold_quantity: -1 })
       .limit(9);
     const productList = await Product.find(
@@ -524,6 +552,10 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -582,6 +614,10 @@ exports.getProductListInCategoryByFilterPrice = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -645,6 +681,10 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ discount: -1 })
       .limit(9);
 
@@ -657,6 +697,10 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ stars: -1 })
       .limit(9);
     const bestSellerProducts = await Product.find(
@@ -668,6 +712,10 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ sold_quantity: -1 })
       .limit(9);
     const productList = await Product.find(
@@ -678,6 +726,10 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -742,6 +794,10 @@ exports.getProductListByFilterPriceInProductType = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -802,6 +858,10 @@ exports.getProductListWithSpecificPageByProductTypeUrl = async (
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -838,6 +898,10 @@ exports.getListContentByManufactorUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -895,6 +959,10 @@ exports.getProductListInManufactorByFilterPrice = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -956,6 +1024,10 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -987,6 +1059,10 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ discount: -1 })
       .limit(9);
 
@@ -999,6 +1075,10 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ stars: -1 })
       .limit(9);
     const bestSellerProducts = await Product.find(
@@ -1010,6 +1090,10 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ sold_quantity: -1 })
       .limit(9);
     const productList = await Product.find(
@@ -1017,6 +1101,10 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -1064,6 +1152,10 @@ exports.getProductListInProductGroupByFilterPrice = async (req, res, next) => {
       { images: { $slice: 1 } }
     )
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
@@ -1129,6 +1221,10 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
 
     let product = await Product.findOne({ linkUrl })
       .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
       .populate({ path: "user", select: "_id avatar information" });
     if (!product) {
       const err = new Error("product not found");
@@ -1147,6 +1243,10 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
         { images: { $slice: 1 } }
       )
         .populate("images")
+        .populate({
+          path: "user",
+          select: "_id information",
+        })
         .limit(8);
       collectionProducts = [...collectionProducts, ...products];
     }
@@ -1158,6 +1258,10 @@ exports.getContentProductByProductUrl = async (req, res, next) => {
         _id: { $ne: product._id },
       })
         .populate("images")
+        .populate({
+          path: "user",
+          select: "_id information",
+        })
         .limit(8);
       collectionProducts = [...collectionProducts, ...products];
     }

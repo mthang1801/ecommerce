@@ -8,7 +8,7 @@ export const closeCart = () => ({
   type: cartActionTypes.CLOSE_CART,
 });
 
-export const addItem = (item, quantity) => ({
+export const addItem = (item, quantity = 1) => ({
   type: cartActionTypes.ADD_ITEM,
   payload: { item, quantity },
 });

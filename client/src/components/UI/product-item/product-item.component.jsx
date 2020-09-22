@@ -20,8 +20,10 @@ import Rating from '@material-ui/lab/Rating';
 import Chip from "@material-ui/core/Chip"
 import {timeCountDown} from "../../../utils/algorithms"
 import {withRouter} from "react-router-dom";
-
-const ProductItem = ({ product, history, onClick }) => {  
+import {connect} from "react-redux";
+import {addItem} from "../../../redux/cart/cart.actions"
+import {addProductToCart} from "../../../utils/algorithms"
+const ProductItem = ({ product, history, onClick , addItem}) => {  
   const [discountDate, setDiscountDate] = useState(null);
   const [timerDiscount, setTimerDiscount] = useState(null);
   useEffect(() => {
@@ -36,9 +38,9 @@ const ProductItem = ({ product, history, onClick }) => {
     return () => clearInterval(timerInterval);
   }, [product]);
   const onAddToCart = e => {
-    e.stopPropagation();    
+    e.stopPropagation();        
+    addItem(addProductToCart(product))
   }
-  // console.log(product)
   return (
     <ProductItemContainer title={product.name} onClick={(e) => onClick(product.linkUrl)}>      
       <ProductItemImageContainer>
@@ -83,5 +85,7 @@ const ProductItem = ({ product, history, onClick }) => {
     </ProductItemContainer>
   );
 };
-
-export default memo(withRouter(ProductItem));
+const mapDispatchToProps = dispatch => ({
+  addItem : (product) => dispatch(addItem(product))
+})
+export default connect(null, mapDispatchToProps)(memo(withRouter(ProductItem)));

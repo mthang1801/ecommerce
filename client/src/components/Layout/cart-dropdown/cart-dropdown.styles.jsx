@@ -31,7 +31,7 @@ export const CartDropdownContainer = styled.div`
 export const CartDropdownItems = styled.div`
   width : 100%;
   height : 85% ;
-  overflow : hidden;
+  overflow : auto;
   text-overflow : ellipsis ; 
   white-space: nowrap ;
 `
