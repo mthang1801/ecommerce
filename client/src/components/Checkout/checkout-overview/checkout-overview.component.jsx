@@ -55,6 +55,8 @@ const CheckoutOverview = ({
       });
     }
   }, [width, orderFormRef]);
+
+  
   if(!cartItems.length){
     return <Redirect to="/" />;
   }

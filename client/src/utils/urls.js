@@ -14,6 +14,7 @@ export default {
   POST_CREATE_NEW_PRODUCT: `/product`,
   UPDATE_ROLE_USER_AS_SELLER: `/user/register-seller`,
   FETCH_INITIAL_DATA: `/initial-data`,
+  GET_HOME_CONTENT_LIST: "/home",
   GET_LATEST_PRODUCTS: "/latest-products",
   GET_BEST_SELLER_PRODUCTS: "/best-seller-products",
   GET_TOP_RATED_PRODUCTS: "/top-rated-products",

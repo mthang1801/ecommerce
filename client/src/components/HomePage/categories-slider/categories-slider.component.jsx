@@ -8,23 +8,16 @@ import {
 } from "./categories-slider.styles";
 import Slider from "react-slick";
 import AppContext from "../../../context/app-viewport.context";
-import { getCategoryList } from "../../../utils/connectDB";
-const CategoriesSlider = (props) => {
+import {selectCategoryList , selectHomeIsLoading} from "../../../redux/home/home.selectors";
+import {createStructuredSelector} from "reselect";
+import {connect} from "react-redux"
+const CategoriesSlider = ({categoryList, isLoading}) => {
   const [slide, setSlide] = useState(null);
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
   const [tabletView, setTabletView] = useState(window.innerWidth < 992);
   const width = useContext(AppContext);
-  const [category, setCategory] = useState([]);
   let dragging = false;
-  useEffect(() => {
-    let _mounted = true;  
-    getCategoryList().then((data) => {
-      if (_mounted) {
-        setCategory(data);
-      }
-    });
-    return () => (_mounted = false);
-  }, [getCategoryList]);
+
 
   useEffect(() => {
     if (width < 600) {
@@ -45,13 +38,13 @@ const CategoriesSlider = (props) => {
 
   let categoriesGroup = [];
   let categoriesPerPage = [];
-  category.forEach((item, index) => {
+  categoryList.forEach((item, index) => {
     if (index !== 0 && index % 4 === 0) {
       categoriesGroup.push(categoriesPerPage);
       categoriesPerPage = [];
     }
     categoriesPerPage.push(item);
-    if (index === category.length - 1 && index % 4 !== 0) {
+    if (index === categoryList.length - 1 && index % 4 !== 0) {
       categoriesGroup.push(categoriesPerPage);
     }
   });
@@ -59,7 +52,7 @@ const CategoriesSlider = (props) => {
     <React.Fragment>
       <CategoriesSliderContainer mobileView={mobileView}>
         <Caption>Danh mục sản phẩm</Caption>
-        {category.length ? (
+        {categoryList.length ? (
           <Slider
             asNavFor={slide}
             ref={slideRef}
@@ -89,10 +82,13 @@ const CategoriesSlider = (props) => {
               })
             )}
           </Slider>
-        ) : <h4>Đang tải...</h4>}
+        ) : null}
       </CategoriesSliderContainer>
     </React.Fragment>
   );
 };
-
-export default CategoriesSlider;
+const mapStateToProps = createStructuredSelector({
+  categoryList : selectCategoryList,
+  isLoading : selectHomeIsLoading
+})
+export default connect(mapStateToProps)(CategoriesSlider);

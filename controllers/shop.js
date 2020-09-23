@@ -46,6 +46,72 @@ exports.getInitialData = async (req, res, next) => {
     next(error);
   }
 };
+exports.getHomeContentList = async (req, res, next) => {
+  try {
+    console.time("getHomeContentList");
+    const categoryList = await Category.find().populate("imageUrl").limit(12);
+    const productsLatest = await Product.find(
+      {},
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
+    )
+      .populate({ path: "images" })
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
+      .sort({ createdAt: -1 })
+      .limit(12);
+    const productsBestSeller = await Product.find(
+      {},
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
+    )
+      .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
+      .sort({ sold_quantity: -1 })
+      .limit(12);
+    const productsTopRated = await Product.find(
+      { stars: { $gt: 4 } },
+      {
+        images: { $slice: 1 },
+        comments: 0,
+        description: 0,
+        information: 0,
+        votes: 0,
+      }
+    )
+      .populate("images")
+      .populate({
+        path: "user",
+        select: "_id information",
+      })
+      .sort({ stars: -1 })
+      .limit(12);
+    console.timeEnd("getHomeContentList");
+    res.status(200).json({
+      categoryList,
+      productsLatest,
+      productsBestSeller,
+      productsTopRated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getCategoryList = async (req, res, next) => {
   try {
     console.time("getCategoryList");

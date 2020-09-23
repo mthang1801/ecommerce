@@ -1,25 +1,17 @@
 import React, { useEffect, useState, memo } from "react";
 import ProductSlider from "../../UI/product-slider/product-slider.component";
-import {getBestSellerProducts} from "../../../utils/connectDB"
 import {ProductsBestSellerWrapper} from "./product-best-seller.styles";
-const ProductsBestSeller = ({ mobileView, tabletView }) => { 
-  const [bestSellerProducts, setBestSellerProducts] = useState([]);
-  useEffect(() => {
-    let _mounted = true;
-    getBestSellerProducts().then(data => {
-      if(_mounted){
-        console.log(data);
-        setBestSellerProducts(data);
-      }
-    });
-    return () => _mounted = false;
-  }, [getBestSellerProducts]);
-   
+import {selectProductsBestSeller} from "../../../redux/home/home.selectors";
+import {createStructuredSelector} from "reselect";
+import {connect} from "react-redux"
+const ProductsBestSeller = ({ mobileView, tabletView, bestSellerProducts }) => {   
   return (
     <ProductsBestSellerWrapper>
       <ProductSlider mobileView={mobileView} tabletView={tabletView} productList={bestSellerProducts} title="Sản phẩm bán chạy"/>
     </ProductsBestSellerWrapper> 
   );
 };
-
-export default memo(ProductsBestSeller);
+const mapStateToProps = createStructuredSelector({
+  bestSellerProducts : selectProductsBestSeller
+})
+export default memo(connect(mapStateToProps)(ProductsBestSeller));

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import drawerReducer from "./drawer/drawer.reducer";
 import userReducer from "./user/user.reducer";
+import homeReducer from "./home/home.reducer";
 import sellerReducer from "./seller/seller.reducer";
 import categoryReducer from "./category/category.reducer";
 import productTypeReducer from "./product-type/product-type.reducer";
@@ -27,6 +28,7 @@ const cartPersistConfig = {
 const rootReducer = combineReducers({
   drawer: drawerReducer,
   user: userReducer,
+  home: homeReducer,
   seller: sellerReducer,
   category: categoryReducer,
   productType: productTypeReducer,

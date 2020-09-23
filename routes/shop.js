@@ -9,6 +9,12 @@ const router = express.Router();
  */
 router.get("/initial-data", shopController.getInitialData);
 /**
+ * @route GET /home
+ * @desc get  data at home page
+ * @access public
+ */
+router.get("/home", shopController.getHomeContentList);
+/**
  * @route GET /api/category
  * @desc get list categories
  * @access public
