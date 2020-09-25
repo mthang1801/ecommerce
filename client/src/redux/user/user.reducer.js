@@ -27,6 +27,20 @@ export default (state = INITIAL_STATE, action) => {
         user: action.payload,
         loading: false,
       };
+    case userActionTypes.ADD_OR_REMOVE_FAVORITE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          favorite_products: state.user.favorite_products.includes(
+            action.payload
+          )
+            ? state.user.favorite_products.filter(
+                (_id) => _id != action.payload
+              )
+            : [...state.user.favorite_products, action.payload],
+        },
+      };
     case userActionTypes.FETCH_USER_FAIL:
     case userActionTypes.LOGOUT_SUCCESS:
     case userActionTypes.RESTORE_ACCOUNT_SUCCESS:

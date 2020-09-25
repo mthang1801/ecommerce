@@ -3,6 +3,7 @@ import {FeaturedProductOverViewContainer, Grid} from "./featured-product-overvie
 import LatestProduct from "../products-latest/products-latest.component";
 import ProductsBestSeller from "../products-best-seller/product-best-seller.component";
 import ProductsTopRated from "../products-top-rated/products-top-rated.component";
+import ProductFavorite from  "../products-favorite/products-favorite.component";
 import AppContext from "../../../context/app-viewport.context";
 const FeaturedProductOverView = () => {
   const [mobileView, setMobileView] = useState(window.innerWidth < 600);
@@ -22,6 +23,9 @@ const FeaturedProductOverView = () => {
   }, [width]); 
   return (
     <FeaturedProductOverViewContainer>
+      <Grid tabletView={tabletView} mobileView={mobileView}>
+        <ProductFavorite tabletView={tabletView} mobileView={mobileView}/>
+      </Grid>
       <Grid tabletView={tabletView} mobileView={mobileView}>
         <LatestProduct tabletView={tabletView} mobileView={mobileView}/>
       </Grid>

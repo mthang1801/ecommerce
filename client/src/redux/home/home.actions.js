@@ -9,7 +9,8 @@ const fetchHomeContentListSuccess = (
   categoryList,
   productsLatest,
   productsBestSeller,
-  productsTopRated
+  productsTopRated,
+  productsFavorite
 ) => ({
   type: homeActionTypes.FETCH_HOME_PAGE_CONTENT_LIST_SUCCESS,
   payload: {
@@ -17,6 +18,7 @@ const fetchHomeContentListSuccess = (
     productsLatest,
     productsBestSeller,
     productsTopRated,
+    productsFavorite,
   },
 });
 
@@ -34,6 +36,7 @@ export const fetchHomeContentList = () => async (dispatch) => {
         productsLatest,
         productsBestSeller,
         productsTopRated,
+        productsFavorite,
       },
     } = await axios.get(urls.GET_HOME_CONTENT_LIST);
     dispatch(
@@ -41,7 +44,8 @@ export const fetchHomeContentList = () => async (dispatch) => {
         categoryList,
         productsLatest,
         productsBestSeller,
-        productsTopRated
+        productsTopRated,
+        productsFavorite
       )
     );
   } catch (error) {

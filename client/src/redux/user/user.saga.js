@@ -2,6 +2,7 @@ import { put, takeLatest, call, all, delay, take } from "redux-saga/effects";
 import * as actions from "./user.actions";
 import * as productActions from "../seller/seller.actions";
 import * as cartActions from "../cart/cart.actions";
+import * as favoriteProductsActions from "../products-favorite/products-favorite.actions";
 import userActionTypes from "./user.types";
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -108,6 +109,16 @@ function* logout() {
   yield put(actions.logoutSuccess());
   yield put(productActions.clearAll());
   yield put(cartActions.clearCartItems());
+  yield put(favoriteProductsActions.clearFavoriteProducts());
+}
+
+function* addOrRemoveFavoriteProduct({ payload }) {
+  try {
+    yield axios.post(urls.ADD_OR_REMOVE_FAVORITE_PRODUCT(payload));
+    yield put(actions.addOrRemoveFavoriteProductSuccess(payload));
+  } catch (error) {
+    yield put(actions.addOrRemoveFavoriteProductFail(error));
+  }
 }
 
 function* onFetchUser() {
@@ -137,6 +148,13 @@ function* onCheckAuthTimeout() {
   yield takeLatest(userActionTypes.CHECK_AUTH_TIMEOUT, checkAuthTimeout);
 }
 
+function* onAddOrRemoveFavoriteProduct() {
+  yield takeLatest(
+    userActionTypes.ADD_OR_REMOVE_FAVORITE_PRODUCT_START,
+    addOrRemoveFavoriteProduct
+  );
+}
+
 export default function* userSaga() {
   yield all([
     call(onRegister),
@@ -146,5 +164,6 @@ export default function* userSaga() {
     call(onLogin),
     call(onLoginFacebook),
     call(onLoginGoogle),
+    call(onAddOrRemoveFavoriteProduct),
   ]);
 }

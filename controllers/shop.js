@@ -19,6 +19,7 @@ const vote = require("../models/vote");
 const Response = require("../models/response");
 const encodeLinkUrl = require("../utils/encodeUrl");
 const connectDB = require("../config/connectDB");
+const jwt = require("jsonwebtoken");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -50,6 +51,26 @@ exports.getHomeContentList = async (req, res, next) => {
   try {
     console.time("getHomeContentList");
     const categoryList = await Category.find().populate("imageUrl").limit(12);
+    let productsFavorite = [];
+    if (req.header("Authentication")) {
+      const token = req.header("Authentication").split(" ")[1];
+      const { userId } = jwt.verify(token, process.env.JwT_SECRET);
+      const user = await User.findById(userId);
+      for await (let [idx, productId] of user.favorite_products.entries()) {
+        if (idx > 12) {
+          break;
+        }
+        const product = await Product.findById(productId, {
+          images: { $slice: 1 },
+        })
+          .populate({ path: "images" })
+          .populate({
+            path: "user",
+            select: "_id information",
+          });
+        productsFavorite.push(product);
+      }
+    }
     const productsLatest = await Product.find(
       {},
       {
@@ -107,6 +128,7 @@ exports.getHomeContentList = async (req, res, next) => {
       productsLatest,
       productsBestSeller,
       productsTopRated,
+      productsFavorite,
     });
   } catch (error) {
     next(error);
@@ -1923,6 +1945,39 @@ exports.readMoreComments = async (req, res, next) => {
       comments: commentList.comments,
       responses: responseList,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.addOrRemoveFavoriteProduct = async (req, res, next) => {
+  try {
+    console.time("addOrRemoveFavoriteProduct");
+    if (!req.isAuthenticated || !req.user) {
+      const Error = new Error("Unauthorized");
+      error.statusCode = 401;
+      throw error;
+    }
+    const { productId } = req.params;
+    if (!productId) {
+      const error = new Error("product not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const checkFavoriteProduct = user.favorite_products.includes(productId);
+    if (!checkFavoriteProduct) {
+      user.favorite_products.push(productId);
+    } else {
+      user.favorite_products.pull(productId);
+    }
+    await user.save();
+    console.timeEnd("addOrRemoveFavoriteProduct");
+    res.status(200).json({ msg: "add or remove success" });
   } catch (error) {
     next(error);
   }

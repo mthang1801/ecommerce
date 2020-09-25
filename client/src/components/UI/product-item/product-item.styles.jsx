@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import {darken} from "polished"
 
 export const ButtonsGroup = styled.div`
   position :absolute; 
@@ -59,25 +59,6 @@ export const ProductItemContainer = styled.div`
     width : 85%;         
   }
 `
-
-export const Button = styled.span`
-  background-color : rgba(255,255,255,.8);  
-  border :1px solid #eee;
-  height : 3rem ; 
-  width : 3rem ;
-  display : flex ; 
-  justify-content : center; 
-  align-items : center;
-  border-radius : 50%;
-  cursor : pointer ; 
-  &:hover{
-    transform : rotate(-360deg);
-    background-color : rgb(127,173,57);
-    color : white;
-  }
-  transition : transform 1s;
-`
-
 
 export const ProductItemImageContainer = styled.div`
   width : 100%;  
@@ -149,4 +130,65 @@ export const ProductUtil = styled.div`
 `
 export const Icon = styled.img`
   width : 30%;  
+`
+
+export const ButtonFavorite = styled.span`
+  border : 1px solid ; 
+  background-color : ${({active}) => active ? "#e74c3c" : "white" };  
+  border-color :${({active}) => active ?  "#e74c3c" :"white" };
+  color: ${({active}) => active ?  "white" : "#e74c3c" };
+  height : 3rem ; 
+  width : 3rem ;
+  display : flex ; 
+  justify-content : center; 
+  align-items : center;
+  border-radius : 50%;
+  cursor : pointer ; 
+  &:hover{
+    transform : rotate(-360deg);
+    background-color :  ${({active}) => active ?  "#e74c3c" : `${darken("0.1", "#e74c3c")}` };  
+    border : ${({active}) => active ?  "#e74c3c" : `${darken("0.1", "#e74c3c")}` };  
+    color: white;
+  }
+  transition : transform 1s;
+`
+
+export const ButtonEye = styled.span`
+  background-color : rgba(255,255,255,.8);  
+  color : #7fad39;
+  border :1px solid #eee;
+  height : 3rem ; 
+  width : 3rem ;
+  display : flex ; 
+  justify-content : center; 
+  align-items : center;
+  border-radius : 50%;
+  cursor : pointer ; 
+  &:hover{
+    transform : rotate(-360deg);
+    background-color : rgb(127,173,57);
+    color : white;
+  }
+  transition : transform 1s;
+`
+
+
+
+export const ButtonCart = styled.span`
+  background-color : rgba(255,255,255,.8);
+  color : #1565c0;  
+  border :1px solid #eee;
+  height : 3rem ; 
+  width : 3rem ;
+  display : flex ; 
+  justify-content : center; 
+  align-items : center;
+  border-radius : 50%;
+  cursor : pointer ; 
+  &:hover{
+    transform : rotate(-360deg);
+    background-color : #1565c0;
+    color : white;
+  }
+  transition : transform 1s;
 `

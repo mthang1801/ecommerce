@@ -309,4 +309,14 @@ router.get(
   "/product-detail/:categoryPath/:productTypePath/:productPath",
   shopController.getContentProductByProductUrl
 );
+/**
+ * @route POST /product-detail/:productId/favorite
+ * @desc add or remove favorite product
+ * @access public
+ */
+router.post(
+  "/product-detail/:productId/favorite",
+  isAuth,
+  shopController.addOrRemoveFavoriteProduct
+);
 module.exports = router;

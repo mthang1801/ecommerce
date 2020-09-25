@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {HomePageContainer} from "./home.styles";
 import BannerOverview from "../../components/HomePage/banner-overview/banner-overview.component"
 import {default as CategoriesSlider} from "../../components/HomePage/categories-slider/categories-slider.container";
-import FeaturedProductOverview from "../../components/HomePage/featured-product-overview/featured-product-overview.component";
+import {default as FeaturedProductOverview} from "../../components/HomePage/featured-product-overview/featured-product-overview.container";
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import {fetchHomeContentList} from "../../redux/home/home.actions"
 import {connect} from "react-redux"

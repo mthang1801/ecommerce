@@ -16,7 +16,9 @@ exports.postCategory = async (req, res, next) => {
   try {
     let { name, linkUrl } = req.body;
     if (linkUrl[0] !== "/") {
-      linkUrl = "/" + linkUrl;
+      linkUrl = "/" + encodeURIComponent(linkUrl);
+    } else {
+      linkUrl = encodeURIComponent(linkUrl);
     }
     const checkCategoryExisting = await Category.findOne({
       name: name,

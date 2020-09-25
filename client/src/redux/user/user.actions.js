@@ -108,3 +108,18 @@ export const updateUserInfo = (userInfo) => (dispatch) => {
     }
   });
 };
+
+export const addOrRemoveFavoriteProductStart = (productId) => ({
+  type: userActionTypes.ADD_OR_REMOVE_FAVORITE_PRODUCT_START,
+  payload: productId,
+});
+
+export const addOrRemoveFavoriteProductSuccess = (productId) => ({
+  type: userActionTypes.ADD_OR_REMOVE_FAVORITE_PRODUCT_SUCCESS,
+  payload: productId,
+});
+
+export const addOrRemoveFavoriteProductFail = (error) => ({
+  type: userActionTypes.ADD_OR_REMOVE_FAVORITE_PRODUCT_FAIL,
+  payload: { msg: error.response.data.message, status: error.response.status },
+});

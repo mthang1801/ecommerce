@@ -14,11 +14,12 @@ import cartReducer from "./cart/cart.reducer";
 import productReviewsReducer from "./product-reviews/product-reviews.reducer";
 import storage from "redux-persist/lib/storage";
 import commentReviewsReducer from "./product-comment-review/product-comment-review.reducer";
+import productsFavoriteReducer from "./products-favorite/products-favorite.reducer";
 import { persistReducer } from "redux-persist";
 const rootPersistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["cart"],
+  whitelist: ["cart", "productsFavorite"],
 };
 const cartPersistConfig = {
   key: "cart",
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   ordered: orderedReducer,
   productReviews: productReviewsReducer,
   commentReviews: commentReviewsReducer,
+  productsFavorite: productsFavoriteReducer,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

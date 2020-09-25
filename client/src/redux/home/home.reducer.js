@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   productsLatest: [],
   productsBestSeller: [],
   productsTopRated: [],
+  productsFavorite: [],
   loading: false,
   error: undefined,
 };
@@ -23,6 +24,7 @@ export default (state = INITIAL_STATE, action) => {
         productsLatest: [...action.payload.productsLatest],
         productsBestSeller: [...action.payload.productsBestSeller],
         productsTopRated: [...action.payload.productsTopRated],
+        productsFavorite: [...action.payload.productsFavorite],
         loading: false,
       };
     case homeActionTypes.FETCH_HOME_PAGE_CONTENT_LIST_FAIL:

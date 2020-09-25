@@ -19,6 +19,10 @@ export const selectProductsTopRated = createSelector(
   selectHome,
   (home) => home.productsTopRated
 );
+export const selectProductsFavorite = createSelector(
+  selectHome,
+  (home) => home.productsFavorite
+);
 
 export const selectHomeIsLoading = createSelector(
   selectHome,
