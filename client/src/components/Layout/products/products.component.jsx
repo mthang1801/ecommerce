@@ -8,6 +8,7 @@ const Products = ({mobileView,tabletView, productList}) => {
       {productList.map(product => (        
           <ProductItem key={product._id}  product={product}/>               
       ))}
+      
     </ProductsContainer>
   )
 }

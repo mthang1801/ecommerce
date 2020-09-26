@@ -1982,3 +1982,34 @@ exports.addOrRemoveFavoriteProduct = async (req, res, next) => {
     next(error);
   }
 };
+exports.searchProducts = async (req, res, next) => {
+  try {
+    console.time("searchProducts");
+    console.log(req.query);
+    const { searchKey } = req.query;
+    const page = +req.query.page;
+    const numProducts = await Product.countDocuments({
+      name: new RegExp(searchKey, "i"),
+    });
+    const productList = await Product.find(
+      {
+        name: new RegExp(searchKey, "i"),
+      },
+      { images: { $slice: 1 } }
+    )
+      .populate("images")
+      .populate({ path: "user", select: "information _id" })
+      .sort({ sold_quantity: -1, price: -1, createdAt: -1 })
+      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
+      .limit(+process.env.PRODUCTS_PER_PAGE);
+    const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
+    console.timeEnd("searchProducts");
+    res.status(200).json({
+      productList,
+      numPages,
+      numProducts,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -112,4 +112,5 @@ export default {
     `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
   ADD_OR_REMOVE_FAVORITE_PRODUCT: (productId) =>
     `/product-detail/${productId}/favorite`,
+  SEARCH_PRODUCT_LIST: "/search",
 };

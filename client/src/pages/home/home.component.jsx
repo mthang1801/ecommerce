@@ -5,11 +5,16 @@ import {default as CategoriesSlider} from "../../components/HomePage/categories-
 import {default as FeaturedProductOverview} from "../../components/HomePage/featured-product-overview/featured-product-overview.container";
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import {fetchHomeContentList} from "../../redux/home/home.actions"
+import {selectHomePageIsFetched, selectProductsFavorite} from "../../redux/home/home.selectors"
+import {selectCurrentUser} from "../../redux/user/user.selectors"
+import {createStructuredSelector} from "reselect"
 import {connect} from "react-redux"
-const HomePage = ({fetchHomeContentList}) => {  
+const HomePage = ({fetchHomeContentList, isFetched, currentUser, favoriteProducts}) => {  
   useEffect(() => {
-    fetchHomeContentList();
-  },[fetchHomeContentList])
+    if(!isFetched || !favoriteProducts.length && currentUser && currentUser.favorite_products.length){      
+      fetchHomeContentList();
+    }    
+  },[fetchHomeContentList, isFetched, currentUser, favoriteProducts])
   useEffect(() => {
     window.scrollTo({
       top : 0 ,
@@ -25,7 +30,12 @@ const HomePage = ({fetchHomeContentList}) => {
     </HomePageContainer>
   )
 }
+const mapStateToProps = createStructuredSelector({
+  isFetched : selectHomePageIsFetched,
+  currentUser : selectCurrentUser,
+  favoriteProducts : selectProductsFavorite
+})
 const mapDispatchToProps = dispatch => ({
   fetchHomeContentList : () => dispatch(fetchHomeContentList())
 })
-export default connect(null, mapDispatchToProps)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

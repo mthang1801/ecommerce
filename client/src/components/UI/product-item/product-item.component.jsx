@@ -32,8 +32,7 @@ import { selectProductsFavoriteList } from "../../..//redux/products-favorite/pr
 import { addOrRemoveFavoriteProductStart } from "../../..//redux/user/user.actions";
 const ProductItem = ({
   product,
-  history,
-  onClick,
+  history,  
   addItem,
   currentUser,
   productsFavorite,
@@ -69,7 +68,7 @@ const ProductItem = ({
   return (
     <ProductItemContainer
       title={product.name}
-      onClick={(e) => onClick(product.linkUrl)}
+      onClick={(e) => history.push(product.linkUrl)}
     >
       <ProductItemImageContainer>
         <Backdrop />

@@ -5,6 +5,9 @@ import {selectProductsFavorite} from "../../../redux/home/home.selectors";
 import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux"
 const ProductsFavorite = ({ mobileView, tabletView, favoriteProducts }) => {   
+  if(!favoriteProducts.length){
+    return null
+  }
   return (
     <ProductsFavoriteWrapper>
       <ProductSlider mobileView={mobileView} tabletView={tabletView} productList={favoriteProducts} title="Sản phẩm bạn yêu thích"/>

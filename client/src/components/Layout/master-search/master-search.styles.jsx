@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const MasterSearchContainer = styled.div`
+export const MasterSearchContainer = styled.form`
   border: 1px solid #ccc;
   display: flex;
   width: 100%;
@@ -30,6 +30,7 @@ export const SearchInput = styled.input`
 `;
 export const SearchButton = styled.button`
   width: 25%;
+  max-width: 4rem;
   outline: none;
   border: none;
   height: 100%;

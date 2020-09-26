@@ -319,4 +319,10 @@ router.post(
   isAuth,
   shopController.addOrRemoveFavoriteProduct
 );
+/**
+ * @route GET /search
+ * @desc search products
+ * @access public
+ */
+router.get("/search", shopController.searchProducts);
 module.exports = router;

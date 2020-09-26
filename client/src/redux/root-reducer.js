@@ -15,6 +15,7 @@ import productReviewsReducer from "./product-reviews/product-reviews.reducer";
 import storage from "redux-persist/lib/storage";
 import commentReviewsReducer from "./product-comment-review/product-comment-review.reducer";
 import productsFavoriteReducer from "./products-favorite/products-favorite.reducer";
+import searchReducer from "./search/search.reducer";
 import { persistReducer } from "redux-persist";
 const rootPersistConfig = {
   key: "root",
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   productReviews: productReviewsReducer,
   commentReviews: commentReviewsReducer,
   productsFavorite: productsFavoriteReducer,
+  search: searchReducer,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

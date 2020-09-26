@@ -145,10 +145,9 @@ export const ButtonFavorite = styled.span`
   border-radius : 50%;
   cursor : pointer ; 
   &:hover{
-    transform : rotate(-360deg);
-    background-color :  ${({active}) => active ?  "#e74c3c" : `${darken("0.1", "#e74c3c")}` };  
-    border : ${({active}) => active ?  "#e74c3c" : `${darken("0.1", "#e74c3c")}` };  
-    color: white;
+    transform : rotate(-360deg);      
+    border : "darken("0.1", "#e74c3c")";  
+    color: "darken("0.1", "#e74c3c")";
   }
   transition : transform 1s;
 `

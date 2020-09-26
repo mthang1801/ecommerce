@@ -48,6 +48,9 @@ const ProductReviews = lazy(() =>
 const RegisterSeller = lazy(() =>
   import("./pages/register-seller/register-seller.container")
 );
+const ProductSearch = lazy(() =>
+  import("./pages/product-search/product-search.component")
+);
 function App({ fetchUser, user, loading }) {
   const [width] = useWindowSize();
   console.log(width);
@@ -76,7 +79,7 @@ function App({ fetchUser, user, loading }) {
               <Route path="/checkout" component={Checkout} />
               <Route path="/contact" exact component={Contact} />
               <Route path="/ordered-history" exact component={OrderedHistory} />
-
+              <Route path="/search" exact component={ProductSearch} />
               <Route
                 path="/product/reviews/:productId"
                 component={ProductReviews}

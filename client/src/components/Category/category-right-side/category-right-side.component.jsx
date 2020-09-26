@@ -96,16 +96,16 @@ const CategoryRightSide = ({
             tabletView={tabletView}
             numProducts={numProducts}
           />
-          {productList.length && (
+          {productList.length ? (
             <Products
               mobileView={mobileView}
               tabletView={tabletView}
               productList={productList}
             />
-          )}
-          {numPages > 0 && (
+          ): null}
+          {numPages > 0 ? (
             <Pagination currentPage={currentPage} numPages={numPages} handlePageClick={handlePageClick} />
-          )}
+          ) : null}
         </React.Fragment>
       )}
     </CategoryRightSideWrapper>

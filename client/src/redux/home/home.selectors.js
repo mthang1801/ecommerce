@@ -28,3 +28,8 @@ export const selectHomeIsLoading = createSelector(
   selectHome,
   (home) => home.loading
 );
+
+export const selectHomePageIsFetched = createSelector(
+  selectHome,
+  (home) => home.fetched
+);
