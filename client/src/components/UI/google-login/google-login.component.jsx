@@ -4,6 +4,7 @@ import {loginGoogleStart} from "../../../redux/user/user.actions";
 import {connect} from "react-redux";
 const GGLogin = ({loginGoogle}) => {
   const responseGoogle = (response) => {
+    console.log(response)
     const {googleId} = response;
     let {name,email} = response.profileObj;
     if(!name){
