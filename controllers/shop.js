@@ -8,17 +8,12 @@ const fs = require("fs-extra");
 const mongoose = require("mongoose");
 const ProductGroup = require("../models/product-groups");
 const removeImage = require("../utils/removeImage");
-const productGroups = require("../models/product-groups");
-const Comment = require("../models/comments");
 const Vote = require("../models/vote");
 const _ = require("lodash");
 const { toCapitalizeString } = require("../utils/algorithms");
-const path = require("path");
-const { populate } = require("../models/category");
-const vote = require("../models/vote");
 const Response = require("../models/response");
 const encodeLinkUrl = require("../utils/encodeUrl");
-const connectDB = require("../config/connectDB");
+const Comment = require("../models/comments");
 const jwt = require("jsonwebtoken");
 exports.getInitialData = async (req, res, next) => {
   try {
@@ -50,7 +45,9 @@ exports.getInitialData = async (req, res, next) => {
 exports.getHomeContentList = async (req, res, next) => {
   try {
     console.time("getHomeContentList");
-    const categoryList = await Category.find().populate("imageUrl").limit(12);
+    const categoryList = await Category.find()
+      .populate("imageUrl")
+      .limit(+process.env.PRODUCTS_SLIDER);
     let productsFavorite = [];
     if (req.header("Authentication")) {
       const token = req.header("Authentication").split(" ")[1];
@@ -87,7 +84,7 @@ exports.getHomeContentList = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ createdAt: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     const productsBestSeller = await Product.find(
       {},
       {
@@ -104,7 +101,7 @@ exports.getHomeContentList = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ sold_quantity: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     const productsTopRated = await Product.find(
       { stars: { $gt: 4 } },
       {
@@ -121,7 +118,7 @@ exports.getHomeContentList = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ stars: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     console.timeEnd("getHomeContentList");
     res.status(200).json({
       categoryList,
@@ -468,7 +465,7 @@ exports.getLatestProducts = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ createdAt: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     console.timeEnd("getLatestProducts");
     res.status(200).json(products);
   } catch (error) {
@@ -495,7 +492,7 @@ exports.getBestSellerProducts = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ sold_quantity: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     console.timeEnd("getBestSellerProducts");
     res.status(200).json(products);
   } catch (error) {
@@ -522,7 +519,7 @@ exports.getTopRatedProducts = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ stars: -1 })
-      .limit(12);
+      .limit(+process.env.PRODUCTS_SLIDER);
     console.timeEnd("getTopRatedProducts");
     res.status(200).json(products);
   } catch (error) {
@@ -1131,9 +1128,9 @@ exports.getListContentProductGroup = async (req, res, next) => {
     console.time("getListContentProductGroup");
     const { categoryPath, productTypePath, productGroupPath } = req.params;
     const page = +req.query.page;
-    const linkUrl = `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(
-      productGroupPath
-    )}`;
+    const linkUrl = `/${encodeURIComponent(categoryPath)}/${encodeURIComponent(
+      productTypePath
+    )}/product-group/${encodeURIComponent(productGroupPath)}`;
     const productGroup = await ProductGroup.findOne({
       linkUrl,
     });
@@ -1152,7 +1149,7 @@ exports.getListContentProductGroup = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ discount: -1 })
-      .limit(9);
+      .limit(+process.env.PRODUCTS_SLIDER);
 
     const topRatedProducts = await Product.find(
       {
@@ -1168,7 +1165,7 @@ exports.getListContentProductGroup = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ stars: -1 })
-      .limit(9);
+      .limit(+process.env.PRODUCTS_SLIDER);
     const bestSellerProducts = await Product.find(
       {
         productGroup: productGroup._id,
@@ -1183,7 +1180,7 @@ exports.getListContentProductGroup = async (req, res, next) => {
         select: "_id information",
       })
       .sort({ sold_quantity: -1 })
-      .limit(9);
+      .limit(+process.env.PRODUCTS_SLIDER);
     const productList = await Product.find(
       { productGroup: productGroup._id },
       { images: { $slice: 1 } }
@@ -1204,6 +1201,14 @@ exports.getListContentProductGroup = async (req, res, next) => {
       { productGroup: productGroup._id },
       { price: 1, _id: 0 }
     ).sort({ price: -1 });
+    console.log(
+      discountProductList,
+      topRatedProducts,
+      bestSellerProducts,
+      productList,
+      numProducts,
+      numPages
+    );
     console.timeEnd("getListContentProductGroup");
     res.status(200).json({
       name: productGroup.name,

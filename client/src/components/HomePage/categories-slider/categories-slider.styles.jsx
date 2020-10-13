@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 export const CategoriesSliderContainer = styled.div`
   width : ${({mobileView}) => mobileView ? "90%" : "80%"};
   margin : ${({mobileView}) => mobileView ? "1rem auto" : "3rem auto"}} ;
-  text-align : center;
+  text-align : center; 
 `
 
 export const Caption = styled.div`

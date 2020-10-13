@@ -24,6 +24,23 @@ export const Backdrop = styled.div`
   background-color : rgba(0,0,0,0.4);
   z-index: 1; 
 `
+
+export const ProductItemImageContainer = styled.div`
+  width : 100%;  
+  height: 15rem;
+  max-height: 60%;
+  position :relative;    
+  cursor : pointer;     
+  overflow : hidden;
+`
+export const ProductItemImage = styled.img`
+  width : 100%;
+  height : 100%;
+  object-fit: scale-down;
+  overflow : hidden ;
+  transition : all 5s; 
+`
+
 export const ProductItemContainer = styled.div`
   padidng : 0.5rem 0;
   margin : 1.25rem auto;
@@ -34,7 +51,7 @@ export const ProductItemContainer = styled.div`
   align-items : flex-start;    
   width: 95%;  
   border : 1px solid #ccc ;
-  box-shadow : 1px 1px 2px rgba(0,0,0,0.15);
+  box-shadow : 1px 2px 4px rgba(0,0,0,0.15);
   border-radius : 5px;     
   position : relative;
   height: 25rem; 
@@ -46,6 +63,10 @@ export const ProductItemContainer = styled.div`
     ${Backdrop}{
       display : block;
     }
+    ${ProductItemImage}{
+      transform : scale(1.2);
+    };
+    transform : translateY(-3px);
   };
   z-index:  0 ;
   @media screen and (max-width : 992px){
@@ -58,16 +79,11 @@ export const ProductItemContainer = styled.div`
   @media screen and (max-width: 600px){
     width : 85%;         
   }
+  
+  transition : all 0.4s;
 `
 
-export const ProductItemImageContainer = styled.div`
-  width : 100%;  
-  height: 15rem;
-  max-height: 60%;
-  position :relative;   
-  overflow : hidden ; 
-  cursor : pointer;   
-`
+
 
 export const ProductDiscount = styled.div`
   position : absolute ; 
@@ -83,11 +99,7 @@ export const ProductDiscount = styled.div`
   left : 0;
 `
 
-export const ProductItemImage = styled.img`
-  width : 100%;
-  height : 100%;
-  object-fit: scale-down;
-`
+
 export const ProductItemText = styled.div`
   display : flex ; 
   flex-direction : column;

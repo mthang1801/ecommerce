@@ -22,7 +22,7 @@ const SearchOverView = ({productList, currentPage, numPages, history,numProducts
     return setInitialPage(!initialPage);
   };
   if(!productList.length){
-    return <h4>Không tìm thấy sản phẩm </h4>
+    return <SearchOverViewWrapper><h4>Không tìm thấy sản phẩm </h4></SearchOverViewWrapper>
   }
   return (
     <SearchOverViewWrapper>

@@ -12,13 +12,13 @@ const ProductImages = ({images}) => {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 4,
+    slidesToShow: images.length < 4 ? images.length : 4,
     slidesToScroll: 1,    
     autoplay: true,
     speed: 2000,
     autoplaySpeed: 2000,
     cssEase: "linear",
-  };  
+  };    
   return (
     <ProductImagesContainer>
       <BackgroundImageContainer>

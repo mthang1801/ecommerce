@@ -71,3 +71,14 @@ export const updateLinkUrl = (productList) => {
     }
   });
 };
+
+export const updateFileImages = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await axios.post(urls.UPDATE_FILE_IMAGES);
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

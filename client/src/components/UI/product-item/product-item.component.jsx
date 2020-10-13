@@ -45,7 +45,7 @@ const ProductItem = ({
   
   useEffect(() => {
     let timerInterval;
-    if (product.discount.end_at) {
+    if (product.discount.end_at && new Date(product.discount.end_at).getTime() > Date.now()) {
       timerInterval = setInterval(() => {
         let { dates, timeString } = timeCountDown(product.discount.end_at);
         setTimerDiscount(timeString);

@@ -7,7 +7,6 @@ import {
   Grid,
   Strong,
   Paragraph,
-  CheckoutBtn
 } from "./order-form.styles";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";

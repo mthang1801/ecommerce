@@ -11,7 +11,7 @@ const GoogleRecaptcha = React.forwardRef( ({onChange}, ref) => {
       size="normal"
       ref={ref}
       sitekey={TEST_SITE_KEY}
-      onChange={onChange}    
+      onChange={onChange}          
   />
   )
 })

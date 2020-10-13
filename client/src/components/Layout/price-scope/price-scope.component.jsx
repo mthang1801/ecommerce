@@ -22,7 +22,7 @@ const PriceScope = ({maxPrice, setMaxPriceChange, setMinPriceChange, setFilter})
   const [value, setValue] = React.useState([0, maxPrice]);
   useLayoutEffect(() => {
     setValue([+urlParams.get("min_price"), +urlParams.get("max_price") === 0 ? maxPrice : +urlParams.get("max_price")])
-  }, [window.location.search])
+  }, [window.location.search, new URLSearchParams(window.location.search).get("max_price") ,  new URLSearchParams(window.location.search).get("min_price")])
   const handleChange = (e, newValue) => {
     setValue(newValue);
   }

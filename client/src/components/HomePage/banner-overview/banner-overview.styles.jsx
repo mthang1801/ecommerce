@@ -6,6 +6,9 @@ export const BannerOverViewContainer = styled.section`
   margin : ${({smallView}) => smallView ? "1rem auto" : "0 0 0 auto"};  
   padding : 0.5rem;  
   overflow : hidden ; 
+  @media screen and (max-width : 768px){
+    display : none ; 
+  }
 `
 export const Grid = styled.div`
   width : ${({w60}) => w60 ? "60%" : "40%"};

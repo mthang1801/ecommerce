@@ -4,4 +4,5 @@ export default {
   UPDATE_MANUFACTOR: "/admin/manufactor",
   GET_PRODUCT_LIST: "/admin/product-list",
   UPDATE_PRODUCT_LIST: "/admin/product-list",
+  UPDATE_FILE_IMAGES: "/admin/update-file-images",
 };

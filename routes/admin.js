@@ -13,4 +13,5 @@ router.get("/menu", adminController.getMenu);
 router.post("/menu", adminController.postCreateMenu);
 router.get("/product-list", adminController.getProductList);
 router.put("/product-list", adminController.updateProductList);
+router.post("/update-file-images", adminController.updateFileImages);
 module.exports = router;

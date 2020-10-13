@@ -5,9 +5,7 @@ import {
   FormGroup,
   Label,
   Input,
-  Required,
-  Select,
-  Option,
+  Required, 
   Button,
   Title
 } from "./update-user-form.styles";

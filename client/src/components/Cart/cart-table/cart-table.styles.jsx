@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { darken, lighten } from "polished";
 
 export const TextContent = styled.div`
   display : flex ;   

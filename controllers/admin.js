@@ -12,6 +12,7 @@ const { v4: uuid } = require("uuid");
 const Ordered = require("../models/ordered");
 const path = require("path");
 const { link } = require("fs");
+const mongoose = require("mongoose");
 exports.postCategory = async (req, res, next) => {
   try {
     let { name, linkUrl } = req.body;
@@ -375,6 +376,30 @@ exports.updateProductList = async (req, res, next) => {
       await __product.save();
     }
     console.timeEnd("update-product-list");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateFileImages = async (req, res, next) => {
+  try {
+    console.time("updateFileImages");
+    const products = await Product.find();
+    const categories = await Category.find();
+    const images = await Image.find();
+    let listRemoved = [];
+    let count = 0;
+    for await (let image of images) {
+      let product = await Product.findOne({ images: image._id });
+      if (!product) {
+        let category = await Category.findOne({ imageUrl: image._id });
+        if (!category) {
+          await Image.findByIdAndDelete(image._id);
+        }
+      }
+    }
+    console.log(count);
+    console.timeEnd("updateFileImages");
   } catch (error) {
     next(error);
   }

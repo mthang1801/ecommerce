@@ -5,7 +5,6 @@ import Background from "../../components/Layout/background/background.component"
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import CheckoutForm from "../../components/Checkout/check-out-form/check-out-form.component";
 import UpdateForm from "../../components/Checkout/update-user-form/update-user-form.component";
-import CheckoutPayment from "../../components/Checkout/checkout-payment/checkout-payment.component";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { createStructuredSelector } from "reselect";
 import {

@@ -19,7 +19,7 @@ const ProductGroupLeftSide = ({ mobileView, tabletView, maxPrice, match, history
         `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(productGroupPath)}/products?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`
       );
     }
-  }, [filter, minPriceChange, maxPriceChange]);
+  }, [filter, minPriceChange, maxPriceChange, history, match]);
   return (
     <ProductGroupLeftSideWrapper>
       <PriceScope

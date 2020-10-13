@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
   getMenu,
   createMenu,
-  updateManufactor
+  updateFileImages
 } from "../../../utils/connectDB";
 import {JSONData, MenuWrapper} from "./menu.styles";
 import Button from '@material-ui/core/Button';
@@ -34,7 +34,8 @@ const Menu = ({match}) => {
       </JSONData>
       {menuList && <Button variant="contained" color="primary" onClick={handleCreateMenuFile} style={{marginLeft : "auto", display : "block"}}>
         Tạo file
-      </Button>}     
+      </Button>}   
+      <Button onClick={() => updateFileImages()}>Cập nhật hình ảnh</Button>  
     </MenuWrapper>  
         
   )

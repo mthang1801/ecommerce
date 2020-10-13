@@ -3,18 +3,9 @@ import {
   ToolbarContainer,
   ToolbarLeft,
   ToolbarItem,
-  ToolbarRight,
-  Logout,
-  Avatar,
-  User
+  ToolbarRight,   
 } from "./toolbar.styles";
-import {
-  TiUser,
-} from "react-icons/ti";
-import {FiLogOut} from "react-icons/fi"
 import ToggleLanguage from "../../toggle-languages/toggle-languages.component";
-import Icon from "../../../UI/custom-icon/custom-icon.component";
-import { CustomLink } from "../../../UI/custom-link/custom-link.component";
 import ToggleUser from "../../toggle-user/toggle-user.component"
 import AppContext from "../../../../context/app-viewport.context";
 import {selectCurrentUser} from "../../../../redux/user/user.selectors"

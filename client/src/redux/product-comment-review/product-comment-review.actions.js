@@ -69,7 +69,7 @@ export const postLikeOrUnlikeComment = (commentId, userId) => async (
       urls.POST_LIKE_OR_UNLIKE_COMMENT(commentId)
     );
     console.log(data);
-    if (data.msg == "like success") {
+    if (data.msg === "like success") {
       dispatch(setLikeForComment(commentId, userId));
     } else {
       dispatch(setUnlikeForComment(commentId, userId));
@@ -95,7 +95,7 @@ export const postDislikeOrUndislikeComment = (commentId, userId) => async (
       urls.POST_DISLIKE_OR_UNDISLIKE_COMMENT(commentId)
     );
 
-    if (data.msg == "dislike success") {
+    if (data.msg === "dislike success") {
       dispatch(setDislikeForComment(commentId, userId));
     } else {
       dispatch(setUndislikeForComment(commentId, userId));

@@ -48,8 +48,7 @@ const CategoriesSlider = ({categoryList, isLoading}) => {
       categoriesGroup.push(categoriesPerPage);
     }
   });
-  return (
-    <React.Fragment>
+  return (   
       <CategoriesSliderContainer mobileView={mobileView}>
         <Caption>Danh mục sản phẩm</Caption>
         {categoryList.length ? (
@@ -83,8 +82,7 @@ const CategoriesSlider = ({categoryList, isLoading}) => {
             )}
           </Slider>
         ) : null}
-      </CategoriesSliderContainer>
-    </React.Fragment>
+      </CategoriesSliderContainer>  
   );
 };
 const mapStateToProps = createStructuredSelector({

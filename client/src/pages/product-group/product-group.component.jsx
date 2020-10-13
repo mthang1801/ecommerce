@@ -46,6 +46,7 @@ const ProductGroupPage = ({
     }
   
   }, [
+    filterProductsByPrice,
     fetchProductGroup,
     fetchProductList,
     location.search,

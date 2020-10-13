@@ -26,7 +26,10 @@ const MasterSearch = ({history, onSearch, searchKey, setSearchKey}) => {
 
   const handleSearch = (e) => {
     e.preventDefault();    
-    history.push(`/search?key=${searchKey}`)
+    if(searchKey){
+      history.push(`/search?key=${searchKey}`)
+    }
+    
   }
   return (
     <MasterSearchContainer mobileView={mobileView} onSubmit={handleSearch} ref={searchRef}>      
