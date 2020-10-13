@@ -6,12 +6,14 @@
   "scripts": {
     "install-client": "npm install --prefix client",
     "intall-admin": "npm install --prefix admin",
+    "build" : "npm run build --prefix client",
     "admin": "npm start --prefix admin",
     "client": "npm start --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\" "
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\" ",
+    "heroku-postbuild" : "npm install --prefix client && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",

@@ -50,6 +50,14 @@ initRouter(app);
 
 //handle error
 handlerError(app);
+
+if (process.env.NODE_ENV === "production") {
+  //set static
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("*", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 connectDB()
   .then((res) => {
     console.log("DB has been connected");
