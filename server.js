@@ -8,7 +8,7 @@ const CORS = require("./config/cors");
 const handlerError = require("./config/handleError");
 const compression = require("compression");
 const helmet = require("helmet");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const fs = require("fs-extra");
 const app = express();
 
@@ -23,7 +23,7 @@ const accessLogStream = fs.createWriteStream(
   { flags: "a" }
 );
 // setup the logger
-app.use(morgan("combined", { stream: accessLogStream }));
+// app.use(morgan("combined", { stream: accessLogStream }));
 //Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
 app.use(helmet());
 //config view Engine
