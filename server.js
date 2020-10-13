@@ -6,6 +6,7 @@ const connectDB = require("./config/connectDB");
 const configViewEngine = require("./config/viewEngine");
 const CORS = require("./config/cors");
 const handlerError = require("./config/handleError");
+const compression = require("compression");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const fs = require("fs-extra");
@@ -15,6 +16,7 @@ const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
+app.use(compression());
 // create a write stream (in append mode)
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "access.log"),
