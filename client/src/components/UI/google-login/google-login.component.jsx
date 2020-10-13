@@ -5,7 +5,10 @@ import {connect} from "react-redux";
 const GGLogin = ({loginGoogle}) => {
   const responseGoogle = (response) => {
     const {googleId} = response;
-    const {name,email} = response.profileObj;
+    let {name,email} = response.profileObj;
+    if(!name){
+      name = `${response.profileObj.givenName} ${response.profileObj.familyName}` || "Người dùng mới"
+    }
     loginGoogle(googleId,name,email)
   }
   return (
