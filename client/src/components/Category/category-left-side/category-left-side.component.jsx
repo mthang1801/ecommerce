@@ -21,11 +21,10 @@ const CategoryLeftSide = ({
   const [minPriceChange, setMinPriceChange] = useState(0);
   const [maxPriceChange, setMaxPriceChange] = useState(maxPrice);
   const [filter, setFilter] = useState(false);
-  useEffect(() => {  
-    let categoryPath = match.url.split("/")[1];        
-    let page = +match.params.page || 1;    
+  useEffect(() => {       
+    let page = +match.params.page || 1;        
     if(filter){     
-      history.push(`/${categoryPath}/products?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`);      
+      history.push(`${match.url}?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`);      
       setFilter(false);
     }
   }, [filter,minPriceChange, maxPriceChange])

@@ -15,6 +15,7 @@ const Response = require("../models/response");
 const encodeLinkUrl = require("../utils/encodeUrl");
 const Comment = require("../models/comments");
 const jwt = require("jsonwebtoken");
+const { min } = require("lodash");
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -568,16 +569,13 @@ exports.getProductListPerPageByCategoryLink = async (req, res, next) => {
 exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
   try {
     console.time("getContentListByCategoryLinkUrl");
-    let { categoryPath } = req.params;
+    let { categoryId } = req.params;
     const page = +req.query.page;
-    if (categoryPath[0] !== "/") {
-      categoryPath = "/" + categoryPath;
-    }
+    let { min_price, max_price } = req.query;
     console.time("start");
-    const category = await Category.findOne({
-      linkUrl: categoryPath,
-      status: "active",
-    }).populate("productTypes");
+    const category = await Category.findById(categoryId).populate(
+      "productTypes"
+    );
     if (!category) {
       const err = new Error("Page not found");
       err.statusCode = 404;
@@ -629,13 +627,18 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       })
       .sort({ sold_quantity: -1 })
       .limit(9);
-    const productList = await Product.find(
-      {
-        category: category._id,
-        status: "active",
-      },
-      { images: { $slice: 1 } }
-    )
+    let setProductList = {
+      category: category._id,
+      status: "active",
+    };
+
+    if (max_price > 0) {
+      setProductList.price = { $lte: max_price, $gte: min_price };
+    }
+
+    const productList = await Product.find(setProductList, {
+      images: { $slice: 1 },
+    })
       .populate("images")
       .populate({
         path: "user",
@@ -644,10 +647,8 @@ exports.getContentListByCategoryLinkUrl = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
-    const numProducts = await Product.countDocuments({
-      category: category._id,
-      status: "active",
-    });
+
+    const numProducts = await Product.countDocuments(setProductList);
     const maxPrice = await Product.findOne(
       {
         category: category._id,

@@ -33,19 +33,19 @@ const CategoryRightSide = ({
   numPages,
   location,
   history,
+  match,
   setCurrentPage,
   isFilter
 }) => {
   const [initialPage, setInitialPage] = useState(true);
-  const movePage = page => {
-    const pathName = location.pathname.split("/")[1];    
+  const movePage = page => {         
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price"); 
     if(max_price > 0 ){
-      history.push(`/${pathName}/products?page=${page}&min_price=${min_price}&max_price=${max_price}`);
+      history.push(`${match.url}?page=${page}&min_price=${min_price}&max_price=${max_price}`);
     }else{
-      history.push(`/${pathName}/products?page=${page}&`);
+      history.push(`${match.url}?page=${page}`);
     }
     
     setCurrentPage(page);

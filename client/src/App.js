@@ -80,6 +80,7 @@ function App({ fetchUser, user, loading }) {
               <Route path="/contact" exact component={Contact} />
               <Route path="/ordered-history" exact component={OrderedHistory} />
               <Route path="/search" exact component={ProductSearch} />
+              <Route path="/category/:categoryId" component={Category} />
               <Route
                 path="/product/reviews/:productId"
                 component={ProductReviews}
@@ -128,7 +129,7 @@ function App({ fetchUser, user, loading }) {
                 path="/:categoryPath/:productTypePath"
                 component={ProductType}
               />
-              <Route path="/:categoryPath" component={Category} />
+             
             </Switch>
           </Suspense>
         </ErrorBoundary>

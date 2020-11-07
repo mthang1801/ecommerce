@@ -26,7 +26,7 @@ router.get("/category", shopController.getCategoryList);
  * @access public
  */
 router.get(
-  "/category/:categoryPath",
+  "/category/:categoryId",
   shopController.getContentListByCategoryLinkUrl
 );
 /**

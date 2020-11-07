@@ -35,16 +35,13 @@ const CategoryPage = ({
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
     const page = +urlParams.get("page") || 1;    
-    let categoryPath = match.params.categoryPath;
-    if (location.search && fetched && !max_price && !min_price) {
-      fetchProductList(categoryPath, page);
-      return;
-    }
-    if (+max_price > 0) {
-      filterProductsByPrice(categoryPath, +min_price, +max_price, page);
-    } else {
-      fetchCategory(categoryPath, page);
-    }    
+    let categoryId = match.params.categoryId;    
+    
+    // if (+max_price > 0) {
+    //   filterProductsByPrice(categoryId, +min_price, +max_price, page);
+    // } else {
+      fetchCategory(categoryId,+min_price, +max_price, page);
+    // }    
   }, [fetchCategory, location.search, match.params.categoryPath, match.url]);
  
   if (error) {
@@ -72,7 +69,7 @@ const mapStateToProps = createStructuredSelector({
   fetched: selectProductFetched,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchCategory: (path, page) => dispatch(fetchCategory(path, page)),
+  fetchCategory: (path, min_price, max_price, page) => dispatch(fetchCategory(path, min_price, max_price, page)),
   fetchProductList: (path, page) => dispatch(fetchProductList(path, page)),
   filterProductsByPrice: (path, minPrice, maxPrice, page) =>
     dispatch(filterProductsByPrice(path, minPrice, maxPrice, page)),

@@ -42,11 +42,12 @@ export const fetchCategoryFail = (err) => {
   };
 };
 
-export const fetchCategory = (path, page = 1) => async (dispatch) => {
+export const fetchCategory = (categoryId, min_price, max_price, page = 1) => async (dispatch) => {
   try {
+    console.log(min_price, max_price)
     dispatch(fetchCategoryStart());
     let { data } = await axios.get(
-      urls.GET_CONTENT_LIST_BY_CATEGORY_PATH_URL(path, page)
+      urls.GET_CONTENT_LIST_BY_CATEGORY_PATH_URL(categoryId,+min_price, +max_price, page)
     );
     data.currentPage = page;
     dispatch(fetchCategorySuccess(data));
@@ -72,11 +73,11 @@ export const fetchProductListFail = (err) => ({
   payload: { msg: err.response.data.message, status: err.response.status },
 });
 
-export const fetchProductList = (pathUrl, page) => async (dispatch) => {
+export const fetchProductList = (categoryId, page) => async (dispatch) => {
   try {
     dispatch(fetchProductListStart());
     const { data } = await axios.get(
-      urls.GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL(pathUrl, page)
+      urls.GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL(categoryId, page)
     );
     dispatch(fetchProductListSuccess(data));
   } catch (error) {

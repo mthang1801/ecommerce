@@ -209,7 +209,8 @@ exports.getMenu = async (req, res, next) => {
       menu[categoryItem._id] = {
         _id: categoryItem._id,
         name: categoryItem.name,
-        linkUrl: categoryItem.linkUrl,
+        // linkUrl: categoryItem.linkUrl,
+        linkUrl : `/category/${categoryItem._id}`
       };
       let productTypes = [];
       let count = 0;
@@ -217,7 +218,8 @@ exports.getMenu = async (req, res, next) => {
         let productType = {
           _id: uuid(),
           name: productTypeItem.name,
-          linkUrl: productTypeItem.linkUrl,
+          // linkUrl: productTypeItem.linkUrl,
+          linkUrl : `/productType/${productTypeItem._id}`,
           productsMenu: [],
         };
         let length;
@@ -236,7 +238,8 @@ exports.getMenu = async (req, res, next) => {
             productType.productsMenu.push({
               _id: `${group._id}-${uuid()}`,
               name: group.name,
-              linkUrl: group.linkUrl,
+              // linkUrl: group.linkUrl,
+              linkUrl : `/product-group/${group._id}`,
               options: {
                 limit: 6,
                 sort: { sold: -1 },
@@ -256,7 +259,8 @@ exports.getMenu = async (req, res, next) => {
             productType.productsMenu.push({
               _id: `${product._id}-${uuid()}`,
               name: product.name,
-              linkUrl: product.linkUrl,
+              // linkUrl: product.linkUrl,
+              linkUrl : `/product/${product._id}`
             });
           }
         }

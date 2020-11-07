@@ -19,10 +19,10 @@ export default {
   GET_BEST_SELLER_PRODUCTS: "/best-seller-products",
   GET_TOP_RATED_PRODUCTS: "/top-rated-products",
   GET_CATEGORY_LIST: "/category",
-  GET_CONTENT_LIST_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
-    `/category/${pathUrl}?page=${page}`,
-  GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL: (pathUrl, page) =>
-    `/category/${pathUrl}/products?page=${page}`,
+  GET_CONTENT_LIST_BY_CATEGORY_PATH_URL: (categoryId,min_price, max_price, page) =>
+    `/category/${categoryId}?page=${page}&min_price=${min_price}&max_price=${max_price}`,
+  GET_PRODUCT_LIST_PER_PAGE_BY_CATEGORY_PATH_URL: (categoryId, page) =>
+    `/category/${categoryId}/products?page=${page}`,
   GET_CONTENT_LIST_BY_PRODUCT_TYPE_URL: (categoryPath, productTypePath, page) =>
     `/category/${categoryPath}/product-type/${productTypePath}?page=${page}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_TYPE_PATH_URL: (
