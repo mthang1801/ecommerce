@@ -1015,14 +1015,13 @@ exports.getListProdudctPerPageByManufactorUrl = async (req, res, next) => {
 exports.getListContentProductGroup = async (req, res, next) => {
   try {
     console.time("getListContentProductGroup");
-    const { categoryPath, productTypePath, productGroupPath } = req.params;
+    const { productGroupId } = req.params;
     const page = +req.query.page;
-    const linkUrl = `/${encodeURIComponent(categoryPath)}/${encodeURIComponent(
-      productTypePath
-    )}/product-group/${encodeURIComponent(productGroupPath)}`;
-    const productGroup = await ProductGroup.findOne({
-      linkUrl,
-    });
+    let {min_price, max_price} = req.query;
+    min_price = parseFloat(min_price);
+    max_price = parseFloat(max_price);
+    
+    const productGroup = await ProductGroup.findById(productGroupId);
     const discountProductList = await Product.find(
       {
         productGroup: productGroup._id,
@@ -1070,8 +1069,14 @@ exports.getListContentProductGroup = async (req, res, next) => {
       })
       .sort({ sold_quantity: -1 })
       .limit(+process.env.PRODUCTS_SLIDER);
+    let setProductListProperties = {
+      productGroup: productGroup._id
+    }
+    if(max_price > 0){
+      setProductListProperties.price = {$lte : max_price, $gte : min_price}
+    }
     const productList = await Product.find(
-      { productGroup: productGroup._id },
+      setProductListProperties,
       { images: { $slice: 1 } }
     )
       .populate("images")
@@ -1082,22 +1087,13 @@ exports.getListContentProductGroup = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
-    const numProducts = await Product.countDocuments({
-      productGroup: productGroup._id,
-    });
+    const numProducts = await Product.countDocuments(setProductListProperties);
     const numPages = Math.ceil(numProducts / +process.env.PRODUCTS_PER_PAGE);
     const maxPrice = await Product.findOne(
       { productGroup: productGroup._id },
       { price: 1, _id: 0 }
     ).sort({ price: -1 });
-    console.log(
-      discountProductList,
-      topRatedProducts,
-      bestSellerProducts,
-      productList,
-      numProducts,
-      numPages
-    );
+    
     console.timeEnd("getListContentProductGroup");
     res.status(200).json({
       name: productGroup.name,

@@ -89,6 +89,12 @@ function App({ fetchUser, user, loading }) {
                 path="/product/reviews/:productId"
                 component={ProductReviews}
               />
+              <Route
+                path="/product-group/:productGroupId"
+                exact
+                component={ProductGroup}
+              />
+           
               <Route path="/register-seller" exact component={RegisterSeller} />
               <Route
                 path="/:categoryPath/:productTypePath/product-group/:productGroupPath/products"
@@ -105,16 +111,7 @@ function App({ fetchUser, user, loading }) {
                 exact
                 component={Manufactor}
               />
-              <Route
-                path="/:categoryPath/:productTypePath/product-group/:productGroupPath"
-                exact
-                component={ProductGroup}
-              />
-              <Route
-                path="/:categoryPath/:productTypePath/products"
-                exact
-                component={ProductType}
-              />
+              
               <Route
                 path="/create-new-product"
                 exact
@@ -129,8 +126,6 @@ function App({ fetchUser, user, loading }) {
                 path="/:categoryPath/:productTypePath/:productPath"
                 component={ProductDetail}
               />
-             
-             
             </Switch>
           </Suspense>
         </ErrorBoundary>

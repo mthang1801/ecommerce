@@ -44,12 +44,12 @@ export default {
   GET_PRODUCT_LIST_PER_PAGE_BY_MANUFACTOR_PATH_URL: (pathUrl, page) =>
     `/manufactor/${pathUrl}/product-list/products?page=${page}`,
   GET_CONTENT_LIST_BY_PRODUCT_GROUP_PATH_URL: (
-    categoryPath,
-    productTypePath,
-    productGroupPath,
+    productGroupId,
+    min_price,
+    max_price,
     page
   ) =>
-    `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}?page=${page}`,
+    `/product-group/${productGroupId}?page=${page}&min_price=${min_price}&max_price=${max_price}`,
   GET_PRODUCT_LIST_PER_PAGE_BY_PRODUCT_GROUP_PATH_URL: (
     categoryPath,
     productTypePath,
@@ -87,21 +87,6 @@ export default {
     `/product-detail/comment/${commentId}/response/readmore?skip=${skip}`,
   GET_MORE_COMMENTS: (productId, skip) =>
     `/product-detail/${productId}/comments/readmore?skip=${skip}`,
-  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_TYPE: (
-    categoryPath,
-    productTypePath,
-    minPrice,
-    maxPrice,
-    page
-  ) =>
-    `/category/${categoryPath}/product-type/${productTypePath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
-  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_CATEGORY: (
-    categoryPath,
-    minPrice,
-    maxPrice,
-    page
-  ) =>
-    `/category/${categoryPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
   GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_MANUFACTOR: (
     manufactorPath,
     minPrice,
@@ -109,15 +94,7 @@ export default {
     page
   ) =>
     `/manufactor/${manufactorPath}/product-list/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
-  GET_PRODUCT_LIST_BY_FILTER_PRICE_IN_PRODUCT_GROUP: (
-    categoryPath,
-    productTypePath,
-    productGroupPath,
-    minPrice,
-    maxPrice,
-    page
-  ) =>
-    `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products/query?min_price=${minPrice}&max_price=${maxPrice}&page=${page}`,
+
   ADD_OR_REMOVE_FAVORITE_PRODUCT: (productId) =>
     `/product-detail/${productId}/favorite`,
   SEARCH_PRODUCT_LIST: "/search",

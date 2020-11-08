@@ -10,13 +10,11 @@ const ProductGroupLeftSide = ({ mobileView, tabletView, maxPrice, match, history
   const [minPriceChange, setMinPriceChange] = useState(0);
   const [maxPriceChange, setMaxPriceChange] = useState(maxPrice);
   const [filter, setFilter] = useState(false);
-  useEffect(() => {
-    let { categoryPath, productTypePath, productGroupPath } = match.params;    
-    console.log(match);
+  useEffect(() => {         
     let page = +match.params.page || 1;
     if (filter) {
       history.push(
-        `/${categoryPath}/${productTypePath}/product-group/${encodeURIComponent(productGroupPath)}/products?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`
+        `${match.url}?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`
       );
     }
   }, [filter, minPriceChange, maxPriceChange, history, match]);

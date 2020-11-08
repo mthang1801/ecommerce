@@ -141,12 +141,12 @@ router.get(
   shopController.getProductListInManufactorByFilterPrice
 );
 /**
- * @route GET /:categoryPath/:productTypePath/product-group/:productGroupPath
+ * @route GET /product-group/:productGroupId
  * @desc get list content product group
  * @access public
  */
 router.get(
-  "/:categoryPath/:productTypePath/product-group/:productGroupPath",
+  "/product-group/:productGroupId",
   shopController.getListContentProductGroup
 );
 /**
