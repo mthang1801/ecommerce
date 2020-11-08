@@ -736,19 +736,14 @@ exports.getProductListInCategoryByFilterPrice = async (req, res, next) => {
 };
 exports.getListContentByProductTypeUrl = async (req, res, next) => {
   try {
-    let { categoryPath, productTypePath } = req.params;
+    let { productTypeId } = req.params;
     const page = +req.query.page;
-    if (categoryPath[0] !== "/") {
-      categoryPath = "/" + categoryPath;
-    }
-    if (productTypePath[0] !== "/") {
-      productTypePath = "/" + productTypePath;
-    }
+    let { min_price, max_price } = req.query;
+    min_price = parseFloat(min_price);
+    max_price = parseFloat(max_price);
+
     console.time("start");
-    let productType = await ProductTypes.findOne({
-      linkUrl: categoryPath + productTypePath,
-      status: "active",
-    })
+    let productType = await ProductTypes.findById(productTypeId)
       .populate("productGroups")
       .populate("manufactors");
     if (!productType) {
@@ -804,13 +799,16 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       })
       .sort({ sold_quantity: -1 })
       .limit(9);
-    const productList = await Product.find(
-      {
-        productType: productType._id,
-        status: "active",
-      },
-      { images: { $slice: 1 } }
-    )
+    let setProductListProperties = {
+      productType: productType._id,
+      status: "active",
+    };
+    if (max_price > 0) {
+      setProductListProperties.price = { $lte: max_price, $gte: min_price };
+    }
+    const productList = await Product.find(setProductListProperties, {
+      images: { $slice: 1 },
+    })
       .populate("images")
       .populate({
         path: "user",
@@ -819,10 +817,7 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
       .limit(+process.env.PRODUCTS_PER_PAGE);
-    const numProducts = await Product.countDocuments({
-      productType: productType._id,
-      status: "active",
-    });
+    const numProducts = await Product.countDocuments(setProductListProperties);
     const maxPrice = await Product.findOne(
       {
         productType: productType._id,
@@ -845,113 +840,6 @@ exports.getListContentByProductTypeUrl = async (req, res, next) => {
       numPages,
       maxPrice: maxPrice.price,
     });
-  } catch (error) {
-    next(error);
-  }
-};
-exports.getProductListByFilterPriceInProductType = async (req, res, next) => {
-  try {
-    console.time("getProductListByFilterPriceInProductType");
-    let { categoryPath, productTypePath } = req.params;
-    const page = +req.query.page;
-    const minPrice = +req.query.min_price;
-    const maxPrice = +req.query.max_price;
-    if (categoryPath[0] !== "/") {
-      categoryPath = "/" + categoryPath;
-    }
-    if (productTypePath[0] !== "/") {
-      productTypePath = "/" + productTypePath;
-    }
-    const productType = await ProductTypes.findOne({
-      linkUrl: categoryPath + productTypePath,
-      status: "active",
-    });
-    if (!productType) {
-      const err = new Error("product Type not found");
-      err.statusCode = 404;
-      throw err;
-    }
-    const productList = await Product.find(
-      {
-        productType: productType._id,
-        status: "active",
-        price: { $gte: minPrice, $lte: maxPrice },
-      },
-      { images: { $slice: 1 } }
-    )
-      .populate("images")
-      .populate({
-        path: "user",
-        select: "_id information",
-      })
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
-      .limit(+process.env.PRODUCTS_PER_PAGE);
-    const numProducts = await Product.countDocuments({
-      productType: productType._id,
-      status: "active",
-      price: { $gte: minPrice, $lte: maxPrice },
-    });
-    const numPages = Math.ceil(numProducts / process.env.PRODUCTS_PER_PAGE);
-    const productMaxPrice = await Product.findOne(
-      {
-        productType: productType._id,
-        status: "active",
-      },
-      { price: 1, _id: 0 }
-    ).sort({ price: -1 });
-    console.timeEnd("getProductListByFilterPriceInProductType");
-    res.status(200).json({
-      name: productType.name,
-      productList,
-      numProducts,
-      currentPage: page,
-      numPages,
-      maxPrice: productMaxPrice.price,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-exports.getProductListWithSpecificPageByProductTypeUrl = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    let { categoryPath, productTypePath } = req.params;
-    const page = +req.query.page;
-    if (categoryPath[0] !== "/") {
-      categoryPath = "/" + categoryPath;
-    }
-    if (productTypePath[0] !== "/") {
-      productTypePath = "/" + productTypePath;
-    }
-    const productType = await ProductTypes.findOne({
-      linkUrl: categoryPath + productTypePath,
-      status: "active",
-    });
-    if (!productType) {
-      const err = new Error("product Type not found");
-      err.statusCode = 404;
-      throw err;
-    }
-    const productList = await Product.find(
-      {
-        productType: productType._id,
-        status: "active",
-      },
-      { images: { $slice: 1 } }
-    )
-      .populate("images")
-      .populate({
-        path: "user",
-        select: "_id information",
-      })
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * +process.env.PRODUCTS_PER_PAGE)
-      .limit(+process.env.PRODUCTS_PER_PAGE);
-    res.status(200).json(productList);
   } catch (error) {
     next(error);
   }

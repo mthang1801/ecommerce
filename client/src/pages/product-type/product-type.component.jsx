@@ -3,11 +3,7 @@ import { ProductTypeWrapper } from "./product-type.styles";
 import { default as ProductTypeOverview } from "../../components/ProductType/product-type-overview/product-type-overview.container";
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import Background from "../../components/Layout/background/background.component";
-import {
-  fetchProductType,
-  fetchProductList,
-  filterProductsByPrice
-} from "../../redux/product-type/product-type.actions";
+import { fetchProductType } from "../../redux/product-type/product-type.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -16,7 +12,7 @@ import {
   selectProductTypeList,
   selectProductFetched,
   selectName,
-  selectProductsIsFilter
+  selectProductsIsFilter,
 } from "../../redux/product-type/product-type.selectors";
 import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
@@ -27,29 +23,16 @@ const ProductTypePage = ({
   fetchProductList,
   loading,
   error,
-  fetched,
   name,
-  isFilter,
-  filterProductsByPrice
 }) => {
-  useEffect(() => {     
-    let { categoryPath, productTypePath } = match.params;        
+  useEffect(() => {
+    let { productTypeId } = match.params;
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
-    const page = +urlParams.get("page") || 1 ;         
-    if (location.search && fetched && !max_price && !min_price) {
-      fetchProductList(categoryPath, productTypePath, page);
-      return;
-    }
-    if(max_price > 0){
-      console.log(1)
-      filterProductsByPrice(categoryPath, productTypePath, min_price, max_price, page);
-    }else{
-      console.log(2);
-      fetchProductType(categoryPath, productTypePath, page);
-    }
-    
+    const page = +urlParams.get("page") || 1;
+
+    fetchProductType(productTypeId, +min_price, +max_price, page);
   }, [
     fetchProductType,
     fetchProductList,
@@ -61,15 +44,17 @@ const ProductTypePage = ({
   if (error && error.status == 404) {
     return <PageNotFound />;
   }
-  if(!loading && name)
-  return (
-    <ProductTypeWrapper>
-      <MasterHeader />
-      <Background label={`Trang chủ / Danh mục sản phẩm / Loại sản phẩm / ${name}`} />
-      <ProductTypeOverview />
-    </ProductTypeWrapper>
-  );
-  return <Loader/>
+  if (!loading && name)
+    return (
+      <ProductTypeWrapper>
+        <MasterHeader />
+        <Background
+          label={`Trang chủ / Danh mục sản phẩm / Loại sản phẩm / ${name}`}
+        />
+        <ProductTypeOverview />
+      </ProductTypeWrapper>
+    );
+  return <Loader />;
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -78,11 +63,10 @@ const mapStateToProps = createStructuredSelector({
   productTypeList: selectProductTypeList,
   fetched: selectProductFetched,
   name: selectName,
-  isFilter : selectProductsIsFilter
+  isFilter: selectProductsIsFilter,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchProductType: (categoryPath, productTypePath, page) => dispatch(fetchProductType(categoryPath, productTypePath, page)),
-  fetchProductList: (categoryPath, productTypePath, page) => dispatch(fetchProductList(categoryPath, productTypePath, page)),
-  filterProductsByPrice : (categoryPath, productTypePath, minPrice, maxPrice, page) => dispatch(filterProductsByPrice(categoryPath, productTypePath, minPrice, maxPrice, page))
+  fetchProductType: (productTypeId, min_price, max_price, page) =>
+    dispatch(fetchProductType(productTypeId, min_price, max_price, page)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTypePage);

@@ -9,7 +9,6 @@ import {
   selectMaxPrice,
   selectManufactorList,
 } from "../../../redux/product-type/product-type.selectors";
-import {filterProductsByPrice} from "../../../redux/product-type/product-type.actions"
 import LeftSideMenu from "../../Layout/left-side-menu/left-side-menu.component";
 import {withRouter} from "react-router-dom"
 const ProductTypeLeftSide = ({
@@ -25,11 +24,10 @@ const ProductTypeLeftSide = ({
   const [maxPriceChange, setMaxPriceChange] = useState(maxPrice);
   const [filter, setFilter] = useState(false);
   useEffect(() => {  
-    let categoryPath = match.url.split("/")[1];
-    let productTypePath= match.url.split("/")[2];    
+  
     let page = +match.params.page || 1;    
     if(filter){     
-      history.push(`/${categoryPath}/${productTypePath}/products?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`);      
+      history.push(`${match.url}?page=${page}&min_price=${minPriceChange}&max_price=${maxPriceChange}`);      
     }
   }, [filter,minPriceChange, maxPriceChange])
   return (
@@ -59,8 +57,6 @@ const mapStateToProps = createStructuredSelector({
   manufactorList: selectManufactorList,
 });
 
-const mapDispatchToProps = dispatch => ({
-  filterProductsByPrice : (categoryPath, productTypePath, minPrice, maxPrice, page) => dispatch(filterProductsByPrice(categoryPath, productTypePath, minPrice, maxPrice, page))
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProductTypeLeftSide));
+
+export default connect(mapStateToProps)(withRouter(ProductTypeLeftSide));

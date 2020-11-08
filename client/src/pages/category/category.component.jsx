@@ -4,11 +4,7 @@ import { default as CategoryOverview } from "../../components/Category/category-
 import MasterHeader from "../../components/Layout/master-header/master-header.component";
 import PageError from "../page-error/page-error.component";
 import Background from "../../components/Layout/background/background.component";
-import {
-  fetchCategory,
-  fetchProductList,
-  filterProductsByPrice,
-} from "../../redux/category/category.actions";
+import { fetchCategory } from "../../redux/category/category.actions";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -25,25 +21,18 @@ const CategoryPage = ({
   error,
   loading,
   categoryList,
-  fetchProductList,
-  fetched,
-  filterProductsByPrice,
 }) => {
-  const categoryRef = useRef(null)
-  useEffect(() => {    
+  const categoryRef = useRef(null);
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
-    const page = +urlParams.get("page") || 1;    
-    let categoryId = match.params.categoryId;    
-    
-    // if (+max_price > 0) {
-    //   filterProductsByPrice(categoryId, +min_price, +max_price, page);
-    // } else {
-      fetchCategory(categoryId,+min_price, +max_price, page);
-    // }    
+    const page = +urlParams.get("page") || 1;
+    let categoryId = match.params.categoryId;
+
+    fetchCategory(categoryId, +min_price, +max_price, page);
   }, [fetchCategory, location.search, match.params.categoryPath, match.url]);
- 
+
   if (error) {
     return <PageError error={error.msg} />;
   }
@@ -52,14 +41,13 @@ const CategoryPage = ({
       <CategoryPageWrapper ref={categoryRef}>
         <MasterHeader />
         <Background
-          label={`Trang chủ/ Danh mục sản phẩm/ ${categoryList.name }`}
+          label={`Trang chủ/ Danh mục sản phẩm/ ${categoryList.name}`}
         />
         <CategoryOverview />
       </CategoryPageWrapper>
     );
   }
-  return <Loader/>
-  
+  return <Loader />;
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -69,9 +57,7 @@ const mapStateToProps = createStructuredSelector({
   fetched: selectProductFetched,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchCategory: (path, min_price, max_price, page) => dispatch(fetchCategory(path, min_price, max_price, page)),
-  fetchProductList: (path, page) => dispatch(fetchProductList(path, page)),
-  filterProductsByPrice: (path, minPrice, maxPrice, page) =>
-    dispatch(filterProductsByPrice(path, minPrice, maxPrice, page)),
+  fetchCategory: (path, min_price, max_price, page) =>
+    dispatch(fetchCategory(path, min_price, max_price, page)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);

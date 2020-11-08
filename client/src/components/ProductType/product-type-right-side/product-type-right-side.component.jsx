@@ -31,22 +31,20 @@ const ProductTypeRightSide = ({
   currentPage,
   numPages,
   history,
-  location,
+  match,
   setCurrentPage,
   isFilter
 }) => {
   const [initialPage, setInitialPage] = useState(true);
   const productsRef = useRef(null);
-  const movePage = page => {      
-    const categoryPath = location.pathname.split("/")[1];   
-    const productTypePath = location.pathname.split("/")[2];    
+  const movePage = page => {          
     const urlParams = new URLSearchParams(window.location.search);
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");     
     if( max_price > 0){
-      history.push(`/${categoryPath}/${productTypePath}/products?page=${page}&min_price=${min_price}&max_price=${max_price}`);
+      history.push(`${match.url}?page=${page}&min_price=${min_price}&max_price=${max_price}`);
     }else{
-      history.push(`/${categoryPath}/${productTypePath}/products?page=${page}`);
+      history.push(`${match.url}?page=${page}`);
     }
       
     setCurrentPage(page);

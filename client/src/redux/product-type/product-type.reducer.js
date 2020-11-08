@@ -11,8 +11,7 @@ const INITIAL_STATE = {
   numProducts: 0,
   numPages: 0,
   currentPage: 1,
-  maxPrice: 0,
-  fetched: false,
+  maxPrice: 0,  
   error: undefined,
   loading: false,
   loadingProductList: false,
@@ -27,21 +26,7 @@ export default (state = INITIAL_STATE, action) => {
         error: undefined,
         loading: true,
         fetched: true,
-      };
-    case productTypeActionTypes.FETCH_PRODUCT_LIST_START:
-      return {
-        ...state,
-        error: undefined,
-        loadingProductList: true,
-        isFilter: false,
-      };
-    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_START:
-      return {
-        ...state,
-        error: undefined,
-        loadingProductList: true,
-        isFilter: true,
-      };
+      };    
     case productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_SUCCESS:
       return {
         ...state,
@@ -57,37 +42,13 @@ export default (state = INITIAL_STATE, action) => {
         numPages: +action.payload.numPages,
         maxPrice: +action.payload.maxPrice,
         loading: false,
-      };
-    case productTypeActionTypes.FETCH_PRODUCT_LIST_SUCCESS:
-      return {
-        ...state,
-        productList: action.payload,
-        loadingProductList: false,
-      };
-    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_SUCCESS:
-      return {
-        ...state,
-        name: action.payload.name,
-        productList: action.payload.productList,
-        numProducts: +action.payload.numProducts,
-        currentPage: +action.payload.currentPage,
-        numPages: +action.payload.numPages,
-        maxPrice: +action.payload.maxPrice,
-        loadingProductList: false,
-      };
+      };    
     case productTypeActionTypes.SET_CURRENT_PAGE:
       return {
         ...state,
         currentPage: +action.payload,
         loadingProductList: false,
-      };
-    case productTypeActionTypes.FETCH_PRODUCT_LIST_FAIL:
-    case productTypeActionTypes.FILTER_PRODUCTS_BY_PRICE_FAIL:
-      return {
-        ...state,
-        error: { msg: action.payload.msg, status: action.payload.status },
-        loadingProductList: false,
-      };
+      };    
     case productTypeActionTypes.FETCH_CONTENT_LIST_BY_PRODUCT_TYPE_FAIL:
       return {
         ...state,

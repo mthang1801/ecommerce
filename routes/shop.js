@@ -30,15 +30,6 @@ router.get(
   shopController.getContentListByCategoryLinkUrl
 );
 /**
- * @route GET /category/:categoryPath/products/query
- * @desc get product List per page by category Link
- * @access public
- */
-router.get(
-  "/category/:categoryPath/products/query",
-  shopController.getProductListInCategoryByFilterPrice
-);
-/**
  * @route GET /category/:id/product-type
  * @desc get list product types by category id
  * @access public
@@ -113,32 +104,15 @@ router.get(
   shopController.getProductListPerPageByCategoryLink
 );
 /**
- * @route GET /category/:categoryPath/product-type/:productTypePath/
+ * @route GET /product-type/:productTypeId
  * @desc get list content by categoryUrl, productTypeUrl
  * @access public
  */
 router.get(
-  "/category/:categoryPath/product-type/:productTypePath",
+  "/product-type/:productTypeId",
   shopController.getListContentByProductTypeUrl
 );
-/**
- * @route GET /category/:categoryPath/product-type/:productTypePath/products/query
- * @desc filter list product by price in productType
- * @access public
- */
-router.get(
-  "/category/:categoryPath/product-type/:productTypePath/products/query",
-  shopController.getProductListByFilterPriceInProductType
-);
-/**
- * @route GET /category/:categoryPath/product-type/:productTypePath/
- * @desc get list product by categoryUrl, productTypeUrl
- * @access public
- */
-router.get(
-  "/category/:categoryPath/product-type/:productTypePath/products",
-  shopController.getProductListWithSpecificPageByProductTypeUrl
-);
+
 /**
  * @route GET /manufactor/:manufactorPath/product-list
  * @desc get list content by manufactorUrl

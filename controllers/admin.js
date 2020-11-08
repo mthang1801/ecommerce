@@ -219,7 +219,7 @@ exports.getMenu = async (req, res, next) => {
           _id: uuid(),
           name: productTypeItem.name,
           // linkUrl: productTypeItem.linkUrl,
-          linkUrl : `/productType/${productTypeItem._id}`,
+          linkUrl : `/product-type/${productTypeItem._id}`,
           productsMenu: [],
         };
         let length;
