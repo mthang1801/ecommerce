@@ -15,21 +15,13 @@ const fetchProductDetailFail = (err) => ({
   payload: { msg: err.response.data.message, status: err.response.status },
 });
 
-export const fetchProductDetail = (
-  categoryPath,
-  productTypePath,
-  productPath
-) => async (dispatch) => {
+export const fetchProductDetail = (productId) => async (dispatch) => {
   try {
     dispatch(fetchProductDetailStart());
     const {
       data: { product, relatedProducts },
     } = await axios.get(
-      urls.GET_CONTENT_PRODUCT_DETAIL_BY_PRODUCT_PATH_URL(
-        categoryPath,
-        productTypePath,
-        productPath
-      )
+      urls.GET_CONTENT_PRODUCT_DETAIL_BY_PRODUCT_PATH_URL(productId)
     );
     dispatch(fetchProductDetailSuccess(product, relatedProducts));
   } catch (error) {

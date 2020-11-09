@@ -1191,13 +1191,11 @@ exports.getListProductGroupPerPageByProductGroupUrl = async (
 exports.getContentProductByProductUrl = async (req, res, next) => {
   try {
     console.time("productDetail");
-    const { categoryPath, productTypePath, productPath } = req.params;
+    const { productId } = req.params;
 
-    const linkUrl = `/${categoryPath}/${productTypePath}/${encodeURIComponent(
-      productPath
-    )}`;
+    
 
-    let product = await Product.findOne({ linkUrl })
+    let product = await Product.findById(productId)
       .populate("images")
       .populate({
         path: "user",

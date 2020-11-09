@@ -68,7 +68,7 @@ const ProductItem = ({
   return (
     <ProductItemContainer
       title={product.name}
-      onClick={(e) => history.push(product.linkUrl)}
+      onClick={(e) => history.push(`/product/${product._id}`)}
     >
       <ProductItemImageContainer>
         <Backdrop />

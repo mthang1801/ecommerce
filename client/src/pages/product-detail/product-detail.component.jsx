@@ -11,7 +11,10 @@ import {
   selectProdudctDetailLoading,
   selectProductDetailError,
 } from "../../redux/product-detail/product-detail.selectors";
-import {selectUserFetched, selectUserLoading} from "../../redux/user/user.selectors";
+import {
+  selectUserFetched,
+  selectUserLoading,
+} from "../../redux/user/user.selectors";
 import PageNotFound from "../page-error/page-error.component";
 import Loader from "../../components/UI/loader/loader.component";
 import { withRouter } from "react-router-dom";
@@ -21,27 +24,19 @@ const ShopDetailPage = ({
   match,
   fetchProductDetail,
   loading,
-  error,  
+  error,
 }) => {
   const productDetailRef = useRef(null);
   useEffect(() => {
-    const categoryPath = match.params.categoryPath;
-    const productTypePath = match.params.productTypePath;
-    const productPath = match.params.productPath;    
-    console.log(categoryPath, productTypePath, productPath)
-    fetchProductDetail(categoryPath, productTypePath, productPath);    
-    if(productDetailRef.current){
+    const { productId } = match.params;
+    fetchProductDetail(productId);
+    if (productDetailRef.current) {
       window.scrollTo({
-        top: productDetailRef.current.offsetTop , 
-        behavior : "auto"
-      })
+        top: productDetailRef.current.offsetTop,
+        behavior: "auto",
+      });
     }
-  }, [  
-    fetchProductDetail,
-    match.params.categoryPath,
-    match.params.productTypePath,
-    match.params.productPath,
-  ]);
+  }, [fetchProductDetail, match.params.productId]);
   if (loading) {
     return <Loader />;
   }
@@ -53,8 +48,10 @@ const ShopDetailPage = ({
       {product ? (
         <ShopDetailsContainer ref={productDetailRef}>
           <MasterHeader />
-          <Background label={`Trang chủ/ Danh mục sản phẩm/ Loại Sản phẩm / Sản phẩm / ${product.label}`} />
-          <ProductDetailsOverview/>
+          <Background
+            label={`Trang chủ/ Danh mục sản phẩm/ Loại Sản phẩm / Sản phẩm / ${product.label}`}
+          />
+          <ProductDetailsOverview />
         </ShopDetailsContainer>
       ) : null}
     </React.Fragment>
@@ -63,11 +60,10 @@ const ShopDetailPage = ({
 const mapStateToProps = createStructuredSelector({
   product: selectProductDetailData,
   loading: selectProdudctDetailLoading,
-  error: selectProductDetailError,   
+  error: selectProductDetailError,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchProductDetail: (categoryPath, productTypePath, productPath) =>
-    dispatch(fetchProductDetail(categoryPath, productTypePath, productPath)),
+  fetchProductDetail: (productId) => dispatch(fetchProductDetail(productId)),
 });
 export default connect(
   mapStateToProps,

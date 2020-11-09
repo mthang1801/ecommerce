@@ -58,10 +58,8 @@ export default {
   ) =>
     `/${categoryPath}/${productTypePath}/product-group/${productGroupPath}/products?page=${page}`,
   GET_CONTENT_PRODUCT_DETAIL_BY_PRODUCT_PATH_URL: (
-    categoryPath,
-    productTypePath,
-    productPath
-  ) => `/product-detail/${categoryPath}/${productTypePath}/${productPath}`,
+    productId,    
+  ) => `/product-detail/${productId}`,
   UPDATE_USER_INFO: `/user/update-information`,
   POST_COD_PAYMENT: `/user/payment/cod`,
   POST_CARD_PAYMENT: `/user/payment/card`,

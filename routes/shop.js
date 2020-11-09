@@ -275,12 +275,12 @@ router.get(
   shopController.readMoreComments
 );
 /**
- * @route GET /:categoryPath/:productTypePath/:productPath
+ * @route GET /product-detail/productId
  * @desc get content product by productUrl
  * @access public
  */
 router.get(
-  "/product-detail/:categoryPath/:productTypePath/:productPath",
+  "/product-detail/:productId",
   shopController.getContentProductByProductUrl
 );
 /**
