@@ -33,7 +33,7 @@ export const SmallerViewPort = styled.div`
   width : 100%;
   display : flex ;
   flex-direction : column;  
-  margin : 2rem auto;
+  margin-bottom : 2rem;
 `
 
 export const Row = styled.div`
