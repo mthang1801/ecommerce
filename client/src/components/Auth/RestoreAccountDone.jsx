@@ -4,7 +4,7 @@ import {
   CheckIconContainer,
   TextContent,
   ButtonDone,
-} from "./restore-account-done.styles";
+} from "./styles/RestoreAccountDone.styles";
 
 import { withRouter } from "react-router-dom";
 import { FaRegCheckCircle } from "react-icons/fa";

@@ -12,10 +12,10 @@ const NavigationNotification = ({countItem, toggleCart}) => {
   return (
     <NavigationNotificationWrapper>
       <Option>
-        <Icon icon={<FaHeart />} number={1} />
+        <Icon color="red" icon={<FaHeart />} number={1} />
       </Option>
       <Option>
-        <Icon icon={<FaShoppingBag />} number={5} />
+        <Icon color="#ef6c00" icon={<FaShoppingBag />} number={5} />
       </Option>
       <Option style={{flexGrow : 1, textAlign : "right"}}>
         <CartPrice onClick={()=> toggleCart()}>

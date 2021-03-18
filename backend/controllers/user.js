@@ -7,8 +7,7 @@ const jwt = require("jsonwebtoken");
 const { restoreAccount } = require("../lang/vi");
 const sendEmail = require("../config/mailer");
 const { v4: uuid } = require("uuid");
-const orderConfirmationEmail = require("../lang/vi");
-const sendMail = require("../config/mailer");
+const removeVietnameseTones = require("../utils/removeVietnameseTones");
 const connectDB = require("../config/connectDB");
 const Stripe = require("stripe");
 const stripe = Stripe("sk_test_gRVFD4jSoam6nmNkUzn1L3IP00uiTerqJ0");
@@ -45,12 +44,18 @@ exports.postUserRegister = async (req, res, next) => {
       throw error;
     }
     const hashPassword = await bcrypt.hash(password, +process.env.SALT);
+    let slug = removeVietnameseTones(name).replace(/[^A-Za-z0-9]+/g, "-");
+    const checkSlugExisted = await User.findOne({ slug });
+    if (checkSlugExisted) {
+      slug = `${slug}-${Date.now().toString(32)}`;
+    }
     const newUser = new User({
       local: {
         name,
-        email,
+        email,       
         password: hashPassword,
       },
+      slug: slug,
       infomation: {
         email,
       },
@@ -169,6 +174,7 @@ exports.postUpdateAccount = async (req, res, next) => {
       "local.email": email,
       "local.verify_token": token,
     });
+
     if (!user) {
       return res.status(400).render(`restore-account`, {
         error:
@@ -178,8 +184,14 @@ exports.postUpdateAccount = async (req, res, next) => {
         title: "Khôi phục tài khoản",
       });
     }
+    let slug = email.split("@")[0].replace(/[^A-Za-z0-9]+/g, "-");
+    const checkSlugExisted = await User.findOne({ slug });
+    if (checkSlugExisted) {
+      slug = `${slug}-${Date.now().toString(32)}`;
+    }
     const hashPassword = await bcrypt.hash(password, +process.env.SALT);
     user.local.password = hashPassword;
+    user.slug = slug;
     user.local.verify_token = undefined;
     user.local.expiration_token = undefined;
     await user.save();
@@ -199,8 +211,15 @@ exports.postUserLoginFacebook = async (req, res, next) => {
       throw error;
     }
     let user = await User.findOne({ "facebook.id": id });
+
     if (!user) {
+      let slug = removeVietnameseTones(name).replace(/[^A-Za-z0-9]+/g, "-");
+      const checkSlugExisted = await User.findOne({ slug });
+      if (checkSlugExisted) {
+        slug = `${slug}-${Date.now().toString(32)}`;
+      }
       user = new User({
+        slug,
         facebook: {
           id,
           name,
@@ -209,6 +228,7 @@ exports.postUserLoginFacebook = async (req, res, next) => {
       });
       await user.save();
     }
+
     const token = jwt.sign(
       { userId: user._id, email: email },
       process.env.JwT_SECRET,
@@ -233,7 +253,13 @@ exports.postUserLoginGoogle = async (req, res, next) => {
     }
     let user = await User.findOne({ "google.id": id });
     if (!user) {
+      let slug = email.split("@")[0].replace(/[^A-Za-z0-9]+/g, "-");
+      const checkSlugExisted = await User.findOne({ slug });
+      if (checkSlugExisted) {
+        slug = `${slug}-${Date.now().toString(32)}`;
+      }
       user = new User({
+        slug,
         google: {
           id,
           name,

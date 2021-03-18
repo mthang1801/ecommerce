@@ -4,7 +4,7 @@ export default createGlobalStyle`
 :root{
   --indigo-1 : #3949ab;
   --indigo-2 : #283593;
-  --indigo-3 : #1a237e;
+  --indigo-3 : #1a237e;  
   --blue-1 : #1e88e5;
   --blue-2 : #1565c0;
   --blue-3 : #0d47a1;
@@ -51,7 +51,8 @@ export default createGlobalStyle`
   --gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));  
   --lightShadow: 0px 1px 1.5px 1.5px rgba(0, 0, 0, 0.1);
   --mediumShadow : 2px 3px 3px 1px rgba(0,0,0,0.2);
-  --darkShadow: 4px 10px 5px 1px rgba(0, 0, 0, 0.3); 
+  --darkShadow: 4px 10px 5px 1px rgba(0, 0, 0, 0.3);
+  --mainTransition : all 0.15s; 
   }
   *{
     padding : 0; 

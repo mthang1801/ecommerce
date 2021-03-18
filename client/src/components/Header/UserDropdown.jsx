@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import ReactCountryFlag from "react-country-flag";
 import {
   Wrapper,
   Text,
@@ -12,14 +11,12 @@ import { Link } from "react-router-dom";
 import { CustomLink } from "../Custom/CustomLink";
 import { AiFillSetting, AiOutlineHistory } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
-import { TiUser } from "react-icons/ti";
 import { FcBusinessman } from "react-icons/fc";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { connect } from "react-redux";
-import Icon from "../Custom/CustomIcon";
 import { logoutStart } from "../../redux/user/user.actions";
-import LanguageDropdown from "./LanguagesDropdown"
+import LanguageDropdown from "./LanguagesDropdown";
 const DropdownUser = ({ user, logout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const userRef = useRef(null);
@@ -39,14 +36,14 @@ const DropdownUser = ({ user, logout }) => {
   const authUserListOptions = (
     <UserOptionsList show={showDropdown}>
       <RowInline>
-        {user.role === "seller" ? (
+        {user && user.role === "seller" ? (
           <Link to="/register-seller">
             <span>
               <FcBusinessman />
             </span>
             <span>Post Product</span>
           </Link>
-        ) : user.role === "customer" ? (
+        ) : user && user.role === "customer" ? (
           <Link to="/create-new-product">
             <span>
               <FcBusinessman />
@@ -64,7 +61,7 @@ const DropdownUser = ({ user, logout }) => {
         </Link>
       </RowInline>
       <RowInline>
-          <LanguageDropdown/>
+        <LanguageDropdown />
       </RowInline>
       <RowInline>
         <Link to="/ordered-history">
@@ -84,28 +81,23 @@ const DropdownUser = ({ user, logout }) => {
       </RowInline>
     </UserOptionsList>
   );
-
+  console.log(user)
+  if (user)
+    return (
+      <Wrapper ref={userRef}>
+        <Avatar src={`http://localhost:5000/images/${user.avatar}`} />
+        <Text>{user.name}</Text>
+        {authUserListOptions}
+      </Wrapper>
+    );
   return (
     <Wrapper ref={userRef}>
-      {user ? (
-        <React.Fragment>
-          <Avatar src={`http://localhost:5000/images/${user.avatar}`} />
-          <Text>{user.name}</Text>
-          {authUserListOptions}          
-        </React.Fragment>
-      ) : (
-        <CustomLink to="/auth" style={{ textTransform: "capitialize" }}>
-          <Icon
-            icon={<TiUser />}
-            style={{
-              transform: "scale(1.5)",
-              marginRight: "1rem",
-              verticalAlign: "middle",
-            }}
-          />
-          Đăng nhập
-        </CustomLink>
-      )}
+      <CustomLink to="/auth" style={{ textTransform: "capitialize" }}>      
+        Đăng nhập
+      </CustomLink>
+      <CustomLink to="/auth/signup" color="red" style={{ textTransform: "capitialize" }}>      
+        Đăng Ký
+      </CustomLink>
     </Wrapper>
   );
 };

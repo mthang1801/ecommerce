@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  CustomFormContainer,
+  AuthFormContainer,
   FormHeader,
   FormGroups,
   FormActions,
@@ -9,16 +9,16 @@ import {
   ErrorMessage,
   Title,
   SubTitle,
-} from "../../UI/custom-form/custom-form.styles";
-import CustomInput from "../../UI/custom-input/custom-input.component";
-import CustomButton from "../../UI/custom-button/custom-button.component";
+} from "./styles/AuthForm.styles";
+import CustomInput from "../Custom/CustomInput";
+import CustomButton from "../Custom/CustomButton";
 import { withRouter } from "react-router-dom";
-import { restoreAccount } from "../../../redux/user/user.actions";
+import { restoreAccount } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
-import { selectUserError} from "../../../redux/user/user.selectors"
+import { selectUserError} from "../../redux/user/user.selectors"
 import {createStructuredSelector} from "reselect"
-import Loader from "../../UI/loader/loader.component";
-import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component"
+import Loader from "../UI/loader/loader.component";
+import GoogleRecaptcha from "../UI/google-recaptcha/google-recaptcha.component"
 class RestoreAccount extends React.Component {
   state = {
     email: "",   
@@ -66,7 +66,7 @@ class RestoreAccount extends React.Component {
     return (
       <React.Fragment>
         {submitLoading && <Loader />}
-        <CustomFormContainer onSubmit={this.handleSubmit}>
+        <AuthFormContainer onSubmit={this.handleSubmit}>
           <FormHeader>
             <Title>Forgot account</Title>
             <SubTitle>Get your account via Email.</SubTitle>
@@ -103,7 +103,7 @@ class RestoreAccount extends React.Component {
               <StyledLink to="/auth">Back to Signin</StyledLink>
             </Option>
           </FormActions>
-        </CustomFormContainer>
+        </AuthFormContainer>
       </React.Fragment>
     );
   }

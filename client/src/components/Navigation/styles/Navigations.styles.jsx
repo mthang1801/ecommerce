@@ -25,7 +25,7 @@ export const MidSide = styled.div`
   flex : 1 ;
   height: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around; 
 `;
 export const RightSide = styled.div`
   max-width: 25%;

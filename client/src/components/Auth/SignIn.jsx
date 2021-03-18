@@ -1,15 +1,15 @@
 import React  from "react"; 
-import {CustomFormContainer, FormHeader, Title, SubTitle,  FormGroups, FormActions, StyledLink, Option, FlashForm , ErrorMessage} from "../../UI/custom-form/custom-form.styles";
-import CustomInput from "../../UI/custom-input/custom-input.component";
-import CustomButton from "../../UI/custom-button/custom-button.component";
+import {AuthFormContainer, FormHeader, Title, SubTitle,  FormGroups, FormActions, StyledLink, Option, FlashForm , ErrorMessage} from "./styles/AuthForm.styles";
+import CustomInput from "../Custom/CustomInput";
+import CustomButton from "../Custom/CustomButton";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux"
 import {createStructuredSelector} from "reselect";
-import {selectUserError} from "../../../redux/user/user.selectors"
-import {loginStart} from "../../../redux/user/user.actions";
-import GoogleRecaptcha from "../../UI/google-recaptcha/google-recaptcha.component";
-import FacebookLogin from "../../UI/facebook-login/facebook-login.component";
-import GoogleLogin from "../../UI/google-login/google-login.component";
+import {selectUserError} from "../../redux/user/user.selectors"
+import {loginStart} from "../../redux/user/user.actions";
+import GoogleRecaptcha from "../UI/google-recaptcha/google-recaptcha.component";
+import FacebookLogin from "../UI/facebook-login/facebook-login.component";
+import GoogleLogin from "../UI/google-login/google-login.component";
 class SignIn extends React.Component{
   constructor(props){
     super(props);
@@ -17,8 +17,7 @@ class SignIn extends React.Component{
   }
   state = {
     email : "", 
-    password : "",
-    error : null, 
+    password : "",    
     disabled : true , 
     loaded : false ,
     captcha_value :null
@@ -59,8 +58,8 @@ class SignIn extends React.Component{
     this.setState({error : null })
     try {
       this.props.login(email,password)
-    } catch (error) {
-      this.setState({error : error})
+    } catch (error) {     
+     console.log(error);
     }
   }
   handleChangeGoogleRecaptcha = value => {
@@ -69,10 +68,10 @@ class SignIn extends React.Component{
   }
 
   render(){    
-    const {email, password, error, disabled, loaded} = this.state;   
-    const {authPath}  = this.props;   
+    const {email, password, disabled, loaded} = this.state;   
+    const {authPath, error}  = this.props;   
     return (
-      <CustomFormContainer onSubmit={this.onSubmitSigninForm} ref={this.signInRef}>
+      <AuthFormContainer onSubmit={this.onSubmitSigninForm} ref={this.signInRef}>
         <FormHeader>
           <Title>Đăng nhập</Title>
           <SubTitle>Đăng nhập tài khoản bằng email và mật khẩu</SubTitle>
@@ -92,7 +91,7 @@ class SignIn extends React.Component{
           <Option>Don't have account ? <StyledLink to={`${authPath}/signup`}>Signup account</StyledLink></Option>
           <Option>Forgot password ? <StyledLink to={`${authPath}/restore-account`}>Get Password Again.</StyledLink></Option>
         </FormActions>
-      </CustomFormContainer>
+      </AuthFormContainer>
     )
   }
 

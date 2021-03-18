@@ -9,27 +9,46 @@ import {
   AiOutlineContacts,
   AiOutlineGift,
   AiOutlineAccountBook,
-  AiOutlineSetting
+  AiOutlineSetting,
 } from "react-icons/ai";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FiTrendingUp } from "react-icons/fi";
-import AppContext from "../../context/app-viewport.context";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { connect } from "react-redux";
 import { setCloseDrawer } from "../../redux/drawer/drawer.actions";
 import Brand from "./NavigationBrand";
-const NavigationItems = ({ user, setCloseDrawer }) => {
-  const [smallView, setSmallView] = useState(window.innerWidth < 992);
-  const width = useContext(AppContext);
+import Tooltips from "./Tooltips";
 
-  useEffect(() => {
-    if (width < 992) {
-      setSmallView(true);
-    } else {
-      setSmallView(false);
-    }
-  }, [width]);
+const navigationsMenu = [
+  {
+    path: "/",
+    name: "Home",
+    icon: <AiOutlineHome />,
+  },
+  {
+    path: "/products/discount",
+    name: "Products on Sale",
+    icon: <AiOutlineGift />,
+  },
+  {
+    path: "/products/hot",
+    name: "Selling products",
+    icon: <FiTrendingUp />,
+  },
+  {
+    path: "/products/favorite",
+    name: "Favorite Products",
+    icon: <MdFavoriteBorder />,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    icon: <AiOutlineContacts />,
+  },
+];
+const NavigationItems = ({ user, setCloseDrawer }) => {
+  const [tooltips, setTooltips] = useState("");
 
   return (
     <React.Fragment>
@@ -72,68 +91,21 @@ const NavigationItems = ({ user, setCloseDrawer }) => {
           )}
         </Row>
       </SmallView>
-      <Row >
-        <CustomLink to="/" title="Trang chủ" onClick={setCloseDrawer}>
-          <AiOutlineHome />
-          <span>Home</span>
-        </CustomLink>
-      </Row>
-      <Row >
-        <CustomLink
-          to="/products/discount"
-          title="SP đang giảm giá"
-          onClick={setCloseDrawer}
+      {navigationsMenu.map((navigationItem) => (
+        <Row
+          key={navigationItem.name}
+          onMouseEnter={() => setTooltips(navigationItem.name)}
+          onMouseLeave={() => setTooltips("")}
         >
-          <AiOutlineGift />
-          <span>Products on Sale</span>
-        </CustomLink>
-      </Row>
-      <Row >
-        <CustomLink
-          to="/products/hot"
-          title="SP bán chạy"
-          onClick={setCloseDrawer}
-        >
-          <FiTrendingUp />
-           <span>Selling Products</span>
-        </CustomLink>
-      </Row>
-      <Row smallView>
-        <CustomLink
-          to="/products/favorite"
-          title="SP Bạn yêu thích"
-          onClick={setCloseDrawer}
-        >
-          <MdFavoriteBorder />
-          <span>Favorite Products</span>
-        </CustomLink>
-      </Row>
-      <Row smallView>
-        <CustomLink
-          to="/ordered-history"
-          title="Lịch sử giao dịch"
-          onClick={setCloseDrawer}
-        >
-          <AiOutlineAccountBook />
-          <span>Ordered History</span>
-        </CustomLink>
-      </Row>
-      {/* <Row ref={pageMenuRef} smallView>
-        <CustomLink to="/">{smallView && <FaConnectdevelop/> }Pages</CustomLink>
-        <PagesMenu show={showPageMenu} />
-      </Row> */}
-      <Row>
-        <CustomLink to="/contact" title="Liên hệ" onClick={setCloseDrawer}>
-          <AiOutlineContacts />
-          <span>Contact</span>
-        </CustomLink>
-      </Row>
-      <Row>
-        <CustomLink to="/contact" title="Liên hệ" onClick={setCloseDrawer}>
-          <AiOutlineSetting />
-          <span>Setting</span>
-        </CustomLink>
-      </Row>
+          <CustomLink to={navigationItem.path} title={navigationItem.name}>
+            {navigationItem.icon}
+            <span>{navigationItem.name}</span>
+          </CustomLink>
+          <Tooltips show={tooltips === navigationItem.name}>
+            {navigationItem.name}
+          </Tooltips>
+        </Row>
+      ))}
     </React.Fragment>
   );
 };

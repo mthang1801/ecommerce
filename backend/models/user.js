@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema(
   {
     first_name: String,
-    last_name: String,
+    last_name: String,   
     local: {
       name: { type: String, unique: true, sparse: true },
       email: {
@@ -16,6 +16,11 @@ const UserSchema = new mongoose.Schema(
       password: String,
       verify_token: String,
       expiration_token: Date,
+    },
+    slug : {
+      type : String , 
+      unique : true ,       
+      sparse : true ,      
     },
     facebook: {
       id: String,
