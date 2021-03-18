@@ -17,7 +17,7 @@ import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { connect } from "react-redux";
 import { setCloseDrawer } from "../../redux/drawer/drawer.actions";
-import Brand from "./NavigationBrand";
+import Brand from "../Header/Brand";
 import Tooltips from "./Tooltips";
 
 const navigationsMenu = [

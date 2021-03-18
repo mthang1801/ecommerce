@@ -1,6 +1,6 @@
 import React from 'react'
 import GoogleLogin from 'react-google-login';
-import {loginGoogleStart} from "../../../redux/user/user.actions";
+import {loginGoogleStart} from "../../redux/user/user.actions";
 import {connect} from "react-redux";
 const GGLogin = ({loginGoogle}) => {
   const responseGoogle = (response) => {

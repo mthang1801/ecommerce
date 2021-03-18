@@ -1,8 +1,8 @@
 import React from 'react'
 import FacebookLogin from "react-facebook-login";
 import {TiSocialFacebook} from "react-icons/ti"
-import "./facebook-login.styles.css";
-import {loginFacebookStart} from "../../../redux/user/user.actions";
+import "./styles/FacebookLogin.styles.css";
+import {loginFacebookStart} from "../../redux/user/user.actions";
 import {connect} from "react-redux";
 const FBLogin = ({loginFacebook}) => {
   const responseFacebook = response => {
