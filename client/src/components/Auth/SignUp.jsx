@@ -19,9 +19,9 @@ import {registerStart} from "../../redux/user/user.actions"
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {selectUserError} from "../../redux/user/user.selectors";
-import GoogleRecaptcha from "../UI/google-recaptcha/google-recaptcha.component";
-import FacebookLogin from "../UI/facebook-login/facebook-login.component";
-import GoogleLogin from "../UI/google-login/google-login.component";
+import GoogleRecaptcha from "./GoogleRecaptcha";
+import FacebookLogin from "./FacebookLogin";
+import GoogleLogin from "./GoogleLogin";
 const INITIAL_STATE = {
   controls: {
     name: {

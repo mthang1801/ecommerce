@@ -19,6 +19,7 @@ export const DesktopContainer = styled.div`
 
 export const LeftSide = styled.div`
   min-width : 3rem;
+  position: relative;  
 `;
 export const MidSide = styled.div`  
   display: flex;

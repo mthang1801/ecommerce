@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export const ToolbarContainer = styled.nav`
+export const HeaderLargeViewPort = styled.nav`
   display: none;
   @media screen and (min-width: 992px) {
     width: 100%;
-    height: 50px;
+    height: 60px;
     background-color: rgba(200, 200, 200, 0.2);
     display: flex;
     justify-content: space-between;
@@ -14,19 +14,32 @@ export const ToolbarContainer = styled.nav`
   }
 `;
 
-export const ToolbarLeft = styled.div`
+export const HeaderSmallViewPort = styled.nav`
+  display : flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  align-items: center;
+  width : 100% ; 
+  height: 60px;  
+  @media screen and (min-width: 992px){
+    display : none ; 
+  }
+`
+
+export const HeaderLeft = styled.div`
   display: flex;
+  align-items:center;  
   flex:  1 ; 
   overflow: hidden;
 `;
-export const ToolbarRight = styled.div`
+export const HeaderRight = styled.div`  
   display: flex;
   justify-content: flex-end;
   align-items: center;
 
 `;
 
-export const ToolbarItem = styled.div`
+export const HeaderItem = styled.div`
   padding: 0 1rem;
   &:not(:first-child) {
     border-left: 1px solid #ccc;

@@ -1,9 +1,9 @@
 import React from 'react'
-import {LogoImage} from "./styles/NavigationBrand.styles";
+import {LogoImage} from "./styles/Brand.styles";
 import {CustomLink} from "../Custom/CustomLink";
 import Logo from "../../assets/img/logo.png"
 
-const NavigationBrand = () => {
+const Brand = () => {
   return (
     <React.Fragment>
       <CustomLink to="/">
@@ -13,4 +13,4 @@ const NavigationBrand = () => {
   )
 }
 
-export default NavigationBrand
+export default Brand

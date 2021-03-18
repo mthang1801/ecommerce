@@ -88,44 +88,45 @@ export default createGlobalStyle`
       text-decoration: none;
     }
     
+  .slick-next:before, .slick-prev:before{
+    font-size : 30px;
+  }
     
-       
-    .slick-next:before, .slick-prev:before{
-      font-size : 30px;
-    }
-    
-    .pagination{
-      display : flex ; 
-      justify-content : center;
-      align-items : center; 
-      list-style: none ;
-    }
-    
-    .pagination-item{
-      margin : 0 2px;
-    }
-    .pagination-link, .pagination-margin, .pagination-break{
-      outline : none ;
-      border: none ; 
-      padding : 0.4rem 0.8rem;   
-      font-weight: bold ;  
-      cursor : pointer; 
-      color : #192a56;
-    }
-    
-    .pagination-margin{
-      vertical-align: middle;
-      font-size : 1.1em;
-    }
-    
-    .pagination-link:hover, .pagination-margin:hover , .pagination-break:hover{  
-      color :#3498db ; 
-    }
-    
-    .active-link{
-      padding : 0.4rem 0.8rem ;  
-      border-radius: 3px;
-      color : white;
-      background-color : #192a56;
-    }
+  .pagination{
+    display : flex ; 
+    justify-content : center;
+    align-items : center; 
+    list-style: none ;
+  }
+  
+  .pagination-item{
+    margin : 0 2px;
+  }
+  .pagination-link, .pagination-margin, .pagination-break{
+    outline : none ;
+    border: none ; 
+    padding : 0.4rem 0.8rem;   
+    font-weight: bold ;  
+    cursor : pointer; 
+    color : #192a56;
+  }
+  
+  .pagination-margin{
+    vertical-align: middle;
+    font-size : 1.1em;
+  }
+  
+  .pagination-link:hover, .pagination-margin:hover , .pagination-break:hover{  
+    color :#3498db ; 
+  }
+  
+  .active-link{
+    padding : 0.4rem 0.8rem ;  
+    border-radius: 3px;
+    color : white;
+    background-color : #192a56;
+  }
+  [role=button]{
+    outline:none;
+  }
 `;

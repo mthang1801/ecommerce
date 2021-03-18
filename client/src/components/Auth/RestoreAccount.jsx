@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { selectUserError} from "../../redux/user/user.selectors"
 import {createStructuredSelector} from "reselect"
 import Loader from "../UI/loader/loader.component";
-import GoogleRecaptcha from "../UI/google-recaptcha/google-recaptcha.component"
+import GoogleRecaptcha from "./GoogleRecaptcha"
 class RestoreAccount extends React.Component {
   state = {
     email: "",   

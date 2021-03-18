@@ -7,13 +7,16 @@ export const Wrapper = styled.div`
   background-color: blue;
   text-align: center;
   transition: var(--mainTransition);
-  background-color : var(--color-card-dark);
+  background-color : var(--gray-1);
   color : var(--color-text-dark);
   padding : 0.5rem ;
   border-radius : 0.4rem;
   width : auto;
   min-width : 10rem;
   font-size : 0.9rem; 
+  text-transform : uppercase ; 
+  font-weight :bolder;
+
   ${({ show }) =>
     show
       ? `
@@ -25,5 +28,6 @@ export const Wrapper = styled.div`
   opacity : 0 ;
   visibility : hidden; 
   `}
+  
   
 `;

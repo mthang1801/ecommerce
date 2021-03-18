@@ -7,9 +7,9 @@ import {connect} from "react-redux"
 import {createStructuredSelector} from "reselect";
 import {selectUserError} from "../../redux/user/user.selectors"
 import {loginStart} from "../../redux/user/user.actions";
-import GoogleRecaptcha from "../UI/google-recaptcha/google-recaptcha.component";
-import FacebookLogin from "../UI/facebook-login/facebook-login.component";
-import GoogleLogin from "../UI/google-login/google-login.component";
+import GoogleRecaptcha from "./GoogleRecaptcha";
+import FacebookLogin from "./FacebookLogin";
+import GoogleLogin from "./GoogleLogin";
 class SignIn extends React.Component{
   constructor(props){
     super(props);
