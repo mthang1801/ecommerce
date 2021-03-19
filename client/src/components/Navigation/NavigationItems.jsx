@@ -8,8 +8,6 @@ import {
   AiOutlineHome,
   AiOutlineContacts,
   AiOutlineGift,
-  AiOutlineAccountBook,
-  AiOutlineSetting,
 } from "react-icons/ai";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FiTrendingUp } from "react-icons/fi";
@@ -19,37 +17,39 @@ import { connect } from "react-redux";
 import { setCloseDrawer } from "../../redux/drawer/drawer.actions";
 import Brand from "../Header/Brand";
 import Tooltips from "./Tooltips";
-
+import useLanguage from "../Global/useLanguage"
 const navigationsMenu = [
   {
+
     path: "/",
-    name: "Home",
+    name: "home",
     icon: <AiOutlineHome />,
   },
   {
     path: "/products/discount",
-    name: "Products on Sale",
+    name: "productsOnSale",
     icon: <AiOutlineGift />,
   },
   {
     path: "/products/hot",
-    name: "Selling products",
+    name: "sellingProducts",
     icon: <FiTrendingUp />,
   },
   {
     path: "/products/favorite",
-    name: "Favorite Products",
+    name: "favoriteProducts",
     icon: <MdFavoriteBorder />,
   },
   {
     path: "/contact",
-    name: "Contact",
+    name: "contact",
     icon: <AiOutlineContacts />,
   },
 ];
 const NavigationItems = ({ user, setCloseDrawer }) => {
   const [tooltips, setTooltips] = useState("");
-
+  const {i18n, lang} = useLanguage();
+  const {navigations} = i18n.store.data[lang].translation
   return (
     <React.Fragment>
       <SmallView>
@@ -102,7 +102,7 @@ const NavigationItems = ({ user, setCloseDrawer }) => {
             <span>{navigationItem.name}</span>
           </CustomLink>
           <Tooltips show={tooltips === navigationItem.name}>
-            {navigationItem.name}
+            {navigations[navigationItem.name]}
           </Tooltips>
         </Row>
       ))}

@@ -6,20 +6,21 @@ import {
   LanguageDropdownContainer,
   RowInline
 } from "./styles/LanguagesDropdown.styles";
+import useLanguage from "../Global/useLanguage"
+import {setLanguage} from "../../locales"
 const configLang = {
-  us: { text: "USA", code: "US" },
-  vi: { text: "Tiếng Việt", code: "VN" },
-  es: { text: "Spain", code: "ES" },
+  en: { key: "en", text: "USA", code: "US" },
+  vi: { key: "vi", text: "Tiếng Việt", code: "VN" },  
 };
 
-const ToggleLanguage = ({ lang }) => {
-  const [defaultLang, setDefaultLang] = useState(configLang.vi);
+const ToggleLanguage = () => {  
   const [showLangBoard, setShowLangBoard] = useState(false);
   const langRef = useRef(null);
+  const {i18n, lang} = useLanguage();
   const listCountriesCode = Object.keys(configLang).filter(
-    (keys) => configLang[keys].code !== defaultLang.code
+    (key) => key !== lang
   );
-
+    
   useEffect(() => {
     function trackLangsBoard(e){
       if(langRef && langRef.current.contains(e.target)){      
@@ -31,23 +32,29 @@ const ToggleLanguage = ({ lang }) => {
     document.addEventListener("mouseover", trackLangsBoard);
     return () => document.removeEventListener("mouseover", trackLangsBoard);
   },[])
+  const onChangeLocale = (key) => {
+    i18n.changeLanguage(key);
+    setLanguage(key);
+  }
+  
+  if(!lang) return null ; 
   return (
     <Wrapper ref={langRef}>
       <ReactCountryFlag
-        countryCode={defaultLang.code}
+        countryCode={configLang[lang].code}
         svg
         style={{ transform: "scale(1.5)", marginRight: "1rem" }}
       />
-      <Text>{defaultLang.text}</Text>
+      <Text>{configLang[lang].text}</Text>
       <LanguageDropdownContainer show={showLangBoard}>
-        {listCountriesCode.map((code) => (
-          <RowInline key={code}>
+        {listCountriesCode.map((key) => (
+          <RowInline key={key} onClick={() => onChangeLocale(key)}>
             <ReactCountryFlag
-              countryCode={configLang[code].code}
+              countryCode={configLang[key].code}
               svg
               style={{ transform: "scale(1.5)", marginRight: "1rem" }}
             />
-            <Text>{configLang[code].text}</Text>
+            <Text>{configLang[key].text}</Text>
           </RowInline>
         ))}
       </LanguageDropdownContainer>

@@ -6,6 +6,7 @@ import { store, persistor } from "./redux/store";
 import { Provider } from "react-redux";
 import axios from "axios";
 import { PersistGate } from "redux-persist/integration/react";
+import "./i18n"
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 ReactDOM.render(

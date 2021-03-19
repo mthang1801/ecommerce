@@ -17,10 +17,13 @@ import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { connect } from "react-redux";
 import { logoutStart } from "../../redux/user/user.actions";
 import LanguageDropdown from "./LanguagesDropdown";
+import useLanguage from "../Global/useLanguage"
 const DropdownUser = ({ user, logout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const userRef = useRef(null);
-
+  const {i18n, lang} =useLanguage()
+  const {userOptions} = i18n.store.data[lang].translation.header;
+  const {authenticate} = i18n.store.data[lang].translation;
   useEffect(() => {
     function trackUserDropdown(e) {
       if (userRef && userRef.current.contains(e.target)) {
@@ -37,27 +40,28 @@ const DropdownUser = ({ user, logout }) => {
     <UserOptionsList show={showDropdown}>
       <RowInline>
         {user && user.role === "seller" ? (
-          <Link to="/register-seller">
-            <span>
-              <FcBusinessman />
+          <Link to="/create-new-product" >
+             <span>
+            {userOptions.postProduct.icon}
             </span>
-            <span>Post Product</span>
+            <span>{userOptions.postProduct.name}</span>
           </Link>
         ) : user && user.role === "customer" ? (
-          <Link to="/create-new-product">
+          <Link to="/register-seller">
             <span>
-              <FcBusinessman />
+             {userOptions.becomeAsSeller.icon}
             </span>
-            <span>Become as Seller</span>
+            <span>{userOptions.becomeAsSeller.name}</span>
+           
           </Link>
         ) : null}
       </RowInline>
       <RowInline>
         <Link to="/setting-account">
           <span>
-            <AiFillSetting />
+          {userOptions.settingAccount.icon}
           </span>
-          <span>Setting Account</span>
+          <span> {userOptions.settingAccount.name}</span>
         </Link>
       </RowInline>
       <RowInline>
@@ -66,17 +70,17 @@ const DropdownUser = ({ user, logout }) => {
       <RowInline>
         <Link to="/ordered-history">
           <span>
-            <AiOutlineHistory />
+          {userOptions.orderedHistory.icon}
           </span>
-          <span>Ordered History</span>
+          <span> {userOptions.orderedHistory.name}</span>
         </Link>
       </RowInline>
       <RowInline>
         <Logout onClick={() => logout()}>
           <span>
-            <FiLogOut />
+          {userOptions.logout.icon}
           </span>
-          <span>Logout</span>
+          <span> {userOptions.logout.name}</span>
         </Logout>
       </RowInline>
     </UserOptionsList>
@@ -93,10 +97,10 @@ const DropdownUser = ({ user, logout }) => {
   return (
     <Wrapper ref={userRef}>
       <CustomLink to="/auth" style={{ textTransform: "capitialize" }}>      
-        Đăng nhập
+        {authenticate.login}
       </CustomLink>
       <CustomLink to="/auth/signup" color="red" style={{ textTransform: "capitialize" }}>      
-        Đăng Ký
+        {authenticate.signup}
       </CustomLink>
     </Wrapper>
   );
