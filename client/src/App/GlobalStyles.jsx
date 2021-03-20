@@ -72,21 +72,15 @@ export default createGlobalStyle`
     font-size: 16px;    
     width : 100vw;
     overflow-x : hidden;
-  }
-
-
-
-    
+  }    
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
-  
-
-    
-    a{
-      text-decoration: none;
-    }
+   
+  a{
+    text-decoration: none;
+  }
     
   .slick-next:before, .slick-prev:before{
     font-size : 30px;

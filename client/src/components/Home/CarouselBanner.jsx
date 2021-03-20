@@ -54,19 +54,14 @@ const CarouselBanner = () => {
   useEffect(() => {
     setCarouselHeight(carouselRef.current.clientHeight);
   },[carouselRef.current] )
-  console.log(bannerImages)
   if(!bannerImages || !bannerImages.length)  return null; 
   return (
     <CarouselBannerWrapper  ref={carouselRef}>
-      <Slider {...settings} >
-        {/* {bannersData.map(bannerItem => (
-          <Banner key={bannerItem.imageUrl} img={bannerItem.imageUrl} height={carouselHeight} linkUrl={bannerItem.linkUrl} />
-        ))} */}
+      <Slider {...settings} >        
         {bannerImages.map(image => (
           <Link to={image.linkUrl} key={image.id}>
-            <LazyLoad>
-              <Image img={image.image} height={carouselHeight} alt={image.image}/>
-            </LazyLoad>
+            
+              <Image img={image.image} height={carouselHeight} alt={image.image}/>            
           </Link>
         ))}
       </Slider>

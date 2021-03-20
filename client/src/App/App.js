@@ -18,7 +18,7 @@ import ErrorBoundary from "../components/UI/error-boundary/error-boundary.compon
 import Loader from "../components/UI/loader/loader.component";
 
 const Category = lazy(() => import("../pages/category/category.component"));
-const Home = lazy(() => import("../pages/home/home.component"));
+const Home = lazy(() => import("../pages/Home"));
 const Cart = lazy(() => import("../pages/cart/cart.component"));
 const ShopDetails = lazy(() =>
   import("../pages/product-detail/product-detail.component")
@@ -51,9 +51,6 @@ const RegisterSeller = lazy(() =>
 const ProductSearch = lazy(() =>
   import("../pages/product-search/product-search.component")
 );
-const Demo = lazy(() =>
-  import("../pages/demo.js")
-);
 function App({ fetchUser, user, loading }) {
   const [width] = useWindowSize();
   console.log(width);
@@ -75,8 +72,7 @@ function App({ fetchUser, user, loading }) {
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <Switch>
-              <Route path="/" exact component={Home} />
-              <Route path="/demo" exact component={Demo} />
+              <Route path="/" exact component={Home} />              
               <Route path="/auth" component={Authentication} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />

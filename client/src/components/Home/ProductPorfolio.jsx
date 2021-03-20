@@ -5,32 +5,19 @@ import {
   CategoryItem,
   CategoryImage,
   CategoryName,
-} from "./categories-slider.styles";
+} from "./styles/ProductPorfolio.styles";
 import Slider from "react-slick";
-import AppContext from "../../../context/app-viewport.context";
-import {selectCategoryList , selectHomeIsLoading} from "../../../redux/home/home.selectors";
+import {selectCategoryList } from "../../redux/home/home.selectors";
 import {createStructuredSelector} from "reselect";
 import {connect} from "react-redux"
-const CategoriesSlider = ({categoryList, isLoading}) => {
+import useLanguage from "../Global/useLanguage"
+const CategoriesSlider = ({categoryList}) => {
+  const {i18n, lang} = useLanguage()
+  const {homePage} = i18n.store.data[lang].translation;
   const [slide, setSlide] = useState(null);
-  const [mobileView, setMobileView] = useState(window.innerWidth < 600);
-  const [tabletView, setTabletView] = useState(window.innerWidth < 992);
-  const width = useContext(AppContext);
   let dragging = false;
+  
 
-
-  useEffect(() => {
-    if (width < 600) {
-      setMobileView(true);
-    } else {
-      setMobileView(false);
-    }
-    if (width < 992) {
-      setTabletView(true);
-    } else {
-      setTabletView(false);
-    }
-  }, [width]);
   const slideRef = useRef(null);
   useEffect(() => {
     setSlide(slideRef.current);
@@ -47,15 +34,15 @@ const CategoriesSlider = ({categoryList, isLoading}) => {
     if (index === categoryList.length - 1 && index % 4 !== 0) {
       categoriesGroup.push(categoriesPerPage);
     }
-  });
+  });  
   return (   
-      <CategoriesSliderContainer mobileView={mobileView}>
-        <Caption>Danh mục sản phẩm</Caption>
+      <CategoriesSliderContainer>
+        <Caption>{homePage.productPorfolio}</Caption>
         {categoryList.length ? (
           <Slider
             asNavFor={slide}
             ref={slideRef}
-            slidesToShow={mobileView ? 2 : tabletView ? 3 : 4}
+            slidesToShow={window.innerWidth < 600 ? 1 :window.innerWidth < 992 ? 2:  4}
             swipeToSlide={true}
             focusOnSelect={false}
             autoplay
@@ -87,6 +74,5 @@ const CategoriesSlider = ({categoryList, isLoading}) => {
 };
 const mapStateToProps = createStructuredSelector({
   categoryList : selectCategoryList,
-  isLoading : selectHomeIsLoading
 })
 export default connect(mapStateToProps)(CategoriesSlider);

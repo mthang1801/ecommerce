@@ -92,6 +92,13 @@ export const en = {
       id : "single-image",
       linkUrl : "/",
       image:  require("../../assets/img/banner/single-image.jpg")
+    },
+    homePage: {
+      productPorfolio : "Products Porfolio",
+      bestSellerProducts : "Best Seller Products",
+      favoriteProducts : "Favorite Products",
+      latestProducts : "Latest Products",
+      topRatedProducts : "Top Rated Products"
     }
   },
 }

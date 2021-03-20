@@ -49,6 +49,7 @@ exports.getHomeContentList = async (req, res, next) => {
     const categoryList = await Category.find()
       .populate("imageUrl")
       .limit(+process.env.PRODUCTS_SLIDER);
+    
     let productsFavorite = [];
     if (req.header("Authentication")) {
       const token = req.header("Authentication").split(" ")[1];

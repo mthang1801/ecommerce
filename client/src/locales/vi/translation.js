@@ -86,6 +86,13 @@ export const vi = {
       id : "single-image",
       linkUrl : "/",
       image:  require("../../assets/img/banner/single-image.jpg")
+    },
+    homePage: {
+      productPorfolio : "Danh mục sản phẩm",
+      bestSellerProducts : "Sản phẩm bán nhiều nhất",
+      favoriteProducts : "Sản phẩm Được yêu thích",
+      latestProducts : "Sản phẩm mới",
+      topRatedProducts : "Sản phẩm được bình chọn"
     }
   },
 }
