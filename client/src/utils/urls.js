@@ -12,7 +12,7 @@ export default {
   GET_LIST_PRODUCT_GROUP_BY_PRODUCTTYPEID: (id) =>
     `/product-type/${id}/product-group`,
   POST_CREATE_NEW_PRODUCT: `/product`,
-  UPDATE_ROLE_USER_AS_SELLER: `/user/register-seller`,
+  UPDATE_ROLE_USER_AS_SELLER: `/user/update-register-seller`,
   FETCH_INITIAL_DATA: `/initial-data`,
   GET_HOME_CONTENT_LIST: "/home",
   GET_LATEST_PRODUCTS: "/latest-products",

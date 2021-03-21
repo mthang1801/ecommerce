@@ -55,7 +55,7 @@ router.post("/verify/update-account", userController.postUpdateAccount);
  * @desc execute update role user as seller
  * @access private
  */
-router.put("/register-seller", isAuth, userController.putUpdateUserAsSeller);
+router.put("/update-register-seller", isAuth, userController.putUpdateUserAsSeller);
 /**
  * @route PUT /user/update-information
  * @desc Update user information

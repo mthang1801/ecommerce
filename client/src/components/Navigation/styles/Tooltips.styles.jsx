@@ -12,8 +12,8 @@ export const Wrapper = styled.div`
   padding : 0.5rem ;
   border-radius : 0.4rem;
   width : auto;
-  min-width : 10rem;
-  font-size : 0.9rem; 
+  min-width : 12rem;
+  font-size : 0.75rem; 
   text-transform : uppercase ; 
   font-weight :bolder;
 

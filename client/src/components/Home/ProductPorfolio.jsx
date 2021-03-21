@@ -55,8 +55,8 @@ const CategoriesSlider = ({categoryList}) => {
               group.map((item) => {
                 return (
                   <CategoryItem
-                    key={item.id}
-                    to={item.linkUrl}
+                    key={item._id}
+                    to={`/category/${item._id}`}
                     onClick={(e) => dragging && e.preventDefault()}
                   >
                     <CategoryImage

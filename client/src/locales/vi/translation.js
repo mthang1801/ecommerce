@@ -5,9 +5,15 @@ import { FcBusinessman } from "react-icons/fc";
 export const vi = {
   translation: {
     authenticate:{
+      requestAuth : "Bạn cần đăng nhập vào tài khoản để tiếp tục",
       login : "Đăng Nhập",
       signup : "Đăng ký",
       forgotPassword : "Quên mật khẩu",      
+    },
+    seller : {
+      regsiterAsSeller : "Thông tin nhà bán hàng",
+      registerPayment : "Tài khoản thanh toán",
+      termsAndPolicies : "Điều khoản và chính sách"      
     },
     header:{
       userOptions :{

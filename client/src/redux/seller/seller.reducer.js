@@ -2,9 +2,12 @@ import sellerActionTypes from "./seller.types";
 
 const INITIAL_STATE = {
   register: {
-    cardNumber: "",
-    expiryDate: "",
-    cvc: "",
+    cardPayment : {
+      cardNumber: "",
+      expiryDate: "",
+      cvc: "",
+      holderName : ""
+    },
     firstName: "",
     lastName: "",
     address: "",

@@ -5,8 +5,8 @@ const fetch = require("node-fetch");
 const ROOT_URL = "https://thongtindoanhnghiep.co/";
 exports.getListCity = async (req, res, next) => {
   try {
-    const response = await fetch(`${ROOT_URL}/api/city`);
-    const data = await response.json();
+    const response = await fetch(`${ROOT_URL}/api/city`);  
+    const data = await response.json();    
     res.status(200).json(data.LtsItem);
   } catch (error) {
     next(error);

@@ -6,9 +6,15 @@ import { BiLayerPlus } from "react-icons/bi";
 export const en = {
   translation: {
     authenticate:{
+      requestAuth : "You need to login or signup to continue",
       login : "login",
       signup : "signup",
       forgotPassword : "Forgot password",      
+    },
+    seller : {
+      regsiterAsSeller : "Register",
+      registerPayment: "Payment",
+      termsAndPolicies : "Terms And Policies"      
     },
     header:{
       userOptions :{

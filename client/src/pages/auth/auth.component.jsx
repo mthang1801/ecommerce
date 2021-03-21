@@ -11,8 +11,7 @@ const RestoreAccountDone = lazy(() => import("../../components/Auth/RestoreAccou
 class AuthPage extends React.Component {
   
   render() {    
-    const { match, location, user } = this.props;
-    console.log(location)
+    const { match, location, user } = this.props;    
     if (user) {
       if (location.state) return <Redirect to={location.state.from} />;
       return <Redirect to="/" />;

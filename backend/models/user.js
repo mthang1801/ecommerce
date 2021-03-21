@@ -38,7 +38,8 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "customer", //seller
+      default: "customer", //seller,
+      enum : ["customer", "seller", "admin"]
     },
     information: {
       first_name: String,
@@ -53,11 +54,13 @@ const UserSchema = new mongoose.Schema(
         number: String,
         expDate: String,
         cvc: Number,
+        holderName : String
       },
     },
     status: {
       type: String,
       default: "active", //disabled
+      enum : ["active" , "disabled"]
     },
     //products user sold
     products: [

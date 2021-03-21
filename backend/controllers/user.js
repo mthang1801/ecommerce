@@ -52,11 +52,11 @@ exports.postUserRegister = async (req, res, next) => {
     const newUser = new User({
       local: {
         name,
-        email,       
+        email,
         password: hashPassword,
       },
       slug: slug,
-      infomation: {
+      information: {
         email,
       },
     });
@@ -289,6 +289,7 @@ exports.putUpdateUserAsSeller = async (req, res, next) => {
       err.statusCode = 401;
       throw err;
     }
+
     const {
       firstName,
       lastName,
@@ -297,9 +298,7 @@ exports.putUpdateUserAsSeller = async (req, res, next) => {
       selectedCity,
       selectedDist,
       selectedWard,
-      cardNumber,
-      expiryDate,
-      cvc,
+      cardPayment: { cardNumber, expiryDate, cvc, holderName },
       email,
     } = req.body;
     const user = await User.findById(req.user._id);
@@ -308,8 +307,13 @@ exports.putUpdateUserAsSeller = async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
+    if(user.role === "seller"){
+      const err = new Error("Update failed, this account was seller");
+      err.statusCode = 400;
+      throw err;
+    }
     user.role = "seller";
-    (user.information = {
+    user.information = {
       first_name: firstName,
       last_name: lastName,
       city: selectedCity.Title,
@@ -322,9 +326,12 @@ exports.putUpdateUserAsSeller = async (req, res, next) => {
         number: cardNumber,
         expDate: expiryDate,
         cvc: +cvc,
+        holderName
       },
-    }),
-      await user.save();
+    };
+    await user.save();
+    console.log(user)
+    console.log("done")
     res.status(200).json({ msg: "Updated success" });
   } catch (error) {
     next(error);

@@ -28,6 +28,7 @@ const CategoryPage = ({
     const min_price = +urlParams.get("min_price");
     const max_price = +urlParams.get("max_price");
     const page = +urlParams.get("page") || 1;
+    
     let categoryId = match.params.categoryId;
 
     fetchCategory(categoryId, +min_price, +max_price, page);

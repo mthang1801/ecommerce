@@ -19,6 +19,9 @@ import Loader from "../components/UI/loader/loader.component";
 
 const Category = lazy(() => import("../pages/category/category.component"));
 const Home = lazy(() => import("../pages/Home"));
+const RegisterSeller = lazy(() =>
+  import("../pages/RegisterSeller")
+);
 const Cart = lazy(() => import("../pages/cart/cart.component"));
 const ShopDetails = lazy(() =>
   import("../pages/product-detail/product-detail.component")
@@ -45,9 +48,7 @@ const OrderedHistory = lazy(() => import("../pages/ordered/ordered.component"));
 const ProductReviews = lazy(() =>
   import("../pages/product-reviews/product-reviews.component")
 );
-const RegisterSeller = lazy(() =>
-  import("../pages/register-seller/register-seller.container")
-);
+
 const ProductSearch = lazy(() =>
   import("../pages/product-search/product-search.component")
 );
@@ -73,7 +74,8 @@ function App({ fetchUser, user, loading }) {
           <Suspense fallback={<Loader />}>
             <Switch>
               <Route path="/" exact component={Home} />              
-              <Route path="/auth" component={Authentication} />
+              <Route path="/auth" component={Authentication} />              
+              <Route path="/register-seller" exact component={RegisterSeller} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" component={Checkout} />
@@ -100,7 +102,7 @@ function App({ fetchUser, user, loading }) {
                 path="/product/:productId"
                 component={ProductDetail}
               />
-              <Route path="/register-seller" exact component={RegisterSeller} />
+            
               <Route
                 path="/:categoryPath/:productTypePath/product-group/:productGroupPath/products"
                 exact
