@@ -14,7 +14,6 @@ import FormRegisterAsSeller from "./FormRegisterAsSeller";
 import PaymentForm from "./PaymentForm";
 import FormComplete from "./form-complete/form-complete.component";
 import TermsAndPrivacy from "./terms-and-privacy/term-and-privacy.component";
-import FormCreateProduct from "../Product/form-create-product/form-create-product.component";
 import { connect } from "react-redux";
 import useLanguage from "../Global/useLanguage";
 import {

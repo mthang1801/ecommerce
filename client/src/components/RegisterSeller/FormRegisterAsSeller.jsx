@@ -12,8 +12,8 @@ import {
   ItemAPI,
   Placeholder,
   SelectIcon,
-  Editable,
-} from "./styles/RegisterFormAsSeller.styles";
+  Editable,  
+} from "../Custom/styles/CustomFormSeller.styles";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/user/user.selectors";

@@ -40,7 +40,7 @@ const DropdownUser = ({ user, logout }) => {
     <UserOptionsList show={showDropdown}>
       <RowInline>
         {user && user.role === "seller" ? (
-          <Link to="/create-new-product" >
+          <Link to="/post-product" >
              <span>
             {userOptions.postProduct.icon}
             </span>

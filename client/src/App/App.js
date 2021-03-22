@@ -22,15 +22,13 @@ const Home = lazy(() => import("../pages/Home"));
 const RegisterSeller = lazy(() =>
   import("../pages/RegisterSeller")
 );
+const PostProduct = lazy(() => import("../pages/PostProduct"))
 const Cart = lazy(() => import("../pages/cart/cart.component"));
 const ShopDetails = lazy(() =>
   import("../pages/product-detail/product-detail.component")
 );
 const Checkout = lazy(() => import("../pages/checkout/checkout.container"));
 const Contact = lazy(() => import("../pages/contact/contact.component"));
-const CreateProduct = lazy(() =>
-  import("../pages/create-product/create-product.component")
-);
 const Authentication = lazy(() => import("../pages/auth/auth.component"));
 const ProductType = lazy(() =>
   import("../pages/product-type/product-type.component")
@@ -76,6 +74,7 @@ function App({ fetchUser, user, loading }) {
               <Route path="/" exact component={Home} />              
               <Route path="/auth" component={Authentication} />              
               <Route path="/register-seller" exact component={RegisterSeller} />
+              <Route path="/post-product" exact component={PostProduct}/>
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" component={Checkout} />
@@ -117,13 +116,7 @@ function App({ fetchUser, user, loading }) {
                 path="/manufactor/:manufactorPath/products"
                 exact
                 component={Manufactor}
-              />
-              
-              <Route
-                path="/create-new-product"
-                exact
-                component={CreateProduct}
-              />
+              />                           
               <Route
                 path="/manufactor/:manufactorPath"
                 exact

@@ -33,21 +33,22 @@ const INITIAL_STATE = {
   product: {
     selectedCategory: {
       _id: "",
-      name: "",
-      linkUrl: "",
+      name: "",      
+      linkUrl : ""
     },
     selectedProductType: {
       _id: "",
-      name: "",
-      linkUrl: "",
+      name: "",  
+      linkUrl : ""    
     },
     selectedProductGroup: {
       _id: "",
       name: "",
+      linkUrl : ""
     },
-    label: "",
-    groupName: "",
+    label: "",    
     name: "",
+    origin : "",
     manufactor: "",
     image: [],
     price: "",
