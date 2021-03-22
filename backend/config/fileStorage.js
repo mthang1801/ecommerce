@@ -4,13 +4,12 @@ const path = require("path");
 const configFileStorage = (app) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "./images");
+      cb(null, path.join(path.dirname(require.main.filename), "images"));
     },
     filename: (req, file, cb) => {
-      if (!["image/jpg", "image/jpeg", "image/png"].includes(file.mimetype)) {
+      if (!["image/jpg", "image/jpeg", "image/png","image/gift"].includes(file.mimetype)) {
         return cb(new Error("This file is not image file"), false);
-      }
-
+      }     
       return cb(null, `${Date.now()}-${file.originalname}`);
     },
   });

@@ -288,6 +288,7 @@ exports.postCreateProduct = async (req, res, next) => {
       weight,
       ship_fee,
     } = req.body;
+    console.log(req.files)
     //to Capitalize name
     name = toCapitalizeString(name);
     label = toCapitalizeString(label);

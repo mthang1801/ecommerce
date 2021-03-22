@@ -75,6 +75,9 @@ const ProductSchema = new Schema(
       ref: "manufactors",
       required: true,
     },
+    origin : {
+      type : String,             
+    },
     sold_quantity: {
       type: Number,
       default: 0,

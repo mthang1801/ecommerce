@@ -79,6 +79,11 @@ export default createGlobalStyle`
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
+
+  input{
+    font-family :  var(--fontFamily);
+    font-size : 0.9rem;
+  }
    
   a{
     text-decoration: none;

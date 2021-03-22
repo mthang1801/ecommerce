@@ -1,18 +1,18 @@
 import React , {useEffect} from 'react'
 import {AiOutlineCheckCircle} from "react-icons/ai"
 import {RiErrorWarningLine} from "react-icons/ri"
-import {FormCompleteWrapper, IconLayer, TextContent, ButtonDone} from "./form-complete.styles";
+import {FormCompleteWrapper, IconLayer, TextContent, ButtonDone} from "./styles/FormComplete.styles";
 import {withRouter} from "react-router-dom";
-import {fetchUserStart} from "../../../redux/user/user.actions";
+import {fetchUserStart} from "../../redux/user/user.actions";
 import {connect} from "react-redux";
-import { clearAll } from '../../../redux/seller/seller.actions';
-const FormCompleteCreateProduct = ({success, history, clearAll, fetchUser, scroll}) => {
+import { clearAll } from '../../redux/seller/seller.actions';
+const FormCompleteCreateProduct = ({success, history, clearAll, fetchUser}) => {
   useEffect(() => {
     window.scrollTo({
-      top : scroll,
+      top : 100,
       behavior : "smooth"
     })
-  }, [scroll])
+  }, [])
   const handleComplete = e => {      
     clearAll();
     fetchUser();
