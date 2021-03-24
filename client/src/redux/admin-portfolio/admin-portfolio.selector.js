@@ -4,10 +4,10 @@ export const selectAdminPortfolio = (state) => state.adminPortfolio;
 
 export const selectAdminPortfolioList = createSelector(
   selectAdminPortfolio,
-  (category) => category.categoryList
+  (portfolio) => portfolio.portfolioList
 );
 
 export const selectLoadingAdminPortfolioList = createSelector(
   selectAdminPortfolio,
-  (category) => category.loading
+  (portfolio) => portfolio.loading
 );

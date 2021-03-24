@@ -24,25 +24,25 @@ export default (state = INITIAL_STATE, action) => {
     case adminPortfolioActionTypes.FETCH_ADMIN_PORTFOLIO_SUCCESS:
       return {
         ...state,
-        categoryList: action.payload,
+        portfolioList: action.payload,
         loading: false,
       };
     case adminPortfolioActionTypes.ADD_ADMIN_PORTFOLIO_SUCCESS:
       return {
         ...state,
-        categoryList: [action.payload, ...state.categoryList],
+        portfolioList: [action.payload, ...state.portfolioList],
         loading: false,
       };
     case adminPortfolioActionTypes.EDIT_ADMIN_PORTFOLIO_SUCCESS:
       return {
         ...state,
-        categoryList: editPortfolio(state.categoryList, action.payload),
+        portfolioList: editPortfolio(state.portfolioList, action.payload),
         loading: false,
       };
     case adminPortfolioActionTypes.REMOVE_ADMIN_PORTFOLIO_SUCCESS:
       return {
         ...state,
-        categoryList: removePortfolio(state.categoryList, action.payload),
+        portfolioList: removePortfolio(state.portfolioList, action.payload),
         loading: false,
       };
     case adminPortfolioActionTypes.FETCH_ADMIN_PORTFOLIO_FAIL:

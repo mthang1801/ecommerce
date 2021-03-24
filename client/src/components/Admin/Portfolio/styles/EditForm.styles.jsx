@@ -7,7 +7,7 @@ export const EditFormWrapper = styled.div`
 export const FormWrapper = styled.div`  
   padding : 1rem 2rem;
   position : fixed;
-  display : flex ;     
+  display : flex ;       
   width : 80%;
   left : 10%;
   top : ${({show}) => show ? "10%" : "-200%"};  
@@ -15,7 +15,7 @@ export const FormWrapper = styled.div`
     width : 500px;    
     max-width : 40% ;  
   };
-  z-index: 500;
+  z-index: ${({show}) => show ? "1000" : "-1"};
   border-radius : 10px;
   box-shadow : 0 3px 6px #ccc;
   background-color : white;

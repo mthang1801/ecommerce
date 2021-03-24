@@ -39,12 +39,12 @@ const DropdownUser = ({ user, logout }) => {
   const authUserListOptions = (
     <UserOptionsList show={showDropdown}>
       <RowInline>
-        {user && user.role === "admin" ? (
+        {user && user?.role === "admin" ? (
           <Link to="/admin">
             <span>{userOptions.admin.icon}</span>
             <span> {userOptions.admin.name}</span>
           </Link>
-        ) : user.role === "seller" ? (
+        ) : user?.role === "seller" ? (
           <Link to="/post-product">
             <span>{userOptions.postProduct.icon}</span>
             <span>{userOptions.postProduct.name}</span>

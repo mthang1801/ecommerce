@@ -12,12 +12,13 @@ import { FaEdit, FaTrash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { removeAdminPortfolio } from "../../../redux/admin-portfolio/admin-portfolio.actions";
 import { connect } from "react-redux";
 import EditForm from "./EditForm";
+import Moment from "react-moment"
 
-const ListTableCategory = ({ data, removeAdminPortfolio, isLoading }) => {
+const ListTablePortfolio = ({ data, removeAdminPortfolio, isLoading }) => {
   const [collapsed, setCollapsed] = useState([]);
   const [colNum, setColNum] = useState(0);
   const [edit, setEdit] = useState({});
-  const [cols, setCols] = useState(["_id", "name", "linkUrl", "createdAt"]); 
+  const [cols, setCols] = useState(["name", "slug", "createdAt"]); 
   const close = (position) => {
     if (collapsed.includes(position)) {
       return true;
@@ -44,19 +45,10 @@ const ListTableCategory = ({ data, removeAdminPortfolio, isLoading }) => {
             <Row number={colNum}>
               {cols.map((col, idx) => (
                 <Data close={close(idx)}>
-                  <span>{col}</span>
-                  {close(idx) ? (
-                    <BtnText onClick={() => handleToggle(idx)}>&#10095;</BtnText>
-                  ) : (
-                    <BtnText onClick={() => handleToggle(idx)}>&#10094;</BtnText>
-                  )}
+                  <span>{col}</span>                  
                 </Data>
               ))}
-              <Data>{close(cols.length) ? (
-                    <BtnText onClick={() => handleToggle(cols.length)}>&#10095;</BtnText>
-                  ) : (
-                    <BtnText onClick={() => handleToggle(cols.length)}>&#10094;</BtnText>
-                  )}</Data>
+              <Data><span>actions</span></Data>
             </Row>
           </Thead>
           <Tbody>
@@ -64,14 +56,10 @@ const ListTableCategory = ({ data, removeAdminPortfolio, isLoading }) => {
               <Row key={portfolio._id} number={colNum}>
                 {cols.map((col, idx) => (
                   <Data close={close(idx)} tbody title={portfolio[col]}>
-                    {col === "imageUrl" ? (
-                      <a
-                        href={`/images/${portfolio[col]}`}
-                        style={{ color: "blue" }}
-                        target="_blank"
-                      >
+                    {col === "createdAt" ? (
+                      <Moment format="DD/MM/YYYY">
                         {portfolio[col]}
-                      </a>
+                      </Moment>
                     ) : (
                       portfolio[col]
                     )}
@@ -105,4 +93,4 @@ const ListTableCategory = ({ data, removeAdminPortfolio, isLoading }) => {
 const mapDispatchToProps = (dispatch) => ({
   removeAdminPortfolio: (porfolioId) => dispatch(removeAdminPortfolio(porfolioId)),
 });
-export default connect(null, mapDispatchToProps)(ListTableCategory);
+export default connect(null, mapDispatchToProps)(ListTablePortfolio);

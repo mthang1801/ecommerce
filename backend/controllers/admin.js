@@ -1,4 +1,4 @@
-const Portfolio = require("../models/portfolio")
+const Portfolio = require("../models/portfolio");
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
 const Product = require("../models/product");
@@ -12,41 +12,94 @@ const Manufactor = require("../models/manufactor");
 const { v4: uuid } = require("uuid");
 const Ordered = require("../models/ordered");
 const path = require("path");
+const portfolio = require("../models/portfolio");
 
- 
 exports.postPortfolio = async (req, res, next) => {
   try {
-    const {name, slug} = req.body; 
+    const { name, slug } = req.body;
     const file = req.files[0];
 
-    const checkSlugExisted = await Portfolio.findOne({slug});
-    if(checkSlugExisted){
+    const checkSlugExisted = await Portfolio.findOne({ slug });
+    if (checkSlugExisted) {
       await removeImage(file.filename);
-      const err = new Error("Portfolio has been existed") ; 
-      err.statusCode = 400 ; 
-      throw err ;
+      const err = new Error("Portfolio has been existed");
+      err.statusCode = 400;
+      throw err;
     }
     const fileData = await fs.readFile(file.path);
-    console.log(file)
+    console.log(file);
     const newPortfolio = new Portfolio({
-      name, 
-      slug, 
-      image : {
-        data : fileData , 
-        mimetype : file.mimetype,
-        filename : file.filename
-      }
-    })
+      name,
+      slug,
+      image: {
+        data: fileData,
+        mimetype: file.mimetype,
+        filename: file.filename,
+      },
+    });
     await newPortfolio.save();
     await removeImage(file.filename);
-    return res.status(200).json({...newPortfolio._doc})
+    return res.status(201).json({ ...newPortfolio._doc });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getPortfolio = async (req, res, next) => {
+  try {
+    const portfolios = await Portfolio.find();    
+    return res.status(200).json({ portfolios: portfolios });
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+};
+
+exports.editPortfolio = async (req, res, next) => {
+  try {
+    const { _id, name, slug } = req.body;
+    const file = req.files[0];
+
+    const portfolio = await Portfolio.findById(_id);
+    if (!portfolio) {
+      await removeImage(file.filename);
+      const err = new Error("Portfolio not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    if (file) {
+      const fileData = await fs.readFile(file.path);
+      portfolio.image.data = fileData;
+      await removeImage(file.filename);
+    }
+    portfolio.name = name;
+    portfolio.slug = slug;
+    await portfolio.save();
+    
+    return res.status(200).json({ ...portfolio._doc });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.removePortfolio = async (req, res, next) => {
+  try {
+    const {_id} = req.body;
+    const removedPortfolio = await Portfolio.findByIdAndDelete(_id);
+    if(!removedPortfolio){
+      const err = new Error("Removed failed");
+      err.statusCode = 400 ;
+      throw err; 
+    }
+    return res.status(200).json({status : "success"})
   } catch (error) {
     next(error);
   }
 }
 
+
 exports.postCategory = async (req, res, next) => {
-  try {    
+  try {
     let { name, linkUrl } = req.body;
     if (linkUrl[0] !== "/") {
       linkUrl = "/" + encodeURIComponent(linkUrl);
@@ -242,7 +295,7 @@ exports.getMenu = async (req, res, next) => {
         _id: categoryItem._id,
         name: categoryItem.name,
         // linkUrl: categoryItem.linkUrl,
-        linkUrl : `/category/${categoryItem._id}`
+        linkUrl: `/category/${categoryItem._id}`,
       };
       let productTypes = [];
       let count = 0;
@@ -251,7 +304,7 @@ exports.getMenu = async (req, res, next) => {
           _id: uuid(),
           name: productTypeItem.name,
           // linkUrl: productTypeItem.linkUrl,
-          linkUrl : `/product-type/${productTypeItem._id}`,
+          linkUrl: `/product-type/${productTypeItem._id}`,
           productsMenu: [],
         };
         let length;
@@ -271,7 +324,7 @@ exports.getMenu = async (req, res, next) => {
               _id: `${group._id}-${uuid()}`,
               name: group.name,
               // linkUrl: group.linkUrl,
-              linkUrl : `/product-group/${group._id}`,
+              linkUrl: `/product-group/${group._id}`,
               options: {
                 limit: 6,
                 sort: { sold: -1 },
@@ -292,7 +345,7 @@ exports.getMenu = async (req, res, next) => {
               _id: `${product._id}-${uuid()}`,
               name: product.name,
               // linkUrl: product.linkUrl,
-              linkUrl : `/product/${product._id}`
+              linkUrl: `/product/${product._id}`,
             });
           }
         }

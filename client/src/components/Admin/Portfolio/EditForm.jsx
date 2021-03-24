@@ -1,82 +1,146 @@
-import React, {useState, useEffect} from 'react'
-import {Form,FormGroup, Input, Title, Label, Error, BtnSubmit} from "../../Custom/styles/CustomFormAdmin.styles";
-import {EditFormWrapper, FormWrapper, DisplayImage, Image} from "./styles/EditForm.styles"
-import Backdrop from "../../UI/backdrop/backdrop.component";
-import {generateBase64Image} from "../../../utils/image";
-import {connect} from "react-redux";
-import {editAdminPortfolio} from "../../../redux/admin-portfolio/admin-portfolio.actions"
-const EditForm = ({edit, setEdit, editCategory}) => {    
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Form,
+  FormGroup,
+  Input,
+  Title,
+  Label,
+  Error,
+} from "../../Custom/styles/CustomFormAdmin.styles";
+import Button from "@material-ui/core/Button";
+import {
+  EditFormWrapper,
+  FormWrapper,
+  DisplayImage,
+  Image,
+} from "./styles/EditForm.styles";
+import Backdrop from "../../UI/Backdrop";
+import { generateBase64Image } from "../../../utils/image";
+import { connect } from "react-redux";
+import { editAdminPortfolio } from "../../../redux/admin-portfolio/admin-portfolio.actions";
+import removeVietnameseTones from "../../../utils/removeVietnameseTones";
+const EditForm = ({ edit, setEdit, editPortfolio }) => {
   const [name, setName] = useState("");
-  const [linkUrl, setLinkUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [slug, setSlug] = useState("");
+  const [image, setImage] = useState("");
   const [imageBase64, setImageBase64] = useState(null);
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
+  const [disabledButton, setDisabledButton] = useState(true);
+  const formRef = useRef(null);
   useEffect(() => {
-    console.log(edit);
-    if(edit){
+    if (edit) {
       setName(edit.name);
-      setLinkUrl(edit.linkUrl);
-      setImageUrl(edit.imageUrl);   
+      setSlug(edit.slug);
+      setImage(edit.image);
     }
-   
-  }, [edit])
+  }, [edit]);
   useEffect(() => {
     setTimeout(() => {
       setError(null);
-    },5000)
-  },[error])
+    }, 5000);
+  }, [error]);
+
   const postInputChangeHandler = (e) => {
-    setImageUrl(e.target.files[0])
-    generateBase64Image(e.target)
+    const fileData = e.target.files[0];
+    console.log(fileData);
+    setImage(fileData);
+    generateBase64Image(fileData)
       .then((res) => setImageBase64(res))
       .catch((err) => console.log(err));
   };
-  const handleSubmitForm = e => {
-    e.preventDefault(); 
-    setError(null);    
-    if(!name || name.length < 3 || !linkUrl || !imageUrl){      
+
+  useEffect(() => {
+    function trackUserClickForm(e) {
+      if (
+        formRef.current &&
+        !formRef.current.contains(e.target) &&
+        Object.keys(edit).length
+      ) {
+        setEdit({});
+      }
+    }
+    window.addEventListener("click", trackUserClickForm);
+    return () => window.removeEventListener("click", trackUserClickForm);
+  }, [formRef, edit]);
+
+  const onChangePortfolioName = (e) => {
+    const { value } = e.target;
+    const newSlug = removeVietnameseTones(value).replace(/[^a-zA-Z0-9]+/g, "-");
+    setName(value);
+    setSlug(newSlug);
+  };
+
+  useEffect(() => {
+    if (name === edit.name && slug === edit.slug && !imageBase64) {
+      setDisabledButton(true);
+    } else {
+      setDisabledButton(false);
+    }
+  }, [name, slug,imageBase64]);
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!name || name.length < 3 || !slug || !image) {
       setError("You must fill all fields and name at least 3 characters");
-      return ;
+      return;
     }
     let formData = new FormData();
     formData.append("_id", edit._id);
-    formData.append("image", imageUrl);
+    formData.append("image", image);
     formData.append("name", name);
-    formData.append("linkUrl", linkUrl);      
-    editCategory(formData)
-    .catch(error => setError(error))
-  }
-  const showForm = Object.keys(edit).length >0;
+    formData.append("slug", slug);
+    editPortfolio(formData).then(res => {
+      setEdit({});
+    }).catch((error) => setError(error));
+  };
+
+  const showForm = Object.keys(edit).length > 0;
 
   return (
     <EditFormWrapper onSubmit={handleSubmitForm}>
-      <Backdrop show={showForm} close={() => setEdit({})}/>
-      <FormWrapper show={showForm}>
-        <Form >
-          <Title>Cập nhật Category</Title>  
+      <Backdrop show={showForm} close={() => setEdit({})} />
+      <FormWrapper show={showForm} ref={formRef}>
+        <Form>
+          <Title>Cập nhật Category</Title>
           {error && <Error>{error}</Error>}
           <FormGroup>
-            <Label>Tên Category</Label>
-            <Input type="text" name="name" value={name || ""} onChange={(e) => setName(e.target.value)}/>
+            <Label>Tên Portfolio</Label>
+            <Input
+              type="text"
+              name="name"
+              value={name || ""}
+              onChange={onChangePortfolioName}
+            />
           </FormGroup>
           <FormGroup>
             <Label>Liên kết</Label>
-            <Input type="text" name="linkUrl" value={linkUrl || ""} onChange={(e) => setLinkUrl(e.target.value)} />
+            <Input type="text" name="slug" value={slug} disabled />
           </FormGroup>
           <FormGroup>
             <Label>Hình ảnh</Label>
-            <Input type="file" onChange={postInputChangeHandler} />
-          </FormGroup>         
-          <BtnSubmit>Cập nhật</BtnSubmit> 
-        </Form>          
+            <Input
+              type="file"
+              name="edit-image"
+              onChange={postInputChangeHandler}
+            />
+          </FormGroup>
+          <Button variant="contained" color="primary" disabled={disabledButton} onClick={handleSubmitForm}>
+            Cập nhật
+          </Button>
+        </Form>
         <DisplayImage>
-          <Image src={imageBase64 ? imageBase64 : imageUrl ? `http://localhost:5000/images/${imageUrl}` : ""}/>
-        </DisplayImage>      
-      </FormWrapper>    
+          {imageBase64 ? (
+            <Image src={imageBase64} />
+          ) : image ? (
+            <Image src={`data:${image.mimetype};base64,${image.data}`} />
+          ) : null}
+        </DisplayImage>
+      </FormWrapper>
     </EditFormWrapper>
-  )
-}
-const mapDispatchToProps = dispatch => ({
-  editCategory : data => dispatch(editAdminPortfolio(data))
-})
-export default connect(null, mapDispatchToProps)(EditForm)
+  );
+};
+const mapDispatchToProps = (dispatch) => ({
+  editPortfolio: (data) => dispatch(editAdminPortfolio(data)),
+});
+export default connect(null, mapDispatchToProps)(EditForm);

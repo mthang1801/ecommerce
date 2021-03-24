@@ -1,15 +1,26 @@
 import React , {lazy} from 'react'
-import {Route, Switch} from "react-router-dom"
+import {Route, Switch, Redirect} from "react-router-dom"
+import {createStructuredSelector} from "reselect"
+import {selectCurrentUser} from "../redux/user/user.selectors"
+import {connect} from "react-redux"
+
 const AdminHome = lazy(() => import("./AdminHome"))
-const AdminCategory = lazy(() => import("./AdminCategory"))
-const Admin = ({match}) => {  
-  console.log(match)
+const AdminPortfolio = lazy(() => import("./AdminPortfolio"))
+const Admin = ({match, user, history}) => {  
+  if(!user){
+    console.log(history)
+    return <Redirect to={history.location.state?.from || "/" }/>
+  }
   return (
     <Switch>
       <Route path={`${match.path}`} exact component={AdminHome} />      
-      <Route path={`${match.path}/portfolio`} component={AdminCategory} />
+      <Route path={`${match.path}/portfolio`} component={AdminPortfolio} />
     </Switch>
   )
 }
 
-export default Admin
+const mapStateToProps = createStructuredSelector({
+  user : selectCurrentUser
+})
+
+export default connect(mapStateToProps)(Admin)

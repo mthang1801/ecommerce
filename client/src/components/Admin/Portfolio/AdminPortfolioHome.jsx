@@ -7,7 +7,7 @@ import {
   selectLoadingAdminPortfolioList,
 } from "../../../redux/admin-portfolio/admin-portfolio.selector";
 import SearchForm from "../../Search/AdminSearch";
-import ListTableCategory from "./ListPortfolioCategory";
+import ListTableCategory from "./ListTablePortfolio";
 import { searchAdminPortfolio } from "../../../redux/admin-portfolio/admin-portfolio.actions";
 const AdminPortfolioHome = ({ onSearch, adminCategoryList, isLoading }) => {
   const [searchValue, setSearchValue] = useState("");

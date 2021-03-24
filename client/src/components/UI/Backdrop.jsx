@@ -1,8 +1,7 @@
 import React from 'react'
 import {BackdropContainer} from "./styles/Backdrop.styles";
 import {setCloseDrawer} from "../../redux/drawer/drawer.actions";
-const Backdrop = ({setCloseDrawer, show, onClick}) => {
-  console.log(show)
+const Backdrop = ({setCloseDrawer, show, onClick}) => {  
   const handleClick = () => {
     if(setCloseDrawer){
       setCloseDrawer();

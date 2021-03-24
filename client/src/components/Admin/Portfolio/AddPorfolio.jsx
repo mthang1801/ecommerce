@@ -20,7 +20,7 @@ import Button from "@material-ui/core/Button"
 const AddPortfolio = ({addAdminPortfolio}) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [imageUrl, setImageUrl] = useState(null);
+  const [image, setImage] = useState(null);
   const [imgBase64, setImageBase64] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -35,7 +35,7 @@ const AddPortfolio = ({addAdminPortfolio}) => {
 
   const postInputChangeHandler = (e) => {
     let fileData = e.target.files[0]    
-    setImageUrl(fileData)
+    setImage(fileData)
     generateBase64Image(fileData)
       .then((res) => setImageBase64(res))
       .catch((err) => console.log(err));
@@ -54,18 +54,18 @@ const AddPortfolio = ({addAdminPortfolio}) => {
     e.preventDefault(); 
     setError(null);
     setSuccess(null);
-    console.log(name, slug, imageUrl)
-    if(!name || name.length < 3 || !slug || !imageUrl){      
+    console.log(name, slug, image)
+    if(!name || name.length < 3 || !slug || !image){      
       setError("You must fill all fields and name at least 3 characters");
       return ;
     }
     let formData = new FormData();
-    formData.append("image", imageUrl);
+    formData.append("image", image);
     formData.append("name", name);
     formData.append("slug", slug);
     addAdminPortfolio(formData).then(res => {
       setSuccess("Created Category Success!!");
-      setImageUrl(null);
+      setImage(null);
       setName("");
       setSlug("");
       setImageBase64(null);

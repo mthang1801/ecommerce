@@ -1,14 +1,15 @@
-export const editPortfolio = (categoryList, category) => {
-  return categoryList.map((categoryItem) => {
-    if (categoryItem._id.toString() === category._id.toString()) {
-      categoryItem = { ...category };
+export const editPortfolio = (portfolioList, portfolio) => {
+  console.log(portfolioList, portfolio)
+  return portfolioList.map((portfolioItem) => {
+    if (portfolioItem._id.toString() === portfolio._id.toString()) {
+      portfolioItem = { ...portfolio };
     }
-    return categoryItem;
+    return portfolioItem;
   });
 };
 
-export const removePortfolio = (categoryList, categoryId) => {
-  return categoryList.filter(
-    (categoryItem) => categoryItem._id.toString() !== categoryId.toString()
+export const removePortfolio = (portfolioList, portfolioId) => {
+  return portfolioList.filter(
+    (portfolioItem) => portfolioItem._id.toString() !== portfolioId.toString()
   );
 };

@@ -1,7 +1,12 @@
 const express = require("express");
 const adminController = require("../controllers/admin");
+const {isAdmin} = require("../middlewares/auth")
 const router = express.Router();
-router.post("/portfolio", adminController.postPortfolio);
+router.post("/portfolio", isAdmin, adminController.postPortfolio);
+router.get("/portfolio", isAdmin, adminController.getPortfolio);
+router.put("/portfolio", isAdmin, adminController.editPortfolio);
+router.delete("/portfolio", isAdmin, adminController.removePortfolio);
+
 router.post("/category", adminController.postCategory);
 router.put("/category", adminController.putCategory);
 router.delete("/category", adminController.deleteCategory);
