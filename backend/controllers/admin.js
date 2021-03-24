@@ -1,3 +1,4 @@
+const Portfolio = require("../models/portfolio")
 const Category = require("../models/category");
 const ProductTypes = require("../models/product-types");
 const Product = require("../models/product");
@@ -11,10 +12,41 @@ const Manufactor = require("../models/manufactor");
 const { v4: uuid } = require("uuid");
 const Ordered = require("../models/ordered");
 const path = require("path");
-const { link } = require("fs");
-const mongoose = require("mongoose");
-exports.postCategory = async (req, res, next) => {
+
+ 
+exports.postPortfolio = async (req, res, next) => {
   try {
+    const {name, slug} = req.body; 
+    const file = req.files[0];
+
+    const checkSlugExisted = await Portfolio.findOne({slug});
+    if(checkSlugExisted){
+      await removeImage(file.filename);
+      const err = new Error("Portfolio has been existed") ; 
+      err.statusCode = 400 ; 
+      throw err ;
+    }
+    const fileData = await fs.readFile(file.path);
+    console.log(file)
+    const newPortfolio = new Portfolio({
+      name, 
+      slug, 
+      image : {
+        data : fileData , 
+        mimetype : file.mimetype,
+        filename : file.filename
+      }
+    })
+    await newPortfolio.save();
+    await removeImage(file.filename);
+    return res.status(200).json({...newPortfolio._doc})
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.postCategory = async (req, res, next) => {
+  try {    
     let { name, linkUrl } = req.body;
     if (linkUrl[0] !== "/") {
       linkUrl = "/" + encodeURIComponent(linkUrl);

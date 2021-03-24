@@ -15,7 +15,7 @@ const Response = require("../models/response");
 const encodeLinkUrl = require("../utils/encodeUrl");
 const Comment = require("../models/comments");
 const jwt = require("jsonwebtoken");
-const { min } = require("lodash");
+const removeVietnameseTones = require("../utils/removeVietnameseTones")
 exports.getInitialData = async (req, res, next) => {
   try {
     let categoryList = await Category.find({ status: "active" }).populate(
@@ -287,8 +287,7 @@ exports.postCreateProduct = async (req, res, next) => {
       quantity,
       weight,
       ship_fee,
-    } = req.body;
-    console.log(req.files)
+    } = req.body;    
     //to Capitalize name
     name = toCapitalizeString(name);
     label = toCapitalizeString(label);

@@ -15,7 +15,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config({path : ".env"});
-console.log(process.env.MONGO_URI)
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 app.use(compression());
 // create a write stream (in append mode)

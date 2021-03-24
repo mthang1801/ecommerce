@@ -22,11 +22,16 @@ const Home = lazy(() => import("../pages/Home"));
 const RegisterSeller = lazy(() =>
   import("../pages/RegisterSeller")
 );
-const PostProduct = lazy(() => import("../pages/PostProduct"))
+const PostProduct = lazy(() => import("../pages/PostProduct"));
+const Admin = lazy(() => import("../pages/Admin"))
+
+
+
 const Cart = lazy(() => import("../pages/cart/cart.component"));
 const ShopDetails = lazy(() =>
   import("../pages/product-detail/product-detail.component")
 );
+
 const Checkout = lazy(() => import("../pages/checkout/checkout.container"));
 const Contact = lazy(() => import("../pages/contact/contact.component"));
 const Authentication = lazy(() => import("../pages/auth/auth.component"));
@@ -73,8 +78,9 @@ function App({ fetchUser, user, loading }) {
             <Switch>
               <Route path="/" exact component={Home} />              
               <Route path="/auth" component={Authentication} />              
-              <Route path="/register-seller" exact component={RegisterSeller} />
-              <Route path="/post-product" exact component={PostProduct}/>
+              <Route path="/register-seller" component={RegisterSeller} />              
+              <Route path="/post-product" component={PostProduct}/>
+              <Route path="/admin" component={Admin}/>
               <Route path="/cart" exact component={Cart} />
               <Route path="/details" exact component={ShopDetails} />
               <Route path="/checkout" component={Checkout} />

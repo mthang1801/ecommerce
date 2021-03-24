@@ -17,13 +17,13 @@ import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { connect } from "react-redux";
 import { logoutStart } from "../../redux/user/user.actions";
 import LanguageDropdown from "./LanguagesDropdown";
-import useLanguage from "../Global/useLanguage"
+import useLanguage from "../Global/useLanguage";
 const DropdownUser = ({ user, logout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const userRef = useRef(null);
-  const {i18n, lang} =useLanguage()
-  const {userOptions} = i18n.store.data[lang].translation.header;
-  const {authenticate} = i18n.store.data[lang].translation;
+  const { i18n, lang } = useLanguage();
+  const { userOptions } = i18n.store.data[lang].translation.header;
+  const { authenticate } = i18n.store.data[lang].translation;
   useEffect(() => {
     function trackUserDropdown(e) {
       if (userRef && userRef.current.contains(e.target)) {
@@ -39,28 +39,26 @@ const DropdownUser = ({ user, logout }) => {
   const authUserListOptions = (
     <UserOptionsList show={showDropdown}>
       <RowInline>
-        {user && user.role === "seller" ? (
-          <Link to="/post-product" >
-             <span>
-            {userOptions.postProduct.icon}
-            </span>
+        {user && user.role === "admin" ? (
+          <Link to="/admin">
+            <span>{userOptions.admin.icon}</span>
+            <span> {userOptions.admin.name}</span>
+          </Link>
+        ) : user.role === "seller" ? (
+          <Link to="/post-product">
+            <span>{userOptions.postProduct.icon}</span>
             <span>{userOptions.postProduct.name}</span>
           </Link>
         ) : user && user.role === "customer" ? (
           <Link to="/register-seller">
-            <span>
-             {userOptions.becomeAsSeller.icon}
-            </span>
+            <span>{userOptions.becomeAsSeller.icon}</span>
             <span>{userOptions.becomeAsSeller.name}</span>
-           
           </Link>
         ) : null}
       </RowInline>
       <RowInline>
         <Link to="/setting-account">
-          <span>
-          {userOptions.settingAccount.icon}
-          </span>
+          <span>{userOptions.settingAccount.icon}</span>
           <span> {userOptions.settingAccount.name}</span>
         </Link>
       </RowInline>
@@ -69,23 +67,19 @@ const DropdownUser = ({ user, logout }) => {
       </RowInline>
       <RowInline>
         <Link to="/ordered-history">
-          <span>
-          {userOptions.orderedHistory.icon}
-          </span>
+          <span>{userOptions.orderedHistory.icon}</span>
           <span> {userOptions.orderedHistory.name}</span>
         </Link>
       </RowInline>
       <RowInline>
         <Logout onClick={() => logout()}>
-          <span>
-          {userOptions.logout.icon}
-          </span>
+          <span>{userOptions.logout.icon}</span>
           <span> {userOptions.logout.name}</span>
         </Logout>
       </RowInline>
     </UserOptionsList>
   );
-  console.log(user)
+  console.log(user);
   if (user)
     return (
       <Wrapper ref={userRef}>
@@ -96,10 +90,14 @@ const DropdownUser = ({ user, logout }) => {
     );
   return (
     <Wrapper ref={userRef}>
-      <CustomLink to="/auth" style={{ textTransform: "capitialize" }}>      
+      <CustomLink to="/auth" style={{ textTransform: "capitialize" }}>
         {authenticate.login}
       </CustomLink>
-      <CustomLink to="/auth/signup" color="red" style={{ textTransform: "capitialize" }}>      
+      <CustomLink
+        to="/auth/signup"
+        color="red"
+        style={{ textTransform: "capitialize" }}
+      >
         {authenticate.signup}
       </CustomLink>
     </Wrapper>

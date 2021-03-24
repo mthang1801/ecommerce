@@ -3,9 +3,9 @@ import {ToggleDrawerContainer, Dash} from "./styles/ButtonToggleDrawer.styles";
 import {setOpenDrawer} from "../../redux/drawer/drawer.actions";
 import {connect} from "react-redux";
 
-const ToggleDrawer = ({setOpenDrawer}) => {  
+const ToggleDrawer = ({setOpenDrawer, ...props}) => {  
   return (
-    <ToggleDrawerContainer onClick={setOpenDrawer} >
+    <ToggleDrawerContainer onClick={setOpenDrawer} {...props} >
       <Dash/>
       <Dash/>
       <Dash/>

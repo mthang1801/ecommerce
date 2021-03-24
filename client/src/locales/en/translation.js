@@ -1,8 +1,10 @@
 import React from "react"
-import { AiFillSetting, AiOutlineHistory } from "react-icons/ai";
-import { FiLogOut } from "react-icons/fi";
+import { AiFillSetting, AiOutlineHistory, AiOutlineHome , AiOutlineShareAlt, AiOutlineAudit, AiOutlineUnorderedList} from "react-icons/ai";
+import { FiLogOut, FiDatabase } from "react-icons/fi";
 import { FcBusinessman } from "react-icons/fc";
-import { BiLayerPlus } from "react-icons/bi";
+import { BiHomeAlt, BiLayerPlus } from "react-icons/bi";
+import {FcManager} from "react-icons/fc"
+import {RiPlayListAddFill} from "react-icons/ri"
 export const en = {
   translation: {
     authenticate:{
@@ -26,6 +28,10 @@ export const en = {
           name : "Post product", 
           icon : <BiLayerPlus/>
         },
+        admin : {
+          name : "Administration",
+          icon : <FcManager/>
+        },
         settingAccount : {
           name : "Setting account",
           icon : <AiFillSetting/>
@@ -38,6 +44,55 @@ export const en = {
           name : "Logout", 
           icon : <FiLogOut/>
         }
+      }
+    },
+    adminNavigations : {
+      home : {
+        name : "home", 
+        icon : <AiOutlineHome/>,
+        path : "/admin"
+      },
+      productManagers : {
+        name : "products-manager",
+        icon : <FiDatabase/>,
+        children : [
+          {
+            name : "Porfolio",
+            icon : <AiOutlineUnorderedList/>,
+            path : "/admin/portfolio"
+          },
+          {
+            name : "product-type",
+            icon : <AiOutlineShareAlt/>,
+            path : "/admin/product-type"
+          },
+          {
+            name : "sellers",
+            icon : <AiOutlineAudit/>,
+            path : "/admin/sellers"
+          }
+        ]
+      },      
+      portfolioNavigations : [
+        {
+          name: "home",
+          icon : <AiOutlineHome/>,
+          path : "home"
+        },
+        {
+          name: "add portfolio",
+          icon : <RiPlayListAddFill/>,
+          path : "add-portfolio"
+        },
+      ]
+    },
+    admin: {
+      porfolio : {
+        addTitle: "Add Porfolio",
+        name : "Porfolio Name",
+        slug : "Slug",
+        image : "Image",
+        submit : "Complete"
       }
     },
     navigations : {

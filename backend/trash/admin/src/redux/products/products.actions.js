@@ -51,9 +51,8 @@ export const addProduct = (product) => (dispatch) => {
       const { data } = await axios.post("/admin/products", product);
       dispatch(addProductSuccess(data));
       resolve(true);
-    } catch (error) {
-      dispatch(addProductFail(error.message));
-      reject(error.message);
+    } catch (error) {            
+      reject(error.response.data.message);
     }
   });
 };
