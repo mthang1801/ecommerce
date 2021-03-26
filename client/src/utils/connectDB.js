@@ -4,6 +4,7 @@ import SELLERS_DATA from "../data/sellers";
 import CART_DATA from "../data/cart";
 import axios from "axios";
 import urls from "./urls";
+import {api} from "./api"
 
 export const getProductsTopRated = () => {
   let sellers = [...SELLERS_DATA];
@@ -364,3 +365,13 @@ export const getCommentReviewsByProductId = (productId) => {
   });
 };
 
+export const fetchPortfolios = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {data} = await axios.get(api.FETCH_ADMIN_PORTFOLIOS);
+      resolve(data)
+    } catch (error) {
+      reject(error);
+    }
+  })
+}

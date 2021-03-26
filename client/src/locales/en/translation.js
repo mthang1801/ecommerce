@@ -62,9 +62,9 @@ export const en = {
             path : "/admin/portfolio"
           },
           {
-            name : "product-type",
+            name : "category",
             icon : <AiOutlineShareAlt/>,
-            path : "/admin/product-type"
+            path : "/admin/category"
           },
           {
             name : "sellers",
@@ -84,15 +84,35 @@ export const en = {
           icon : <RiPlayListAddFill/>,
           path : "add-portfolio"
         },
+      ],
+      categoryNavigations : [
+        {
+          name: "home",
+          icon : <AiOutlineHome/>,
+          path : "home"
+        },
+        {
+          name: "add category",
+          icon : <RiPlayListAddFill/>,
+          path : "add-category"
+        },
       ]
     },
-    admin: {
+    admin: {      
       porfolio : {
         addTitle: "Add Porfolio",
         name : "Porfolio Name",
         slug : "Slug",
         image : "Image",
-        submit : "Complete"
+        submit : "Complete",       
+      },
+      category : {
+        addTitle: "Add Category",
+        name : "Category Name",
+        portfolioLabel : "Portfolio Name",
+        slug : "Slug",
+        image : "Image",
+        submit : "Complete",       
       }
     },
     navigations : {
@@ -160,6 +180,10 @@ export const en = {
       favoriteProducts : "Favorite Products",
       latestProducts : "Latest Products",
       topRatedProducts : "Top Rated Products"
+    },
+    notification: {
+      upadteSuccess : "Update Successully",
+      upadteFailed : "Update Failed"
     }
   },
 }

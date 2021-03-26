@@ -1,6 +1,6 @@
 import adminPortfolioActionTypes from "./admin-portfolio.types";
 import axios from "axios";
-import urls from "../../utils/urls"
+import {api} from "../../utils/api"
 import arrayBufferToBase64 from "../../utils/arrayBufferToBase64"
 import { AiFillCodeSandboxCircle } from "react-icons/ai";
 export const fetchAdminPortfolioStart = () => ({
@@ -20,7 +20,7 @@ export const fetchAdminPortfolioFail = (err) => ({
 export const fetchAdminPortfolioList = () => async (dispatch) => {
   try {
     dispatch(fetchAdminPortfolioStart());
-    const { data } = await axios.get(urls.FETCH_ADMIN_PORTFOLIOS);
+    const { data } = await axios.get(api.FETCH_ADMIN_PORTFOLIOS);
     if(data.portfolios){
       const standardizedData = data.portfolios.map( portfolio  => {
         const _portfolio = {...portfolio};
@@ -38,9 +38,9 @@ export const fetchAdminPortfolioList = () => async (dispatch) => {
 
 export const searchAdminPortfolio = (searchKey) => async (dispatch) => {
   try {
-    dispatch(fetchAdminPortfolioStart());
-    const { data } = await axios.get(`/category?search=${searchKey}`);
-    console.log(data)
+    dispatch(fetchAdminPortfolioStart());    
+    const { data } = await axios.get(api.SEARCH_PORFOLIO(searchKey));
+    
     dispatch(fetchAdminPortfolioSuccess(data));
   } catch (error) {
     dispatch(fetchAdminPortfolioFail(error.message));
@@ -64,7 +64,7 @@ export const editAdminPortfolioFail = (err) => ({
 export const editAdminPortfolio = (formData) => async (dispatch) => {
   try {
     dispatch(editAdminPortfolioStart());    
-    const { data } = await axios.put(urls.EDIT_PORTFOLIO, formData);
+    const { data } = await axios.put(api.EDIT_PORTFOLIO, formData);
     const standardizedData = {...data};
     standardizedData.image.data= arrayBufferToBase64(standardizedData.image.data.data);
     dispatch(editAdminPortfolioSuccess(standardizedData));
@@ -88,7 +88,7 @@ export const removeAdminPortfolioFail = (err) => ({
 export const removeAdminPortfolio = (_id) => async (dispatch) => {
   try {
     dispatch(removeAdminPortfolioStart());
-    const {data} = await axios.delete(urls.REMOVE_PORTFOLIO, { data: { _id } });
+    const {data} = await axios.delete(api.REMOVE_PORTFOLIO, { data: { _id } });
     if(data.status === "success"){
       dispatch(removeAdminPortfolioSuccess(_id));
     }
@@ -115,7 +115,7 @@ export const addAdminPortfolio = (formData) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
       dispatch(addAdminPortfolioStart());
-      const { data } = await axios.post(urls.POST_ADD_NEW_PORTFOLIO, formData);
+      const { data } = await axios.post(api.POST_ADD_NEW_PORTFOLIO, formData);
       const standardizedData = {...data}      
       standardizedData.image.data = arrayBufferToBase64(standardizedData.image.data.data);
       dispatch(addAdminPortfolioSuccess(standardizedData));

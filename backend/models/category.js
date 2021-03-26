@@ -1,30 +1,49 @@
 const mongoose = require("mongoose");
 
-const CategorySchema = new mongoose.Schema(
+const ProductTypesSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      minlength: 3,
     },
     status: {
       type: String,
       default: "active",
     },
-    linkUrl: {
+    slug: {
       type: String,
       required: true,
       index: true,
     },
-    imageUrl: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "images",
-      required: true,
-    },
-    productTypes: [
+    products: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "product-types",
+        ref: "products",
+        required: true,
+      },
+    ],
+   
+    productGroups: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product-groups",
+        required: true,
+      },
+    ],
+    portfolio: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "portfolios",
+      required: true 
+    },
+    image : {
+      data : Buffer,
+      mimetype : String, 
+      filename : String
+    },
+    manufactors: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "manufactors",
         required: true,
       },
     ],
@@ -32,4 +51,4 @@ const CategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("categories", CategorySchema);
+module.exports = mongoose.model("categories", ProductTypesSchema);

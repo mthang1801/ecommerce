@@ -9,9 +9,9 @@ import {createStructuredSelector} from "reselect"
 import {connect} from "react-redux"
 const Demo = ({isFetched,fetchHomeContentList }) => {  
   useEffect(() => {
-    if(!isFetched){
-      fetchHomeContentList();
-    }
+    // if(!isFetched){
+    //   fetchHomeContentList();
+    // }
   },[isFetched])
 
   

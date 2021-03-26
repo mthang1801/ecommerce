@@ -39,10 +39,7 @@ export const Row = styled.div`
   padding: 0.2rem 0.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  & > * {
-    width: ${({ number }) => (number ? `${100 / number}%` : "auto")};
-  }
+  align-items: center;  
   height: 3rem;
   &:nth-child(odd) {
     background-color: #f6e58d;
@@ -56,11 +53,13 @@ export const Row = styled.div`
       background-color: ${darken("0.1", "#dff9fb")};
     }
   }
+ 
 `;
 
 export const Data = styled.span`
-  width: ${({ close }) => (!close ? "100%" : "30%")};
-  visibility: ${(props) => (props.close && props.tbody ? "hidden" : "visible")};
+  display : inline-block;    
+  flex : ${({flex}) => flex };  
+  
   ${Thead} & {
     & span {
       &:first-child {

@@ -21,10 +21,10 @@ const PortfolioSchema = new mongoose.Schema(
       mimetype : String,
       filename : String,     
     },
-    productTypes: [
+    categories: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "product-types",
+        ref: "categories",
         required: true,
       },
     ],

@@ -24,7 +24,7 @@ export const vi = {
           name: "Trở thành nhà bán hàng",
           icon: <FcBusinessman />,
         },
-        becomeAsSeller: {
+        admin: {
           name: "Quản trị trang",
           icon: <FcManager />,
         },
@@ -60,7 +60,7 @@ export const vi = {
           {
             name: "Loại SP",
             icon: <AiOutlineShareAlt />,
-            path: "/admin/product-type",
+            path: "/admin/category",
           },
           {
             name: "Nhà bán hàng",
@@ -81,6 +81,18 @@ export const vi = {
           path : "add-portfolio"
         },
       ],
+      categoryNavigations : [
+        {
+          name: "Trang chủ",
+          icon : <AiOutlineHome/>,
+          path : "home"
+        },
+        {
+          name: "Thêm Loại SP",
+          icon : <RiPlayListAddFill/>,
+          path : "add-category"
+        },
+      ]
     },
     admin: {
       portfolio : {
@@ -88,7 +100,15 @@ export const vi = {
         name : "Tên danh mục",
         slug : "đường dẫn liên kết",
         image : "file ảnh",
-        submit : "Tạo Danh Mục"
+        submit : "Tạo Danh Mục",        
+      },
+      category : {
+        addTitle: "Thêm loại SP",
+        name : "Tên loại SP",
+        portfolioLabel : "SP thuộc danh mục",
+        slug : "Đường dẫn liên kết",
+        image : "file ảnh",
+        submit : "Tạo Loại SP",        
       }
     },
     navigations: {
@@ -156,5 +176,9 @@ export const vi = {
       latestProducts: "Sản phẩm mới",
       topRatedProducts: "Sản phẩm được bình chọn",
     },
+    notification: {
+      updateSuccess : "Cập nhật thành công",
+      updateFailed : "Cập nhật thất bại, có lỗi xảy ra."
+    }
   },
 };

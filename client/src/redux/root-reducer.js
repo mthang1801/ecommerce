@@ -17,6 +17,7 @@ import commentReviewsReducer from "./product-comment-review/product-comment-revi
 import productsFavoriteReducer from "./products-favorite/products-favorite.reducer";
 import searchReducer from "./search/search.reducer";
 import adminPortfolioReducer from "./admin-portfolio/admin-portfolio.reducer"
+import adminCategoryReducer from "./admin-category/admin-category.reducer"
 import { persistReducer } from "redux-persist";
 const rootPersistConfig = {
   key: "root",
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
   commentReviews: commentReviewsReducer,
   productsFavorite: productsFavoriteReducer,
   search: searchReducer,
-  adminPortfolio : adminPortfolioReducer
+  adminPortfolio : adminPortfolioReducer,
+  adminCategory : adminCategoryReducer
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

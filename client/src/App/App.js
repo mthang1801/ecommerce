@@ -1,8 +1,4 @@
 import React, { useEffect, Suspense, lazy, useContext } from "react";
-import Toolbar from "../components/Layout/header/toolbar/toolbar.component";
-import Navigation from "../components/Layout/navigations/navigations.component";
-import Footer from "../components/Layout/footer/footer.component";
-import SideDrawer from "../components/Layout/header/side-drawer/side-drawer.component";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import useWindowSize from "../utils/useWindowSize.util";
 import AppContext from "../context/app-viewport.context";
@@ -56,8 +52,7 @@ const ProductSearch = lazy(() =>
   import("../pages/product-search/product-search.component")
 );
 function App({ fetchUser, user, loading }) {
-  const [width] = useWindowSize();
-  console.log(width);
+  const [width] = useWindowSize();  
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
@@ -69,10 +64,6 @@ function App({ fetchUser, user, loading }) {
     <Router>
       <AppContext.Provider value={width}>
         <GlobalStyles />
-        {/* {width < 992 ? <SideDrawer /> : null} */}
-        {/* <Toolbar />
-        <Navigation /> */}
-      
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <Switch>
