@@ -10,8 +10,7 @@ const AdminPortfolioNavigations = ({
   setNavigation,
   dataNavigations,
 }) => {
-  const { openSidebar } = useContext(AdminLayoutContext);
-
+  const { openSidebar } = useContext(AdminLayoutContext);  
   return (
     <Wrapper>
       <Navigations openSidebar={openSidebar}>

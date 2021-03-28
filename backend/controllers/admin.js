@@ -47,20 +47,20 @@ exports.editPortfolio = async (req, res, next) => {
   try {
     const { _id, name, slug } = req.body;
     const fileImage = req.files[0];
-    const portfolio = await Portfolio.findById(_id);    
+    const portfolio = await Portfolio.findById(_id);
     if (fileImage) {
       const fileData = await fs.readFile(fileImage.path);
       portfolio.image.data = fileData;
       await removeImage(fileImage.filename);
     }
-    
+
     if (!portfolio) {
       await removeImage(file.filename);
       const err = new Error("Portfolio not found");
       err.statusCode = 404;
       throw err;
     }
-   
+
     portfolio.name = name;
     portfolio.slug = slug;
     await portfolio.save();
@@ -75,22 +75,22 @@ exports.removePortfolio = async (req, res, next) => {
   try {
     const { _id } = req.body;
     //use method findByIdAndDelete() to return portfolio item
-    const portfolio = await Portfolio.findByIdAndDelete(_id); 
-    
+    const portfolio = await Portfolio.findByIdAndDelete(_id);
+
     if (!portfolio) {
       const err = new Error("Removed failed");
       err.statusCode = 400;
       throw err;
     }
-    
-    for(let categoryId of portfolio.categories){
+
+    for (let categoryId of portfolio.categories) {
       //remove category
-      const category = await Category.findByIdAndDelete(categoryId);      
+      const category = await Category.findByIdAndDelete(categoryId);
       //remove product group
-          // loop category.productGroup to remove
-              //remove product
-                  // loop productGroup.product to remove
-    }    
+      // loop category.productGroup to remove
+      //remove product
+      // loop productGroup.product to remove
+    }
 
     return res.status(200).json({ status: "success" });
   } catch (error) {
@@ -124,7 +124,9 @@ exports.postCreateCategory = async (req, res, next) => {
     session.startTransaction();
     portfolio.categories.push(newCategoryItem._id);
     await portfolio.save();
-    await (await newCategoryItem.save()).populate({path : "portfolio", select : "name"}).execPopulate();
+    await (await newCategoryItem.save())
+      .populate({ path: "portfolio", select: "name" })
+      .execPopulate();
     await session.commitTransaction();
     session.endSession();
     return res.status(201).json({ ...newCategoryItem._doc });
@@ -136,17 +138,24 @@ exports.postCreateCategory = async (req, res, next) => {
 exports.getCategory = async (req, res, next) => {
   try {
     let { skip, limit } = req.query;
-    skip = +skip; 
+    skip = +skip;
     limit = +limit;
+    
     if (!skip) {
       skip = 0;
     }
     if (!limit) {
       limit = +process.env.CATEGORY_PER_LOAD;
     }
-    const categoryResult = await Category.find().populate({path : "portfolio", select : "name"}).sort({createdAt : -1}).skip(skip).limit(limit);
+    const categoryResult = await Category.find()
+      .populate({ path: "portfolio", select: "name" })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     const countCategories = await Category.countDocuments();
-    return res.status(200).json({categories : categoryResult, count : countCategories})
+    return res
+      .status(200)
+      .json({ categories: categoryResult, count: countCategories });
   } catch (error) {
     next(error);
   }
@@ -154,87 +163,94 @@ exports.getCategory = async (req, res, next) => {
 
 exports.putEditCategory = async (req, res, next) => {
   try {
-    const {_id, name, slug, portfolioId} = req.body;
-    const category = await Category.findById(_id); 
+    const { _id, name, slug, portfolioId } = req.body;
+    const category = await Category.findById(_id);
     const fileImage = req.files[0];
-    let fileData ; 
-    if(fileImage){
+    let fileData;
+    if (fileImage) {
       fileData = await fs.readFile(fileImage.path);
       await removeImage(fileImage.filename);
-    }   
-    if(!category){
+    }
+    if (!category) {
       const err = new Error("Category not found");
-      err.statusCode = 404; 
-      throw err; 
+      err.statusCode = 404;
+      throw err;
     }
-    if(slug !== category.slug){
-      const checkSlug = await Category.findOne({slug});
-      if(checkSlug){
+    if (slug !== category.slug) {
+      const checkSlug = await Category.findOne({ slug });
+      if (checkSlug) {
         const err = new Error("Slug has been existed");
-        err.statusCode = 400 ; 
-        throw err; 
-      }
-    }    
-    let newPortfolio ;         
-    if(category.portfolio.toString() !== portfolioId.toString()){
-      newPortfolio = await Portfolio.findById(portfolioId);
-      if(!newPortfolio){
-        const err = new Error("Portfolio not found");
-        err.statusCode = 404; 
-        throw err; 
+        err.statusCode = 400;
+        throw err;
       }
     }
-    console.log(newPortfolio)
+    let newPortfolio;
+    if (category.portfolio.toString() !== portfolioId.toString()) {
+      newPortfolio = await Portfolio.findById(portfolioId);
+      if (!newPortfolio) {
+        const err = new Error("Portfolio not found");
+        err.statusCode = 404;
+        throw err;
+      }
+    }
+    console.log(newPortfolio);
     const session = await mongoose.startSession();
     session.startTransaction();
-    if(newPortfolio){
-      console.log(newPortfolio)
-      console.log(category.portfolio)
+    if (newPortfolio) {
+      console.log(newPortfolio);
+      console.log(category.portfolio);
       //update old Portfolio;
-      await Portfolio.findByIdAndUpdate(category.portfolio, {$pull : {categories : category._id} }, {new: true});
+      await Portfolio.findByIdAndUpdate(
+        category.portfolio,
+        { $pull: { categories: category._id } },
+        { new: true }
+      );
       newPortfolio.categories.push(category._id);
       await newPortfolio.save();
     }
-    category.name = name ; 
-    category.slug = slug ; 
+    category.name = name;
+    category.slug = slug;
     category.portfolio = portfolioId;
-    if(fileData){
+    if (fileData) {
       category.image.data = fileData;
-      category.image.mimetype = fileImage.mimetype; 
-      category.image.filename = fileImage.filename; 
-    }  
-    await(await category.save()).populate({path : "portfolio", select : "name"}).execPopulate();
+      category.image.mimetype = fileImage.mimetype;
+      category.image.filename = fileImage.filename;
+    }
+    await (await category.save())
+      .populate({ path: "portfolio", select: "name" })
+      .execPopulate();
     await session.commitTransaction();
     session.endSession();
     return res.status(200).json({ ...category._doc });
-    
   } catch (error) {
     next(error);
   }
-}
+};
 
 exports.removeCategory = async (req, res, next) => {
   try {
-    const {id} = req.body;
+    const { id } = req.body;
     const category = await Category.findById(id);
-    if(!category){
+    if (!category) {
       const err = new Error("Delete failed, not found category");
-      category.statusCode = 404; 
-      throw err; 
+      category.statusCode = 404;
+      throw err;
     }
-    const portfolioContainCategory = await Portfolio.findById(category.portfolio);
+    const portfolioContainCategory = await Portfolio.findById(
+      category.portfolio
+    );
     const session = await mongoose.startSession();
     session.startTransaction();
-    portfolioContainCategory.categories.pull(id); 
+    portfolioContainCategory.categories.pull(id);
     await portfolioContainCategory.save();
     await Category.findByIdAndDelete(id);
     await session.commitTransaction();
     session.endSession();
-    return res.status(200).json({result : true})
+    return res.status(200).json({ result: true });
   } catch (error) {
     next(error);
   }
-}
+};
 // exports.postCategory = async (req, res, next) => {
 //   try {
 //     let { name, linkUrl } = req.body;

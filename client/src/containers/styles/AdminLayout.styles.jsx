@@ -5,17 +5,14 @@ export const Wrapper = styled.div`
 `
 
 export const Sidebar = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   overflow : auto;  
   width : ${({open}) => open ? "320px" : "0"};  
   @media screen and (min-width:992px){
     width : ${({open}) => open ? "25%" : "0"};
-  }
-  border-right: 1px solid var(--light-gray-3);
-  box-shadow : var(--lightShadow);
+  }    
   transition : var(--mainTransition);
-  ${({open}) => open ? `
-    width : auto;
+  ${({open}) => open ? `    
     visibility : visible; 
     opacity : 1; 
   ` : `
@@ -26,17 +23,20 @@ export const Sidebar = styled.div`
   `} ;
   position : fixed; 
   left: 0;
+  background : linear-gradient(to right, #90caf9 50%, #64b5f6 100%);
 `
 
 export const MainContent = styled.div` 
-  height: 100vh;
+  min-height: 100vh;
   overflow : auto;
   width : ${({scale}) => scale ? "calc(100% - 320px)" : "100%"};
   margin-left:  ${({scale}) => scale ? "320px" : "0"};
   @media screen and (min-width: 992px){
-    width : ${({scale}) => scale ? "calc(75%)" : "100%"};
-  margin-left:  ${({scale}) => scale ? "25%" : "0"};
+    width : ${({scale}) => scale ? "75%" : "100%"};
+    margin-left:  ${({scale}) => scale ? "24%" : "0"};
+    padding-left:  ${({scale}) => scale ? "1%" : "0"};
   }
+  background : linear-gradient(to right, #64b5f6 25%,#90caf9 50%, #bbdefb 75% ,#e3f2fd 100%);
 `
 
 export const ToggleDrawer = styled.div`

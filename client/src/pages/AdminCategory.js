@@ -9,13 +9,14 @@ import { createStructuredSelector } from "reselect";
 import {
   selectAdminCategoriesList,
   selectAdminCategoriesCount,
-  selectAdminCategoriesLoading
+  selectAdminCategoriesLoading,
 } from "../redux/admin-category/admin-category.selectors";
 import {
   addAdminCategory,
   fetchAdminCategories,
-  editAdminCategories ,
-  removeAdminCategory
+  editAdminCategories,
+  removeAdminCategory,
+  searchAdminCategories
 } from "../redux/admin-category/admin-category.actions";
 const AdminCategory = ({
   adminCategoriesList,
@@ -24,7 +25,8 @@ const AdminCategory = ({
   isLoading,
   onAdd,
   onEdit,
-  onRemove
+  onRemove,
+  onSearch
 }) => {
   const cols = ["name", "slug", "portfolio", "createdAt"];
   const { i18n, lang } = useLanguage();
@@ -37,7 +39,7 @@ const AdminCategory = ({
   useEffect(() => {
     fetchAdminCategories(0, +process.env.REACT_APP_ADMIN_CATEGORIES_PER_LOAD);
   }, []);
- 
+  
   return (
     <AdminLayout>
       <AdminNavigations
@@ -52,9 +54,11 @@ const AdminCategory = ({
           count={adminCategoriesCount}
           role="category"
           cols={cols}
-          localesData={category} 
+          localesData={category}
           onEdit={onEdit}
           onRemove={onRemove}
+          onSearch={onSearch}
+          fetchAllData={fetchAdminCategories}
         />
       )}
       {navigation === "add-category" && (
@@ -66,14 +70,15 @@ const AdminCategory = ({
 const mapStateToProps = createStructuredSelector({
   adminCategoriesList: selectAdminCategoriesList,
   adminCategoriesCount: selectAdminCategoriesCount,
-  isLoading : selectAdminCategoriesLoading
+  isLoading: selectAdminCategoriesLoading,
 });
 const mapDispatchToProps = (dispatch) => ({
   fetchAdminCategories: (skip, limit) =>
     dispatch(fetchAdminCategories(skip, limit)),
   onAdd: (category) => dispatch(addAdminCategory(category)),
-  onEdit : category => dispatch(editAdminCategories(category)),
-  onRemove : _id => dispatch(removeAdminCategory(_id))
+  onEdit: (category) => dispatch(editAdminCategories(category)),
+  onRemove: (_id) => dispatch(removeAdminCategory(_id)),
+  onSearch : search => dispatch(searchAdminCategories(search))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminCategory);

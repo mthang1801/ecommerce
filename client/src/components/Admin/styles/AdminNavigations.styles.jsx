@@ -3,9 +3,9 @@ import styled from "styled-components";
 export const Wrapper = styled.nav`
   width: 100%;
   height: 50px;
-
   border-bottom: 1px solid var(--gray-1);
-  box-shadow: var(--lightShadow);
+  box-shadow: var(--lightShadow);  
+  
 `;
 export const NativeLink = styled.span`
   padding: 0.5rem;
@@ -15,7 +15,7 @@ export const NativeLink = styled.span`
   cursor: pointer;
   height: 100%;
   &:hover {
-    background-color: var(--light-gray-1);
+    background: linear-gradient(to bottom, #bbdefb , #90caf9);
   }
   & span {
     margin: 0 0.2rem;
@@ -25,8 +25,9 @@ export const NativeLink = styled.span`
   & svg {
     font-size: 1.4rem;
   }
-  background-color: ${({ active }) =>
-    active ? "var(--light-gray-1)" : "white"};
+  background: ${({ active }) =>
+    active ? "linear-gradient(to right, #bbdefb , #90caf9);" : "transaprent"};
+  border-bottom : 5px solid ${({active}) => active ? "#fb8c00" : "transparent"};
 `;
 
 export const Navigations = styled.div`
@@ -34,5 +35,5 @@ export const Navigations = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  background-color: white;
+  background: linear-gradient(to right, #64b5f6 25%,#90caf9 50%, #bbdefb 75% ,#e3f2fd 100%);
 `;

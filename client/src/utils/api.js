@@ -9,5 +9,6 @@ export const api = {
   POST_ADD_NEW_CATEGORY : "/admin/category",
   FETCH_ADDMIN_CATEGORIES : "/admin/category",
   EDIT_ADMIN_CATEGORY : "/admin/category",
-  REMOVE_ADMIN_CATEGORY : "/admin/category"
+  REMOVE_ADMIN_CATEGORY : "/admin/category",
+  SEARCH_CATEGORY : search => `/search/category?search=${search}`
 }

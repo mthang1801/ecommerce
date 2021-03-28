@@ -17,16 +17,16 @@ const ListTable = ({ data, isLoading, count, role, cols , onRemove, onEdit, loca
     
   const [edit, setEdit] = useState({});
     
-  if(!data) return null;
-  if(isLoading) return <h4>Loading...</h4>
+  if(!data) return null;  
   if (data.length) {
     return (
       <React.Fragment>
+        {isLoading && <h4>Loading...</h4>}
         <Table>
           <Thead>
             <Row>
               {cols.map((col, idx) => (
-                <Data flex={col === "portfolio" ? "2 0 25%" :"1 0 20%" }>
+                <Data key={col} flex={col === "portfolio" ? "2 0 25%" :"1 0 20%" } >
                   <span>{col}</span>                  
                 </Data>
               ))}
@@ -35,9 +35,9 @@ const ListTable = ({ data, isLoading, count, role, cols , onRemove, onEdit, loca
           </Thead>
           <Tbody>
             {data.map((item) => (
-              <Row key={item._id}  >
+              <Row key={`${role}-${item._id}`}  >
                 {cols.map((col, idx) => (
-                  <Data tbody title={item[col].name} flex={col === "portfolio" ? 3 :1 }>
+                  <Data tbody title={item[col].name} flex={col === "portfolio" ? 3 :1 } text={col === "portfolio" ? "center" : "left"}>
                     {col === "portfolio" ? item[col].name : col === "createdAt" ? (
                       <Moment format="DD/MM/YYYY">
                         {item[col]}

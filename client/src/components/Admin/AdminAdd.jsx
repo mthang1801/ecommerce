@@ -31,8 +31,9 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   const [success, setSuccess] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
-  const [openPortfolioDropdown, setOpenPortfolioDropdown] = useState(false)
+  const [openPortfolioDropdown, setOpenPortfolioDropdown] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
+  const portfolioRef = useRef(null);
   const formRef = useRef(null);
   useEffect(() => {
     let timer;
@@ -43,17 +44,17 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   }, [error]);
 
   useEffect(() => {
-    let _isMounted = true; 
+    let _isMounted = true;
     if (role === "category") {
       fetchPortfolios().then((data) => {
         if (data.portfolios) {
-          if(_isMounted){
+          if (_isMounted) {
             setPortfolios([...data.portfolios]);
-          }          
+          }
         }
       });
     }
-    return () => _isMounted = false ;
+    return () => (_isMounted = false);
   }, [role]);
   const postInputChangeHandler = (e) => {
     let fileData = e.target.files[0];
@@ -74,28 +75,47 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
 
   const isValidForm = () => {
     const validImage = ["image/jpeg", "image/jpg", "image/png"];
-    if(!name || name?.length < 3 || !slug || !image || !validImage.includes(image.type)){
-      return false; 
-    }
-    if(role === "category" && !selectedPortfolio){
+    if (
+      !name ||
+      name?.length < 3 ||
+      !slug ||
+      !image ||
+      !validImage.includes(image.type)
+    ) {
       return false;
     }
-    return true; 
-  }
-  
+    if (role === "category" && !selectedPortfolio) {
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
-    if(isValidForm()){
+    function trackUserClickPortfolioRef(e) {     
+      if (
+        portfolioRef.current &&
+        !portfolioRef.current.contains(e.target) 
+      ) {
+        setOpenPortfolioDropdown(false);
+      }
+    }
+    window.addEventListener("click", trackUserClickPortfolioRef);
+    return () =>
+      window.removeEventListener("click", trackUserClickPortfolioRef);
+  }, [portfolioRef]);
+
+  useEffect(() => {
+    if (isValidForm()) {
       setDisabledSubmit(false);
-    }else{
+    } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, image, selectedPortfolio])
+  }, [name, slug, image, selectedPortfolio]);
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
     setError(null);
-    setSuccess(null);    
+    setSuccess(null);
     if (!name || name.length < 3 || !slug || !image) {
       setError("You must fill all fields and name at least 3 characters");
       return;
@@ -104,8 +124,8 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     formData.append("image", image);
     formData.append("name", name);
     formData.append("slug", slug);
-    if(role === "category"){
-      formData.append("portfolioId", selectedPortfolio._id)
+    if (role === "category") {
+      formData.append("portfolioId", selectedPortfolio._id);
     }
     onAdd(formData)
       .then((res) => {
@@ -126,12 +146,16 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
         <Title>{localesData.addTitle}</Title>
         {error && <Error>{error}</Error>}
         {success && <Success>{success}</Success>}
-        {role=== "category" && (
-          <FormDropdown style={{zIndex: openPortfolioDropdown ? 10 : 1}} onClick={() => setOpenPortfolioDropdown(prevState => !prevState)}>
+        {role === "category" && (
+          <FormDropdown
+            ref={portfolioRef}
+            style={{ zIndex: openPortfolioDropdown ? 10 : 1 }}
+            onClick={() => setOpenPortfolioDropdown((prevState) => !prevState)}
+          >
             <Label>{localesData.portfolioLabel}</Label>
 
             <Select>
-              { selectedPortfolio && selectedPortfolio._id ? (
+              {selectedPortfolio && selectedPortfolio._id ? (
                 <span>{selectedPortfolio.name}</span>
               ) : portfolios.length ? (
                 <Placeholder>Select Portfolio</Placeholder>
@@ -143,7 +167,12 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
               </SelectIcon>
               <ListAPI show={openPortfolioDropdown}>
                 {portfolios.map((portfolio) => (
-                  <ItemAPI key={portfolio._id} onClick={() => setSelectedPortfolio({...portfolio})}>{portfolio.name}</ItemAPI>
+                  <ItemAPI
+                    key={portfolio._id}
+                    onClick={() => setSelectedPortfolio({ ...portfolio })}
+                  >
+                    {portfolio.name}
+                  </ItemAPI>
                 ))}
               </ListAPI>
             </Select>
@@ -167,7 +196,12 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
           <Input type="file" name="image" onChange={postInputChangeHandler} />
         </FormGroup>
         <FormGroup>
-          <Button color="primary" variant="contained" type="submit" disabled={disabledSubmit}>
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            disabled={disabledSubmit}
+          >
             {localesData.submit}
           </Button>
         </FormGroup>

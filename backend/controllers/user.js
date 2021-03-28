@@ -79,7 +79,7 @@ exports.postUserRegister = async (req, res, next) => {
 
 exports.postUserLogin = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body;    
     const user = await User.findOne({ "local.email": email });
     if (!user) {
       const err = new Error("Email or password was not correct");

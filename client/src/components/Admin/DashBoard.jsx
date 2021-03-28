@@ -10,7 +10,7 @@ const DashBoard = ({match}) => {
   
   return (
     <Wrapper>
-      <CustomLink to={`${home.path}`}>
+      <CustomLink active={match.path === home.path} to={`${home.path}`}>
         <span>{home.icon}</span>
         <span>{home.name}</span>
       </CustomLink>
@@ -22,7 +22,7 @@ const DashBoard = ({match}) => {
         </ButtonDropdown>
         <Dropdown show={showProductsManager}>
           {productManagers.children.map(item => (
-            <CustomLink to={`${item.path}`} key={item.name}>
+            <CustomLink active={match.path === item.path} to={`${item.path}`} key={item.name}>
               <span>{item.icon}</span>
               <span>{item.name}</span>
             </CustomLink>

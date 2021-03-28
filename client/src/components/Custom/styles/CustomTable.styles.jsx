@@ -7,8 +7,7 @@ export const Table = styled.div`
   width: 90%;
   min-width: 900px;
   margin: auto;  
-  font-size : 0.85em;
-  max-height : 450px;
+  font-size : 0.85em;  
   overflow : auto;
 `;
 
@@ -59,13 +58,13 @@ export const Row = styled.div`
 export const Data = styled.span`
   display : inline-block;    
   flex : ${({flex}) => flex };  
-  
+  text-align : ${({text}) => text};
   ${Thead} & {
     & span {
       &:first-child {
         visibility: "hidden";
       }
-    }
+    }   
   }
   ${Tbody} & {
     overflow: hidden;

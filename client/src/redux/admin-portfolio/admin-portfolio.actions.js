@@ -39,6 +39,7 @@ export const fetchAdminPortfolioList = () => async (dispatch) => {
 export const searchAdminPortfolio = (searchKey) => async (dispatch) => {
   try {
     dispatch(fetchAdminPortfolioStart());    
+    
     const { data } = await axios.get(api.SEARCH_PORFOLIO(searchKey));
     
     dispatch(fetchAdminPortfolioSuccess(data));

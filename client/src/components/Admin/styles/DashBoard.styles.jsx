@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   margin-top : 4rem;  
   & > * {
     margin-bottom : 1rem;
-  }
+  }  
 `
 
 export const CustomLink = styled(NavLink)`
@@ -12,9 +12,10 @@ export const CustomLink = styled(NavLink)`
   align-items : center;
   text-transform  :capitalize ; 
   color : inherit ;
-  &:hover{
-    color : white;
-    background-color : var(--blue-1);
+  background : ${({active}) => active ? "linear-gradient(to right, #bbdefb , #90caf9)" : "var(--transparent)"};
+  border-right : 7px solid ${({active}) => active ? "#fb8c00" : "var(--transparent)"};
+  &:hover{    
+    background : linear-gradient(to right, #bbdefb , #90caf9);
   }
   padding: 0.5rem 1rem;
   & span{
@@ -35,12 +36,14 @@ export const CustomLink = styled(NavLink)`
 export const DropdownWrapper = styled.div`
   display : flex;
   flex-direction : column;  
-  
+  ${CustomLink}{
+    padding: 0.5rem 0 0.5rem 2.5rem;
+  }
 `
 
 export const ButtonDropdown = styled.span`
   cursor : pointer;
-padding : 0.5rem 1rem;
+  padding : 0.5rem 1rem;
   display : flex; 
   align-items : center;
   text-transform  :capitalize ;
@@ -66,7 +69,7 @@ padding : 0.5rem 1rem;
 `
 
 export const Dropdown = styled.div`
-  padding : 0 1.5rem;
+  // padding : 0 1.5rem;
   transition : var(--mainTransition);
   ${({show}) => show ? `
     height: auto; 

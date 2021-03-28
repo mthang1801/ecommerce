@@ -28,14 +28,14 @@ const AdminPortfolio = ({
 }) => {
   const cols = ["name", "slug", "createdAt"];
   const [navigation, setNavigation] = useState("home");
-  useEffect(() => {
+  useEffect(() => {    
     fetchAdminPortfolioList();
   }, [fetchAdminPortfolioList]);
   const { i18n, lang } = useLanguage();  
   const {porfolio} = i18n.store.data[lang].translation.admin
   const { portfolioNavigations } = i18n.store.data[
     lang
-  ].translation.adminNavigations;
+  ].translation.adminNavigations;  
   return (
     <AdminLayout>
       <AdminNavigations
@@ -51,6 +51,8 @@ const AdminPortfolio = ({
           cols={cols}
           onRemove={onRemove}
           onEdit={onEdit}
+          role="portfolio"
+          fetchAllData={fetchAdminPortfolioList}
         />
       )}
       {navigation === "add-portfolio" && <AddPortfolio onAdd={onAdd} localesData={porfolio}/>}

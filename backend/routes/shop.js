@@ -3,8 +3,8 @@ const shopController = require("../controllers/shop");
 const { isAuth } = require("../middlewares/auth");
 const router = express.Router();
 
-router.get("/search/portfolio", shopController.searchPortfolio )
-
+router.get("/search/portfolio", shopController.searchPortfolio );
+router.get("/search/category", shopController.searchCategory);
 // /**
 //  * @route GET /initial-data
 //  * @desc get initial data

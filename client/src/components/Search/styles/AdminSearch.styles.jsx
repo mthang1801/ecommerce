@@ -7,9 +7,10 @@ export const Wrapper = styled.form`
   display : flex; 
   align-items: center;
   justify-content : space-between;
-  border : 1px solid var(--light-gray-3);
+  border : 1px solid var(--blue-1);
   padding : 0.5rem 1rem;
   border-radius : 1rem;
+  background : transparent;
   input, button{
     border : none ; 
     outline : none ; 

@@ -1905,11 +1905,22 @@
 
 
 const Portfolio  = require("../models/portfolio");
-
+const Category = require("../models/category");
 exports.searchPortfolio = async (req, res, next) => {
   try {
-    const {search} = req.query;
+    const {search} = req.query;    
     const searchResults = await Portfolio.find({name : new RegExp(search, "gi")});
+    return res.status(200).json(searchResults)
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.searchCategory = async (req, res, next) => {
+  try {    
+    const {search} = req.query; 
+        
+    const searchResults = await Category.find({name : new RegExp(search, "gi")}).populate("portfolio");
     return res.status(200).json(searchResults)
   } catch (error) {
     next(error);

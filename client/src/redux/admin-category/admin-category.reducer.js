@@ -22,14 +22,14 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        adminCategoriesList: action.payload.adminCategoriesList,
+        adminCategoriesList: [...state.adminCategoriesList, ...action.payload.adminCategoriesList],
         count: action.payload.count,
       };
     case adminCategoriesActionTypes.SEARCH_ADMIN_CATEGORIES_SUCCESS:
       return {
         ...state,
         loading: false,
-        adminCategoriesList: action.payload,
+        adminCategoriesList: [...action.payload],
       };
     case adminCategoriesActionTypes.ADD_ADMIN_CATEGORY_SUCCESS:
       return {

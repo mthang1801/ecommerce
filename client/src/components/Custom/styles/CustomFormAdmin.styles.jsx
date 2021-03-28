@@ -45,15 +45,16 @@ export const Title = styled.h2`
   text-align: center;
   font-size: 1.6em;
   text-transform: uppercase;
-  margin: 2rem auto;
+  margin: 2rem auto;  
 `;
 
 export const Label = styled.span`
-  background-color: white;
+  background: linear-gradient(to right, #bbdefb , #90caf9);
   position: absolute;
   top: -0.75rem;
   left: 1rem;
   z-index: 1;
+  padding :0  0.25rem;
 `;
 
 export const Input = styled.input`
@@ -70,6 +71,7 @@ export const Input = styled.input`
     padding-top: 0.6rem;
   }
   flex-grow: 1;
+  background: linear-gradient(to right , #90caf9,#bbdefb)
 `;
 
 export const Feedback = styled.span`
@@ -101,6 +103,7 @@ export const Select = styled.div`
   align-items: center;
   cursor: pointer;
   position: relative;
+  background: linear-gradient(to right , #90caf9,#bbdefb);
 `;
 
 export const SelectIcon = styled.span`

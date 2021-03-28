@@ -185,7 +185,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
           </FormGroup>
           <FormGroup>
             <Label>Liên kết</Label>
-            <Input type="text" name="slug" value={slug} disabled />
+            <Input type="text" name="slug" value={slug} onChange={() =>{}} disabled />
           </FormGroup>
           <FormGroup>
             <Label>Hình ảnh</Label>
