@@ -375,3 +375,14 @@ export const fetchPortfolios = () => {
     }
   })
 }
+
+export const fetchCategoriesByPortfolio = (portfolioId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {data} = await axios.get(api.FETCH_CATEGORIES_BY_PORTFOLIO(portfolioId));
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  })
+}

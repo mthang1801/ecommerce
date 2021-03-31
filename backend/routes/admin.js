@@ -12,6 +12,11 @@ router.post("/category", isAdmin, adminController.postCreateCategory);
 router.get("/category", isAdmin, adminController.getCategory);
 router.put("/category", isAdmin, adminController.putEditCategory);
 router.delete("/category", isAdmin, adminController.removeCategory);
+//Product Group
+router.post("/product-group", isAdmin, adminController.postCreateProductGroup);
+router.get("/product-group", isAdmin, adminController.getProductGroup);
+router.put("/product-group", isAdmin, adminController.editProductGroup);
+router.delete("/product-group", isAdmin, adminController.removeProductGroup);
 // router.post("/category", adminController.postCategory);
 // router.put("/category", adminController.putCategory);
 // router.delete("/category", adminController.deleteCategory);

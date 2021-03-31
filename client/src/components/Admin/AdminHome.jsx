@@ -23,7 +23,7 @@ const AdminHome = ({
       onSearch(searchValue);
     }else{
       if(fetchAllData && touched ){       
-        fetchAllData(0, +process.env.REACT_APP_ADMIN_CATEGORIES_PER_LOAD)
+        fetchAllData(0, +process.env.REACT_APP_ADMIN_PRODUCT_GROUPS_PER_LOAD)
         }      
     }
 
@@ -60,7 +60,7 @@ const AdminHome = ({
       });
     }
   },[isLoadMore,fetchAllData])
-  
+  console.log(listData)
   return (
     <Wrapper>
       <SearchForm

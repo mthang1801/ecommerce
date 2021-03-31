@@ -5,13 +5,20 @@ const ProductGroupSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  linkUrl: {
+  slug: {
     type: String,
+    unique : true,
+    index : true,
     required: true,
   },
-  productType: {
+  portfolio : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "portfolios",
+    required: true 
+  },
+  category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "product-types",
+    ref: "categories",
     required: true,
   },
   products: [
@@ -21,6 +28,6 @@ const ProductGroupSchema = new mongoose.Schema({
       required: true,
     },
   ],
-});
+},{timestamps : true});
 
 module.exports = mongoose.model("product-groups", ProductGroupSchema);

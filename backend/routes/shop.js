@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/search/portfolio", shopController.searchPortfolio );
 router.get("/search/category", shopController.searchCategory);
+router.get("/search/product-group", shopController.searchProductGroup);
+router.get("/portfolio/:portfolioId/categories", shopController.getCategoriesByPortfolio);
 // /**
 //  * @route GET /initial-data
 //  * @desc get initial data

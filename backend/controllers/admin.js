@@ -1,5 +1,6 @@
 const Portfolio = require("../models/portfolio");
 const Category = require("../models/category");
+const ProductGroup = require("../models/product-group");
 const fs = require("fs-extra");
 const removeImage = require("../utils/removeImage");
 const mongoose = require("mongoose");
@@ -140,7 +141,7 @@ exports.getCategory = async (req, res, next) => {
     let { skip, limit } = req.query;
     skip = +skip;
     limit = +limit;
-    
+
     if (!skip) {
       skip = 0;
     }
@@ -233,7 +234,7 @@ exports.removeCategory = async (req, res, next) => {
     const category = await Category.findById(id);
     if (!category) {
       const err = new Error("Delete failed, not found category");
-      category.statusCode = 404;
+      err.statusCode = 404;
       throw err;
     }
     const portfolioContainCategory = await Portfolio.findById(
@@ -251,6 +252,169 @@ exports.removeCategory = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.postCreateProductGroup = async (req, res, next) => {
+  try {
+    const { name, slug, portfolioId, categoryId } = req.body;
+    const portfolio = await Portfolio.findById(portfolioId);
+    const category = await Category.findById(categoryId);
+    if (!portfolio || !category) {
+      const err = new Error("Portfolio or category not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    const newProductGroup = new ProductGroup({
+      name,
+      slug,
+      portfolio: portfolioId,
+      category: categoryId,
+    });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    portfolio.productGroups.push(newProductGroup._id);
+    category.productGroups.push(newProductGroup._id);
+    await portfolio.save();
+    await category.save();
+    await (await newProductGroup.save())
+      .populate({ path: "portfolio", select: "name" })
+      .populate({ path: "category", select: "name" })
+      .execPopulate();
+    await session.commitTransaction();
+    session.endSession();
+    return res.status(201).json({ ...newProductGroup._doc });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProductGroup = async (req, res, next) => {
+  try {
+    let { skip, limit } = req.query;
+    skip = +skip;
+    limit = +limit;
+
+    if (!skip) {
+      skip = 0;
+    }
+    if (!limit) {
+      limit = +process.env.PRODUCT_GROUP_PER_LOAD;
+    }
+    const productGroupsResult = await ProductGroup.find()
+      .populate({ path: "portfolio", select: "name" })
+      .populate({ path: "category", select: "name" })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+    const countProductGroups = await ProductGroup.countDocuments();
+    return res
+      .status(200)
+      .json({ productGroups: productGroupsResult, count: countProductGroups });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.editProductGroup = async (req, res, next) => {
+  const { _id, name, slug, portfolioId, categoryId } = req.body;
+  const productGroup = await ProductGroup.findById(_id);
+
+  if (!productGroup) {
+    const err = new Error("Category not found");
+    err.statusCode = 404;
+    throw err;
+  }
+  if (slug !== productGroup.slug) {
+    const checkSlug = await ProductGroup.findOne({ slug });
+    if (checkSlug) {
+      const err = new Error("Slug has been existed");
+      err.statusCode = 400;
+      throw err;
+    }
+  }
+  let newPortfolio;
+  let newCategory;
+  if (productGroup.portfolio.toString() !== portfolioId.toString()) {
+    newPortfolio = await Portfolio.findById(portfolioId);
+    if (!newPortfolio) {
+      const err = new Error("Portfolio not found");
+      err.statusCode = 404;
+      throw err;
+    }
+  }
+  if (productGroup.category.toString() !== categoryId.toString()) {
+    newCategory = await Category.findById(categoryId);
+    if (!newCategory) {
+      const err = new Error("Category not found");
+      err.statusCode = 404;
+      throw err;
+    }
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  if (newPortfolio) {
+    //update old Portfolio;
+    await Portfolio.findByIdAndUpdate(
+      productGroup.portfolio,
+      { $pull: { productGroups: productGroup._id } },
+      { new: true }
+    );
+    newPortfolio.productGroups.push(productGroup._id);
+    await newPortfolio.save();
+  }
+  if (newCategory) {
+    //update old Portfolio;
+    await Category.findByIdAndUpdate(
+      productGroup.category,
+      { $pull: { productGroups: productGroup._id } },
+      { new: true }
+    );
+    newCategory.productGroups.push(productGroup._id);
+    await newCategory.save();
+  }
+  productGroup.name = name;
+  productGroup.slug = slug;
+  productGroup.portfolio = portfolioId;
+  productGroup.category = categoryId;
+
+  await (await productGroup.save())
+    .populate({ path: "portfolio", select: "name" })
+    .populate({ path: "category", select: "name" })
+    .execPopulate();
+  await session.commitTransaction();
+  session.endSession();
+  return res.status(200).json({ ...productGroup._doc });
+};
+
+exports.removeProductGroup = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const productGroup = await ProductGroup.findById(id);
+    if (!productGroup) {
+      const err = new Error("Delete failed, not found category");
+      err.statusCode = 404;
+      throw err;
+    }
+    const portfolioContainProductGroup = await Portfolio.findById(
+      productGroup.portfolio
+    );
+    const categoryContainProductGroup = await Category.findById(
+      productGroup.category
+    )
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    portfolioContainProductGroup.productGroups.pull(id);
+    await portfolioContainProductGroup.save();
+    categoryContainProductGroup.productGroups.pull(id);
+    await categoryContainProductGroup.save();
+    await ProductGroup.findByIdAndDelete(id);
+    await session.commitTransaction();
+    session.endSession();
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    next(error);
+  }
+}
 // exports.postCategory = async (req, res, next) => {
 //   try {
 //     let { name, linkUrl } = req.body;

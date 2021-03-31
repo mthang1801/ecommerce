@@ -2,7 +2,7 @@ import React from "react"
 import { AiFillSetting, AiOutlineHistory, AiOutlineHome , AiOutlineShareAlt, AiOutlineAudit, AiOutlineUnorderedList} from "react-icons/ai";
 import { FiLogOut, FiDatabase } from "react-icons/fi";
 import { FcBusinessman } from "react-icons/fc";
-import { BiHomeAlt, BiLayerPlus } from "react-icons/bi";
+import { BiLayer, BiLayerPlus } from "react-icons/bi";
 import {FcManager} from "react-icons/fc"
 import {RiPlayListAddFill} from "react-icons/ri"
 export const en = {
@@ -67,6 +67,11 @@ export const en = {
             path : "/admin/category"
           },
           {
+            name : "Product Groups",
+            icon : <BiLayer/>,
+            path : "/admin/product-groups"
+          },
+          {
             name : "sellers",
             icon : <AiOutlineAudit/>,
             path : "/admin/sellers"
@@ -96,6 +101,18 @@ export const en = {
           icon : <RiPlayListAddFill/>,
           path : "add-category"
         },
+      ],
+      productGroupsNavigations : [
+        {
+          name: "home",
+          icon : <AiOutlineHome/>,
+          path : "home"
+        },
+        {
+          name: "add product group",
+          icon : <RiPlayListAddFill/>,
+          path : "add-product-group"
+        },
       ]
     },
     admin: {      
@@ -110,6 +127,15 @@ export const en = {
         addTitle: "Add Category",
         name : "Category Name",
         portfolioLabel : "Portfolio Name",
+        slug : "Slug",
+        image : "Image",
+        submit : "Complete",       
+      },
+      productGroups : {
+        addTitle: "Add Product Groups",
+        name : "Product Groups Name",
+        portfolioLabel : "Portfolio Name",
+        categoryLabel : "Category Name",
         slug : "Slug",
         image : "Image",
         submit : "Complete",       

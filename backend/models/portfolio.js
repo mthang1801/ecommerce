@@ -28,6 +28,13 @@ const PortfolioSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    productGroups: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product-groups",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

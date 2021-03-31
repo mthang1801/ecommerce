@@ -49,7 +49,7 @@
 //     const categoryList = await Category.find()
 //       .populate("imageUrl")
 //       .limit(+process.env.PRODUCTS_SLIDER);
-    
+
 //     let productsFavorite = [];
 //     if (req.header("Authentication")) {
 //       const token = req.header("Authentication").split(" ")[1];
@@ -287,7 +287,7 @@
 //       quantity,
 //       weight,
 //       ship_fee,
-//     } = req.body;    
+//     } = req.body;
 //     //to Capitalize name
 //     name = toCapitalizeString(name);
 //     label = toCapitalizeString(label);
@@ -1021,7 +1021,7 @@
 //     let {min_price, max_price} = req.query;
 //     min_price = parseFloat(min_price);
 //     max_price = parseFloat(max_price);
-    
+
 //     const productGroup = await ProductGroup.findById(productGroupId);
 //     const discountProductList = await Product.find(
 //       {
@@ -1094,7 +1094,7 @@
 //       { productGroup: productGroup._id },
 //       { price: 1, _id: 0 }
 //     ).sort({ price: -1 });
-    
+
 //     console.timeEnd("getListContentProductGroup");
 //     res.status(200).json({
 //       name: productGroup.name,
@@ -1193,8 +1193,6 @@
 //   try {
 //     console.time("productDetail");
 //     const { productId } = req.params;
-
-    
 
 //     let product = await Product.findById(productId)
 //       .populate("images")
@@ -1903,26 +1901,60 @@
 //   }
 // };
 
-
-const Portfolio  = require("../models/portfolio");
+const Portfolio = require("../models/portfolio");
 const Category = require("../models/category");
+const ProductGroup = require("../models/product-group");
 exports.searchPortfolio = async (req, res, next) => {
   try {
-    const {search} = req.query;    
-    const searchResults = await Portfolio.find({name : new RegExp(search, "gi")});
-    return res.status(200).json(searchResults)
+    const { search } = req.query;
+    const searchResults = await Portfolio.find({
+      name: new RegExp(search, "gi"),
+    });
+    return res.status(200).json(searchResults);
   } catch (error) {
     next(error);
   }
-}
+};
 
 exports.searchCategory = async (req, res, next) => {
-  try {    
-    const {search} = req.query; 
-        
-    const searchResults = await Category.find({name : new RegExp(search, "gi")}).populate("portfolio");
-    return res.status(200).json(searchResults)
+  try {
+    const { search } = req.query;
+
+    const searchResults = await Category.find({
+      name: new RegExp(search, "gi"),
+    }).populate("portfolio");
+    return res.status(200).json(searchResults);
   } catch (error) {
     next(error);
   }
-}
+};
+
+exports.searchProductGroup = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+
+    const searchResults = await ProductGroup.find({
+      name: new RegExp(search, "gi"),
+    })
+      .populate({ path: "portfolio", select: "name" })
+      .populate({ path: "category", select: "name" });
+    return res.status(200).json(searchResults);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getCategoriesByPortfolio = async (req, res, next) => {
+  try {
+    const { portfolioId } = req.params;
+    if (!portfolioId) {
+      return;
+    }
+    const portfolio = await Portfolio.findById(portfolioId).populate(
+      "categories"
+    );
+    return res.status(200).json({ categories: portfolio.categories });
+  } catch (error) {
+    next(error);
+  }
+};

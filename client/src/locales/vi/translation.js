@@ -2,7 +2,7 @@ import React from "react"
 import { AiFillSetting, AiOutlineHistory, AiOutlineHome , AiOutlineShareAlt, AiOutlineAudit, AiOutlineUnorderedList} from "react-icons/ai";
 import { FiLogOut, FiDatabase } from "react-icons/fi";
 import { FcBusinessman } from "react-icons/fc";
-import { BiHomeAlt, BiLayerPlus } from "react-icons/bi";
+import { BiLayer, BiLayerPlus } from "react-icons/bi";
 import {FcManager} from "react-icons/fc"
 import {RiPlayListAddFill} from "react-icons/ri"
 export const vi = {
@@ -63,6 +63,11 @@ export const vi = {
             path: "/admin/category",
           },
           {
+            name : "Nhóm SP",
+            icon : <BiLayer/>,
+            path : "/admin/product-groups"
+          },
+          {
             name: "Nhà bán hàng",
             icon: <AiOutlineAudit />,
             path: "/admin/sellers",
@@ -92,6 +97,18 @@ export const vi = {
           icon : <RiPlayListAddFill/>,
           path : "add-category"
         },
+      ],
+      productGroupsNavigations : [
+        {
+          name: "Trang chủ",
+          icon : <AiOutlineHome/>,
+          path : "home"
+        },
+        {
+          name: "Thêm Nhóm SP",
+          icon : <RiPlayListAddFill/>,
+          path : "add-product-group"
+        },
       ]
     },
     admin: {
@@ -109,6 +126,15 @@ export const vi = {
         slug : "Đường dẫn liên kết",
         image : "file ảnh",
         submit : "Tạo Loại SP",        
+      },
+      productGroups : {
+        addTitle: "Thêm Nhóm SP",
+        name : "Tên nhóm SP",
+        portfolioLabel : "SP thuộc danh mục",
+        categoryLabel : "SP thuộc loại",
+        slug : "Đường dẫn liên kết",
+        image : "file Ảnh",
+        submit : "Tạo nhóm SP",       
       }
     },
     navigations: {

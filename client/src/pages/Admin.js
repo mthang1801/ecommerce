@@ -7,6 +7,8 @@ import {connect} from "react-redux"
 const AdminHome = lazy(() => import("./AdminHome"))
 const AdminPortfolio = lazy(() => import("./AdminPortfolio"))
 const AdminCategory = lazy(() => import("./AdminCategory"))
+const AdminProductGroups = lazy(() => import("./AdminProductGroups"))
+
 const Admin = ({match, user, history}) => {  
   if(!user){
     console.log(history)
@@ -17,6 +19,7 @@ const Admin = ({match, user, history}) => {
       <Route path={`${match.path}`} exact component={AdminHome} />      
       <Route path={`${match.path}/portfolio`} component={AdminPortfolio} />
       <Route path={`${match.path}/category`} component={AdminCategory} />
+      <Route path={`${match.path}/product-groups`} component={AdminProductGroups} />
     </Switch>
   )
 }

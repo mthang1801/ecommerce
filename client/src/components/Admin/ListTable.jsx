@@ -14,9 +14,9 @@ import EditForm from "./EditForm";
 import Moment from "react-moment"
 
 const ListTable = ({ data, isLoading, count, role, cols , onRemove, onEdit, localesData}) => {
-    
+    console.log(cols)
   const [edit, setEdit] = useState({});
-    
+  
   if(!data) return null;  
   if (data.length) {
     return (
@@ -26,38 +26,55 @@ const ListTable = ({ data, isLoading, count, role, cols , onRemove, onEdit, loca
           <Thead>
             <Row>
               {cols.map((col, idx) => (
-                <Data key={col} flex={col === "portfolio" ? "2 0 25%" :"1 0 20%" } >
-                  <span>{col}</span>                  
+                <Data
+                  key={col}
+                  style={{
+                    width:
+                      col === "portfolio" && col === "category"
+                        ? "15%"
+                        : col === "portfolio"
+                        ? "30%"
+                        : "15%",
+                  }}
+                >
+                  <span>{col}</span>
                 </Data>
               ))}
-              <Data><span>actions</span></Data>
+              <Data>
+                <span>actions</span>
+              </Data>
             </Row>
           </Thead>
           <Tbody>
             {data.map((item) => (
-              <Row key={`${role}-${item._id}`}  >
+              <Row key={`${role}-${item._id}`}>
                 {cols.map((col, idx) => (
-                  <Data tbody title={item[col].name} flex={col === "portfolio" ? 3 :1 } text={col === "portfolio" ? "center" : "left"}>
-                    {col === "portfolio" ? item[col].name : col === "createdAt" ? (
-                      <Moment format="DD/MM/YYYY">
-                        {item[col]}
-                      </Moment>
+                  <Data
+                    tbody
+                    title={item[col].name}
+                    style={{
+                      width:
+                        col === "portfolio" && col === "category"
+                          ? "15%"
+                          : col === "portfolio"
+                          ? "30%"
+                          : "15%",
+                    }}
+                  >
+                    {col === "portfolio" || col === "category" ? (
+                      item[col].name
+                    ) : col === "createdAt" ? (
+                      <Moment format="DD/MM/YYYY">{item[col]}</Moment>
                     ) : (
                       item[col]
                     )}
                   </Data>
                 ))}
-                <Data                  
-                  tbody
-                  style={{ textAlign: "center" }}
-                >
+                <Data tbody style={{ textAlign: "center" }}>
                   <Button color="#fbc531" onClick={() => setEdit(item)}>
                     <FaEdit />
                   </Button>
-                  <Button
-                    onClick={() => onRemove(item._id)}
-                    color="#dd2222"
-                  >
+                  <Button onClick={() => onRemove(item._id)} color="#dd2222">
                     <FaTrash />
                   </Button>
                 </Data>
@@ -65,7 +82,13 @@ const ListTable = ({ data, isLoading, count, role, cols , onRemove, onEdit, loca
             ))}
           </Tbody>
         </Table>
-        <EditForm edit={edit} setEdit={setEdit} onEdit={onEdit} role={role} localesData={localesData} />
+        <EditForm
+          edit={edit}
+          setEdit={setEdit}
+          onEdit={onEdit}
+          role={role}
+          localesData={localesData}
+        />
       </React.Fragment>
     );
   }

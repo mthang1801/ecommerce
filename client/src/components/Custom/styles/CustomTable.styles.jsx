@@ -56,9 +56,11 @@ export const Row = styled.div`
 `;
 
 export const Data = styled.span`
-  display : inline-block;    
-  flex : ${({flex}) => flex };  
-  text-align : ${({text}) => text};
+  display : inline-block;      
+  text-align : left;
+  overflow : hidden;
+  text-overflow : ellipsis;
+  whitespace: nowrap;
   ${Thead} & {
     & span {
       &:first-child {
