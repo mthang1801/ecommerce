@@ -82,6 +82,10 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
       .catch((err) => console.log(err));
   };
 
+  const onChangePortfolio = (portfolio) => {
+     setSelectedPortfolio({ ...portfolio });
+     setSelectedCategory(null);
+  }
   const onChangeCategoryName = (e) => {
     const { value } = e.target;
     const newSlug = removeVietnameseTones(value)
@@ -184,8 +188,8 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
         <Title>{localesData.addTitle}</Title>
         {error && <Error>{error}</Error>}
         {success && <Success>{success}</Success>}
-        {role === "category" ||
-          (role === "product-group" && (
+        {(role === "category" ||
+          role === "product-group") && (
             <FormDropdown
               ref={portfolioRef}
               style={{ zIndex: openPortfolioDropdown ? 10 : 1 }}
@@ -210,7 +214,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
                   {portfolios.map((portfolio) => (
                     <ItemAPI
                       key={portfolio._id}
-                      onClick={() => setSelectedPortfolio({ ...portfolio })}
+                      onClick={() => onChangePortfolio(portfolio)}
                     >
                       {portfolio.name}
                     </ItemAPI>
@@ -218,7 +222,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
                 </ListAPI>
               </Select>
             </FormDropdown>
-          ))}
+          )}
         {role === "product-group" && (
           <FormDropdown
             ref={categoryRef}

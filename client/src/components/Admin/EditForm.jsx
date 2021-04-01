@@ -129,17 +129,14 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     const validImage = ["image/jpeg", "image/jpg", "image/png"];
     if (!name || name?.length < 3 || !slug) {
       return false;
+    }    
+    if(role === "portfolio" && (!image || !validImage.includes(image.type))){
+      return false ; 
     }
-    if (role !== "product-group") {
-      if (!image || !validImage.includes(image.type)) {
-        return false;
-      }
-    }
-
-    if (role === "category" && !selectedPortfolio) {
+    else if (role === "category" && name === edit.name && (!image || !validImage.includes(image.type)) ) {
       return false;
     }
-    if (role === "product-group" && !(selectedCategory && selectedPortfolio)) {
+    else if (role === "product-group" && name === edit.name && selectedCategory._id === edit.category._id && selectedPortfolio === edit.portfolio._id ) {
       return false;
     }
 

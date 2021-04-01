@@ -19,15 +19,19 @@ const AdminHome = ({
   const [touched, setTouched] = useState(false);
   const [isLoadMore, setIsLoadMore] = useState(false);
   useEffect(() => {
+    let timer ; 
     if (searchValue && onSearch) {
-      onSearch(searchValue);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        onSearch(searchValue);
+      },66)      
     }else{
       if(fetchAllData && touched ){       
         fetchAllData(0, +process.env.REACT_APP_ADMIN_PRODUCT_GROUPS_PER_LOAD)
         }      
     }
 
-
+    return () => clearTimeout(timer);
   }, [searchValue,fetchAllData, touched]);
 
 
