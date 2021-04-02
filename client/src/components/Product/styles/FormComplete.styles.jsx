@@ -16,8 +16,7 @@ export const FormCompleteWrapper = styled.form`
   @media screen and (max-width: 500px) {
     width: 90%;
     padding: 1rem 1.5rem;
-  };
-  font-family : Roboto, sans serif;
+  };  
 `;
 
 const checkAnimation = keyframes`

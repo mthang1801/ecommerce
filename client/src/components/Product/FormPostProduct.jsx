@@ -14,7 +14,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs"
 import LazyLoad from "react-lazyload";
 import Button from "@material-ui/core/Button"
-import { createNewProduct } from "../../utils/connectDB";
+import { createNewProduct, fetchPortfolios, fetchCategoriesByPortfolio, fetchProductGroupsByCategory } from "../../utils/connectDB";
 import {
   Form,
   FormInline,
@@ -34,20 +34,15 @@ import {
   FormGroupAnimation,
   PlainText,
 } from "../Custom/styles/CustomFormSeller.styles";
+import useLanguage from "../Global/useLanguage"
 
-import {
-  getListCategory,
-  getListProductType,
-  getListProductGroup,
-} from "../../utils/connectDB";
 import FormComplete from "./FormComplete"
 import { generateBase64Image } from "../../utils/image";
 const FormPostProduct = ({ product, saveProductForm }) => {
   const {
-    selectedCategory,
-    selectedProductType,
-    selectedProductGroup,
-    label,
+    selectedPortfolio,
+    selectedCategory, 
+    selectedProductGroup,    
     name,
     origin,
     manufactor,
@@ -63,10 +58,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
     ship_fee,
   } = product;
   const [loading, setLoading] = useState(true);
+  const [listPortfolios, setListPortfolios] = useState([]);
+  const [showListPortfolios, setShowListPortfolios] = useState(false);
   const [listCategories, setListCategories] = useState([]);
-  const [showListCategories, setShowListCategories] = useState(false);
-  const [listProductTypes, setListProductTypes] = useState([]);
-  const [showListProductTypes, setShowListProductTypes] = useState(false);
+  const [showListCategories, setShowListCategories] = useState(false); 
   const [listProductGroups, setListProductGroups] = useState([]);
   const [showListProductGroups, setShowListProductGroups] = useState(false);
   const [hasShippingFee, setHasShippingFee] = useState(false);
@@ -81,12 +76,14 @@ const FormPostProduct = ({ product, saveProductForm }) => {
   const [success, setSuccess] = useState(false);
   const [complete, setComplete] = useState(false);
   const [error, setError] = useState(null);
+  const {i18n, lang} = useLanguage();
+  const {postProduct} = i18n.store.data[lang].translation;
   useEffect(() => {
     let _isMounted = true;
-    getListCategory()
+    fetchPortfolios()
       .then((data) => {
-        if (_isMounted) {
-          setListCategories([...data]);
+        if (_isMounted) {        
+          setListPortfolios([...data.portfolios]);
           setLoading(false);
         }
       })
@@ -100,16 +97,17 @@ const FormPostProduct = ({ product, saveProductForm }) => {
     return () => (_isMounted = false);
   }, []);
 
-  const handleChangeCategory = (categoryId, categoryName, categoryLinkUrl) => {
+  const handleChangePortfolio = (portfolio) => {
+    console.log(portfolio)
     saveProductForm({
-      selectedCategory: { _id: categoryId, name: categoryName, linkUrl : categoryLinkUrl },
-      selectedProductType: { _id: "", name: "", linkUrl : "" },
-      selectedProductGroup: { _id: "", name: "", linkUrl : "" },
+      selectedPortfolio : {...portfolio},
+      selectedCategory : null , 
+      selectedProductGroup : null
     });
-    getListProductType(categoryId)
+    fetchCategoriesByPortfolio(portfolio._id)
       .then((data) => {
-        if (data) {
-          setListProductTypes([...data]);
+        if (data) {          
+          setListCategories([...data.categories]);
         }
       })
       .catch((err) => {
@@ -118,15 +116,15 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       });
   };
 
-  const handleChangeproductType = (productTypeId, productTypeName, productTypeLinkUrl) => {
+  const handleChangeCategory = (category) => {
     saveProductForm({
-      selectedProductType: { _id: productTypeId, name: productTypeName, linkUrl : productTypeLinkUrl },
-      selectedProductGroup: { _id: "", name: "", linkUrl : "" },
+      selectedCategory: { ...category },
+      selectedProductGroup: null,
     });
-    getListProductGroup(productTypeId)
+    fetchProductGroupsByCategory(category._id)
       .then((data) => {
-        if (data) {
-          setListProductGroups([...data]);
+        if (data) {                 
+          setListProductGroups([...data.productGroups]);
         }
       })
       .catch((err) => {
@@ -134,9 +132,9 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       });
   };
 
-  const handleChangeproductGroup = (productGroupId, productGroupName, productGroupLinkUrl) => {
+  const handleChangeproductGroup = (productGroup) => {
     saveProductForm({
-      selectedProductGroup: { _id: productGroupId, name: productGroupName, linkUrl:  productGroupLinkUrl },
+      selectedProductGroup: {...productGroup},
     });
   };
   const onChangeInput = (e) => {
@@ -190,17 +188,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
 
   const isValidForm = () => {
     const checkDescription = convertHTMLToEditorState(description);
-    const checkInformation = convertHTMLToEditorState(information);
-    console.log(checkDescription.hasText());
-    console.log(checkInformation.hasText());
-    
+    const checkInformation = convertHTMLToEditorState(information);    
     if (
-      !selectedCategory.name ||
-      !selectedCategory._id ||      
-      !selectedCategory.linkUrl ||
-      !selectedProductType.name ||
-      !selectedProductType._id ||          
-      !label.trim() ||
+      !selectedCategory||      
+      !selectedPortfolio ||      
       !name.trim() ||      
       !image.length ||
       image.length > 5 ||
@@ -232,10 +223,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
     }    
     setValidForm(true);
   }, [
+    selectedPortfolio,
     selectedCategory,
-    selectedProductType,
-    name,
-    label,
+    selectedProductGroup,
+    name,    
     isDiscount,
     discount,
     discountExpDate,
@@ -247,25 +238,26 @@ const FormPostProduct = ({ product, saveProductForm }) => {
     weight,
     quantity,
     ship_fee,
+    origin
   ]);
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    setLoading(true);
     if (!isValidForm()) {
       return setError(
         "Bạn cần phải điền đầy đủ thông tin sản phẩm trước khi gửi!!"
       );
-    }
+    }    
     createNewProduct(product)
       .then((res) => {
         setSuccess(true);
-      })
-      .catch((err) => {
-        setSuccess(false);
-      })
-      .finally(() => {
         setComplete(true);
-      });
+      })
+      .catch((err) => {       
+        setError(error.message);
+        setLoading(false);
+      })      
   };
   if (complete) {
     return <FormComplete success={success}/>;
@@ -273,73 +265,73 @@ const FormPostProduct = ({ product, saveProductForm }) => {
   if (loading) return <div>Loading...</div>;
   return (
     <Wrapper>
-      <h2>Post new Product</h2>
+      <h2>{postProduct.title}</h2>
       {/* Select category */}
       <FormGroup
-        style={{ zIndex: showListCategories ? 10 : 1 }}
+        style={{ zIndex: showListPortfolios ? 10 : 1 }}
         onClick={() =>
-          listCategories.length &&
-          setShowListCategories((prevState) => !prevState)
+          listPortfolios.length &&
+          setShowListPortfolios((prevState) => !prevState)
         }
       >
-        <Label>Category</Label>
+        <Label>{postProduct.portfolio}</Label>
         <Select>
-          {selectedCategory._id ? (
-            <span>{selectedCategory.name}</span>
+          {selectedPortfolio ? (
+            <span>{selectedPortfolio.name}</span>
           ) : (
-            <Placeholder>Select Category</Placeholder>
+            <Placeholder>{postProduct.portfolioPlaceholder}</Placeholder>
           )}
           <SelectIcon>
             <FaChevronDown />
           </SelectIcon>
 
-          <ListAPI show={showListCategories}>
-            {listCategories.map((category) => (
+          <ListAPI show={showListPortfolios}>
+            {listPortfolios.map((portfolio) => (
               <ItemAPI
-                key={category._id}
+                key={portfolio._id}
                 onClick={() =>
-                  handleChangeCategory(category._id, category.name, category.linkUrl)
+                  handleChangePortfolio(portfolio)
                 }
               >
-                {category.name}
+                {portfolio.name}
               </ItemAPI>
             ))}
           </ListAPI>
         </Select>
       </FormGroup>
-      {/* Product Types */}
+      {/* Categories */}
       <FormGroup
         style={{
-          zIndex: selectedCategory._id && showListProductTypes ? 11 : 1,
+          zIndex: selectedPortfolio && showListCategories ? 11 : 1,
         }}
         onClick={() => {
-          if (selectedCategory._id) {
-            setShowListProductTypes((prevState) => !prevState);
+          if (selectedPortfolio) {
+            setShowListCategories((prevState) => !prevState);
           }
         }}
       >
-        <Label>Product Type</Label>
+        <Label>{postProduct.category}</Label>
         <Select>
-          {selectedProductType._id ? (
-            <span>{selectedProductType.name}</span>
-          ) : listProductTypes.length ? (
-            <Placeholder>Select Product Type</Placeholder>
+          {selectedCategory ? (
+            <span>{selectedCategory.name}</span>
+          ) : listCategories.length ? (
+            <Placeholder>{postProduct.categoryPlaceholder}</Placeholder>
           ) : (
-            <Placeholder>No Product Type</Placeholder>
+            <Placeholder>{postProduct.noCategory}</Placeholder>
           )}
           <SelectIcon>
             <FaChevronDown />
           </SelectIcon>
 
-          <ListAPI show={showListProductTypes && selectedCategory._id}>
-            {listProductTypes.map((productType) => (
+          <ListAPI show={showListCategories && selectedPortfolio}>
+            {listCategories.map((category) => (
               <ItemAPI
-                key={productType._id}
+                key={category._id}
                 onClick={() =>
-                  handleChangeproductType(productType._id, productType.name, productType.linkUrl)
+                  handleChangeCategory(category)
                 }
               >
-                {productType.name}
+                {category.name}
               </ItemAPI>
             ))}
           </ListAPI>
@@ -349,8 +341,8 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       <FormGroup
         style={{
           zIndex:
-            selectedCategory._id &&
-            selectedProductType._id &&
+            selectedPortfolio &&
+            selectedCategory &&            
             listProductGroups.length &&
             showListProductGroups
               ? 12
@@ -358,30 +350,30 @@ const FormPostProduct = ({ product, saveProductForm }) => {
         }}
         onClick={() => {
           if (
-            selectedCategory._id &&
-            selectedProductType._id &&
+            selectedPortfolio&&
+            selectedCategory&&            
             listProductGroups.length
           ) {
             setShowListProductGroups((prevState) => !prevState);
           }
         }}
       >
-        <Label>Product Groups</Label>
+        <Label>{postProduct.productGroup}</Label>
         <Select>
-          {selectedProductGroup._id ? (
+          {selectedProductGroup ? (
             <span>{selectedProductGroup.name}</span>
           ) : listProductGroups.length ? (
-            <Placeholder>Select Product Group</Placeholder>
+            <Placeholder>{postProduct.productGroupPlaceholder}</Placeholder>
           ) : (
-            <Placeholder>No Product Groups</Placeholder>
+            <Placeholder>{postProduct.noProductGroup}</Placeholder>
           )}
           <SelectIcon>
             <FaChevronDown />
           </SelectIcon>
           <ListAPI
             show={
-              selectedCategory._id &&
-              selectedProductType._id &&
+              selectedPortfolio &&
+              selectedCategory &&              
               showListProductGroups
             }
           >
@@ -389,7 +381,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
               <ItemAPI
                 key={productGroup._id}
                 onClick={() =>
-                  handleChangeproductGroup(productGroup._id, productGroup.name, productGroup.linkUrl)
+                  handleChangeproductGroup(productGroup)
                 }
               >
                 {productGroup.name}
@@ -397,26 +389,13 @@ const FormPostProduct = ({ product, saveProductForm }) => {
             ))}
           </ListAPI>
         </Select>
-      </FormGroup>
-      {/* Label */}
-      <FormGroup>
-        <Label>Label</Label>
-        <Input
-          type="text"
-          name="label"
-          placeholder="Type Product Label"
-          value={label}
-          onChange={onChangeInput}
-          required
-        />
-      </FormGroup>
+      </FormGroup>     
       {/* Product Name */}
       <FormGroup>
-        <Label>Product Name</Label>
+        <Label>{postProduct.productName}</Label>
         <Input
           type="text"
-          name="name"
-          placeholder="Type Product Name"
+          name="name"          
           value={name}
           onChange={onChangeInput}
           required
@@ -424,11 +403,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Manufactor */}
       <FormGroup>
-        <Label>Manufactor</Label>
+        <Label>{postProduct.manufactor}</Label>
         <Input
           type="text"
-          name="manufactor"
-          placeholder="Type Product Label"
+          name="manufactor"         
           value={manufactor}
           onChange={onChangeInput}
           required
@@ -436,11 +414,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Origin */}
       <FormGroup>
-        <Label>Origin</Label>
+        <Label>{postProduct.origin}</Label>
         <Input
           type="text"
-          name="origin"
-          placeholder="Type Product Label"
+          name="origin"          
           value={origin}
           onChange={onChangeInput}
           required
@@ -470,12 +447,12 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Price */}
       <FormGroup>
-        <Label>Price</Label>
+        <Label>{postProduct.price}</Label>
         <CustomNumberFormat
           value={price}
           allowLeadingZeros={false}
           thousandSeparator={true}
-          suffix={" VNĐ"}
+          suffix={price ? " VNĐ" : ""}
           allowNegative={false}
           allowEmptyFormatting={true}
           onValueChange={({ floatValue }) => {
@@ -487,7 +464,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       {/* quantity, weight */}
       <FormInline>
         <FormGroup>
-          <Label>Số Lượng</Label>
+          <Label>{postProduct.quantity}</Label>
           <Input
             type="number"
             value={quantity == 0 ? "" : quantity}
@@ -497,7 +474,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
           />
         </FormGroup>
         <FormGroup>
-          <Label>Khối Lượng (kg)</Label>
+          <Label>{postProduct.weight}</Label>
           <Input
             type="number"
             value={weight == 0 ? "" : weight}
@@ -516,6 +493,8 @@ const FormPostProduct = ({ product, saveProductForm }) => {
                 onChange={(e) => {
                   if (hasShippingFee) {
                     saveProductForm({ ship_fee: 0 });
+                  }else{
+                    saveProductForm({ship_fee : 12000})
                   }
                   setHasShippingFee((prevState) => !prevState);
                 }}
@@ -529,19 +508,16 @@ const FormPostProduct = ({ product, saveProductForm }) => {
         <FormGroup style={{ flex: 1 }}>
           <FormGroupAnimation show={hasShippingFee}>
             <Label>
-              <Required>Shipping Fee</Required>
+              <Required>{postProduct.shippingFee}</Required>
             </Label>
             <CustomNumberFormat
               value={ship_fee}
               allowLeadingZeros={false}
               thousandSeparator={true}
-              suffix={" VNĐ"}
+              suffix={ship_fee ? " VNĐ" : ""}
               allowNegative={false}
               allowEmptyFormatting={true}
-              onValueChange={({ floatValue }) => {
-                if (ship_fee > price || !price) {
-                  return saveProductForm({ ship_fee: 0 });
-                }
+              onValueChange={({ floatValue }) => {                
                 saveProductForm({ ship_fee: floatValue });
               }}
               style={{ borderBottomColor: !price ? "red" : "green" }}
@@ -562,17 +538,17 @@ const FormPostProduct = ({ product, saveProductForm }) => {
                     saveProductForm({ discount: null, discountExpDate: null });
                   }
                 }}
-                name="isDiscount"
+                name={postProduct.discount}
                 color="primary"
               />
             }
-            label="SP giảm giá"
+            label={postProduct.discount}
           />
         </FormGroup>
         <FormGroup style={{ flex: 1 }}>
           <FormGroupAnimation show={isDiscount}>
             <Label>
-              <Required>Discount</Required>
+              <Required>{postProduct.discountPercentage}</Required>
             </Label>
             <Input
               type="number"
@@ -585,7 +561,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
         <FormGroup style={{ flex: 1, marginLeft: "1rem" }}>
           <FormGroupAnimation show={isDiscount}>
             <Label>
-              <Required>Thời hạn</Required>
+              <Required>{postProduct.discountExpiration}</Required>
             </Label>
             <Input
               value={discountExpDate || ""}
@@ -595,16 +571,14 @@ const FormPostProduct = ({ product, saveProductForm }) => {
               style={{
                 borderBottomColor: !discountExpDate ? "red" : "green",
               }}
-            />
-
-            <PlainText>Bắt buộc (*)</PlainText>
+            />            
           </FormGroupAnimation>
         </FormGroup>
       </FormInline>
       <FormGroup>
         <FormGroupAnimation show={discount > 0}>
           <Label>
-            <Required>Giá SP Được giảm giá</Required>
+            <Required>{postProduct.priceAfterDiscount}</Required>
           </Label>
           <CustomNumberFormat
             thousandSeparator={true}
@@ -616,14 +590,14 @@ const FormPostProduct = ({ product, saveProductForm }) => {
         </FormGroupAnimation>
       </FormGroup>
       <div style={{ margin: "1.5rem 0 " }}>
-        <h4>Product Information</h4>
+        <h4>{postProduct.productInformation}</h4>
         <Editor
           editorState={informationState}
           setEditorState={setProductInformationState}
         />
       </div>
       <div style={{ margin: "1.5rem 0 " }}>
-        <h4>Product Description</h4>
+        <h4>{postProduct.productDescription}</h4>
         <Editor
           editorState={descriptionState}
           setEditorState={setProductDescriptionState}
@@ -638,7 +612,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
           disabled={!validForm}
           onClick={handleSubmitForm}
         >
-          Tạo Sản Phẩm
+          {postProduct.submit}
         </Button>
       
     </Wrapper>

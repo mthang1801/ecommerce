@@ -1,7 +1,6 @@
-.btn-fb{
+.btn-fb {
   font-size: 14px;
-    font-weight: 500;
-    font-family: Roboto, sans-serif;
+  font-weight: 500;
   width: 100%;
   outline: none;
   border: none;
@@ -17,12 +16,11 @@
   border-radius: 5px;
 }
 
-.btn-fb:hover{
+.btn-fb:hover {
   background-color: #243c6e;
 }
 
-.btn-fb > svg{
-  font-size : 1.5em;
+.btn-fb > svg {
+  font-size: 1.5em;
   vertical-align: middle;
-
 }

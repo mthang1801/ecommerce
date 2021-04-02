@@ -3,7 +3,7 @@ import NumberFormat from "react-number-format";
 
 export const Wrapper = styled.div`
   width : 90vw; 
-  max-width : 1000px;
+  max-width : 800px;
   margin: 1rem auto 3rem auto;
   h2{
     text-align: center;

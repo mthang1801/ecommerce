@@ -21,16 +21,7 @@ export const fetchAdminPortfolioList = () => async (dispatch) => {
   try {
     dispatch(fetchAdminPortfolioStart());
     const { data } = await axios.get(api.FETCH_ADMIN_PORTFOLIOS);
-    if(data.portfolios){
-      const standardizedData = data.portfolios.map( portfolio  => {
-        const _portfolio = {...portfolio};
-        _portfolio.image.data = arrayBufferToBase64(_portfolio.image.data.data);
-        return {..._portfolio}
-      })      
-      dispatch(fetchAdminPortfolioSuccess(standardizedData));
-    }
-    
-    
+    dispatch(fetchAdminPortfolioSuccess(data.portfolios));
   } catch (error) {
     dispatch(fetchAdminPortfolioFail(error.message));
   }
@@ -116,10 +107,8 @@ export const addAdminPortfolio = (formData) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
       dispatch(addAdminPortfolioStart());
-      const { data } = await axios.post(api.POST_ADD_NEW_PORTFOLIO, formData);
-      const standardizedData = {...data}      
-      standardizedData.image.data = arrayBufferToBase64(standardizedData.image.data.data);
-      dispatch(addAdminPortfolioSuccess(standardizedData));
+      const { data } = await axios.post(api.POST_ADD_NEW_PORTFOLIO, formData);      
+      dispatch(addAdminPortfolioSuccess(data));
       resolve(true);
     } catch (error) {             
       reject(error.response.data.message);

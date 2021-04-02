@@ -329,7 +329,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
           {imageBase64 ? (
             <Image src={imageBase64} />
           ) : image ? (
-            <Image src={`data:${image.mimetype};base64,${image.data}`} />
+            <Image src={image} />
           ) : null}
         </DisplayImage>}
       </FormWrapper>

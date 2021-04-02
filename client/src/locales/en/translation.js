@@ -210,6 +210,32 @@ export const en = {
     notification: {
       upadteSuccess : "Update Successully",
       upadteFailed : "Update Failed"
+    },
+    postProduct : {
+      title : "Post product",
+      portfolio : "Portfolio",
+      portfolioPlaceholder : "Select Portfolio",
+      category : "Category",
+      categoryPlaceholder : "Select Category",      
+      noCategory : "No category",
+      productGroup : "Product Group",
+      productGroupPlaceholder : "Select Product Group",
+      noProductGroup : "No Product group",
+      productName : "Product Name", 
+      manufactor : "Manufactor", 
+      origin : "Origin" , 
+      addImage : "Add Image",
+      price : "Price", 
+      quantity : "Quantity",
+      weight : "Weight", 
+      shippingFee : "Shipping fee", 
+      discount : "Discount",
+      discountPercentage : "Percentage", 
+      discountExpiration : "Expiration", 
+      priceAfterDiscount : "Total price After discount",
+      productInformation : "Product Information", 
+      productDescription : "Product Description", 
+      submit : "Post Product"
     }
   },
 }

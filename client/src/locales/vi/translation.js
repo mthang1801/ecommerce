@@ -24,6 +24,10 @@ export const vi = {
           name: "Trở thành nhà bán hàng",
           icon: <FcBusinessman />,
         },
+        postProduct:{
+          name : "Đăng bán SP", 
+          icon : <BiLayerPlus/>
+        },
         admin: {
           name: "Quản trị trang",
           icon: <FcManager />,
@@ -55,7 +59,7 @@ export const vi = {
           {
             name: "Danh mục SP",
             icon: <AiOutlineUnorderedList />,
-            path: "/admin/porfolio",
+            path: "/admin/portfolio",
           },
           {
             name: "Loại SP",
@@ -205,6 +209,32 @@ export const vi = {
     notification: {
       updateSuccess : "Cập nhật thành công",
       updateFailed : "Cập nhật thất bại, có lỗi xảy ra."
+    },
+    postProduct : {
+      title : "Đăng sản phẩm",
+      portfolio : "Danh mục SP",
+      portfolioPlaceholder : "Lựa chọn danh mục SP",
+      category : "Loại SP",
+      categoryPlaceholder : "Lựa chọn loại SP",
+      noCategory : "Không có Loại SP",
+      productGroup : "Nhóm SP (nếu có)",
+      productGroupPlaceholder : "Lựa chọn nhóm SP" ,
+      noProductGroup : "Không có nhóm SP",
+      productName : "Tên SP (bắt buộc)", 
+      manufactor : "Nhà sản xuất (bắt buộc)", 
+      origin : "Nguồn gốc (bắt buộc)" , 
+      addImage : "Thêm ảnh",
+      price : "Đơn giá (bắt buộc)", 
+      quantity : "Số lượng bán (bắt buộc)",
+      weight : "Khối lượng(g)", 
+      shippingFee : "Phí vận chuyển", 
+      discount : "Giảm giá",
+      discountPercentage : "Phần trăm giảm giá", 
+      discountExpiration : "Ngày hết hạn giảm giá", 
+      priceAfterDiscount : "Giá SP Sau khi giảm",
+      productInformation : "Thông tin SP", 
+      productDescription : "Mô tả SP", 
+      submit : "Đăng SP"
     }
   },
 };

@@ -4,42 +4,30 @@ const ProductGroup = require("../models/product-group");
 const fs = require("fs-extra");
 const removeImage = require("../utils/removeImage");
 const mongoose = require("mongoose");
+const cloudinary = require("../config/cloudinary")
 exports.postPortfolio = async (req, res, next) => {
   try {
     const { name, slug } = req.body;
     const file = req.files[0];
-
     const checkSlugExisted = await Portfolio.findOne({ slug });
     if (checkSlugExisted) {
-      await removeImage(file.filename);
+      await removeImage(file.filename);      
       const err = new Error("Portfolio has been existed");
       err.statusCode = 400;
       throw err;
     }
-    const fileData = await fs.readFile(file.path);
+
+    const image = await cloudinary.uploader.upload(file.path, {"tags" : "portfolio", "width" : 300, height: 300, "crop" : "fit"})
+    
     const newPortfolio = new Portfolio({
       name,
       slug,
-      image: {
-        data: fileData,
-        mimetype: file.mimetype,
-        filename: file.filename,
-      },
+      image
     });
     await newPortfolio.save();
     await removeImage(file.filename);
     return res.status(201).json({ ...newPortfolio._doc });
   } catch (error) {
-    next(error);
-  }
-};
-
-exports.getPortfolio = async (req, res, next) => {
-  try {
-    const portfolios = await Portfolio.find();
-    return res.status(200).json({ portfolios: portfolios });
-  } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -131,32 +119,6 @@ exports.postCreateCategory = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
     return res.status(201).json({ ...newCategoryItem._doc });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.getCategory = async (req, res, next) => {
-  try {
-    let { skip, limit } = req.query;
-    skip = +skip;
-    limit = +limit;
-
-    if (!skip) {
-      skip = 0;
-    }
-    if (!limit) {
-      limit = +process.env.CATEGORY_PER_LOAD;
-    }
-    const categoryResult = await Category.find()
-      .populate({ path: "portfolio", select: "name" })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-    const countCategories = await Category.countDocuments();
-    return res
-      .status(200)
-      .json({ categories: categoryResult, count: countCategories });
   } catch (error) {
     next(error);
   }
@@ -282,33 +244,6 @@ exports.postCreateProductGroup = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
     return res.status(201).json({ ...newProductGroup._doc });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.getProductGroup = async (req, res, next) => {
-  try {
-    let { skip, limit } = req.query;
-    skip = +skip;
-    limit = +limit;
-
-    if (!skip) {
-      skip = 0;
-    }
-    if (!limit) {
-      limit = +process.env.PRODUCT_GROUP_PER_LOAD;
-    }
-    const productGroupsResult = await ProductGroup.find()
-      .populate({ path: "portfolio", select: "name" })
-      .populate({ path: "category", select: "name" })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-    const countProductGroups = await ProductGroup.countDocuments();
-    return res
-      .status(200)
-      .json({ productGroups: productGroupsResult, count: countProductGroups });
   } catch (error) {
     next(error);
   }

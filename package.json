@@ -5,15 +5,13 @@
   "main": "./backend/server.js",
   "scripts": {
     "install-client": "npm install --prefix client",
-    "install-admin": "npm install --prefix admin",
-    "install-all": "npm install && npm run install-client && npm run install-admin",
+    "install-all": "npm install && npm run install-client",
     "build": "npm run build --prefix client",
-    "admin": "npm start --prefix admin",
     "client": "npm start --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server.js",
     "server": "nodemon ./server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\" ",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
     "heroku-postbuild": "npm install --prefix client && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
@@ -29,6 +27,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
+    "cloudinary": "^1.25.1",
     "clsx": "^1.1.1",
     "compression": "^1.7.4",
     "ejs": "^3.1.5",

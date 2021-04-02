@@ -186,32 +186,27 @@ export const createNewProduct = (product) => {
   return new Promise(async (resolve, reject) => {
     try {
       let formData = new FormData();
-      formData.append("categoryId", product.selectedCategory._id);
-      formData.append("productTypeId", product.selectedProductType._id);
-      formData.append("rootUrl", product.selectedProductType.linkUrl);
+      formData.append("portfolioId", product.selectedPortfolio._id);
+      formData.append("categoryId", product.selectedCategory._id);     
       formData.append(
-        "productGroupId",
-        product.selectedProductGroup._id === "#"
-          ? ""
-          : product.selectedProductGroup._id
-      );
-      formData.append("groupName", product.selectedProductGroup.name);
-      formData.append("label", product.label);
+        "productGroupId", product.selectedProductGroup?._id)                    
       formData.append("name", product.name);
-      formData.append("price", product.price);
+      formData.append("price", product.price);      
       formData.append("discount", product.discount || 0);
       formData.append("discountExpDate", product.discountExpDate);
+      formData.append("origin", product.origin);
       formData.append("description", product.description);
       formData.append("information", product.information);
       formData.append("manufactor", product.manufactor);
       formData.append("weight", +product.weight);
       formData.append("quantity", +product.quantity);
       formData.append("ship_fee", +product.ship_fee);
+      
       for (let file of product.image) {
         formData.append("multiple-images", file);
       }
 
-      const { data } = await axios.post(urls.POST_CREATE_NEW_PRODUCT, formData);
+      const { data } = await axios.post(api.POST_PRODUCT, formData);
       resolve(true);
     } catch (error) {
       reject(error);
@@ -380,6 +375,17 @@ export const fetchCategoriesByPortfolio = (portfolioId) => {
   return new Promise(async (resolve, reject) => {
     try {
       const {data} = await axios.get(api.FETCH_CATEGORIES_BY_PORTFOLIO(portfolioId));
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  })
+}
+
+export const fetchProductGroupsByCategory = (categoryId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {data} = await axios.get(api.FETCH_PRODUCT_GROUPS_BY_CATEGORY(categoryId));
       resolve(data);
     } catch (error) {
       reject(error);

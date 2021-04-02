@@ -11,8 +11,7 @@ export const DesktopContainer = styled.div`
 
     align-items: center;
     padding: 0 5rem;
-    margin: auto;
-    font-family: Roboto, "sans serif";
+    margin: auto;    
     position: relative;
   }
 `;

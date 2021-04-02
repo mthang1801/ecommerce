@@ -6,8 +6,7 @@ export const DesktopContainer = styled.div`
   display : flex ; 
   align-items : center;
   padding : 0 5rem ; 
-  margin : auto ; 
-  font-family: Roboto ,"sans serif";
+  margin : auto ;   
   position : relative;
 `
 

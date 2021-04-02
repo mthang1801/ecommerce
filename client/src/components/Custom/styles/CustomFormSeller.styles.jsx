@@ -3,7 +3,7 @@ import NumberFormat from "react-number-format";
 export const Form = styled.form`
   width: 100%;
   max-width: 600px;
-  margin: 1rem auto;
+  margin: 2rem auto;
 `;
 export const FormGroup = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ export const Label = styled.label`
   color: #002984;
   top: -0.8rem;
   background-color: white;
-  padding: 0px 10px;
+  padding: 0px 3px;
   left: 0.4rem;
   z-index: 1;
 `;
@@ -44,6 +44,9 @@ export const Input = styled.input`
     border: 2px solid #002984 !important;
   }
   z-index: 0;
+  &::placeholder{
+    font-size : 0.9rem;
+  }
 `;
 
 export const CustomNumberFormat = styled(NumberFormat)` 
@@ -70,8 +73,7 @@ export const Select = styled.div`
   line-height: 1.7;
   outline: none;
   border: 1px solid #424242;
-  border-radius: 0.3rem;
-  margin: 0 auto 1rem auto;
+  border-radius: 0.3rem;  
   background-color: transparent;
   z-index: 0;
   display: flex;

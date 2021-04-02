@@ -1,25 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema(
-  {
-    label: {
-      type: String,
-      required: true,
-    },
+  {    
     name: {
       type: String,
       required: true,
     },
-    linkUrl: {
+    slug: {
       type: String,
       required: true,
+      index : true,
+      unique : true 
     },
     images: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "images",
-        required: true,
-      },
+        type : String,
+        required :true 
+      }
     ],
     discount: {
       value: {
@@ -29,10 +26,10 @@ const ProductSchema = new Schema(
         max: 100,
       },
       start_at: {
-        type: Date,
+        type: Number,        
       },
       end_at: {
-        type: Date,
+        type: Number,
       },
     },
     price: {
@@ -49,6 +46,7 @@ const ProductSchema = new Schema(
     },
     status: {
       type: String,
+      enum : ["pending", "active"] , //pending status occurs when waiting admin confirm to post product
       default: "active",
     },
     user: {
@@ -56,31 +54,32 @@ const ProductSchema = new Schema(
       ref: "users",
       required: true,
     },
-    productGroup: {
-      type: Schema.Types.ObjectId,
-      ref: "product-groups",
-    },
-    productType: {
-      type: Schema.Types.ObjectId,
-      ref: "product-types",
-      required: true,
+    portfolio : {
+      type : Schema.Types.ObjectId,
+      ref : "portfolios",
+      required : true 
     },
     category: {
       type: Schema.Types.ObjectId,
       ref: "categories",
       required: true,
     },
+    productGroup: {
+      type: Schema.Types.ObjectId,
+      ref: "product-groups",
+    },    
     manufactor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "manufactors",
-      required: true,
+      type : String , 
+      requried : true 
     },
     origin : {
-      type : String,             
+      type : String,        
+      required : true      
     },
     sold_quantity: {
       type: Number,
       default: 0,
+      min : 0
     },
     stars: {
       type: Number,
@@ -101,22 +100,25 @@ const ProductSchema = new Schema(
     ],
     quantity: {
       type: Number,
+      min: 1,
       required: true,
     },
     fast_delivery: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     ship_fee: {
       type: Number,
-      default: 10000,
+      min : 0,
+      default: 12000,
     },
     weight: {
       type: Number,
+      min : 1,
       required: true,
     },
   },
-  { timestamps: true, strict: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("products", ProductSchema);

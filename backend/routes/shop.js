@@ -3,10 +3,20 @@ const shopController = require("../controllers/shop");
 const { isAuth } = require("../middlewares/auth");
 const router = express.Router();
 
+//Search
 router.get("/search/portfolio", shopController.searchPortfolio );
 router.get("/search/category", shopController.searchCategory);
 router.get("/search/product-group", shopController.searchProductGroup);
+//Portfolio
+router.get("/portfolio", shopController.getPortfolio);
+//Category
+router.get("/category", shopController.getCategory);
 router.get("/portfolio/:portfolioId/categories", shopController.getCategoriesByPortfolio);
+//Product Group
+router.get("/product-group", shopController.getProductGroup);
+router.get("/category/:categoryId/product-groups", shopController.getProductGroupsByCategory);
+//Product
+router.post("/product" ,isAuth, shopController.postProduct);
 // /**
 //  * @route GET /initial-data
 //  * @desc get initial data

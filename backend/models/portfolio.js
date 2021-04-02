@@ -17,9 +17,8 @@ const PortfolioSchema = new mongoose.Schema(
       index : true 
     },
     image: {
-      data: Buffer,
-      mimetype : String,
-      filename : String,     
+      type : String, 
+      required: true  
     },
     categories: [
       {
@@ -35,6 +34,13 @@ const PortfolioSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    products : [
+      {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "products",
+        required: true 
+      }
+    ]
   },
   { timestamps: true }
 );

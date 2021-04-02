@@ -31,8 +31,7 @@ export const MainContent = styled.div`
   overflow : auto;
   width : ${({scale}) => scale ? "calc(100% - 320px)" : "100%"};
   margin-left:  ${({scale}) => scale ? "320px" : "0"};
-  @media screen and (min-width: 992px){
-    width : ${({scale}) => scale ? "75%" : "100%"};
+  @media screen and (min-width: 992px){    
     margin-left:  ${({scale}) => scale ? "24%" : "0"};
     padding-left:  ${({scale}) => scale ? "1%" : "0"};
   }

@@ -23,7 +23,11 @@ const ProductTypesSchema = new mongoose.Schema(
         required: true,
       },
     ],
-   
+    portfolio: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "portfolios",
+      required: true 
+    },
     productGroups: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,11 +35,13 @@ const ProductTypesSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    portfolio: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "portfolios",
-      required: true 
-    },
+    products : [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
+        required: true,
+      },
+    ],
     image : {
       data : Buffer,
       mimetype : String, 

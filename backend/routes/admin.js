@@ -4,17 +4,14 @@ const { isAdmin } = require("../middlewares/auth");
 const router = express.Router();
 //Portfolio
 router.post("/portfolio", isAdmin, adminController.postPortfolio);
-router.get("/portfolio", isAdmin, adminController.getPortfolio);
 router.put("/portfolio", isAdmin, adminController.editPortfolio);
 router.delete("/portfolio", isAdmin, adminController.removePortfolio);
 //Category
 router.post("/category", isAdmin, adminController.postCreateCategory);
-router.get("/category", isAdmin, adminController.getCategory);
 router.put("/category", isAdmin, adminController.putEditCategory);
 router.delete("/category", isAdmin, adminController.removeCategory);
 //Product Group
 router.post("/product-group", isAdmin, adminController.postCreateProductGroup);
-router.get("/product-group", isAdmin, adminController.getProductGroup);
 router.put("/product-group", isAdmin, adminController.editProductGroup);
 router.delete("/product-group", isAdmin, adminController.removeProductGroup);
 // router.post("/category", adminController.postCategory);

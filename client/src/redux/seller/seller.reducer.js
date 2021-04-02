@@ -31,22 +31,9 @@ const INITIAL_STATE = {
     },
   },
   product: {
-    selectedCategory: {
-      _id: "",
-      name: "",      
-      linkUrl : ""
-    },
-    selectedProductType: {
-      _id: "",
-      name: "",  
-      linkUrl : ""    
-    },
-    selectedProductGroup: {
-      _id: "",
-      name: "",
-      linkUrl : ""
-    },
-    label: "",    
+    selectedPortfolio : null,
+    selectedCategory: null,    
+    selectedProductGroup: null,    
     name: "",
     origin : "",
     manufactor: "",

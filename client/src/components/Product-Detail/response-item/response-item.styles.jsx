@@ -81,8 +81,7 @@ export const TextArea = styled.textarea`
   &:focus {
     border-color: #004a8a;
   }
-  resize: none;
-  font-family: Roboto, sans serif;
+  resize: none;  
   &::after{
     content : "", 
     display : table,  
