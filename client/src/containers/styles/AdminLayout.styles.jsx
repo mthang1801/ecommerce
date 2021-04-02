@@ -8,7 +8,7 @@ export const Sidebar = styled.div`
   min-height: 100vh;
   overflow : auto;  
   width : ${({open}) => open ? "320px" : "0"};  
-  @media screen and (min-width:992px){
+  @media screen and (min-width:992px){    
     width : ${({open}) => open ? "25%" : "0"};
   }    
   transition : var(--mainTransition);
@@ -32,6 +32,7 @@ export const MainContent = styled.div`
   width : ${({scale}) => scale ? "calc(100% - 320px)" : "100%"};
   margin-left:  ${({scale}) => scale ? "320px" : "0"};
   @media screen and (min-width: 992px){    
+    width:  ${({scale}) => scale ? "75%" : "100%"};
     margin-left:  ${({scale}) => scale ? "24%" : "0"};
     padding-left:  ${({scale}) => scale ? "1%" : "0"};
   }

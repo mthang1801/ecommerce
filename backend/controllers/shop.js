@@ -1952,8 +1952,7 @@ exports.searchProductGroup = async (req, res, next) => {
 
 exports.getPortfolio = async (req, res, next) => {
   try {    
-    const portfolios = await Portfolio.find({});
-    console.log(portfolios)
+    const portfolios = await Portfolio.find({});    
     return res.status(200).json({ portfolios: portfolios });
   } catch (error) {
     console.log(error);

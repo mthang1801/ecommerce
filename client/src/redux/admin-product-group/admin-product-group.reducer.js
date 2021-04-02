@@ -35,7 +35,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        adminProductGroupsList: [...state.adminProductGroupsList, action.payload],
+        adminProductGroupsList: [ {...action.payload}, ...state.adminProductGroupsList,],
         count: state.count + 1,
       };
     case adminProductGroupsActionTypes.REMOVE_ADMIN_PRODUCT_GROUP_SUCCESS:

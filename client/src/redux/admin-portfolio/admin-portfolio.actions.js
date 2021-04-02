@@ -56,10 +56,8 @@ export const editAdminPortfolioFail = (err) => ({
 export const editAdminPortfolio = (formData) => async (dispatch) => {
   try {
     dispatch(editAdminPortfolioStart());    
-    const { data } = await axios.put(api.EDIT_PORTFOLIO, formData);
-    const standardizedData = {...data};
-    standardizedData.image.data= arrayBufferToBase64(standardizedData.image.data.data);
-    dispatch(editAdminPortfolioSuccess(standardizedData));
+    const { data } = await axios.put(api.EDIT_PORTFOLIO, formData);    
+    dispatch(editAdminPortfolioSuccess(data.portfolio));
   } catch (error) {
     dispatch(editAdminPortfolioFail(error.message));
   }

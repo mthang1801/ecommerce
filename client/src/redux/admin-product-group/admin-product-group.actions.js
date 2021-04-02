@@ -57,7 +57,7 @@ export const addAdminProductGroup = (productGroup) => (dispatch) => {
         url: api.POST_ADD_NEW_PRODUCT_GROUP,
         data: productGroup,
       });     
-      dispatch(addAdminProductGroupSuccess(data));
+      dispatch(addAdminProductGroupSuccess(data.productGroup));
       resolve(true);
     } catch (error) {
       dispatch(addAdminProductGroupFail(error.message));
@@ -135,7 +135,7 @@ export const editAdminProductGroups = (adminProductGroupsData) => (dispatch) => 
         data: adminProductGroupsData,
       });
      
-      dispatch(editAdminProductGroupsSuccess(data));
+      dispatch(editAdminProductGroupsSuccess(data.productGroup));
       resolve(true);
     } catch (error) {
       dispatch(editAdminProductGroupsFail(error.message));

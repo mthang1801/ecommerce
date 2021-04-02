@@ -27,9 +27,7 @@ import Button from "@material-ui/core/Button";
 
 const AdminAdd = ({ onAdd, localesData, role }) => {
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [image, setImage] = useState(null);
-  const [imgBase64, setImageBase64] = useState(null);
+  const [slug, setSlug] = useState("");    
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
@@ -56,12 +54,14 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     if (role === "category" || role === "product-group") {
       fetchPortfolios().then((data) => {
         if (data.portfolios) {
-          if (_isMounted) {
+          if (_isMounted) {            
             setPortfolios([...data.portfolios]);
             setIsFetched(true);
           }
         }
       });
+    }else{
+      setIsFetched(true);
     }
     return () => (_isMounted = false);
   }, [role]);
@@ -74,13 +74,6 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
       });
     }
   }, [selectedPortfolio]);
-  const postInputChangeHandler = (e) => {
-    let fileData = e.target.files[0];
-    setImage(fileData);
-    generateBase64Image(fileData)
-      .then((res) => setImageBase64(res))
-      .catch((err) => console.log(err));
-  };
 
   const onChangePortfolio = (portfolio) => {
      setSelectedPortfolio({ ...portfolio });
@@ -95,16 +88,10 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     setSlug(newSlug);
   };
 
-  const isValidForm = () => {
-    const validImage = ["image/jpeg", "image/jpg", "image/png"];
+  const isValidForm = () => {    
     if (!name || name?.length < 3 || !slug) {
       return false;
-    }
-    if (role !== "product-group") {
-      if (!image || !validImage.includes(image.type)) {
-        return false;
-      }
-    }
+    }   
 
     if (role === "category" && !selectedPortfolio) {
       return false;
@@ -143,7 +130,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, image, selectedPortfolio, selectedCategory]);
+  }, [name, slug, selectedPortfolio, selectedCategory]);
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -153,10 +140,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
       setError("You must fill all fields and name at least 3 characters");
       return;
     }
-    let formData = new FormData();
-    if (role !== "product-group") {
-      formData.append("image", image);
-    }
+    let formData = new FormData();    
     formData.append("name", name);
     formData.append("slug", slug);
     if (role === "category" || role === "product-group") {
@@ -167,11 +151,9 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     }
     onAdd(formData)
       .then((res) => {
-        setSuccess("Created Category Success!!");
-        setImage(null);
+        setSuccess("Created Category Success!!");        
         setName("");
-        setSlug("");
-        setImageBase64(null);
+        setSlug("");        
         setSelectedCategory(null);
         setSelectedPortfolio(null);
         formRef.current.reset();
@@ -271,13 +253,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
         <FormGroup>
           <Label>{localesData.slug}</Label>
           <Input type="text" name="slug" value={slug} disabled />
-        </FormGroup>
-        {role !== "product-group" && (
-          <FormGroup>
-            <Label>{localesData.image}</Label>
-            <Input type="file" name="image" onChange={postInputChangeHandler} />
-          </FormGroup>
-        )}
+        </FormGroup>       
         <FormGroup>
           <Button
             color="primary"
@@ -289,11 +265,6 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
           </Button>
         </FormGroup>
       </Form>
-      {imgBase64 && role !== "product-group" && (
-        <DisplayImage>
-          <img src={imgBase64} alt={slug} />
-        </DisplayImage>
-      )}
     </AdminAddContainer>
   );
 };

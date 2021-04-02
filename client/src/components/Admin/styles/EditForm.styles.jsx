@@ -9,11 +9,13 @@ export const FormWrapper = styled.div`
   position : fixed;
   display : flex ;       
   width : 80%;
-  left : 10%;
-  top : ${({show}) => show ? "10%" : "-200%"};  
+  max-width : 800px;  
+  left : 50%;
+  top : ${({show}) => show ? "40%" : "-200%"};  
+  transform : translate(-50%,-50%);
   & > form{
     width : 500px;    
-    max-width : 40% ;  
+    // max-width : 40% ;  
   };
   z-index: ${({show}) => show ? "1000" : "-1"};
   border-radius : 10px;

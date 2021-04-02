@@ -32,10 +32,11 @@ const AdminPortfolio = ({
     fetchAdminPortfolioList();
   }, [fetchAdminPortfolioList]);
   const { i18n, lang } = useLanguage();  
-  const {porfolio} = i18n.store.data[lang].translation.admin
+  const {portfolio} = i18n.store.data[lang].translation.admin
   const { portfolioNavigations } = i18n.store.data[
     lang
   ].translation.adminNavigations;  
+  console.log(portfolio)
   return (
     <AdminLayout>
       <AdminNavigations
@@ -55,7 +56,7 @@ const AdminPortfolio = ({
           fetchAllData={fetchAdminPortfolioList}
         />
       )}
-      {navigation === "add-portfolio" && <AddPortfolio onAdd={onAdd} localesData={porfolio}/>}
+      {navigation === "add-portfolio" && <AddPortfolio onAdd={onAdd} localesData={portfolio}/>}
     </AdminLayout>
   );
 };

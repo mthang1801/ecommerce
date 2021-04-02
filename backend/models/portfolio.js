@@ -16,10 +16,6 @@ const PortfolioSchema = new mongoose.Schema(
       required:  true ,
       index : true 
     },
-    image: {
-      type : String, 
-      required: true  
-    },
     categories: [
       {
         type: mongoose.Schema.Types.ObjectId,

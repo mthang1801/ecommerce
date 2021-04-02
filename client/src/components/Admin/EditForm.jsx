@@ -33,8 +33,6 @@ import useLanguage from "../Global/useLanguage";
 const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [image, setImage] = useState(null);
-  const [imageBase64, setImageBase64] = useState(null);
   const [error, setError] = useState(null);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [openPortfolioDropdown, setOpenPortfolioDropdown] = useState(false);
@@ -54,14 +52,13 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   useEffect(() => {
     if (edit) {
       setName(edit.name);
-      setSlug(edit.slug);
-      setImage(edit.image);
+      setSlug(edit.slug);     
       if (role === "category") {
         setSelectedPortfolio(edit.portfolio);
       }
-      if(role === "product-group"){
+      if (role === "product-group") {
         setSelectedPortfolio(edit.portfolio);
-        setSelectedCategory(edit.category)
+        setSelectedCategory(edit.category);
       }
     }
   }, [edit, role]);
@@ -75,7 +72,6 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     let _isMounted = true;
     if (role === "category" || role === "product-group") {
       fetchPortfolios().then((data) => {
-        
         if (data.portfolios) {
           if (_isMounted) {
             setPortfolios([...data.portfolios]);
@@ -95,14 +91,6 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
       });
     }
   }, [selectedPortfolio]);
-
-  const postInputChangeHandler = (e) => {
-    const fileData = e.target.files[0];
-    setImage(fileData);
-    generateBase64Image(fileData)
-      .then((res) => setImageBase64(res))
-      .catch((err) => console.log(err));
-  };
 
   useEffect(() => {
     function trackUserClickForm(e) {
@@ -126,17 +114,14 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   };
 
   const isValidForm = () => {
-    const validImage = ["image/jpeg", "image/jpg", "image/png"];
     if (!name || name?.length < 3 || !slug) {
       return false;
-    }    
-    if(role === "portfolio" && (!image || !validImage.includes(image.type))){
-      return false ; 
-    }
-    else if (role === "category" && name === edit.name && (!image || !validImage.includes(image.type)) ) {
-      return false;
-    }
-    else if (role === "product-group" && name === edit.name && selectedCategory._id === edit.category._id && selectedPortfolio === edit.portfolio._id ) {
+    } else if (
+      role === "product-group" &&
+      name === edit.name &&
+      selectedCategory?._id === edit.category._id &&
+      selectedPortfolio === edit.portfolio?._id
+    ) {
       return false;
     }
 
@@ -170,8 +155,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, image, selectedPortfolio, selectedCategory]);
-
+  }, [name, slug, selectedPortfolio, selectedCategory]);
 
   useEffect(() => {
     if (isValidForm()) {
@@ -179,7 +163,12 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, imageBase64, selectedPortfolio, role]);
+  }, [name, slug, selectedPortfolio, role]);
+
+  const onChangePortfolio = portfolio => {
+    setSelectedPortfolio({...portfolio});
+    setSelectedCategory(null);
+  }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -188,10 +177,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
       setError("You must fill all fields and name at least 3 characters");
       return;
     }
-    let formData = new FormData();
-    if (role !== "product-group") {
-      formData.append("image", image);
-    }
+    let formData = new FormData();    
     formData.append("_id", edit._id);
     formData.append("name", name);
     formData.append("slug", slug);
@@ -244,7 +230,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
                     {portfolios.map((portfolio) => (
                       <ItemAPI
                         key={portfolio._id}
-                        onClick={() => setSelectedPortfolio({ ...portfolio })}
+                        onClick={() => onChangePortfolio(portfolio)}
                       >
                         {portfolio.name}
                       </ItemAPI>
@@ -307,15 +293,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
               onChange={() => {}}
               disabled
             />
-          </FormGroup>
-          {role !== "product-group" && <FormGroup>
-            <Label>Hình ảnh</Label>
-            <Input
-              type="file"
-              name="edit-image"
-              onChange={postInputChangeHandler}
-            />
-          </FormGroup>}
+          </FormGroup>         
           <Button
             variant="contained"
             color="primary"
@@ -324,14 +302,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
           >
             Cập nhật
           </Button>
-        </Form>
-        {role !== "product-group" && <DisplayImage>
-          {imageBase64 ? (
-            <Image src={imageBase64} />
-          ) : image ? (
-            <Image src={image} />
-          ) : null}
-        </DisplayImage>}
+        </Form>        
       </FormWrapper>
     </EditFormWrapper>
   );

@@ -8,6 +8,7 @@ const ProductTypesSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+      enum : ["active", "disable"],
       default: "active",
     },
     slug: {
@@ -41,12 +42,7 @@ const ProductTypesSchema = new mongoose.Schema(
         ref: "products",
         required: true,
       },
-    ],
-    image : {
-      data : Buffer,
-      mimetype : String, 
-      filename : String
-    },
+    ],   
     manufactors: [
       {
         type: mongoose.Schema.Types.ObjectId,

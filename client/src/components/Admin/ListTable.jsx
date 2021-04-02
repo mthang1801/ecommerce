@@ -12,7 +12,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button"
+import Button from "@material-ui/core/Button";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -32,9 +32,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const useStyles = makeStyles({
-  table: {
-  
-  },
+  table: {},
 });
 
 const ListTable = ({
@@ -53,7 +51,7 @@ const ListTable = ({
   if (!data) return null;
   if (data.length) {
     return (
-      <React.Fragment>
+      <div style={{ padding: "1rem 2rem" }}>
         {isLoading && <h4>Loading...</h4>}
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
@@ -91,11 +89,25 @@ const ListTable = ({
                       )}
                     </StyledTableCell>
                   ))}
-                  <StyledTableCell>
-                    <Button style={{color : "#ffab00", fontWeight: "bolder", fontSize: "0.8rem"}} onClick={() => setEdit(item)}>
+                  <StyledTableCell align="right">
+                    <Button
+                      style={{
+                        color: "#ffab00",
+                        fontWeight: "bolder",
+                        fontSize: "0.8rem",
+                      }}
+                      onClick={() => setEdit(item)}
+                    >
                       EDIT
                     </Button>
-                    <Button style={{color : "#d32f2f", fontWeight :"bolder", fontSize: "0.8rem"}} onClick={() => onRemove(item._id)}>
+                    <Button
+                      style={{
+                        color: "#d32f2f",
+                        fontWeight: "bolder",
+                        fontSize: "0.8rem",
+                      }}
+                      onClick={() => onRemove(item._id)}
+                    >
                       DELETE
                     </Button>
                   </StyledTableCell>
@@ -111,7 +123,7 @@ const ListTable = ({
           role={role}
           localesData={localesData}
         />
-      </React.Fragment>
+      </div>
     );
   }
   return null;

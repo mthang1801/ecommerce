@@ -20,27 +20,14 @@ export const fetchAdminCategoriesFail = (err) => ({
 export const fetchAdminCategories = (skip, limit) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
-      dispatch(fetchAdminCategoriesStart());      
+      dispatch(fetchAdminCategoriesStart());
       const { data } = await axios({
         method: "GET",
         url: `${api.FETCH_ADDMIN_CATEGORIES}?skip=${skip}&limit=${limit}`,
       });
-      console.log(data);
-      if (data.categories.length) {
-        const standardizedData = data.categories.map((category) => {
-          const _category = { ...category };
-          _category.image.data = arrayBufferToBase64(_category.image.data.data);
-          return { ..._category };
-        });
-        console.log(standardizedData, data.count);
-        dispatch(
-          fetchAdminCategoriesSuccess(standardizedData, data.count)
-        );
-        return resolve(true);
-      }
 
       dispatch(fetchAdminCategoriesSuccess(data.categories, data.count));
-      resolve(true);
+      return resolve(true);
     } catch (error) {
       dispatch(fetchAdminCategoriesFail(error.message));
       reject(error?.response?.data?.message);
@@ -70,15 +57,8 @@ export const addAdminCategory = (category) => (dispatch) => {
         method: "POST",
         url: api.POST_ADD_NEW_CATEGORY,
         data: category,
-      });
-      const standardizedData = {
-        ...data,
-        image: {
-          ...data.image,
-          data: arrayBufferToBase64(data.image.data.data),
-        },
-      };
-      dispatch(addAdminCategorySuccess(standardizedData));
+      });      
+      dispatch(addAdminCategorySuccess(data.category));
       resolve(true);
     } catch (error) {
       dispatch(addAdminCategoryFail(error.message));
@@ -100,16 +80,13 @@ export const searchAdminCategoryFail = (err) => ({
 });
 
 export const searchAdminCategories = (searchKey) => async (dispatch) => {
-  
-    try {
-      dispatch(searchAdminCategoryStart());      
-      const { data } = await axios.get(api.SEARCH_CATEGORY(searchKey))      
-      dispatch(searchAdminCategorySuccess(data));
-     
-    } catch (error) {
-      dispatch(searchAdminCategoryFail(error.message));      
-    }
-  
+  try {
+    dispatch(searchAdminCategoryStart());
+    const { data } = await axios.get(api.SEARCH_CATEGORY(searchKey));
+    dispatch(searchAdminCategorySuccess(data));
+  } catch (error) {
+    dispatch(searchAdminCategoryFail(error.message));
+  }
 };
 
 export const findAdminCategoriesById = (productTypeId) => {
@@ -155,15 +132,8 @@ export const editAdminCategories = (adminCategoriesData) => (dispatch) => {
         method: "PUT",
         data: adminCategoriesData,
       });
-      console.log(data);
-      const standardizedData = {
-        ...data,
-        image: {
-          ...data.image,
-          data: arrayBufferToBase64(data.image.data.data),
-        },
-      };
-      dispatch(editAdminCategoriesSuccess(standardizedData));
+      
+      dispatch(editAdminCategoriesSuccess(data.category));
       resolve(true);
     } catch (error) {
       dispatch(editAdminCategoriesFail(error.message));

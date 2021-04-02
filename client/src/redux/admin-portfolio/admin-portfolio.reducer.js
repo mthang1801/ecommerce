@@ -30,7 +30,7 @@ export default (state = INITIAL_STATE, action) => {
     case adminPortfolioActionTypes.ADD_ADMIN_PORTFOLIO_SUCCESS:
       return {
         ...state,
-        portfolioList: [action.payload, ...state.portfolioList],
+        portfolioList: [{...action.payload}, ...state.portfolioList],
         loading: false,
       };
     case adminPortfolioActionTypes.EDIT_ADMIN_PORTFOLIO_SUCCESS:

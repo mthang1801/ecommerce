@@ -63,8 +63,7 @@ const AdminHome = ({
         setIsLoadMore(false);
       });
     }
-  },[isLoadMore,fetchAllData])
-  console.log(listData)
+  },[isLoadMore,fetchAllData])  
   return (
     <Wrapper>
       <SearchForm

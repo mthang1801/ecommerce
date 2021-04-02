@@ -35,7 +35,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        adminCategoriesList: [...state.adminCategoriesList, action.payload],
+        adminCategoriesList: [{...action.payload}, ...state.adminCategoriesList],
         count: state.count + 1,
       };
     case adminCategoriesActionTypes.REMOVE_ADMIN_CATEGORY_SUCCESS:

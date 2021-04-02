@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const Form = styled.form`
   width: 600px;
-  max-width: 40%;
-  margin: 1rem 2rem;
+  // max-width: 40%;
+  margin: 1rem auto;
 `;
 export const FormGroup = styled.div`
   width: 100%;
