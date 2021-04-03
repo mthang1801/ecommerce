@@ -14,6 +14,9 @@ export const NativeLink = styled.span`
   align-items: center;
   cursor: pointer;
   height: 100%;
+  background: ${({ active }) =>
+    active ? "linear-gradient(to right, #bbdefb , #90caf9)" : "transaprent"};
+  border-bottom : 5px solid ${({active}) => active ? "#fb8c00" : "transparent"};
   &:hover {
     background: linear-gradient(to bottom, #bbdefb , #90caf9);
   }
@@ -25,9 +28,7 @@ export const NativeLink = styled.span`
   & svg {
     font-size: 1.4rem;
   }
-  background: ${({ active }) =>
-    active ? "linear-gradient(to right, #bbdefb , #90caf9);" : "transaprent"};
-  border-bottom : 5px solid ${({active}) => active ? "#fb8c00" : "transparent"};
+  
 `;
 
 export const Navigations = styled.div`

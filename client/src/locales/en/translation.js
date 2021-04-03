@@ -57,7 +57,7 @@ export const en = {
         icon : <FiDatabase/>,
         children : [
           {
-            name : "Porfolio",
+            name : "Portfolio",
             icon : <AiOutlineUnorderedList/>,
             path : "/admin/portfolio"
           },

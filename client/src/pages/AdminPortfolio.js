@@ -56,7 +56,7 @@ const AdminPortfolio = ({
           fetchAllData={fetchAdminPortfolioList}
         />
       )}
-      {navigation === "add-portfolio" && <AddPortfolio onAdd={onAdd} localesData={portfolio}/>}
+      {navigation === "add-portfolio" && <AddPortfolio onAdd={onAdd} localesData={portfolio} role="portfolio"/>}
     </AdminLayout>
   );
 };

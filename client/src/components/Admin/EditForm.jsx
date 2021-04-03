@@ -34,6 +34,8 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [error, setError] = useState(null);
+  const [image, setImage] = useState(null);
+  const [imageBase64, setImageBase64] = useState(null);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [openPortfolioDropdown, setOpenPortfolioDropdown] = useState(false);
   const [openCategoryDropdown, setOpenCategoryDropdown] = useState(false);
@@ -42,6 +44,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const [portfolios, setPortfolios] = useState([]);
   const [categories, setCategories] = useState([]);
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
   const portfolioRef = useRef(null);
   const categoryRef = useRef(null);
@@ -53,6 +56,9 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     if (edit) {
       setName(edit.name);
       setSlug(edit.slug);     
+      if(role === "portfolio"){
+        setImage(edit.image);
+      }
       if (role === "category") {
         setSelectedPortfolio(edit.portfolio);
       }
@@ -92,6 +98,14 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     }
   }, [selectedPortfolio]);
 
+  const postInputChangeHandler = (e) => {
+    const fileData = e.target.files[0];
+    setImage(fileData);
+    generateBase64Image(fileData)
+      .then((res) => setImageBase64(res))
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     function trackUserClickForm(e) {
       if (
@@ -114,9 +128,23 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   };
 
   const isValidForm = () => {
+    const validImage = ["image/jpeg", "image/jpg", "image/png"];
     if (!name || name?.length < 3 || !slug) {
       return false;
-    } else if (
+    } 
+    if(role === "portfolio" ){
+     
+      if(name === edit.name && !imageBase64){
+        return false 
+      }else if (imageBase64 && !validImage.includes(image.type)) {
+        return false;
+      }
+    }
+  
+    if(role === "category" && name === edit.name && selectedPortfolio?._id === edit.portfolio._id){
+      return false ; 
+    }
+    if (
       role === "product-group" &&
       name === edit.name &&
       selectedCategory?._id === edit.category._id &&
@@ -155,15 +183,8 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, selectedPortfolio, selectedCategory]);
+  }, [name, slug, imageBase64, selectedPortfolio, selectedCategory]);
 
-  useEffect(() => {
-    if (isValidForm()) {
-      setDisabledSubmit(false);
-    } else {
-      setDisabledSubmit(true);
-    }
-  }, [name, slug, selectedPortfolio, role]);
 
   const onChangePortfolio = portfolio => {
     setSelectedPortfolio({...portfolio});
@@ -172,6 +193,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    setLoading(true);
     setError(null);
     if (disabledSubmit) {
       setError("You must fill all fields and name at least 3 characters");
@@ -179,6 +201,9 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     }
     let formData = new FormData();    
     formData.append("_id", edit._id);
+    if(role === "portfolio" && imageBase64){
+      formData.append("image", image);
+    }
     formData.append("name", name);
     formData.append("slug", slug);
     if (role === "category" || role === "product-group") {
@@ -189,13 +214,21 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     }
     onEdit(formData)
       .then((res) => {
+        setLoading(false);
         setEdit({});
+        setImageBase64(null);
+        setImage(null);
       })
       .catch((error) => setError(updateFailed));
   };
 
   const showForm = Object.keys(edit).length > 0;
-
+  if(loading) return (<>
+     <Backdrop show={showForm} close={() => setEdit({})} />
+     <FormWrapper show={showForm} ref={formRef}>
+       <div>Loading...</div>
+     </FormWrapper>
+  </>)
   return (
     <EditFormWrapper onSubmit={handleSubmitForm}>
       <Backdrop show={showForm} close={() => setEdit({})} />
@@ -204,8 +237,8 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
           <Title>Cập nhật Category</Title>
           {error && <Error>{error}</Error>}
           {success && <Success>{success}</Success>}
-          {role === "category" ||
-            (role === "product-group" && (
+          {(role === "category" ||
+            role === "product-group") && (
               <FormDropdown
                 ref={portfolioRef}
                 style={{ zIndex: openPortfolioDropdown ? 10 : 1 }}
@@ -238,7 +271,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
                   </ListAPI>
                 </Select>
               </FormDropdown>
-            ))}
+            )}
           {role === "product-group" && (
             <FormDropdown
               ref={categoryRef}
@@ -289,11 +322,19 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
             <Input
               type="text"
               name="slug"
-              value={slug}
-              onChange={() => {}}
+              value={slug || ""}
+              onChange={(e) => setSlug(e.target.value)}
               disabled
             />
-          </FormGroup>         
+          </FormGroup>   
+          {role === "portfolio" && <FormGroup>
+            <Label>Hình ảnh</Label>
+            <Input
+              type="file"
+              name="edit-image"
+              onChange={postInputChangeHandler}
+            />
+          </FormGroup>}      
           <Button
             variant="contained"
             color="primary"
@@ -303,6 +344,13 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
             Cập nhật
           </Button>
         </Form>        
+        {role === "portfolio" && <DisplayImage>
+          {imageBase64 ? (
+            <Image src={imageBase64} />
+          ) : image ? (
+            <Image src={image.url} />
+          ) : null}
+        </DisplayImage>}
       </FormWrapper>
     </EditFormWrapper>
   );

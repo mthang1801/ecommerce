@@ -11,6 +11,10 @@ const PortfolioSchema = new mongoose.Schema(
       type: String,
       default: "active",
     },
+    image : {
+      url : String, 
+      public_id : String
+    },
     slug : {
       type : String, 
       required:  true ,

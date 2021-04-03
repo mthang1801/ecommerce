@@ -32,12 +32,15 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   const [success, setSuccess] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null);
+  const [imgBase64, setImageBase64] = useState(null);
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [openPortfolioDropdown, setOpenPortfolioDropdown] = useState(false);
   const [openCategoryDropdown, setOpenCategoryDropdown] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [isFetched, setIsFetched] = useState(false);
+  const [loading, setLoading] = useState(false);
   const portfolioRef = useRef(null);
   const categoryRef = useRef(null);
   const formRef = useRef(null);
@@ -74,6 +77,13 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
       });
     }
   }, [selectedPortfolio]);
+  const postInputChangeHandler = (e) => {
+    let fileData = e.target.files[0];
+    setImage(fileData);
+    generateBase64Image(fileData)
+      .then((res) => setImageBase64(res))
+      .catch((err) => console.log(err));
+  };
 
   const onChangePortfolio = (portfolio) => {
      setSelectedPortfolio({ ...portfolio });
@@ -89,10 +99,15 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   };
 
   const isValidForm = () => {    
+    const validImage = ["image/jpeg", "image/jpg", "image/png"];
     if (!name || name?.length < 3 || !slug) {
       return false;
     }   
-
+    if (role === "portfolio") {
+      if (!image || !validImage.includes(image.type)) {
+        return false;
+      }
+    }
     if (role === "category" && !selectedPortfolio) {
       return false;
     }
@@ -130,17 +145,21 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, selectedPortfolio, selectedCategory]);
+  }, [name, slug, image, selectedPortfolio, selectedCategory]);
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true);
     if (disabledSubmit) {
       setError("You must fill all fields and name at least 3 characters");
       return;
     }
-    let formData = new FormData();    
+    let formData = new FormData();
+    if (role === "portfolio") {
+      formData.append("image", image);
+    }    
     formData.append("name", name);
     formData.append("slug", slug);
     if (role === "category" || role === "product-group") {
@@ -156,14 +175,17 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
         setSlug("");        
         setSelectedCategory(null);
         setSelectedPortfolio(null);
+        setLoading(false);
         formRef.current.reset();
+       
       })
       .catch((err) => {
         setError(err);
+        setLoading(false);
       });
   };
 
-  if(!isFetched) return <div>Loading...</div>
+  if(!isFetched || loading) return <div>Loading...</div>
   return (
     <AdminAddContainer>
       <Form ref={formRef} onSubmit={handleSubmitForm}>
@@ -250,6 +272,12 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
             onChange={onChangeCategoryName}
           />
         </FormGroup>
+        {role === "portfolio" && (
+          <FormGroup>
+            <Label>{localesData.image}</Label>
+            <Input type="file" name="image" onChange={postInputChangeHandler} />
+          </FormGroup>
+        )}
         <FormGroup>
           <Label>{localesData.slug}</Label>
           <Input type="text" name="slug" value={slug} disabled />
@@ -265,6 +293,11 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
           </Button>
         </FormGroup>
       </Form>
+      {imgBase64 && role === "portfolio" && (
+        <DisplayImage>
+          <img src={imgBase64} alt={slug} />
+        </DisplayImage>
+      )}
     </AdminAddContainer>
   );
 };

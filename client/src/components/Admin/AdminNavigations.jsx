@@ -17,7 +17,7 @@ const AdminPortfolioNavigations = ({
         {dataNavigations.map((data) => (
           <NativeLink
             key={data.name}
-            active={navigation === data.name}
+            active={navigation.toLowerCase() === data.name.toLowerCase()}
             onClick={() => setNavigation(data.path)}
           >
             <span>{data.icon}</span>

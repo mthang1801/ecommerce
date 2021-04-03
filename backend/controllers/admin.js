@@ -3,13 +3,21 @@ const Category = require("../models/category");
 const ProductGroup = require("../models/product-group");
 const Product = require("../models/product");
 const User = require("../models/user");
-const fs = require("fs-extra");
+const cloudinary = require("../config/cloudinary")
 const removeImage = require("../utils/removeImage");
 const mongoose = require("mongoose");
-const portfolio = require("../models/portfolio");
+
 exports.postPortfolio = async (req, res, next) => {
   try {
     const { name, slug } = req.body;    
+    const file = req.files[0];
+    if(!file){
+      const err = new Error("Image is required");
+      err.statusCode = 400; 
+      throw err; 
+    }
+    const image = await cloudinary.uploader.upload(file.path,{"tags": "portfolios", "width" : 200, "height" : 200 });
+    await removeImage(file.filename);
     const checkSlugExisted = await Portfolio.findOne({ slug });
     if (checkSlugExisted) {          
       const err = new Error("Portfolio has been existed");
@@ -20,6 +28,10 @@ exports.postPortfolio = async (req, res, next) => {
     const newPortfolio = new Portfolio({
       name,
       slug,      
+      image : {
+        url : image.secure_url, 
+        public_id : image.public_id
+      }
     });
     await newPortfolio.save();    
     return res.status(201).json({ ...newPortfolio._doc });
@@ -32,11 +44,21 @@ exports.editPortfolio = async (req, res, next) => {
   try {
     const { _id, name, slug } = req.body;    
     const portfolio = await Portfolio.findById(_id);
-    
+    let file = req.files[0];
+   
     if (!portfolio) {      
       const err = new Error("Portfolio not found");
       err.statusCode = 404;
       throw err;
+    }
+    if(file){
+      if(portfolio.image.public_id){
+        await cloudinary.uploader.destroy(portfolio.image.public_id);
+      }           
+      const image = await cloudinary.uploader.upload(file.path, {"tags" : "portfolios", "width" : 200, "height": 200});
+      portfolio.image.url = image.secure_url; 
+      portfolio.image.public_id = image.public_id;
+      await removeImage(file.filename);
     }
 
     portfolio.name = name;
