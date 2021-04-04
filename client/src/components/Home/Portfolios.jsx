@@ -2,43 +2,51 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   CategoriesSliderContainer,
   Caption,
-  CategoryItem,
-  CategoryImage,
-  CategoryName,
+ 
 } from "./styles/ProductPorfolio.styles";
 import Slider from "react-slick";
-import {selectCategoryList } from "../../redux/home/home.selectors";
-import {createStructuredSelector} from "reselect";
-import {connect} from "react-redux"
-import useLanguage from "../Global/useLanguage"
-const CategoriesSlider = ({categoryList}) => {
-  const {i18n, lang} = useLanguage()
-  const {homePage} = i18n.store.data[lang].translation;
+import { selectHomePortfolios } from "../../redux/home/home.selectors";
+import { createStructuredSelector } from "reselect";
+import { connect } from "react-redux";
+import useLanguage from "../Global/useLanguage";
+import PortfolioItem from "./PortfolioItem"
+import {CustomPortfoliosArrowNext, CustomPortfoliosArrowPrev} from "../Custom/CustomArrowSlider"
+const CategoriesSlider = ({ portfolios }) => {
+  const { i18n, lang } = useLanguage();
+  const { homePage } = i18n.store.data[lang].translation;
   const [slide, setSlide] = useState(null);
   let dragging = false;
-  
 
   const slideRef = useRef(null);
   useEffect(() => {
     setSlide(slideRef.current);
   }, [slideRef]);
-
-  let categoriesGroup = [];
-  let categoriesPerPage = [];
-  categoryList.forEach((item, index) => {
-    if (index !== 0 && index % 4 === 0) {
-      categoriesGroup.push(categoriesPerPage);
-      categoriesPerPage = [];
-    }
-    categoriesPerPage.push(item);
-    if (index === categoryList.length - 1 && index % 4 !== 0) {
-      categoriesGroup.push(categoriesPerPage);
-    }
-  });  
-  return (   
-      <CategoriesSliderContainer>
-        <Caption>{homePage.productPorfolio}</Caption>
-        {categoryList.length ? (
+  const settings = {        
+    infinite: true, 
+    slidesToShow: window.innerWidth < 600 ? 3 : window.innerWidth < 992 ? 4 :  5,
+    speed: 500,
+    rows: 2,
+    slidesPerRow: 1,
+    autoPlay : true,
+    prevArrow : <CustomPortfoliosArrowPrev/>,
+    nextArrow : <CustomPortfoliosArrowNext/>
+  };
+  if (!portfolios.length) return null;
+  return (
+    <CategoriesSliderContainer>
+      <Caption>{homePage.productPorfolio}</Caption>
+      {
+        <Slider {...settings}
+          beforeChange={() => (dragging = true)}
+          afterChange={() => (dragging = false)}
+          autoplaySpeed={2000}
+        >
+          {portfolios.map((portfolio) => (
+            <PortfolioItem key={`home-${portfolio._id}`} portfolio={portfolio} />
+          ))}
+        </Slider>
+      }
+      {/* {categoryList.length ? (
           <Slider
             asNavFor={slide}
             ref={slideRef}
@@ -68,11 +76,11 @@ const CategoriesSlider = ({categoryList}) => {
               })
             )}
           </Slider>
-        ) : null}
-      </CategoriesSliderContainer>  
+        ) : null} */}
+    </CategoriesSliderContainer>
   );
 };
 const mapStateToProps = createStructuredSelector({
-  categoryList : selectCategoryList,
-})
+  portfolios: selectHomePortfolios,
+});
 export default connect(mapStateToProps)(CategoriesSlider);

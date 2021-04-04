@@ -1,4 +1,4 @@
-import ProductPorfolio from "./ProductPorfolio";
+import Portfolios from "./Portfolios";
 import {selectHomeIsLoading} from "../../redux/home/home.selectors"
 import {connect} from "react-redux" 
 import {createStructuredSelector} from "reselect"
@@ -8,6 +8,6 @@ const mapStateToProps = createStructuredSelector({
   isLoading : selectHomeIsLoading
 })
 
-const ProductPorfolioContainer = connect(mapStateToProps)(withSpinner(ProductPorfolio))
+const PortfoliosContainer = connect(mapStateToProps)(withSpinner(Portfolios))
 
-export default ProductPorfolioContainer
+export default PortfoliosContainer

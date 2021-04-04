@@ -2144,3 +2144,14 @@ exports.postProduct = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getHome = async (req, res, next) => {
+  try {    
+    const portfolios = await Portfolio.find();
+    const recommendedProducts = await Product.find({}).sort({"sold_quantity_by_date.quantity" : -1 ,  sold_quantity : -1, stars : -1 }).skip(0).limit(+process.env.PRODUCTS_PER_PAGE);
+
+    return res.status(200).json({portfolios,recommendedProducts})
+  } catch (error) {
+    next(error);
+  }
+}

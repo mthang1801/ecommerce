@@ -1,10 +1,7 @@
 import homeActionTypes from "./home.types";
 const INITIAL_STATE = {
-  categoryList: [],
-  productsLatest: [],
-  productsBestSeller: [],
-  productsTopRated: [],
-  productsFavorite: [],
+  portfolios : [],
+  recommendedProducts : [],
   fetched: false,
   loading: false,
   error: undefined,
@@ -21,11 +18,8 @@ export default (state = INITIAL_STATE, action) => {
     case homeActionTypes.FETCH_HOME_PAGE_CONTENT_LIST_SUCCESS:
       return {
         ...state,
-        categoryList: [...action.payload.categoryList],
-        productsLatest: [...action.payload.productsLatest],
-        productsBestSeller: [...action.payload.productsBestSeller],
-        productsTopRated: [...action.payload.productsTopRated],
-        productsFavorite: [...action.payload.productsFavorite],
+        portfolios : [...action.payload.portfolios],
+        recommendedProducts : [...action.payload.recommendedProducts],
         fetched: true,
         loading: false,
       };

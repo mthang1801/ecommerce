@@ -3,27 +3,7 @@ import {CarouselBannerWrapper, Image} from "./styles/CarouselBanner.styles";
 import useLanguage from "../Global/useLanguage"
 import {Link} from "react-router-dom"
 import Slider from "react-slick";
-import LazyLoad from "react-lazyload"
-const CustomArrowPrev = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "transparent", opacity : "0.9" , position : "absolute", left: "3%", zIndex: 1}}
-      onClick={onClick}
-    />
-  )
-}
-const CustomArrowNext = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "transparent", opacity : "0.9" , position : "absolute", right: "3%", zIndex: 1 }}
-      onClick={onClick}
-    />
-  )
-}
+import {CustomArrowNext, CustomArrowPrev} from "../Custom/CustomArrowSlider"
 
 const CarouselBanner = () => {
   const [carouselHeight, setCarouselHeight] = useState(0)
@@ -32,7 +12,7 @@ const CarouselBanner = () => {
   const {bannerImages} = i18n.store.data[lang].translation
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,

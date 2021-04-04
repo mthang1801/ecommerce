@@ -17,6 +17,9 @@ router.get("/product-group", shopController.getProductGroup);
 router.get("/category/:categoryId/product-groups", shopController.getProductGroupsByCategory);
 //Product
 router.post("/product" ,isAuth, shopController.postProduct);
+//Home page
+router.get("/home", shopController.getHome);
+
 // /**
 //  * @route GET /initial-data
 //  * @desc get initial data

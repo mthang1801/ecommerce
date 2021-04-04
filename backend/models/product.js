@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema(
-  {    
+  {
     name: {
       type: String,
       required: true,
@@ -9,15 +9,19 @@ const ProductSchema = new Schema(
     slug: {
       type: String,
       required: true,
-      index : true,
-      unique : true 
+      index: true,
+      unique: true,
     },
     images: [
       {
-        type : String,
-        required :true 
-      }
+        type: String,
+        required: true,
+      },
     ],
+    views: {
+      type: Number,
+      default: 0,
+    },
     discount: {
       value: {
         type: Number,
@@ -26,7 +30,7 @@ const ProductSchema = new Schema(
         max: 100,
       },
       start_at: {
-        type: Number,        
+        type: Number,
       },
       end_at: {
         type: Number,
@@ -46,7 +50,7 @@ const ProductSchema = new Schema(
     },
     status: {
       type: String,
-      enum : ["pending", "active"] , //pending status occurs when waiting admin confirm to post product
+      enum: ["pending", "active"], //pending status occurs when waiting admin confirm to post product
       default: "active",
     },
     user: {
@@ -54,10 +58,10 @@ const ProductSchema = new Schema(
       ref: "users",
       required: true,
     },
-    portfolio : {
-      type : Schema.Types.ObjectId,
-      ref : "portfolios",
-      required : true 
+    portfolio: {
+      type: Schema.Types.ObjectId,
+      ref: "portfolios",
+      required: true,
     },
     category: {
       type: Schema.Types.ObjectId,
@@ -67,20 +71,32 @@ const ProductSchema = new Schema(
     productGroup: {
       type: Schema.Types.ObjectId,
       ref: "product-groups",
-    },    
-    manufactor: {
-      type : String , 
-      requried : true 
     },
-    origin : {
-      type : String,        
-      required : true      
+    manufactor: {
+      type: String,
+      requried: true,
+    },
+    origin: {
+      type: String,
+      required: true,
     },
     sold_quantity: {
       type: Number,
       default: 0,
-      min : 0
+      min: 0,
     },
+    sold_quantity_by_date : [
+      {
+        date : {
+          type : Number, 
+          default :Date.now
+        },
+        quantity : {
+          type : Number, 
+          required: true           
+        }
+      }
+    ],
     stars: {
       type: Number,
     },
@@ -93,9 +109,15 @@ const ProductSchema = new Schema(
     ],
     votes: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "votes",
-        required: true,
+        user: {
+          type: Schema.Types.ObjectId,
+          ref: "users",
+          required: true,
+        },
+        star: {
+          type: Number,
+          required: true,
+        },
       },
     ],
     quantity: {
@@ -109,12 +131,12 @@ const ProductSchema = new Schema(
     },
     ship_fee: {
       type: Number,
-      min : 0,
+      min: 0,
       default: 12000,
     },
     weight: {
       type: Number,
-      min : 1,
+      min: 1,
       required: true,
     },
   },
