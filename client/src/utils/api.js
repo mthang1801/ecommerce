@@ -12,6 +12,7 @@ export const api = {
   REMOVE_ADMIN_CATEGORY : "/admin/category",
   SEARCH_CATEGORY : search => `/search/category?search=${search}`,
   FETCH_CATEGORIES_BY_PORTFOLIO : (portfolioId) => `/portfolio/${portfolioId}/categories`,
+  FETCH_MANUFACTORS_BY_PORTFOLIO : (portfolioId) => `/portfolio/${portfolioId}/manufactors`,
   //ProductGroup
   POST_ADD_NEW_PRODUCT_GROUP : "/admin/product-group",
   FETCH_ADMIN_PRODUCT_GROUPS : "/product-group",

@@ -3,6 +3,7 @@ const Category = require("../models/category");
 const ProductGroup = require("../models/product-group");
 const Product = require("../models/product");
 const User = require("../models/user");
+const Manufactor = require("../models/manufactor");
 const cloudinary = require("../config/cloudinary")
 const removeImage = require("../utils/removeImage");
 const mongoose = require("mongoose");
@@ -95,6 +96,10 @@ exports.removePortfolio = async (req, res, next) => {
       await Product.findByIdAndDelete(productId);
       //remove products in user
       await User.findOneAndUpdate({products : productId}, {$pull: {products : productId}});
+    }
+    //loop and remove manufactor
+    for(let manufactorId of portfolio.manufactors){
+      await Manufactor.findByIdAndDelete(manufactorId);
     }
     
     

@@ -5,11 +5,18 @@ const ManufactorSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+    },   
+    slug : {
+      type : String , 
+      index : true, 
+      unique : true, 
+      required : true
     },
-    linkUrl: {
-      type: String,
-      required: true,
-    },
+    portfolios : [{
+      type : mongoose.Schema.Types.ObjectId,
+      ref : "portfolios",
+      required : true 
+    }],
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,13 +24,7 @@ const ManufactorSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    productGroups: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product-groups",
-        required: true,
-      },
-    ],
+    
   },
   { timestamps: true }
 );

@@ -11,19 +11,26 @@ const PortfolioSchema = new mongoose.Schema(
       type: String,
       default: "active",
     },
-    image : {
-      url : String, 
-      public_id : String
+    image: {
+      url: String,
+      public_id: String,
     },
-    slug : {
-      type : String, 
-      required:  true ,
-      index : true 
+    slug: {
+      type: String,
+      required: true,
+      index: true,
     },
     categories: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "categories",
+        required: true,
+      },
+    ],
+    manufactors: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "manufactors",
         required: true,
       },
     ],
@@ -34,13 +41,13 @@ const PortfolioSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    products : [
+    products: [
       {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "products",
-        required: true 
-      }
-    ]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

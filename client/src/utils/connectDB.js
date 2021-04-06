@@ -189,7 +189,9 @@ export const createNewProduct = (product) => {
       formData.append("portfolioId", product.selectedPortfolio._id);
       formData.append("categoryId", product.selectedCategory._id);     
       formData.append(
-        "productGroupId", product.selectedProductGroup?._id)                    
+        "productGroupId", product.selectedProductGroup?._id)    
+      formData.append("manufactorId", product.selectedManufactor?._id);
+      formData.append("manufactorName", product.selectedManufactor?.name);
       formData.append("name", product.name);
       formData.append("price", product.price);      
       formData.append("discount", product.discount || 0);
@@ -375,6 +377,17 @@ export const fetchCategoriesByPortfolio = (portfolioId) => {
   return new Promise(async (resolve, reject) => {
     try {
       const {data} = await axios.get(api.FETCH_CATEGORIES_BY_PORTFOLIO(portfolioId));
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  })
+}
+
+export const fetchManufactorsByPortfolio = (portfolioId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {data} = await axios.get(api.FETCH_MANUFACTORS_BY_PORTFOLIO(portfolioId));
       resolve(data);
     } catch (error) {
       reject(error);

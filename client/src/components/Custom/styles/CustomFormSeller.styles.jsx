@@ -1,10 +1,18 @@
 import styled from "styled-components";
 import NumberFormat from "react-number-format";
+
+export const Transition = styled.div`
+  visibility : ${({show}) => show ? "visible" : "hidden"};
+  opacity :  ${({show}) => show ? 1: 0};
+  height : ${({show}) => show ? "auto" : 0};
+`
+
 export const Form = styled.form`
   width: 100%;
   max-width: 600px;
   margin: 2rem auto;
 `;
+
 export const FormGroup = styled.div`
   display: flex;
   margin : 2rem 0;
@@ -69,6 +77,7 @@ export const Required = styled.span`
 export const Select = styled.div`
   width: 100%;
   padding: 0.5rem 1rem;
+  min-height: 2.5rem;
   font-size: 1.1em;
   line-height: 1.7;
   outline: none;

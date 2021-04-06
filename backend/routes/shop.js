@@ -12,6 +12,8 @@ router.get("/portfolio", shopController.getPortfolio);
 //Category
 router.get("/category", shopController.getCategory);
 router.get("/portfolio/:portfolioId/categories", shopController.getCategoriesByPortfolio);
+//Manufactors
+router.get("/portfolio/:portfolioId/manufactors", shopController.getManufactorsByPortfolio)
 //Product Group
 router.get("/product-group", shopController.getProductGroup);
 router.get("/category/:categoryId/product-groups", shopController.getProductGroupsByCategory);

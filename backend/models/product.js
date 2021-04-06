@@ -73,7 +73,8 @@ const ProductSchema = new Schema(
       ref: "product-groups",
     },
     manufactor: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref : "manufactors",
       requried: true,
     },
     origin: {
