@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import NumberFormat from "react-number-format";
 
-export const Transition = styled.div`
-  visibility : ${({show}) => show ? "visible" : "hidden"};
-  opacity :  ${({show}) => show ? 1: 0};
-  height : ${({show}) => show ? "auto" : 0};
+export const Error = styled.div`
+  color : var(--red-1);
+  text-align:center;
 `
 
 export const Form = styled.form`

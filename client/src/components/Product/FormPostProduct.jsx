@@ -36,6 +36,7 @@ import {
   ImageInput,
   CustomNumberFormat,
   FormGroupAnimation,
+  Error
 } from "../Custom/styles/CustomFormSeller.styles";
 import useLanguage from "../Global/useLanguage";
 
@@ -85,6 +86,32 @@ const FormPostProduct = ({ product, saveProductForm }) => {
   const [complete, setComplete] = useState(false);
   const [error, setError] = useState(null);
   const { i18n, lang } = useLanguage();
+
+  const portfolioRef = useRef(null);
+  const categoryRef = useRef(null);
+  const productGroupRef = useRef(null);
+  const manufactorRef = useRef(null);
+  const addOtherManufactorRef = useRef(null)
+  useEffect(() => {  
+    function trackUserClick(e){           
+      if(portfolioRef.current && !portfolioRef.current.contains(e.target)){
+        setShowListPortfolios(false);
+      }
+      if(categoryRef.current && !categoryRef.current.contains(e.target)){
+        setShowListCategories(false);
+      }
+      if(productGroupRef.current && !productGroupRef.current.contains(e.target)){
+        setShowListProductGroups(false);
+      }
+      if(manufactorRef.current && !manufactorRef.current.contains(e.target)){
+        setShowListManufactors(false);
+      }
+    }
+    window.addEventListener("click", trackUserClick);
+    return () => window.removeEventListener("click", trackUserClick);
+  })
+
+
   const { postProduct } = i18n.store.data[lang].translation;
   useEffect(() => {
     let _isMounted = true;
@@ -208,8 +235,10 @@ const FormPostProduct = ({ product, saveProductForm }) => {
   const onOpenOtherManufactorInput = () => {
     saveProductForm({ selectedManufactor: null });
     setOpenOtherManufactorInput(true);
-  };
-  console.log(openOtherManufactorInput)
+    setTimeout(() => {
+      addOtherManufactorRef.current.focus();
+    },66)
+  };  
 
   const isValidForm = () => {
     const checkDescription = convertHTMLToEditorState(description);
@@ -291,13 +320,16 @@ const FormPostProduct = ({ product, saveProductForm }) => {
   return (
     <Wrapper>
       <h2>{postProduct.title}</h2>
-      {/* Select category */}
+      {error && <Error>{error}</Error>}
+      {/* Select portfolio */}
       <FormGroup
+        ref={portfolioRef}
         style={{ zIndex: showListPortfolios ? 10 : 1 }}
         onClick={() =>
           listPortfolios.length &&
           setShowListPortfolios((prevState) => !prevState)
         }
+      
       >
         <Label>{postProduct.portfolio}</Label>
         <Select>
@@ -324,6 +356,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Categories */}
       <FormGroup
+        ref={categoryRef}
         style={{
           zIndex: selectedPortfolio && showListCategories ? 11 : 1,
         }}
@@ -360,6 +393,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Product Groups */}
       <FormGroup
+        ref={productGroupRef}
         style={{
           zIndex:
             selectedPortfolio &&
@@ -409,6 +443,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Manufactor */}
       <FormGroup
+        ref={manufactorRef}
         style={{
           zIndex: selectedPortfolio && showListManufactors ? 13 : 1,
         }}
@@ -454,6 +489,7 @@ const FormPostProduct = ({ product, saveProductForm }) => {
             name="addManufactor"
             value={selectedManufactor?  selectedManufactor.name : ""}
             onChange={(e) => saveProductForm({selectedManufactor : {name : e.target.value} })}
+            ref={addOtherManufactorRef}
             required
           />
         </FormGroup>
@@ -482,8 +518,8 @@ const FormPostProduct = ({ product, saveProductForm }) => {
       </FormGroup>
       {/* Image */}
       <FormGroup>
-        <ImageInput htmlFor="images">
-          <RiImageAddLine />
+        <ImageInput style={{minWidth:"120px"}} htmlFor="images">
+          <span style={{display : "flex", alignItems : "flex-end"}}>{postProduct.addImage} <RiImageAddLine /></span>
           <input
             type="file"
             name="images"
