@@ -1,10 +1,22 @@
-import React from "react"
-import { AiFillSetting, AiOutlineHistory, AiOutlineHome , AiOutlineShareAlt, AiOutlineAudit, AiOutlineUnorderedList} from "react-icons/ai";
+import React from "react";
+import {
+  AiFillSetting,
+  AiOutlineHistory,
+  AiOutlineHome,
+  AiOutlineShareAlt,
+  AiOutlineAudit,
+  AiOutlineUnorderedList,
+} from "react-icons/ai";
 import { FiLogOut, FiDatabase } from "react-icons/fi";
-import { FcBusinessman } from "react-icons/fc";
+import {
+  FcBusinessman,
+  FcAddDatabase,
+  FcGenealogy,
+  FcHome,
+} from "react-icons/fc";
 import { BiLayer, BiLayerPlus } from "react-icons/bi";
-import {FcManager} from "react-icons/fc"
-import {RiPlayListAddFill} from "react-icons/ri"
+import { FcManager } from "react-icons/fc";
+import { RiPlayListAddFill } from "react-icons/ri";
 export const vi = {
   translation: {
     authenticate: {
@@ -24,9 +36,9 @@ export const vi = {
           name: "Trở thành nhà bán hàng",
           icon: <FcBusinessman />,
         },
-        postProduct:{
-          name : "Đăng bán SP", 
-          icon : <BiLayerPlus/>
+        postProduct: {
+          name: "Đăng bán SP",
+          icon: <BiLayerPlus />,
         },
         admin: {
           name: "Quản trị trang",
@@ -67,13 +79,13 @@ export const vi = {
             path: "/admin/category",
           },
           {
-            name : "Nhóm SP",
-            icon : <BiLayer/>,
-            path : "/admin/product-groups"
+            name: "Nhóm SP",
+            icon: <AiOutlineHome />,
+            path: "/admin/product-groups",
           },
           {
             name: "Nhà bán hàng",
-            icon: <AiOutlineAudit />,
+            icon: <FcAddDatabase />,
             path: "/admin/sellers",
           },
         ],
@@ -81,68 +93,78 @@ export const vi = {
       portfolioNavigations: [
         {
           name: "Trang chủ",
-          icon: <AiOutlineHome />,
-          path : "home"
+          icon: <FcHome />,
+          path: "home",
         },
         {
           name: "Thêm loại sản phẩm",
-          icon: <RiPlayListAddFill />,
-          path : "add-portfolio"
+          icon: <FcAddDatabase />,
+          path: "add-portfolio",
         },
       ],
-      categoryNavigations : [
+      categoryNavigations: [
         {
           name: "Trang chủ",
-          icon : <AiOutlineHome/>,
-          path : "home"
+          icon: <FcHome />,
+          path: "home",
         },
         {
           name: "Thêm Loại SP",
-          icon : <RiPlayListAddFill/>,
-          path : "add-category"
+          icon: <FcAddDatabase />,
+          path: "add-category",
         },
       ],
-      productGroupsNavigations : [
+      productGroupsNavigations: [
         {
           name: "Trang chủ",
-          icon : <AiOutlineHome/>,
-          path : "home"
+          icon: <FcHome />,
+          path: "home",
         },
         {
           name: "Thêm Nhóm SP",
-          icon : <RiPlayListAddFill/>,
-          path : "add-product-group"
+          icon: <FcAddDatabase />,
+          path: "add-product-group",
         },
-      ]
+        {
+          name: "Tạo nhiều nhóm SP",
+          icon: <FcGenealogy />,
+          path: "auto-generate-data",
+        },
+      ],
     },
     admin: {
-      portfolio : {
+      portfolio: {
         addTitle: "Thêm Danh Mục Sản Phẩm",
-        name : "Tên danh mục",
-        slug : "đường dẫn liên kết",
-        image : "file ảnh",
-        submit : "Tạo Danh Mục",        
+        name: "Tên danh mục",
+        slug: "đường dẫn liên kết",
+        image: "file ảnh",
+        submit: "Tạo Danh Mục",
       },
-      category : {
+      category: {
         addTitle: "Thêm loại SP",
-        name : "Tên loại SP",
-        portfolioLabel : "SP thuộc danh mục",
-        slug : "Đường dẫn liên kết",
-        image : "file ảnh",
-        submit : "Tạo Loại SP",        
+        name: "Tên loại SP",
+        portfolioLabel: "SP thuộc danh mục",
+        slug: "Đường dẫn liên kết",
+        image: "file ảnh",
+        submit: "Tạo Loại SP",
+        showProductGroupsToClient: "Hiển thị nhóm SP cho client",
+        statusYes: "Có",
+        statusNo: "Không",
       },
-      productGroups : {
+      productGroups: {
         addTitle: "Thêm Nhóm SP",
-        name : "Tên nhóm SP",
-        portfolioLabel : "SP thuộc danh mục",
-        categoryLabel : "SP thuộc loại",
-        slug : "Đường dẫn liên kết",
-        image : "file Ảnh",
-        submit : "Tạo nhóm SP",   
-        showProductGroupsToClient : "Hiển thị nhóm SP cho client",
-        statusYes : "Có",
-        statusNo : "Không"
-      }
+        name: "Tên nhóm SP",
+        portfolioLabel: "SP thuộc danh mục",
+        categoryLabel: "SP thuộc loại",
+        slug: "Đường dẫn liên kết",
+        image: "file Ảnh",
+        submit: "Tạo nhóm SP",
+        showProductGroupsToClient: "Hiển thị nhóm SP cho client",
+        statusYes: "Có",
+        statusNo: "Không",
+        autoGenerateDataLabel : "Nhập tên Nhóm SP sau đó Enter hoặc Tab để tạo",
+        autogenerateTitle : "Tạo nhiều nhóm SP"
+      },
     },
     navigations: {
       home: "Trang chủ",
@@ -210,38 +232,38 @@ export const vi = {
       topRatedProducts: "Sản phẩm được bình chọn",
     },
     notification: {
-      updateSuccess : "Cập nhật thành công",
-      updateFailed : "Cập nhật thất bại, có lỗi xảy ra."
+      updateSuccess: "Cập nhật thành công",
+      updateFailed: "Cập nhật thất bại, có lỗi xảy ra.",
     },
-    postProduct : {
-      title : "Đăng sản phẩm",
-      portfolio : "Danh mục SP",
-      portfolioPlaceholder : "Lựa chọn danh mục SP",
-      category : "Loại SP",
-      categoryPlaceholder : "Lựa chọn loại SP",
-      noCategory : "Không có Loại SP",
-      productGroup : "Nhóm SP (nếu có)",
-      productGroupPlaceholder : "Lựa chọn nhóm SP" ,
-      noProductGroup : "Không có nhóm SP",
-      productName : "Tên SP (bắt buộc)", 
-      manufactor : "Nhà sản xuất",
-      manufactorPlaceholder : "Lựa chọn nhà SX", 
-      noManufactor : "Chưa có nhà sản xuất nào",
-      manufactorOtherSelect : "Nhà sản xuất khác",
-      addManufactor : "Thêm nhà SX",
-      origin : "Nguồn gốc (bắt buộc)" , 
-      addImage : "Thêm ảnh",
-      price : "Đơn giá (bắt buộc)", 
-      quantity : "Số lượng bán (bắt buộc)",
-      weight : "Khối lượng(g)", 
-      shippingFee : "Phí vận chuyển", 
-      discount : "Giảm giá",
-      discountPercentage : "Phần trăm giảm giá", 
-      discountExpiration : "Ngày hết hạn giảm giá", 
-      priceAfterDiscount : "Giá SP Sau khi giảm",
-      productInformation : "Thông tin SP", 
-      productDescription : "Mô tả SP", 
-      submit : "Đăng SP"
-    }
+    postProduct: {
+      title: "Đăng sản phẩm",
+      portfolio: "Danh mục SP",
+      portfolioPlaceholder: "Lựa chọn danh mục SP",
+      category: "Loại SP",
+      categoryPlaceholder: "Lựa chọn loại SP",
+      noCategory: "Không có Loại SP",
+      productGroup: "Nhóm SP (nếu có)",
+      productGroupPlaceholder: "Lựa chọn nhóm SP",
+      noProductGroup: "Không có nhóm SP",
+      productName: "Tên SP (bắt buộc)",
+      manufactor: "Nhà sản xuất",
+      manufactorPlaceholder: "Lựa chọn nhà SX",
+      noManufactor: "Chưa có nhà sản xuất nào",
+      manufactorOtherSelect: "Nhà sản xuất khác",
+      addManufactor: "Thêm nhà SX",
+      origin: "Nguồn gốc (bắt buộc)",
+      addImage: "Thêm ảnh",
+      price: "Đơn giá (bắt buộc)",
+      quantity: "Số lượng bán (bắt buộc)",
+      weight: "Khối lượng(g)",
+      shippingFee: "Phí vận chuyển",
+      discount: "Giảm giá",
+      discountPercentage: "Phần trăm giảm giá",
+      discountExpiration: "Ngày hết hạn giảm giá",
+      priceAfterDiscount: "Giá SP Sau khi giảm",
+      productInformation: "Thông tin SP",
+      productDescription: "Mô tả SP",
+      submit: "Đăng SP",
+    },
   },
 };

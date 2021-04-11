@@ -28,7 +28,7 @@ const AdminCategory = ({
   onRemove,
   onSearch
 }) => {
-  const cols = ["name", "slug", "portfolio", "createdAt"];
+  const cols = ["name", "slug", "active", "portfolio", "createdAt"];
   const { i18n, lang } = useLanguage();
   const [navigation, setNavigation] = useState("home");
   const { categoryNavigations } = i18n.store.data[

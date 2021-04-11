@@ -6,15 +6,14 @@ const ProductTypesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum : ["active", "disable"],
-      default: "active",
+    active: {
+      type: Boolean,
+      default: true,
     },
     slug: {
       type: String,
       required: true,
-      unique : true,
+      unique: true,
       index: true,
     },
     products: [
@@ -27,7 +26,7 @@ const ProductTypesSchema = new mongoose.Schema(
     portfolio: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "portfolios",
-      required: true 
+      required: true,
     },
     productGroups: [
       {
@@ -36,13 +35,13 @@ const ProductTypesSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    products : [
+    products: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "products",
         required: true,
       },
-    ],   
+    ],
     manufactors: [
       {
         type: mongoose.Schema.Types.ObjectId,

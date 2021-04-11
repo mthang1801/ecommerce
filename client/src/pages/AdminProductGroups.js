@@ -3,14 +3,10 @@ import AdminLayout from "../containers/AdminLayout";
 import useLanguage from "../components/Global/useLanguage";
 import AdminNavigations from "../components/Admin/AdminNavigations";
 import AdminHome from "../components/Admin/AdminHome";
+import GenerateManyData from "../components/Admin/GenerateManyData";
 import AdminAdd from "../components/Admin/AdminAdd";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import {
-  selectAdminCategoriesList,
-  selectAdminCategoriesCount,
-  selectAdminCategoriesLoading,
-} from "../redux/admin-category/admin-category.selectors";
 import {
   selectAdminProductGroupsList,
   selectAdminProductGroupsCount,
@@ -23,6 +19,7 @@ import {
   editAdminProductGroups,
   removeAdminProductGroup,
   searchAdminProductGroups,
+  generateManyProductGroups,
 } from "../redux/admin-product-group/admin-product-group.actions";
 
 const AdminCategory = ({
@@ -34,6 +31,7 @@ const AdminCategory = ({
   onEdit,
   onRemove,
   onSearch,
+  onGenerate,
 }) => {
   const cols = ["name", "slug", "active", "portfolio", "category", "createdAt"];
   const { i18n, lang } = useLanguage();
@@ -78,6 +76,13 @@ const AdminCategory = ({
           role="product-group"
         />
       )}
+      {navigation === "auto-generate-data" && (
+        <GenerateManyData
+          localesData={productGroups}
+          role="product-group"
+          onGenerate={onGenerate}
+        />
+      )}
     </AdminLayout>
   );
 };
@@ -93,6 +98,7 @@ const mapDispatchToProps = (dispatch) => ({
   onEdit: (productGroup) => dispatch(editAdminProductGroups(productGroup)),
   onRemove: (_id) => dispatch(removeAdminProductGroup(_id)),
   onSearch: (search) => dispatch(searchAdminProductGroups(search)),
+  onGenerate: (data) => dispatch(generateManyProductGroups(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminCategory);

@@ -14,6 +14,7 @@ router.delete("/category", isAdmin, adminController.removeCategory);
 router.post("/product-group", isAdmin, adminController.postCreateProductGroup);
 router.put("/product-group", isAdmin, adminController.editProductGroup);
 router.delete("/product-group", isAdmin, adminController.removeProductGroup);
+router.post("/generate-many-product-groups", isAdmin, adminController.generateManuProductGroups)
 // router.post("/category", adminController.postCategory);
 // router.put("/category", adminController.putCategory);
 // router.delete("/category", adminController.deleteCategory);

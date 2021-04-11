@@ -2,8 +2,7 @@ import React from 'react'
 import {Wrapper} from "./styles/PortfolioItem.styles"
 import {LazyLoadImage} from "react-lazy-load-image-component"
 
-const PortfolioItem = ({portfolio}) => {  
-  console.log(portfolio)
+const PortfolioItem = ({portfolio}) => {    
   return (
     <Wrapper to={`/${portfolio.slug}`}>
       <LazyLoadImage 

@@ -149,7 +149,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
       }
     }
   
-    if(role === "category" && name === edit.name && selectedPortfolio?._id === edit.portfolio._id ){
+    if(role === "category" && name === edit.name && selectedPortfolio?._id === edit.portfolio._id && activeStatus.toString() === edit.active.toString() ){
       return false ; 
     }
     if (
@@ -218,10 +218,10 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     formData.append("slug", slug);
     if (role === "category" || role === "product-group") {
       formData.append("portfolioId", selectedPortfolio._id);
+      formData.append("status", activeStatus)
     }
     if (role === "product-group") {
-      formData.append("categoryId", selectedCategory._id);
-      formData.append("status", activeStatus)
+      formData.append("categoryId", selectedCategory._id);    
     }
     onEdit(formData)
       .then((res) => {
@@ -338,7 +338,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
               disabled
             />
           </FormGroup>   
-          {role === "product-group" && (
+          {(role === "product-group" || role ==="category") && (
           <FormControl
             style={{
               display: "flex",

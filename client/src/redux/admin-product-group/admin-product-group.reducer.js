@@ -13,7 +13,8 @@ export default (state = INITIAL_STATE, action) => {
     case adminProductGroupsActionTypes.ADD_ADMIN_PRODUCT_GROUP_START:
     case adminProductGroupsActionTypes.SEARCH_ADMIN_PRODUCT_GROUPS_START:
     case adminProductGroupsActionTypes.REMOVE_ADMIN_PRODUCT_GROUP_START:
-    case adminProductGroupsActionTypes.EIDT_ADMIN_PRODUCT_GROUP_START:
+    case adminProductGroupsActionTypes.EDIT_ADMIN_PRODUCT_GROUP_START:
+    case adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_START:
       return {
         ...state,
         loading: true,
@@ -22,7 +23,10 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        adminProductGroupsList: [...state.adminProductGroupsList, ...action.payload.adminProductGroupsList],
+        adminProductGroupsList: [
+          ...state.adminProductGroupsList,
+          ...action.payload.adminProductGroupsList,
+        ],
         count: action.payload.count,
       };
     case adminProductGroupsActionTypes.SEARCH_ADMIN_PRODUCT_GROUPS_SUCCESS:
@@ -35,7 +39,10 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        adminProductGroupsList: [ {...action.payload}, ...state.adminProductGroupsList,],
+        adminProductGroupsList: [
+          { ...action.payload },
+          ...state.adminProductGroupsList,
+        ],
         count: state.count + 1,
       };
     case adminProductGroupsActionTypes.REMOVE_ADMIN_PRODUCT_GROUP_SUCCESS:
@@ -56,11 +63,21 @@ export default (state = INITIAL_STATE, action) => {
           action.payload
         ),
       };
+    case adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        adminProductGroupsList: [
+          ...action.payload,
+          ...state.adminProductGroupsList,         
+        ],
+      };
     case adminProductGroupsActionTypes.FETCH_ADMIN_PRODUCT_GROUPS_FAIL:
     case adminProductGroupsActionTypes.ADD_ADMIN_PRODUCT_GROUP_FAIL:
     case adminProductGroupsActionTypes.SEARCH_ADMIN_PRODUCT_GROUPS_FAIL:
     case adminProductGroupsActionTypes.REMOVE_ADMIN_PRODUCT_GROUP_FAIL:
     case adminProductGroupsActionTypes.EIDT_ADMIN_PRODUCT_GROUP_FAIL:
+    case adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_FAIL:
       return {
         ...state,
         loading: false,

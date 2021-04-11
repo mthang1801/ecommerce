@@ -20,6 +20,7 @@ export const api = {
   REMOVE_ADMIN_PRODUCT_GROUP : "/admin/product-group",
   SEARCH_PRODUCT_GROUP : (search) => `/search/product-group?search=${search}`,
   FETCH_PRODUCT_GROUPS_BY_CATEGORY : categoryId => `/category/${categoryId}/product-groups`,
+  GENERATE_MANY_PRODUCT_GROUPS : "/admin/generate-many-product-groups",
   //Post Product
   POST_PRODUCT : "/product",
   //Home page

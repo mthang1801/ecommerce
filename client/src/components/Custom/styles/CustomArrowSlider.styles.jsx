@@ -6,17 +6,16 @@ export const CustomPortfoliosArrowPrevContainer = styled.div`
   background-color: var(--light-gray-1);
   cursor: pointer;
   position: absolute;
-  top: 50%;
-  left: -1%;
-  transform: translateY(-50%);
+  top: 45%;
+  left: -1%;  
   z-index: 1;
   border-radius: 50%;
+  transition : all 0.3s; 
   &:hover {
     background-color: var(--light-gray-2);
-    width: 2.5rem;
-    height: 2.5rem;
+    transform : scale(1.5);
     &:before {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
   }
   &:before {
@@ -36,18 +35,16 @@ export const CustomPortfoliosArrowNextContainer = styled.div`
   background-color: var(--light-gray-1);
   cursor: pointer;
   position: absolute;
-  top: 50%;
-  right : -1%;  
-  transform: translateY(-50%);
+  top: 45%;
+  right : -1%;    
   z-index: 1;
   border-radius: 50%;
-  
+  transition : all 0.3s;
   &:hover {
     background-color: var(--light-gray-2);
-    width: 2.5rem;
-    height: 2.5rem;
+    transform : scale(1.5);
     &:after {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
   }
   &:after {

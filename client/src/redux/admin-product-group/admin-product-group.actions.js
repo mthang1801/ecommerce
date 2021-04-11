@@ -7,7 +7,10 @@ export const fetchAdminProductGroupsStart = () => ({
   type: adminProductGroupsActionTypes.FETCH_ADMIN_PRODUCT_GROUPS_START,
 });
 
-export const fetchAdminProductGroupsSuccess = (adminProductGroupsList, count) => ({
+export const fetchAdminProductGroupsSuccess = (
+  adminProductGroupsList,
+  count
+) => ({
   type: adminProductGroupsActionTypes.FETCH_ADMIN_PRODUCT_GROUPS_SUCCESS,
   payload: { adminProductGroupsList, count },
 });
@@ -20,11 +23,11 @@ export const fetchAdminProductGroupsFail = (err) => ({
 export const fetchAdminProductGroups = (skip, limit) => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
-      dispatch(fetchAdminProductGroupsStart());      
+      dispatch(fetchAdminProductGroupsStart());
       const { data } = await axios({
         method: "GET",
         url: `${api.FETCH_ADMIN_PRODUCT_GROUPS}?skip=${skip}&limit=${limit}`,
-      });                 
+      });
       dispatch(fetchAdminProductGroupsSuccess(data.productGroups, data.count));
       resolve(true);
     } catch (error) {
@@ -56,7 +59,7 @@ export const addAdminProductGroup = (productGroup) => (dispatch) => {
         method: "POST",
         url: api.POST_ADD_NEW_PRODUCT_GROUP,
         data: productGroup,
-      });     
+      });
       dispatch(addAdminProductGroupSuccess(data.productGroup));
       resolve(true);
     } catch (error) {
@@ -79,16 +82,13 @@ export const searchAdminProductGroupFail = (err) => ({
 });
 
 export const searchAdminProductGroups = (searchKey) => async (dispatch) => {
-  
-    try {
-      dispatch(searchAdminProductGroupStart());      
-      const { data } = await axios.get(api.SEARCH_PRODUCT_GROUP(searchKey))      
-      dispatch(searchAdminProductGroupSuccess(data));
-     
-    } catch (error) {
-      dispatch(searchAdminProductGroupFail(error.message));      
-    }
-  
+  try {
+    dispatch(searchAdminProductGroupStart());
+    const { data } = await axios.get(api.SEARCH_PRODUCT_GROUP(searchKey));
+    dispatch(searchAdminProductGroupSuccess(data));
+  } catch (error) {
+    dispatch(searchAdminProductGroupFail(error.message));
+  }
 };
 
 export const findAdminProductGroupsById = (productTypeId) => {
@@ -111,7 +111,7 @@ export const findAdminProductGroupsById = (productTypeId) => {
 };
 
 export const editAdminProductGroupsStart = () => ({
-  type: adminProductGroupsActionTypes.EIDT_ADMIN_PRODUCT_GROUP_START,
+  type: adminProductGroupsActionTypes.EDIT_ADMIN_PRODUCT_GROUP_START,
 });
 export const editAdminProductGroupsSuccess = (productType) => ({
   type: adminProductGroupsActionTypes.EIDT_ADMIN_PRODUCT_GROUP_SUCCESS,
@@ -122,7 +122,9 @@ export const editAdminProductGroupsFail = (err) => ({
   payload: err,
 });
 
-export const editAdminProductGroups = (adminProductGroupsData) => (dispatch) => {
+export const editAdminProductGroups = (adminProductGroupsData) => (
+  dispatch
+) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!adminProductGroupsData) {
@@ -134,7 +136,7 @@ export const editAdminProductGroups = (adminProductGroupsData) => (dispatch) => 
         method: "PUT",
         data: adminProductGroupsData,
       });
-     
+
       dispatch(editAdminProductGroupsSuccess(data.productGroup));
       resolve(true);
     } catch (error) {
@@ -169,6 +171,39 @@ export const removeAdminProductGroup = (id) => (dispatch) => {
     } catch (error) {
       dispatch(removeAdminProductGroupFail(error.message));
       reject(error.message);
+    }
+  });
+};
+
+export const generateManyProductGroupsStart = () => ({
+  type: adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_START,
+});
+
+export const generateManyProductGroupsSuccess = (newProductGroups) => ({
+  type: adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_SUCCESS,
+  payload: newProductGroups,
+});
+
+export const generateManyProductGroupsFailed = (err) => ({
+  type: adminProductGroupsActionTypes.GENERATE_MANY_PRODUCT_GROUPS_FAIL,
+  payload: err,
+});
+
+export const generateManyProductGroups = (
+  generateData
+) => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      dispatch(generateManyProductGroupsStart());      
+      const { data } = await axios({
+        url : api.GENERATE_MANY_PRODUCT_GROUPS, 
+        data: generateData,
+        method : "POST"
+      });      
+      dispatch(generateManyProductGroupsSuccess(data.productGroupsList));
+      resolve(true);
+    } catch (error) {
+      reject(error);
     }
   });
 };
