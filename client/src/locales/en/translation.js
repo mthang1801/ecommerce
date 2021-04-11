@@ -139,6 +139,9 @@ export const en = {
         slug : "Slug",
         image : "Image",
         submit : "Complete",       
+        showProductGroupsToClient : "Display product group to Client",
+        statusYes : "Yes",
+        statusNo : "No"
       }
     },
     navigations : {

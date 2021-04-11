@@ -49,6 +49,7 @@ const ListTable = ({
   const [edit, setEdit] = useState({});
 
   if (!data) return null;
+  console.log(data)
   if (data.length) {
     return (
       <div style={{ padding: "1rem 2rem" }}>
@@ -85,7 +86,7 @@ const ListTable = ({
                       ) : col === "createdAt" ? (
                         <Moment format="DD/MM/YYYY">{item[col]}</Moment>
                       ) : (
-                        <span title={item[col]}>{item[col]}</span>
+                        <span title={item[col]}>{item[col].toString()}</span>
                       )}
                     </StyledTableCell>
                   ))}
@@ -129,4 +130,4 @@ const ListTable = ({
   return null;
 };
 
-export default ListTable;
+export default React.memo(ListTable);

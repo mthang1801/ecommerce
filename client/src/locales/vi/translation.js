@@ -138,7 +138,10 @@ export const vi = {
         categoryLabel : "SP thuộc loại",
         slug : "Đường dẫn liên kết",
         image : "file Ảnh",
-        submit : "Tạo nhóm SP",       
+        submit : "Tạo nhóm SP",   
+        showProductGroupsToClient : "Hiển thị nhóm SP cho client",
+        statusYes : "Có",
+        statusNo : "Không"
       }
     },
     navigations: {

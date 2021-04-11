@@ -231,7 +231,12 @@ exports.removeCategory = async (req, res, next) => {
 
 exports.postCreateProductGroup = async (req, res, next) => {
   try {
-    const { name, slug, portfolioId, categoryId } = req.body;
+    let { name, slug, portfolioId, categoryId, status } = req.body;    
+    if(status === "true"){
+      status = true; 
+    }else{
+      status = false ;
+    }  
     const portfolio = await Portfolio.findById(portfolioId);
     const category = await Category.findById(categoryId);
     if (!portfolio || !category) {
@@ -242,9 +247,11 @@ exports.postCreateProductGroup = async (req, res, next) => {
     const newProductGroup = new ProductGroup({
       name,
       slug,
+      active : status,
       portfolio: portfolioId,
       category: categoryId,
     });
+    console.log(newProductGroup)
     const session = await mongoose.startSession();
     session.startTransaction();
     portfolio.productGroups.push(newProductGroup._id);
@@ -264,7 +271,12 @@ exports.postCreateProductGroup = async (req, res, next) => {
 };
 
 exports.editProductGroup = async (req, res, next) => {
-  const { _id, name, slug, portfolioId, categoryId } = req.body;
+  let { _id, name, slug, portfolioId, categoryId, status } = req.body;
+  if(status === "true"){
+    status = true ; 
+  }else{
+    status = false ;
+  }
   const productGroup = await ProductGroup.findById(_id);
 
   if (!productGroup) {
@@ -325,7 +337,7 @@ exports.editProductGroup = async (req, res, next) => {
   productGroup.slug = slug;
   productGroup.portfolio = portfolioId;
   productGroup.category = categoryId;
-
+  productGroup.active = status; 
   await (await productGroup.save())
     .populate({ path: "portfolio", select: "name" })
     .populate({ path: "category", select: "name" })

@@ -9,8 +9,7 @@ export const FormGroup = styled.div`
   width: 100%;
   height: 2.5rem;
   display: flex;
-  flex-direction: column;
-  justify-conetent: center;
+  flex-direction: column;  
   align-items: center;
   &:not(:last-child) {
     margin-bottom: 2rem;

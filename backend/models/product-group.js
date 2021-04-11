@@ -28,6 +28,10 @@ const ProductGroupSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  active : {
+    type : Boolean,
+    default : true 
+  }
 },{timestamps : true});
 
 module.exports = mongoose.model("product-groups", ProductGroupSchema);

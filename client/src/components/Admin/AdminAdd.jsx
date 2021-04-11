@@ -24,10 +24,15 @@ import {
   fetchCategoriesByPortfolio,
 } from "../../utils/connectDB";
 import Button from "@material-ui/core/Button";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 
 const AdminAdd = ({ onAdd, localesData, role }) => {
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");    
+  const [slug, setSlug] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
@@ -41,6 +46,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [isFetched, setIsFetched] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(true);
   const portfolioRef = useRef(null);
   const categoryRef = useRef(null);
   const formRef = useRef(null);
@@ -57,13 +63,13 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     if (role === "category" || role === "product-group") {
       fetchPortfolios().then((data) => {
         if (data.portfolios) {
-          if (_isMounted) {            
+          if (_isMounted) {
             setPortfolios([...data.portfolios]);
             setIsFetched(true);
           }
         }
       });
-    }else{
+    } else {
       setIsFetched(true);
     }
     return () => (_isMounted = false);
@@ -86,9 +92,9 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
   };
 
   const onChangePortfolio = (portfolio) => {
-     setSelectedPortfolio({ ...portfolio });
-     setSelectedCategory(null);
-  }
+    setSelectedPortfolio({ ...portfolio });
+    setSelectedCategory(null);
+  };
   const onChangeCategoryName = (e) => {
     const { value } = e.target;
     const newSlug = removeVietnameseTones(value)
@@ -98,11 +104,11 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     setSlug(newSlug);
   };
 
-  const isValidForm = () => {    
+  const isValidForm = () => {
     const validImage = ["image/jpeg", "image/jpg", "image/png"];
     if (!name || name?.length < 3 || !slug) {
       return false;
-    }   
+    }
     if (role === "portfolio") {
       if (!image || !validImage.includes(image.type)) {
         return false;
@@ -111,7 +117,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     if (role === "category" && !selectedPortfolio) {
       return false;
     }
-    if (role === "product-group" && !(selectedCategory && selectedPortfolio)) {
+    if (role === "product-group" && !(selectedCategory && selectedPortfolio) ) {
       return false;
     }
 
@@ -159,7 +165,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     let formData = new FormData();
     if (role === "portfolio") {
       formData.append("image", image);
-    }    
+    }
     formData.append("name", name);
     formData.append("slug", slug);
     if (role === "category" || role === "product-group") {
@@ -167,17 +173,17 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
     }
     if (role === "product-group") {
       formData.append("categoryId", selectedCategory._id);
+      formData.append("status" , activeStatus)
     }
     onAdd(formData)
       .then((res) => {
-        setSuccess("Created Category Success!!");        
+        setSuccess("Created Category Success!!");
         setName("");
-        setSlug("");        
+        setSlug("");
         setSelectedCategory(null);
         setSelectedPortfolio(null);
         setLoading(false);
         formRef.current.reset();
-       
       })
       .catch((err) => {
         setError(err);
@@ -185,48 +191,45 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
       });
   };
 
-  if(!isFetched || loading) return <div>Loading...</div>
+  if (!isFetched || loading) return <div>Loading...</div>;
   return (
     <AdminAddContainer>
       <Form ref={formRef} onSubmit={handleSubmitForm}>
         <Title>{localesData.addTitle}</Title>
         {error && <Error>{error}</Error>}
         {success && <Success>{success}</Success>}
-        {(role === "category" ||
-          role === "product-group") && (
-            <FormDropdown
-              ref={portfolioRef}
-              style={{ zIndex: openPortfolioDropdown ? 10 : 1 }}
-              onClick={() =>
-                setOpenPortfolioDropdown((prevState) => !prevState)
-              }
-            >
-              <Label>{localesData.portfolioLabel}</Label>
+        {(role === "category" || role === "product-group") && (
+          <FormDropdown
+            ref={portfolioRef}
+            style={{ zIndex: openPortfolioDropdown ? 10 : 1 }}
+            onClick={() => setOpenPortfolioDropdown((prevState) => !prevState)}
+          >
+            <Label>{localesData.portfolioLabel}</Label>
 
-              <Select>
-                {selectedPortfolio && selectedPortfolio._id ? (
-                  <span>{selectedPortfolio.name}</span>
-                ) : portfolios.length ? (
-                  <Placeholder>Select Portfolio</Placeholder>
-                ) : (
-                  <Placeholder>No Portfolio</Placeholder>
-                )}
-                <SelectIcon>
-                  <FaChevronDown />
-                </SelectIcon>
-                <ListAPI show={openPortfolioDropdown}>
-                  {portfolios.map((portfolio) => (
-                    <ItemAPI
-                      key={portfolio._id}
-                      onClick={() => onChangePortfolio(portfolio)}
-                    >
-                      {portfolio.name}
-                    </ItemAPI>
-                  ))}
-                </ListAPI>
-              </Select>
-            </FormDropdown>
-          )}
+            <Select>
+              {selectedPortfolio && selectedPortfolio._id ? (
+                <span>{selectedPortfolio.name}</span>
+              ) : portfolios.length ? (
+                <Placeholder>Select Portfolio</Placeholder>
+              ) : (
+                <Placeholder>No Portfolio</Placeholder>
+              )}
+              <SelectIcon>
+                <FaChevronDown />
+              </SelectIcon>
+              <ListAPI show={openPortfolioDropdown}>
+                {portfolios.map((portfolio) => (
+                  <ItemAPI
+                    key={portfolio._id}
+                    onClick={() => onChangePortfolio(portfolio)}
+                  >
+                    {portfolio.name}
+                  </ItemAPI>
+                ))}
+              </ListAPI>
+            </Select>
+          </FormDropdown>
+        )}
         {role === "product-group" && (
           <FormDropdown
             ref={categoryRef}
@@ -272,6 +275,44 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
             onChange={onChangeCategoryName}
           />
         </FormGroup>
+        {role === "product-group" && (
+          <FormControl
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+              margin: "-1rem 0 2rem 0",
+              color: "inherit",
+            }}
+          >
+            <FormLabel component="legend" style={{ color: "inherit" }}>
+              {localesData.showProductGroupsToClient}:{" "}
+            </FormLabel>
+            <RadioGroup
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: "1rem",
+              }}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio color="primary" />}
+                label={localesData.statusYes}
+                onChange={() => setActiveStatus(true)}
+                checked={activeStatus === true}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label={localesData.statusNo}
+                onChange={() => setActiveStatus(false)}
+                checked={activeStatus === false}
+              />
+            </RadioGroup>
+          </FormControl>
+        )}
         {role === "portfolio" && (
           <FormGroup>
             <Label>{localesData.image}</Label>
@@ -281,7 +322,7 @@ const AdminAdd = ({ onAdd, localesData, role }) => {
         <FormGroup>
           <Label>{localesData.slug}</Label>
           <Input type="text" name="slug" value={slug} disabled />
-        </FormGroup>       
+        </FormGroup>
         <FormGroup>
           <Button
             color="primary"

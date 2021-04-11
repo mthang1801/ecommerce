@@ -30,6 +30,11 @@ import {
 } from "../../utils/connectDB";
 import removeVietnameseTones from "../../utils/removeVietnameseTones";
 import useLanguage from "../Global/useLanguage";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -45,6 +50,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const [categories, setCategories] = useState([]);
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(true);
   const formRef = useRef(null);
   const portfolioRef = useRef(null);
   const categoryRef = useRef(null);
@@ -53,6 +59,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     lang
   ].translation.notification;
   useEffect(() => {
+    console.log(edit)
     if (edit) {
       setName(edit.name);
       setSlug(edit.slug);     
@@ -65,6 +72,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
       if (role === "product-group") {
         setSelectedPortfolio(edit.portfolio);
         setSelectedCategory(edit.category);
+        setActiveStatus(edit.active)
       }
     }
   }, [edit, role]);
@@ -141,14 +149,15 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
       }
     }
   
-    if(role === "category" && name === edit.name && selectedPortfolio?._id === edit.portfolio._id){
+    if(role === "category" && name === edit.name && selectedPortfolio?._id === edit.portfolio._id ){
       return false ; 
     }
     if (
       role === "product-group" &&
       name === edit.name &&
       selectedCategory?._id === edit.category._id &&
-      selectedPortfolio === edit.portfolio?._id
+      selectedPortfolio?._id === edit.portfolio?._id && 
+      activeStatus.toString() === edit.active.toString()
     ) {
       return false;
     }
@@ -156,6 +165,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     return true;
   };
 
+  
   useEffect(() => {
     function trackUserClickPortfolioRef(e) {
       if (portfolioRef.current && !portfolioRef.current.contains(e.target)) {
@@ -183,7 +193,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     } else {
       setDisabledSubmit(true);
     }
-  }, [name, slug, imageBase64, selectedPortfolio, selectedCategory]);
+  }, [name, slug, imageBase64, selectedPortfolio, selectedCategory, activeStatus]);
 
 
   const onChangePortfolio = portfolio => {
@@ -211,6 +221,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
     }
     if (role === "product-group") {
       formData.append("categoryId", selectedCategory._id);
+      formData.append("status", activeStatus)
     }
     onEdit(formData)
       .then((res) => {
@@ -327,6 +338,44 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
               disabled
             />
           </FormGroup>   
+          {role === "product-group" && (
+          <FormControl
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+              margin: "-1rem 0 2rem 0",
+              color: "inherit",
+            }}
+          >
+            <FormLabel component="legend" style={{ color: "inherit" }}>
+              {localesData.showProductGroupsToClient}:{" "}
+            </FormLabel>
+            <RadioGroup
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: "1rem",
+              }}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio color="primary" />}
+                label={localesData.statusYes}
+                onChange={() => setActiveStatus(true)}
+                checked={activeStatus === true}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label={localesData.statusNo}
+                onChange={() => setActiveStatus(false)}
+                checked={activeStatus === false}
+              />
+            </RadioGroup>
+          </FormControl>
+        )}
           {role === "portfolio" && <FormGroup>
             <Label>Hình ảnh</Label>
             <Input
