@@ -12,9 +12,9 @@ export const fetchAdminCategoriesSuccess = (adminCategoriesList, count) => ({
   payload: { adminCategoriesList, count },
 });
 
-export const fetchAdminCategoriesFail = (err) => ({
+export const fetchAdminCategoriesFail = (error) => ({
   type: adminCategoriesActionTypes.FETCH_ADMIN_CATEGORIES_FAIL,
-  payload: err,
+  payload: { msg: error.response.data.message, status: error.response.status },
 });
 
 export const fetchAdminCategories = (skip, limit) => (dispatch) => {
@@ -44,9 +44,9 @@ export const addAdminCategorySuccess = (newAdminCategories) => ({
   payload: newAdminCategories,
 });
 
-export const addAdminCategoryFail = (err) => ({
+export const addAdminCategoryFail = (error) => ({
   type: adminCategoriesActionTypes.ADD_ADMIN_CATEGORY_FAIL,
-  payload: err,
+  payload: { msg: error.response.data.message, status: error.response.status },
 });
 
 export const addAdminCategory = (category) => (dispatch) => {
@@ -74,9 +74,9 @@ export const searchAdminCategorySuccess = (adminCategoriesList) => ({
   type: adminCategoriesActionTypes.SEARCH_ADMIN_CATEGORIES_SUCCESS,
   payload: adminCategoriesList,
 });
-export const searchAdminCategoryFail = (err) => ({
+export const searchAdminCategoryFail = (error) => ({
   type: adminCategoriesActionTypes.SEARCH_ADMIN_CATEGORIES_FAIL,
-  payload: err,
+  payload: { msg: error.response.data.message, status: error.response.status },
 });
 
 export const searchAdminCategories = (searchKey) => async (dispatch) => {
@@ -115,9 +115,9 @@ export const editAdminCategoriesSuccess = (productType) => ({
   type: adminCategoriesActionTypes.EIDT_ADMIN_CATEGORY_SUCCESS,
   payload: productType,
 });
-export const editAdminCategoriesFail = (err) => ({
+export const editAdminCategoriesFail = (error) => ({
   type: adminCategoriesActionTypes.EIDT_ADMIN_CATEGORY_FAIL,
-  payload: err,
+  payload: { msg: error.response.data.message, status: error.response.status },
 });
 
 export const editAdminCategories = (adminCategoriesData) => (dispatch) => {
@@ -170,3 +170,33 @@ export const removeAdminCategory = (id) => (dispatch) => {
     }
   });
 };
+
+const generateManyCategoriesStart = () => ({
+  type : adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_START
+})
+const generateManyCategoriesSuccess = (newCategories) => ({
+  type : adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_SUCCESS,
+  payload : newCategories
+})
+const generateManyCategoriesFail = (error) => ({
+  type : adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_FAIL,
+  payload: { msg: error.response.data.message, status: error.response.status },
+})
+
+export const generateManyCategories = (categoryData) => dispatch => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      dispatch(generateManyCategoriesStart());
+      const {data} = await axios({
+        url : api.GENERATE_MANY_CATEGORIES,
+        method : "POST", 
+        data : categoryData
+      })
+      dispatch(generateManyCategoriesSuccess(data.categoriesList))
+      resolve(true);
+    } catch (error) {
+      dispatch(generateManyCategoriesFail(error))
+      reject(false);
+    }
+  })
+}

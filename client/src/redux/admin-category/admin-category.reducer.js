@@ -14,6 +14,7 @@ export default (state = INITIAL_STATE, action) => {
     case adminCategoriesActionTypes.SEARCH_ADMIN_CATEGORIES_START:
     case adminCategoriesActionTypes.REMOVE_ADMIN_CATEGORY_START:
     case adminCategoriesActionTypes.EIDT_ADMIN_CATEGORY_START:
+    case adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_START:
       return {
         ...state,
         loading: true,
@@ -56,11 +57,18 @@ export default (state = INITIAL_STATE, action) => {
           action.payload
         ),
       };
+    case adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_SUCCESS : 
+      return {
+        ...state, 
+        loading : false , 
+        adminCategoriesList : [...action.payload, ...state.adminCategoriesList]
+      };
     case adminCategoriesActionTypes.FETCH_ADMIN_CATEGORIES_FAIL:
     case adminCategoriesActionTypes.ADD_ADMIN_CATEGORY_FAIL:
     case adminCategoriesActionTypes.SEARCH_ADMIN_CATEGORIES_FAIL:
     case adminCategoriesActionTypes.REMOVE_ADMIN_CATEGORY_FAIL:
     case adminCategoriesActionTypes.EIDT_ADMIN_CATEGORY_FAIL:
+    case adminCategoriesActionTypes.GENERATE_MANY_CATEGORIES_FAIL:
       return {
         ...state,
         loading: false,

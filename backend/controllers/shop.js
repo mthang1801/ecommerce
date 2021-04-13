@@ -119,6 +119,7 @@ exports.getCategoriesByPortfolio = async (req, res, next) => {
     }
     const portfolio = await Portfolio.findById(portfolioId).populate({
       path: "categories",
+      match : {active : true}, 
       select: "name slug",
     });
     return res.status(200).json({ categories: portfolio.categories });
@@ -142,6 +143,7 @@ exports.getProductGroupsByCategory = async (req, res, next) => {
     const { categoryId } = req.params;
     const category = await Category.findById(categoryId).populate({
       path: "productGroups",
+      match : {active : true},
       select: "name slug",
     });
     return res.status(200).json({ productGroups: category.productGroups });

@@ -58,8 +58,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
   const { updateSuccess, updateFailed } = i18n.store.data[
     lang
   ].translation.notification;
-  useEffect(() => {
-    console.log(edit)
+  useEffect(() => {    
     if (edit) {
       setName(edit.name);
       setSlug(edit.slug);     
@@ -75,7 +74,7 @@ const EditForm = ({ edit, setEdit, onEdit, role, localesData }) => {
         setActiveStatus(edit.active)
       }
     }
-  }, [edit, role]);
+  }, [edit, role, setEdit]);
   useEffect(() => {
     setTimeout(() => {
       setError(null);

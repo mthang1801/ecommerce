@@ -13,6 +13,7 @@ export const api = {
   SEARCH_CATEGORY : search => `/search/category?search=${search}`,
   FETCH_CATEGORIES_BY_PORTFOLIO : (portfolioId) => `/portfolio/${portfolioId}/categories`,
   FETCH_MANUFACTORS_BY_PORTFOLIO : (portfolioId) => `/portfolio/${portfolioId}/manufactors`,
+  GENERATE_MANY_CATEGORIES : "/admin/generate-many-categories",
   //ProductGroup
   POST_ADD_NEW_PRODUCT_GROUP : "/admin/product-group",
   FETCH_ADMIN_PRODUCT_GROUPS : "/product-group",

@@ -4,6 +4,7 @@ import useLanguage from "../components/Global/useLanguage";
 import AdminNavigations from "../components/Admin/AdminNavigations";
 import AdminHome from "../components/Admin/AdminHome";
 import AdminAdd from "../components/Admin/AdminAdd";
+import GenerateManyData from "../components/Admin/GenerateManyData";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
@@ -16,7 +17,8 @@ import {
   fetchAdminCategories,
   editAdminCategories,
   removeAdminCategory,
-  searchAdminCategories
+  searchAdminCategories,
+  generateManyCategories,
 } from "../redux/admin-category/admin-category.actions";
 const AdminCategory = ({
   adminCategoriesList,
@@ -26,7 +28,8 @@ const AdminCategory = ({
   onAdd,
   onEdit,
   onRemove,
-  onSearch
+  onSearch,
+  onGenerate,
 }) => {
   const cols = ["name", "slug", "active", "portfolio", "createdAt"];
   const { i18n, lang } = useLanguage();
@@ -39,7 +42,7 @@ const AdminCategory = ({
   useEffect(() => {
     fetchAdminCategories(0, +process.env.REACT_APP_ADMIN_CATEGORIES_PER_LOAD);
   }, []);
-  
+
   return (
     <AdminLayout>
       <AdminNavigations
@@ -64,6 +67,13 @@ const AdminCategory = ({
       {navigation === "add-category" && (
         <AdminAdd onAdd={onAdd} localesData={category} role="category" />
       )}
+      {navigation === "auto-generate-data" && (
+        <GenerateManyData
+          localesData={category}
+          role="category"
+          onGenerate={onGenerate}
+        />
+      )}
     </AdminLayout>
   );
 };
@@ -78,7 +88,8 @@ const mapDispatchToProps = (dispatch) => ({
   onAdd: (category) => dispatch(addAdminCategory(category)),
   onEdit: (category) => dispatch(editAdminCategories(category)),
   onRemove: (_id) => dispatch(removeAdminCategory(_id)),
-  onSearch : search => dispatch(searchAdminCategories(search))
+  onSearch: (search) => dispatch(searchAdminCategories(search)),
+  onGenerate: (data) => dispatch(generateManyCategories(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminCategory);

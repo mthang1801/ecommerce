@@ -10,6 +10,7 @@ router.delete("/portfolio", isAdmin, adminController.removePortfolio);
 router.post("/category", isAdmin, adminController.postCreateCategory);
 router.put("/category", isAdmin, adminController.putEditCategory);
 router.delete("/category", isAdmin, adminController.removeCategory);
+router.post("/generate-many-categories", isAdmin, adminController.generateManuCategories);
 //Product Group
 router.post("/product-group", isAdmin, adminController.postCreateProductGroup);
 router.put("/product-group", isAdmin, adminController.editProductGroup);

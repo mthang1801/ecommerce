@@ -253,6 +253,41 @@ exports.removeCategory = async (req, res, next) => {
   }
 };
 
+exports.generateManuCategories = async (req, res, next) => {
+  try {
+    let {portfolioId,categoriesList } = req.body;
+    categoriesList = JSON.parse(categoriesList);
+    const portfolio = await Portfolio.findById(portfolioId);
+    if(!portfolio){
+      const err = new Error("Portfolio not found");
+      err.statusCode = 404; 
+      throw err; 
+    }
+    let categoriesResult = [];
+    for(let categoriesItem of categoriesList){
+      const slug =  removeVietnameseTones(categoriesItem)
+      .trim()
+      .replace(/[^a-zA-Z0-9]+/g, "-");  
+      const checkSlugExisted = await Category.findOne({slug});
+      if(checkSlugExisted){
+        continue; 
+      }
+      const newCategoryItem = new Category({
+        name : categoriesItem,
+        slug, 
+        portfolio : portfolioId
+      })
+      portfolio.categories.push(newCategoryItem._id);
+      await portfolio.save();
+      await (await newCategoryItem.save()).populate("portfolio");
+      categoriesResult = [...categoriesResult, newCategoryItem._doc]
+    }
+    return res.status(201).json({categoriesList : categoriesResult})
+  } catch (error) {
+    next(error);
+  }
+}
+
 exports.postCreateProductGroup = async (req, res, next) => {
   try {
     let { name, slug, portfolioId, categoryId, status } = req.body;
