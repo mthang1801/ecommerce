@@ -140,6 +140,10 @@ const ProductSchema = new Schema(
       min: 1,
       required: true,
     },
+    isHotProduct : {
+      type : Boolean,
+      default : false 
+    }
   },
   { timestamps: true }
 );

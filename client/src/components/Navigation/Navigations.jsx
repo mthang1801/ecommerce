@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import AppContext from "../../context/app-viewport.context";
 import {
   DesktopContainer,
   LeftSide,
@@ -16,7 +15,7 @@ import { selectCartShow } from "../../redux/cart/cart.selectors";
 import { connect } from "react-redux";
 import { setCartCheckoutPosition } from "../../redux/cart/cart.actions";
 import CartDropdown from "../Cart/CartDropdown";
-import CategoryMenuBoard from "../Category/CategoryMenuBoard";
+import CategoryMenuBoard from "../Portfolio/PortfolioMenuBoard";
 import Backdrop from "../UI/Backdrop";
 const Header = ({ setCartCheckoutPosition, cartShow }) => {
   const [openBoard, setOpenBoard] = useState(false);

@@ -9,6 +9,7 @@ router.get("/search/category", shopController.searchCategory);
 router.get("/search/product-group", shopController.searchProductGroup);
 //Portfolio
 router.get("/portfolio", shopController.getPortfolio);
+router.get("/portfolios-menu", shopController.getPortfoliosMenu);
 //Category
 router.get("/category", shopController.getCategory);
 router.get("/portfolio/:portfolioId/categories", shopController.getCategoriesByPortfolio);

@@ -79,7 +79,7 @@ const DropdownUser = ({ user, logout }) => {
       </RowInline>
     </UserOptionsList>
   );
-  console.log(user);
+  
   if (user)
     return (
       <Wrapper ref={userRef}>

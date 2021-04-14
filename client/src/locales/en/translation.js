@@ -179,6 +179,7 @@ export const en = {
       sellingProducts: "Selling Products",
       favoriteProducts: "Favorite Products",
       contact: "Contact",
+      portfolioMenu : "Portfolio"
     },
     cart: {
       name: "Cart",
@@ -271,6 +272,6 @@ export const en = {
       productInformation: "Product Information",
       productDescription: "Product Description",
       submit: "Post Product",
-    },
+    },    
   },
 };

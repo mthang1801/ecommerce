@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {Link} from "react-router-dom"
 export const Wrapper = styled.div`
   color : inherit;
-  padding: 1rem;
+  padding: 1rem;  
+  
 `
 
 export const Title = styled(Link)`
@@ -11,12 +12,12 @@ export const Title = styled(Link)`
   font-weight: bold;
 `
 
-export const ListProducts = styled.div`
+export const ListProductGroups = styled.div`
   display : flex;
-  flex-direction: column;
+  flex-direction: column;  
 `
 
-export const ProductItem = styled(Link)`
+export const ProductGroupItem = styled(Link)`
   color : inherit;
   &:hover{
     background-color : var(--blue-1);

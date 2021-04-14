@@ -179,6 +179,7 @@ export const vi = {
       sellingProducts: "Sản phẩm bán chạy",
       favoriteProducts: "Sản phẩm bạn yêu thích",
       contact: "Liên hệ",
+      portfolioMenu : "Danh mục SP"
     },
     cart: {
       name: "Giỏ hàng",

@@ -27,9 +27,10 @@ export const Wrapper = styled.div`
 `;
 
 
-export const TypesBoards = styled.div`
+export const CategoriesBoard = styled.div`
   position : absolute;
   left: 20vw;
   top : 0%;  
+  height: 100%;
   
 `

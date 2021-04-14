@@ -1,4 +1,6 @@
 export const api = {
+  //static
+  FETCH_PORTFOLIOS_MENU : "/portfolios-menu",
   //Portfolio
   SEARCH_PORFOLIO : search => `/search/portfolio?search=${search}`,
   POST_ADD_NEW_PORTFOLIO : "/admin/portfolio",

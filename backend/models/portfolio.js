@@ -5,11 +5,11 @@ const PortfolioSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      minlength: 3,
+      minlength: 1,
     },
-    status: {
-      type: String,
-      default: "active",
+    active: {
+      type: Boolean,
+      default: true,
     },
     image: {
       url: String,
